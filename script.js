@@ -108,6 +108,17 @@ document.addEventListener("DOMContentLoaded", () => {
         "is-topbar-compact",
         currentScroll > window.innerHeight * 0.18,
       );
+
+      const topbarProbeY = 36;
+      const isOverDarkSection = [".sheets"].some((selector) => {
+        const section = document.querySelector(selector);
+        if (!section) return false;
+
+        const rect = section.getBoundingClientRect();
+        return rect.top <= topbarProbeY && rect.bottom >= topbarProbeY;
+      });
+
+      document.body.classList.toggle("is-topbar-inverted", isOverDarkSection);
     }
   };
 
@@ -677,8 +688,6 @@ document.addEventListener("DOMContentLoaded", () => {
     ".works-cap",
     ".process-num",
     ".material-swatch span",
-    ".contact-cta .morph-btn__content",
-    ".contact-sub a",
     ".topbar a",
     ".topbar-menu",
     ".footer-cta",
@@ -954,7 +963,7 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
   gsap.utils
-    .toArray(".works-head, .process-head, .materials, .studio-copy")
+    .toArray(".works-head, .process-head, .materials")
     .forEach((block) => {
       gsap.from(block, {
         y: 60,
@@ -1091,17 +1100,6 @@ document.addEventListener("DOMContentLoaded", () => {
         start: "top 90%",
       },
     });
-  });
-
-  // Studio Infinite Marquee
-  const quoteTrack1 = document.getElementById("quoteTrack1");
-  const quoteTrack2 = document.getElementById("quoteTrack2");
-
-  gsap.to([quoteTrack1, quoteTrack2], {
-    xPercent: -100,
-    repeat: -1,
-    duration: 40,
-    ease: "none",
   });
 
   const morphButtons = gsap.utils.toArray(".morph-btn");
