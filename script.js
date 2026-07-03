@@ -204,6 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const measureThemeSections = () => {
     themeMetrics = themeSections.map(({ section, bg, fg, panel }) => ({
+      section,
       bg,
       fg,
       panel,
@@ -221,7 +222,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const updateDynamicTheme = (scrollY = window.scrollY) => {
     if (!themeMetrics.length) return;
 
-    const probe = scrollY + window.innerHeight * 0.42;
+    const heroSection = document.getElementById("hero");
+    if (
+      heroSection &&
+      scrollY < Math.max(heroSection.offsetHeight * 0.72, window.innerHeight * 0.55)
+    ) {
+      const heroTheme = themeMetrics.find(
+        (entry) => entry.section === heroSection,
+      );
+      if (heroTheme) {
+        applyThemeColors(heroTheme.bg, heroTheme.fg, heroTheme.panel);
+        return;
+      }
+    }
+
+    const probe = scrollY + window.innerHeight * 0.35;
     let index = 0;
 
     for (let i = themeMetrics.length - 1; i >= 0; i -= 1) {
@@ -233,10 +248,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const current = themeMetrics[index];
     const next = themeMetrics[index + 1];
-    const blendEnd = next ? next.start : current.end;
-    const span = Math.max(blendEnd - current.start, 1);
+    const blendStart = current.start + current.section.offsetHeight * 0.35;
+    const blendEnd = next ? next.start + next.section.offsetHeight * 0.15 : current.end;
+    const span = Math.max(blendEnd - blendStart, 1);
     const t = next
-      ? gsap.utils.clamp(0, 1, (probe - current.start) / span)
+      ? gsap.utils.clamp(0, 1, (probe - blendStart) / span)
       : 0;
 
     applyThemeColors(

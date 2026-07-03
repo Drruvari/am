@@ -655,20 +655,24 @@ body.is-topbar-inverted .morph-btn--soft.is-hover .morph-btn__content {
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  padding: clamp(6.5rem, 8vw, 7.5rem) clamp(1.5rem, 3.5vw, 2.75rem)
-    clamp(2rem, 4vw, 3rem);
+  padding: clamp(5.5rem, 7vw, 6.75rem) clamp(1.5rem, 3.5vw, 2.75rem)
+    clamp(2.5rem, 4vw, 3.5rem);
   overflow: hidden;
+  background: #fcfcfc;
+  color: #141412;
+  isolation: isolate;
 }
+
 .hero-mark {
   position: absolute;
-  top: clamp(4.5rem, 7vw, 6rem);
+  top: clamp(5.75rem, 10vw, 7.5rem);
   left: clamp(1.25rem, 3.5vw, 2.75rem);
   z-index: 0;
   pointer-events: none;
-  color: var(--accent);
+  color: color-mix(in srgb, #141412 7%, transparent);
   font-family: var(--font-heading);
   font-weight: 900;
-  font-size: clamp(7.5rem, 24vw, 20rem);
+  font-size: clamp(6.5rem, 20vw, 16rem);
   line-height: 0.78;
   letter-spacing: -0.07em;
   font-variation-settings:
@@ -676,13 +680,18 @@ body.is-topbar-inverted .morph-btn--soft.is-hover .morph-btn__content {
     "opsz" 48;
   user-select: none;
 }
+
 .hero-container {
   position: relative;
   z-index: 1;
   flex: 1;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
 }
+
 .hero-grid {
   flex: 1;
   display: grid;
@@ -690,73 +699,88 @@ body.is-topbar-inverted .morph-btn--soft.is-hover .morph-btn__content {
   gap: clamp(2rem, 4vw, 3rem);
   align-items: stretch;
   min-height: calc(
-    100svh - clamp(6.5rem, 8vw, 7.5rem) - clamp(2rem, 4vw, 3rem)
+    100svh - clamp(5.5rem, 7vw, 6.75rem) - clamp(2.5rem, 4vw, 3.5rem)
   );
-  padding-top: clamp(9rem, 18vw, 14rem);
+  padding-top: clamp(3.5rem, 7vw, 5.5rem);
 }
+
 .hero-left {
   grid-column: 1 / 6;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: clamp(4rem, 10vw, 10rem);
+  justify-content: flex-start;
+  gap: clamp(2rem, 4vw, 3rem);
   padding-bottom: clamp(1rem, 2.5vw, 2rem);
 }
+
 .hero-meta-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 1.5rem;
-  width: min(100%, 22rem);
-  color: var(--accent);
+  width: min(100%, 24rem);
+  color: #141412;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.14em;
 }
+
 .hero-lede {
   max-width: 34ch;
-  padding-right: clamp(1rem, 8vw, 6rem);
+  margin-top: auto;
+  padding-right: clamp(0.5rem, 4vw, 3rem);
   font-size: clamp(0.98rem, 1.05vw, 1.125rem);
   font-weight: 500;
   line-height: 1.58;
-  color: var(--fg);
+  color: #141412;
 }
+
 .hero-right {
   grid-column: 7 / 13;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: clamp(4rem, 8vw, 7rem);
+  justify-content: flex-start;
+  gap: clamp(2rem, 3.5vw, 2.75rem);
   padding-bottom: clamp(1rem, 2.5vw, 2rem);
 }
+
 .hero-copy {
   display: flex;
   flex-direction: column;
-  gap: clamp(2rem, 3.5vw, 3.25rem);
+  gap: clamp(1.5rem, 2.5vw, 2.25rem);
 }
+
 .hero-headline {
-  max-width: 13.5ch;
+  max-width: 11.5ch;
   font-family: var(--font-heading);
   font-weight: 850;
   font-size: clamp(2.35rem, 4.2vw, 4rem);
   line-height: 1.06;
   letter-spacing: -0.085em;
+  color: #141412;
   font-optical-sizing: auto;
   font-variation-settings:
     "wdth" 88,
     "opsz" 48;
 }
+
 .hero-headline .line {
   display: block;
   overflow: hidden;
   padding-bottom: 0.08em;
 }
+
 .hero-support {
-  max-width: 42ch;
+  max-width: 40ch;
   font-size: clamp(0.98rem, 1.05vw, 1.125rem);
   font-weight: 500;
   line-height: 1.58;
-  color: var(--muted);
+  color: color-mix(in srgb, #141412 68%, transparent);
+}
+
+.hero-right .morph-btn {
+  align-self: flex-start;
+  margin-top: auto;
 }
 .hero-cta {
   font-family: var(--font-mono);
@@ -1481,18 +1505,18 @@ p {
   }
   .hero {
     min-height: auto;
-    padding: 5.75rem 1.25rem 3rem;
+    padding: 5.25rem 1.25rem 3rem;
   }
   .hero-mark {
-    top: 4.75rem;
+    top: 4.25rem;
     left: 1rem;
-    font-size: clamp(4.5rem, 32vw, 7.5rem);
+    font-size: clamp(4rem, 28vw, 6.5rem);
   }
   .hero-grid {
     grid-template-columns: 1fr;
     min-height: auto;
-    padding-top: clamp(4.5rem, 20vw, 7rem);
-    gap: 2rem;
+    padding-top: clamp(3rem, 12vw, 4.5rem);
+    gap: 2.5rem;
   }
   .hero-left,
   .hero-right {
@@ -1506,18 +1530,22 @@ p {
     font-size: 0.66rem;
   }
   .hero-lede {
+    margin-top: 0;
     max-width: 100%;
     padding-right: 0;
     font-size: 0.95rem;
   }
   .hero-headline {
     max-width: none;
-    font-size: clamp(1.75rem, 8.5vw, 2.65rem);
+    font-size: clamp(1.85rem, 8.5vw, 2.75rem);
     line-height: 1.08;
   }
   .hero-support {
     max-width: 100%;
     font-size: 0.95rem;
+  }
+  .hero-right .morph-btn {
+    margin-top: 0.5rem;
   }
   .morph-btn--rect > a.hero-cta {
     padding: 0.95rem 1.35rem;
