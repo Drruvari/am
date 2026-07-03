@@ -208,18 +208,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const cursor = document.getElementById("cursorMorph");
 
-  const prepareDrawPaths = (selector) => {
-    const paths = gsap.utils.toArray(selector);
-    paths.forEach((path) => {
-      const length = path.getTotalLength();
-      gsap.set(path, {
-        strokeDasharray: length,
-        strokeDashoffset: length,
-      });
-    });
-    return paths;
-  };
-
   const isDesktop = () => desktopQuery.matches;
 
   mm.add("(min-width: 769px)", () => {
@@ -686,11 +674,8 @@ document.addEventListener("DOMContentLoaded", () => {
     ".sheets-index",
     ".sheet-meta",
     ".works-cap",
-    ".process-num",
-    ".material-swatch span",
     ".topbar a",
     ".topbar-menu",
-    ".footer-cta",
     ".footer-nav a",
     ".footer-bottom a",
     ".detail-close",
@@ -924,23 +909,8 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     });
 
-    const processTrack = document.getElementById("processTrack");
-
-    gsap.to(processTrack, {
-      x: () => -getHorizontalDistance(processTrack, 140),
-      ease: "none",
-      scrollTrigger: {
-        trigger: ".process",
-        pin: true,
-        start: "top top",
-        end: () => `+=${getHorizontalDistance(processTrack, 140)}`,
-        scrub: 1,
-        invalidateOnRefresh: true,
-      },
-    });
-
     return () => {
-      gsap.set([sheetsStack, processTrack, ".sheets-copy", ".sheet img"], {
+      gsap.set([sheetsStack, ".sheets-copy", ".sheet img"], {
         clearProps: "transform",
       });
     };
@@ -963,7 +933,7 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
   gsap.utils
-    .toArray(".works-head, .process-head, .materials")
+    .toArray(".works-head")
     .forEach((block) => {
       gsap.from(block, {
         y: 60,
@@ -1022,28 +992,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  prepareDrawPaths(".process-glyph path, .process-glyph circle").forEach(
-    (path) => {
-      gsap.to(path, {
-        strokeDashoffset: 0,
-        duration: 1.2,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: path.closest(".process-step"),
-          start: "top 70%",
-        },
-      });
-    },
-  );
-
-  const swatches = gsap.utils.toArray(".material-swatch");
-  swatches.forEach((swatch) => {
-    swatch.style.setProperty(
-      "--swatch-color",
-      swatch.getAttribute("data-color"),
-    );
-  });
-
   mm.add("(min-width: 769px)", () => {
     const cleanups = gsap.utils.toArray(".works-figure").map((figure) => {
       const image = figure.querySelector(".works-visual img");
@@ -1085,21 +1033,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     return () => cleanups.forEach((cleanup) => cleanup());
-  });
-
-  // Stats Counter
-  gsap.utils.toArray(".stat-num").forEach((stat) => {
-    let target = parseFloat(stat.getAttribute("data-count"));
-    gsap.to(stat, {
-      innerHTML: target,
-      duration: 2.5,
-      snap: { innerHTML: 1 },
-      ease: "power3.out",
-      scrollTrigger: {
-        trigger: stat,
-        start: "top 90%",
-      },
-    });
   });
 
   const morphButtons = gsap.utils.toArray(".morph-btn");
