@@ -153,7 +153,7 @@ function initGlobalUI() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  gsap.registerPlugin(ScrollTrigger, Flip, SplitText);
+  gsap.registerPlugin(ScrollTrigger, Flip);
 
   if ("scrollRestoration" in history) {
     history.scrollRestoration = "manual";

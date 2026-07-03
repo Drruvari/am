@@ -1,15 +1,16 @@
 @font-face {
-  font-family: "Epilogue";
-  src: url("../assets/fonts/Epilogue-VariableFont_wght.ttf") format("truetype");
-  font-weight: 100 900;
+  font-family: "Bricolage Grotesque";
+  src: url("../assets/fonts/BricolageGrotesque-VariableFont_opsz,wdth,wght.ttf")
+    format("truetype");
+  font-weight: 200 800;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "DM Sans";
-  src: url("../assets/fonts/DMSans-VariableFont_opsz,wght.ttf") format("truetype");
-  font-weight: 100 1000;
+  font-family: "Manrope";
+  src: url("../assets/fonts/Manrope-VariableFont_wght.ttf") format("truetype");
+  font-weight: 200 800;
   font-style: normal;
   font-display: swap;
 }
@@ -23,10 +24,10 @@
   --muted: color-mix(in srgb, var(--fg) 68%, transparent);
   --line: color-mix(in srgb, var(--fg) 14%, transparent);
   --section-pad: clamp(6rem, 10vw, 12rem);
-  --font-display: "Epilogue", sans-serif;
-  --font-heading: "Epilogue", sans-serif;
-  --font-body: "DM Sans", sans-serif;
-  --font-mono: "DM Sans", sans-serif;
+  --font-display: "Bricolage Grotesque", sans-serif;
+  --font-heading: "Bricolage Grotesque", sans-serif;
+  --font-body: "Manrope", sans-serif;
+  --font-mono: "Manrope", sans-serif;
   --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
 }
 

@@ -109,7 +109,6 @@
     font-size: 0.95rem;
   }
   .hero-headline {
-    max-width: none;
     font-size: clamp(1.85rem, 8.5vw, 2.75rem);
     line-height: 1.08;
   }

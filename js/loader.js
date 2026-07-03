@@ -5,15 +5,14 @@ function initLoader() {
   lenis.stop();
   document.body.style.overflow = "hidden";
 
-  const loaderTitle = new SplitText(".loader-title", {
-    type: "chars",
-    mask: "chars",
+  const loaderTitle = new SplitType(".loader-title", {
+    types: "chars",
   });
 
-  const heroHeadline = new SplitText(".hero-headline", {
-    type: "chars",
-    mask: "chars",
-  });
+  const heroLineSplits = gsap.utils
+    .toArray(".hero-headline .line")
+    .map((line) => new SplitType(line, { types: "chars" }));
+  const heroHeadlineChars = heroLineSplits.flatMap((split) => split.chars);
 
   gsap.set(".loader-card", {
     xPercent: -50,
@@ -22,7 +21,7 @@ function initLoader() {
     rotate: (i) => [8, -3, -10, 10, -7, 5][i],
   });
 
-  gsap.set([loaderTitle.chars, heroHeadline.chars], {
+  gsap.set([loaderTitle.chars, heroHeadlineChars], {
     yPercent: 100,
     rotation: 10,
     transformOrigin: "0% 100%",
@@ -139,7 +138,7 @@ function initLoader() {
     )
 
     .to(
-      heroHeadline.chars,
+      heroHeadlineChars,
       {
         yPercent: 0,
         rotation: 0,

@@ -13,12 +13,12 @@
 .topbar-brand,
 .topbar-nav a,
 .topbar-nav span {
-  color: #141412;
+  color: var(--fg);
 }
 body.is-topbar-inverted .topbar-brand,
 body.is-topbar-inverted .topbar-nav a,
 body.is-topbar-inverted .topbar-nav span {
-  color: #fcfcfc;
+  color: var(--bg);
 }
 .topbar-brand {
   position: fixed;
