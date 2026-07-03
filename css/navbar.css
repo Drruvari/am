@@ -29,7 +29,7 @@ body.is-topbar-inverted .topbar-nav span {
   font-size: clamp(2.5rem, 4.6vw, 4.25rem);
   font-weight: 800;
   line-height: 0.9;
-  letter-spacing: -0.06em;
+  letter-spacing: 0;
   text-transform: none;
   white-space: nowrap;
   transition:
@@ -65,7 +65,7 @@ body.is-topbar-inverted .topbar-nav span {
 .topbar-actions {
   --topbar-brief-width: 9.35rem;
   --topbar-menu-width: 4.7rem;
-  --topbar-action-gap: 0.65rem;
+  --topbar-action-gap: 1.6rem;
   position: fixed;
   top: 1.25rem;
   right: clamp(1rem, 2.5vw, 2rem);
@@ -128,7 +128,9 @@ body.is-topbar-compact .topbar-menu-wrap {
   visibility: visible;
   transform: translateX(0) scale(1);
 }
-
+.topbar-actions .morph-btn__rings {
+  inset: -0.28rem;
+}
 .mobile-menu {
   position: fixed;
   inset: 0;
@@ -199,7 +201,7 @@ body.is-topbar-compact .topbar-menu-wrap {
   font-size: clamp(1.75rem, 8vw, 2.4rem);
   font-weight: 850;
   line-height: 1;
-  letter-spacing: -0.03em;
+  letter-spacing: 0;
   color: #141412;
 }
 

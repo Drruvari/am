@@ -75,7 +75,7 @@
   font-size: clamp(5rem, 10vw, 9.5rem);
   font-weight: 900;
   line-height: 0.68;
-  letter-spacing: -0.04em;
+  letter-spacing: 0;
 }
 
 .footer-label {
@@ -98,7 +98,7 @@
   font-size: clamp(2.4rem, 3.8vw, 4.25rem);
   font-weight: 850;
   line-height: 0.96;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
   color: #141412;
 }
 

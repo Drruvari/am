@@ -31,7 +31,7 @@
   min-height: calc(
     100svh - clamp(5.5rem, 7vw, 6.75rem) - clamp(2.5rem, 4vw, 3.5rem)
   );
-  padding-top: clamp(3.5rem, 7vw, 5.5rem);
+  padding-top: clamp(5.25rem, 8vw, 7rem);
 }
 
 .hero-left {
@@ -83,9 +83,10 @@
 .hero-headline {
   font-family: var(--font-heading);
   font-weight: 850;
-  font-size: clamp(2.35rem, 4.2vw, 4rem);
-  line-height: 1.06;
-  letter-spacing: -0.085em;
+  font-size: clamp(2.35rem, 3.95vw, 3.75rem);
+  line-height: 1.1;
+  letter-spacing: 0;
+  word-spacing: 0.03em;
   color: var(--fg);
   font-optical-sizing: auto;
 }
@@ -93,8 +94,8 @@
 .hero-headline .line {
   display: block;
   overflow: hidden;
-  padding-bottom: 0.08em;
-  white-space: nowrap;
+  padding-bottom: 0.04em;
+  white-space: normal;
 }
 
 .hero-support {

@@ -51,7 +51,7 @@
   .topbar-actions {
     --topbar-brief-width: 7.9rem;
     --topbar-menu-width: 4.35rem;
-    --topbar-action-gap: 0.4rem;
+    --topbar-action-gap: 1rem;
     top: 0.85rem;
     right: 1.25rem;
   }
@@ -90,12 +90,12 @@
   }
   .hero {
     min-height: auto;
-    padding: 5.25rem 1.25rem 3rem;
+    padding: 6.75rem 1.25rem 3rem;
   }
   .hero-grid {
     grid-template-columns: 1fr;
     min-height: auto;
-    padding-top: clamp(3rem, 12vw, 4.5rem);
+    padding-top: clamp(2.25rem, 10vw, 3.5rem);
     gap: 2.5rem;
   }
   .hero-left,
@@ -116,8 +116,9 @@
     font-size: 0.95rem;
   }
   .hero-headline {
-    font-size: clamp(1.85rem, 8.5vw, 2.75rem);
-    line-height: 1.08;
+    font-size: clamp(1.85rem, 8vw, 2.55rem);
+    line-height: 1.14;
+    letter-spacing: 0;
   }
   .hero-support {
     max-width: 100%;
@@ -317,7 +318,7 @@
   .topbar-actions {
     --topbar-brief-width: 7.25rem;
     --topbar-menu-width: 4rem;
-    --topbar-action-gap: 0.35rem;
+    --topbar-action-gap: 0.85rem;
     right: 1rem;
   }
   .topbar-brief,

@@ -29,7 +29,8 @@ function initScrambleText() {
     ".sheets-index",
     ".sheet-meta",
     ".works-cap",
-    ".topbar a",
+    ".topbar-brand",
+    ".topbar-nav a",
     ".topbar-brief .morph-btn__content > span",
     ".topbar-menu .morph-btn__content > span",
     ".footer-cta .morph-btn__content > span:first-child",
@@ -198,8 +199,7 @@ function syncTopbarActionMotion(isCompact) {
 }
 
 function initMorphButtons() {
-  ensureLiquidFilter();
-  morphButtons = gsap.utils.toArray(".morph-btn");
+  const morphButtons = gsap.utils.toArray(".morph-btn");
 
   morphButtons.forEach((btn) => {
     if (btn.dataset.morphReady === "true") return;
@@ -207,142 +207,42 @@ function initMorphButtons() {
 
     const layer = document.createElement("span");
     const body = document.createElement("span");
-    const satA = document.createElement("span");
-    const satB = document.createElement("span");
     const content = btn.querySelector(".morph-btn__content");
     const interactive = btn.querySelector("a, button");
-    let isHovering = false;
-    let lastVector = { x: 1, y: 0 };
-    const getVector = () => btn._fluidVector || lastVector;
 
     layer.className = "morph-btn__rings";
     body.className = "morph-btn__body";
-    satA.className = "morph-btn__sat morph-btn__sat--a";
-    satB.className = "morph-btn__sat morph-btn__sat--b";
     layer.setAttribute("aria-hidden", "true");
-    layer.append(body, satA, satB);
+
+    layer.append(body);
     btn.prepend(layer);
 
-    const fluidTargets = [btn, layer, body, satA, satB, content].filter(Boolean);
+    const setHover = (active) => {
+      btn.classList.toggle("is-hover", active);
 
-    const setHoverState = (active) => {
-      if (isHovering === active) return;
-      isHovering = active;
-      gsap.killTweensOf(fluidTargets);
+      gsap.to(body, {
+        scale: active ? 1.03 : 1,
+        duration: 0.28,
+        ease: "power2.out",
+        overwrite: "auto",
+      });
 
-      if (active) {
-        const vector = getVector();
-        btn.classList.add("is-hover");
-        gsap.to(layer, {
-          scale: 1.025,
-          duration: 0.42,
-          ease: "power3.out",
+      if (content) {
+        gsap.to(content, {
+          y: active ? -1 : 0,
+          duration: 0.28,
+          ease: "power2.out",
           overwrite: "auto",
         });
-        gsap.to(body, {
-          scaleX: 1.035,
-          scaleY: 0.98,
-          duration: 0.42,
-          ease: "power3.out",
-          overwrite: "auto",
-        });
-        gsap.to(satA, {
-          x: vector.x * 18,
-          y: vector.y * 12,
-          opacity: 1,
-          scale: 0.95,
-          duration: 0.38,
-          ease: "power3.out",
-          overwrite: "auto",
-        });
-        gsap.to(satB, {
-          x: vector.x * -14,
-          y: vector.y * -8 + 5,
-          opacity: 1,
-          scale: 0.82,
-          duration: 0.44,
-          ease: "power3.out",
-          overwrite: "auto",
-        });
-        if (content) {
-          gsap.to(content, {
-            y: -1,
-            duration: 0.42,
-            ease: "power3.out",
-            overwrite: "auto",
-          });
-        }
-        return;
       }
-
-      btn.classList.remove("is-hover");
-      gsap.to([btn, layer, body, content].filter(Boolean), {
-        x: 0,
-        y: 0,
-        scale: 1,
-        scaleX: 1,
-        scaleY: 1,
-        duration: 0.78,
-        ease: "elastic.out(1.05, 0.45)",
-        overwrite: "auto",
-      });
-      gsap.to([satA, satB], {
-        x: 0,
-        y: 0,
-        opacity: 0,
-        scale: 1,
-        duration: 0.72,
-        ease: "elastic.out(1.05, 0.42)",
-        overwrite: "auto",
-      });
     };
 
-    const splash = () => {
-      const vector = getVector();
-      gsap.fromTo(
-        body,
-        { scaleX: 0.88, scaleY: 0.88 },
-        {
-          scaleX: isHovering ? 1.05 : 1,
-          scaleY: isHovering ? 0.96 : 1,
-          duration: 0.55,
-          ease: "elastic.out(1.2, 0.35)",
-          overwrite: "auto",
-        },
-      );
-      gsap.fromTo(
-        [satA, satB],
-        {
-          x: (index) => vector.x * (index === 0 ? 58 : -46),
-          y: (index) => vector.y * (index === 0 ? 42 : -34),
-          opacity: 1,
-          scale: 0.42,
-        },
-        {
-          x: 0,
-          y: 0,
-          opacity: isHovering ? 1 : 0,
-          scale: 1,
-          duration: 0.9,
-          ease: "elastic.out(1.1, 0.42)",
-          overwrite: "auto",
-        },
-      );
-    };
-
-    const onEnter = () => setHoverState(true);
-    const onLeave = () => setHoverState(false);
-
-    btn.addEventListener("mouseenter", onEnter);
-    btn.addEventListener("mouseleave", onLeave);
-    btn.addEventListener("touchstart", onEnter, { passive: true });
-    btn.addEventListener("touchend", onLeave);
-    btn.addEventListener("touchcancel", onLeave);
+    btn.addEventListener("mouseenter", () => setHover(true));
+    btn.addEventListener("mouseleave", () => setHover(false));
 
     if (interactive) {
-      interactive.addEventListener("focus", onEnter);
-      interactive.addEventListener("blur", onLeave);
-      interactive.addEventListener("pointerdown", splash);
+      interactive.addEventListener("focus", () => setHover(true));
+      interactive.addEventListener("blur", () => setHover(false));
     }
   });
 
@@ -351,88 +251,37 @@ function initMorphButtons() {
 
     morphButtons.forEach((btn) => {
       const content = btn.querySelector(".morph-btn__content");
-      const body = btn.querySelector(".morph-btn__body");
-      const satA = btn.querySelector(".morph-btn__sat--a");
-      const satB = btn.querySelector(".morph-btn__sat--b");
-      const pull = btn.classList.contains("morph-btn--rect") ? 0.16 : 0.12;
-      const labelPull = pull * 0.36;
 
       const onMove = (e) => {
         const rect = btn.getBoundingClientRect();
         const x = e.clientX - rect.left - rect.width / 2;
         const y = e.clientY - rect.top - rect.height / 2;
-        const distance = Math.max(Math.hypot(x, y), 1);
-        const threshold = Math.max(rect.width, rect.height) * 1.75;
-        const power = gsap.utils.clamp(
-          0.35,
-          1,
-          (threshold - distance) / threshold,
-        );
-        const nx = x / distance;
-        const ny = y / distance;
-        btn._fluidVector = { x: nx, y: ny };
 
         gsap.to(btn, {
-          x: x * pull,
-          y: y * pull,
-          duration: 0.34,
-          ease: "power3.out",
-          overwrite: "auto",
-        });
-        gsap.to(body, {
-          scaleX: 1 + Math.abs(nx) * power * 0.11,
-          scaleY: 1 + Math.abs(ny) * power * 0.075,
-          duration: 0.32,
-          ease: "power2.out",
-          overwrite: "auto",
-        });
-        gsap.to(satA, {
-          x: nx * power * 34,
-          y: ny * power * 24,
-          opacity: 1,
-          scale: 0.95,
-          duration: 0.28,
-          ease: "power2.out",
-          overwrite: "auto",
-        });
-        gsap.to(satB, {
-          x: Math.cos(Math.atan2(y, x) - 0.35) * power * 26,
-          y: Math.sin(Math.atan2(y, x) - 0.35) * power * 20,
-          opacity: 1,
-          scale: 0.8,
-          duration: 0.34,
+          x: x * 0.08,
+          y: y * 0.08,
+          duration: 0.3,
           ease: "power2.out",
           overwrite: "auto",
         });
 
         if (content) {
           gsap.to(content, {
-            x: x * labelPull,
-            y: y * labelPull,
-            duration: 0.34,
-            ease: "power3.out",
+            x: x * 0.025,
+            y: y * 0.025,
+            duration: 0.3,
+            ease: "power2.out",
             overwrite: "auto",
           });
         }
       };
 
       const onLeave = () => {
-        gsap.to([btn, body, content].filter(Boolean), {
+        gsap.to([btn, content].filter(Boolean), {
           x: 0,
           y: 0,
-          scaleX: 1,
-          scaleY: 1,
-          duration: 0.78,
-          ease: "elastic.out(1, 0.45)",
-          overwrite: "auto",
-        });
-        gsap.to([satA, satB].filter(Boolean), {
-          x: 0,
-          y: 0,
-          scale: 1,
-          opacity: 0,
-          duration: 0.62,
-          ease: "power3.out",
+          duration: 0.35,
+          ease: "power2.out",
           overwrite: "auto",
         });
       };
@@ -443,9 +292,6 @@ function initMorphButtons() {
       cleanups.push(() => {
         btn.removeEventListener("mousemove", onMove);
         btn.removeEventListener("mouseleave", onLeave);
-        gsap.set([btn, body, satA, satB, content].filter(Boolean), {
-          clearProps: "transform,opacity",
-        });
       });
     });
 

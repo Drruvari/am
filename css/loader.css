@@ -42,7 +42,7 @@
   font-size: clamp(2rem, 10vw, 15rem);
   font-weight: 850;
   line-height: 0.85;
-  letter-spacing: -0.08em;
+  letter-spacing: 0;
   color: #fff;
   mix-blend-mode: difference;
 }
