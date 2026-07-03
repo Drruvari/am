@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Arbër Manga — Architecture & Design</title>
+    <meta
+      name="description"
+      content="Architecture studies by Arbër Manga: houses, pavilions, interiors, and material systems."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@10..48,75..100,300..900&family=Manrope:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="cursor-morph" id="cursorMorph" aria-hidden="true">
+      <svg class="cursor-morph__svg" viewBox="0 0 120 120">
+        <circle
+          id="cursorMorphFill"
+          class="cursor-morph__fill"
+          cx="60"
+          cy="60"
+          r="47"
+        />
+
+        <path
+          id="cursorMorphCircleA"
+          class="cursor-morph__circle"
+          d="M60 10 C82 8 104 26 108 48 C112 72 96 96 72 106 C46 114 20 100 12 76 C6 52 18 26 42 14 C48 12 54 10 60 10Z"
+        />
+
+        <path
+          id="cursorMorphCircleB"
+          class="cursor-morph__circle cursor-morph__circle--ghost"
+          d="M60 14 C78 12 98 28 102 50 C106 74 90 94 68 102 C44 108 22 94 16 72 C10 50 24 28 46 18 C50 16 55 14 60 14Z"
+        />
+
+        <g id="cursorMorphCore" class="cursor-morph__core">
+          <path
+            id="cursorMorphDot"
+            class="cursor-morph__dot"
+            d="M60 54.5 C63.4 54.5 66 57.1 66 60.5 C66 63.9 63.4 66.5 60 66.5 C56.6 66.5 54 63.9 54 60.5 C54 57.1 56.6 54.5 60 54.5Z"
+          />
+        </g>
+      </svg>
+    </div>
+
+    <div class="scroll-progress" aria-hidden="true">
+      <span id="scrollProgress"></span>
+    </div>
+
+    <div
+      class="loader"
+      id="loader"
+      aria-label="Loading portfolio"
+      data-cursor-hidden
+    >
+      <div class="loader-card">
+        <img
+          src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=900"
+          alt=""
+          loading="eager"
+          decoding="async"
+        />
+      </div>
+      <div class="loader-card">
+        <img
+          src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=900"
+          alt=""
+          loading="eager"
+          decoding="async"
+        />
+      </div>
+      <div class="loader-card">
+        <img
+          src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=900"
+          alt=""
+          loading="eager"
+          decoding="async"
+        />
+      </div>
+      <div class="loader-card">
+        <img
+          src="https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&q=80&w=900"
+          alt=""
+          loading="eager"
+          decoding="async"
+        />
+      </div>
+      <div class="loader-card">
+        <img
+          src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=900"
+          alt=""
+          loading="eager"
+          decoding="async"
+        />
+      </div>
+      <div class="loader-card">
+        <img
+          src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&q=80&w=900"
+          alt=""
+          loading="eager"
+          decoding="async"
+        />
+      </div>
+      <div class="loader-count mono" aria-hidden="true">
+        <p id="loaderPct">000</p>
+      </div>
+    </div>
+
+    <header class="nav">
+      <a href="#top" class="nav-mark" data-hover="link">ARBËR MANGA</a>
+      <nav class="nav-links">
+        <a href="#work" data-hover="link">Selected Works</a>
+        <a href="#process" data-hover="link">Approach</a>
+        <a href="#studio" data-hover="link">Studio</a>
+        <a href="#contact" data-hover="link">Contact</a>
+      </nav>
+      <div class="morph-btn morph-btn--pill">
+        <a href="#contact" class="nav-cta" data-hover="link">
+          <span class="morph-btn__content">Send brief</span>
+        </a>
+      </div>
+      <button
+        class="nav-burger"
+        id="navBurger"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+        aria-controls="navMobile"
+      >
+        <span></span>
+      </button>
+    </header>
+
+    <div class="nav-mobile" id="navMobile">
+      <a href="#work" class="mobile-link">Selected Works</a>
+      <a href="#process" class="mobile-link">Approach</a>
+      <a href="#studio" class="mobile-link">Studio</a>
+      <a href="#contact" class="mobile-link">Contact</a>
+    </div>
+
+    <main id="top">
+      <section class="hero" id="hero">
+        <div class="hero-mark" aria-hidden="true">
+          <span class="hero-mark-text">AM</span>
+        </div>
+        <div class="hero-container">
+          <div class="hero-grid">
+            <div class="hero-left">
+              <div class="hero-meta-top mono">
+                <span>Arbër Manga</span>
+                <span>Architecture</span>
+              </div>
+              <p class="hero-lede" id="heroSub">
+                Independent studies in residential form, interior space, and
+                material restraint — shaped by site, structure, and light.
+              </p>
+            </div>
+            <div class="hero-right">
+              <div class="hero-copy">
+                <h1 class="hero-headline" id="heroTitle">
+                  <span class="line"
+                    ><span class="word-wrap">Architecture that</span></span
+                  >
+                  <span class="line"
+                    ><span class="word-wrap">merges structure</span></span
+                  >
+                  <span class="line"
+                    ><span class="word-wrap">with light, weight,</span></span
+                  >
+                  <span class="line"
+                    ><span class="word-wrap">and place.</span></span
+                  >
+                </h1>
+                <p class="hero-support">
+                  Houses, pavilions, interiors, and material systems — developed
+                  independently, edited until nothing extra remains.
+                </p>
+              </div>
+              <div class="morph-btn morph-btn--rect">
+                <a href="#work" class="hero-cta" data-hover="link">
+                  <span class="morph-btn__content">
+                    <span>View work</span>
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                      <path
+                        d="M1 13L13 1M13 1H4M13 1V10"
+                        stroke="currentColor"
+                        stroke-width="1.4"
+                      />
+                    </svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="manifesto">
+        <p class="manifesto-eyebrow eyebrow mono">01 — Philosophy</p>
+        <p class="manifesto-text" id="manifestoText">
+          The work starts with what is already there: slope, shade, wind,
+          access, budget, and the material close at hand. Form follows those
+          constraints, then gets edited until nothing extra remains.
+        </p>
+      </section>
+
+      <section class="sheets" id="work">
+        <div class="sheets-pin" id="sheetsPin">
+          <div class="sheets-copy">
+            <div class="sheets-index mono" id="sheetsIndex">
+              02 — Project Archive
+            </div>
+            <h2>SELECTED<br />STUDIES</h2>
+            <p>
+              Four studies arranged by atmosphere and massing. No campaign
+              language, just the image, the place, and the architectural
+              problem.
+            </p>
+          </div>
+          <div class="sheets-stack" id="sheetsStack">
+            <div class="sheet">
+              <img
+                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1200"
+                alt="Villa Lura"
+                loading="lazy"
+              />
+              <div class="sheet-meta mono">
+                01 / Villa Lura, Coastal Retreat
+              </div>
+            </div>
+            <div class="sheet">
+              <img
+                src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1200"
+                alt="Dajt Pavilion"
+                loading="lazy"
+              />
+              <div class="sheet-meta mono">02 / Dajt Mountain Pavilion</div>
+            </div>
+            <div class="sheet">
+              <img
+                src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1200"
+                alt="Krujë Studio"
+                loading="lazy"
+              />
+              <div class="sheet-meta mono">03 / Timber Studio, Krujë</div>
+            </div>
+            <div class="sheet">
+              <img
+                src="https://images.unsplash.com/photo-1600607686527-6fb886090705?auto=format&fit=crop&q=80&w=1200"
+                alt="Courtyard House"
+                loading="lazy"
+              />
+              <div class="sheet-meta mono">04 / Courtyard Residence, South</div>
+            </div>
+          </div>
+          <div class="sheets-scrollcue mono">Scroll through archive &rarr;</div>
+        </div>
+      </section>
+
+      <section class="works">
+        <div class="works-head">
+          <p class="eyebrow mono">03 — Built Environments</p>
+          <h2>FOUR WAYS<br />OF BUILDING</h2>
+          <p>
+            Different sites, same discipline: clear structure, useful rooms,
+            controlled openings, and materials that can take wear.
+          </p>
+        </div>
+        <div class="works-row">
+          <div
+            class="works-figure large"
+            data-hover="view"
+            data-title="The Cliff House"
+            data-loc="Vlorë Riviera"
+            data-desc="A coastal house set into limestone terrain. Concrete walls take the load and salt exposure; deep glazing is held back where the rooms need shade and opened where the view matters."
+            data-index="A—01"
+            data-type="Residential"
+            data-status="Concept Study"
+            data-scale="420 SQM"
+            data-year="2026"
+            data-materials="Board-formed concrete, limestone, low-iron glass"
+            data-note="north light / cliff datum"
+            data-images="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=1400|https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=1000|https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&q=80&w=1000"
+          >
+            <div class="works-visual" id="v1">
+              <img
+                src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=1400"
+                alt="Cliff House"
+                loading="lazy"
+              />
+            </div>
+            <div class="works-cap mono">A—01 / The Cliff House, Vlorë</div>
+          </div>
+          <div
+            class="works-figure small"
+            data-hover="view"
+            data-title="Industrial Loft"
+            data-loc="Tirana Center"
+            data-desc="A former textile floor converted into a compact live-work interior. Brick and steel stay visible; new oak and limewash volumes organize storage, services, and work rooms."
+            data-index="A—02"
+            data-type="Adaptive Reuse"
+            data-status="Interior Concept"
+            data-scale="280 SQM"
+            data-year="2025"
+            data-materials="Existing brick, blackened steel, pale oak"
+            data-note="service core / retained shell"
+            data-images="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80&w=1000|https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&q=80&w=1000|https://images.unsplash.com/photo-1600607687644-c7171b42498f?auto=format&fit=crop&q=80&w=1000"
+          >
+            <div class="works-visual" id="v2">
+              <img
+                src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80&w=800"
+                alt="Industrial Loft"
+                loading="lazy"
+              />
+            </div>
+            <div class="works-cap mono">A—02 / Factory Loft, Tirana</div>
+          </div>
+        </div>
+        <div class="works-row reverse">
+          <div
+            class="works-figure small"
+            data-hover="view"
+            data-title="Botanical Spine"
+            data-loc="Lundër"
+            data-desc="A small research pavilion built around a glulam spine. The structure sets the rhythm, while the skin filters heat, rain, and glare without hiding the frame."
+            data-index="A—03"
+            data-type="Research Pavilion"
+            data-status="Schematic Design"
+            data-scale="190 SQM"
+            data-year="2026"
+            data-materials="Glulam timber, lime plaster, polycarbonate"
+            data-note="glulam rhythm / passive skin"
+            data-images="https://images.unsplash.com/photo-1541888087595-8850cb101569?auto=format&fit=crop&q=80&w=1000|https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&q=80&w=1000|https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&q=80&w=1000"
+          >
+            <div class="works-visual" id="v3">
+              <img
+                src="https://images.unsplash.com/photo-1541888087595-8850cb101569?auto=format&fit=crop&q=80&w=800"
+                alt="Botanical Pavilion"
+                loading="lazy"
+              />
+            </div>
+            <div class="works-cap mono">A—03 / Botanical Pavilion, Lundër</div>
+          </div>
+          <div
+            class="works-figure large"
+            data-hover="view"
+            data-title="Monolith Sanctuary"
+            data-loc="Theth National Park"
+            data-desc="A mountain retreat with a heavy mineral shell and a single roof opening. The study tests how little a room needs when the site already carries the atmosphere."
+            data-index="A—04"
+            data-type="Retreat"
+            data-status="Research Proposal"
+            data-scale="310 SQM"
+            data-year="2025"
+            data-materials="Local aggregate, darkened timber, mineral render"
+            data-note="roof aperture / stone mass"
+            data-images="https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&q=80&w=1400|https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&q=80&w=1000|https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&q=80&w=1000"
+          >
+            <div class="works-visual" id="v4">
+              <img
+                src="https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&q=80&w=1400"
+                alt="Monolith Sanctuary"
+                loading="lazy"
+              />
+            </div>
+            <div class="works-cap mono">A—04 / Monolith Sanctuary, Theth</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="process" id="process">
+        <div class="process-pin" id="processPin">
+          <div class="process-head">
+            <p class="eyebrow mono">04 — Methodology</p>
+            <h2>WORKING<br />METHOD</h2>
+          </div>
+          <div class="process-track" id="processTrack">
+            <article class="process-step">
+              <span class="process-num mono">Phase I</span>
+              <svg class="process-glyph" viewBox="0 0 80 80" fill="none">
+                <path
+                  d="M10 60L40 20L70 60M20 60V45H60V60"
+                  stroke="#A6422D"
+                  stroke-width="1.2"
+                />
+              </svg>
+              <h3>Read the Site</h3>
+              <p>
+                Map slope, access, weather, views, and existing constraints
+                before deciding what the building should do.
+              </p>
+            </article>
+            <article class="process-step">
+              <span class="process-num mono">Phase II</span>
+              <svg class="process-glyph" viewBox="0 0 80 80" fill="none">
+                <path
+                  d="M12 65C25 20 55 20 68 65"
+                  stroke="#A6422D"
+                  stroke-width="1.2"
+                />
+                <path d="M20 65h40" stroke="#A6422D" stroke-width="1.2" />
+              </svg>
+              <h3>Draw Fast</h3>
+              <p>
+                Test massing, routes, and room proportions before the project
+                becomes too polished to question.
+              </p>
+            </article>
+            <article class="process-step">
+              <span class="process-num mono">Phase III</span>
+              <svg class="process-glyph" viewBox="0 0 80 80" fill="none">
+                <path
+                  d="M15 15h50v50h-50z"
+                  stroke="#A6422D"
+                  stroke-width="1.2"
+                />
+                <path
+                  d="M15 35h50M35 15v50"
+                  stroke="#A6422D"
+                  stroke-width="1.2"
+                />
+              </svg>
+              <h3>Resolve Structure</h3>
+              <p>
+                Keep structure legible. Walls, spans, and openings should read
+                as one decision, not separate layers.
+              </p>
+            </article>
+            <article class="process-step">
+              <span class="process-num mono">Phase IV</span>
+              <svg class="process-glyph" viewBox="0 0 80 80" fill="none">
+                <circle
+                  cx="40"
+                  cy="40"
+                  r="24"
+                  stroke="#A6422D"
+                  stroke-width="1.2"
+                />
+                <path
+                  d="M40 16v48M16 40h48"
+                  stroke="#A6422D"
+                  stroke-width="1.2"
+                />
+              </svg>
+              <h3>Choose Materials</h3>
+              <p>
+                Use materials that fit the climate, budget, maintenance load,
+                and the tone of the place.
+              </p>
+            </article>
+            <article class="process-step">
+              <span class="process-num mono">Phase V</span>
+              <svg class="process-glyph" viewBox="0 0 80 80" fill="none">
+                <path
+                  d="M12 40h56M40 12v56M20 20l40 40M60 20l-40 40"
+                  stroke="#A6422D"
+                  stroke-width="1.2"
+                />
+              </svg>
+              <h3>Detail the Edges</h3>
+              <p>
+                Junctions, thresholds, drainage, and shade lines decide whether
+                the project holds together.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="materials">
+        <p class="eyebrow mono">05 — Palette</p>
+        <h2>MATERIAL<br />SYSTEMS</h2>
+        <div class="materials-strip" id="materialsStrip">
+          <div class="material-swatch" data-color="#D1CCC1">
+            <span class="mono">Exposed Aggregate Concrete</span>
+          </div>
+          <div class="material-swatch" data-color="#A6422D">
+            <span class="mono">Terracotta & Brick</span>
+          </div>
+          <div class="material-swatch" data-color="#A18060">
+            <span class="mono">European White Oak</span>
+          </div>
+          <div class="material-swatch" data-color="#2D2A26">
+            <span class="mono">Oxidized Steel</span>
+          </div>
+          <div class="material-swatch" data-color="#F4F1EC">
+            <span class="mono">Mineral Limewash</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="stats">
+        <div class="stat">
+          <span class="stat-num" data-count="18">0</span>
+          <span class="stat-label mono">Design Studies</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num" data-count="7">0</span>
+          <span class="stat-label mono">Material Systems</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num" data-count="4">0</span>
+          <span class="stat-label mono">Site Types</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num" data-count="1">0</span>
+          <span class="stat-label mono">Independent Practice</span>
+        </div>
+      </section>
+
+      <section class="studio" id="studio">
+        <div class="studio-copy">
+          <p class="eyebrow mono">06 — The Studio</p>
+          <h2>SMALL STUDIO,<br />CLEAR EDIT.</h2>
+          <p>
+            The studio stays small by choice. Fewer projects, tighter decisions,
+            and drawings that keep the contractor, client, and site aligned.
+          </p>
+        </div>
+        <div class="studio-quotes" id="studioQuotes">
+          <div class="quote-track" id="quoteTrack1">
+            <blockquote>
+              "Strong rooms before strong images."
+              <cite>— Studio note</cite>
+            </blockquote>
+            <blockquote>
+              "Material choices are made for wear, not novelty."
+              <cite>— Material log</cite>
+            </blockquote>
+            <blockquote>
+              "Every opening has to earn its size."
+              <cite>— Drawing review</cite>
+            </blockquote>
+          </div>
+          <div class="quote-track" id="quoteTrack2" aria-hidden="true">
+            <blockquote>
+              "Strong rooms before strong images."
+              <cite>— Studio note</cite>
+            </blockquote>
+            <blockquote>
+              "Material choices are made for wear, not novelty."
+              <cite>— Material log</cite>
+            </blockquote>
+            <blockquote>
+              "Every opening has to earn its size."
+              <cite>— Drawing review</cite>
+            </blockquote>
+          </div>
+        </div>
+      </section>
+
+      <section class="contact" id="contact">
+        <p class="eyebrow mono">07 — Get in touch</p>
+        <div class="morph-btn morph-btn--circle" id="magneticCta">
+          <a
+            href="mailto:hello@arbermanga.com"
+            class="contact-cta"
+            data-cursor-hidden
+          >
+            <span class="morph-btn__content">START A<br />BRIEF</span>
+          </a>
+        </div>
+        <p class="contact-sub">
+          Send project notes to
+          <a href="mailto:hello@arbermanga.com" data-hover="link"
+            >hello@arbermanga.com</a
+          >
+        </p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-block mono">
+        <span class="footer-label">Studio</span>
+        <span>Arbër Manga Architecture</span>
+      </div>
+      <div class="footer-block mono">
+        <span class="footer-label">Headquarters</span>
+        <span>Blloku District, Tirana, AL</span>
+      </div>
+      <div class="footer-block mono">
+        <span class="footer-label">Design Ethos</span>
+        <span>Form Follows Context</span>
+      </div>
+      <div class="footer-block mono">
+        <span class="footer-label">Year</span>
+        <span id="footerYear">2026</span>
+      </div>
+      <div class="footer-block mono footer-social">
+        <span class="footer-label">Connect</span>
+        <span
+          ><a href="#" data-hover="link">Instagram</a>
+          <a href="#" data-hover="link">LinkedIn</a></span
+        >
+      </div>
+    </footer>
+
+    <div class="detail" id="detail">
+      <div class="morph-btn morph-btn--pill morph-btn--detail">
+        <button class="detail-close mono" id="detailClose" data-hover="close">
+          <span class="morph-btn__content">Close</span>
+        </button>
+      </div>
+      <div class="detail-visual" id="detailVisual"></div>
+      <div class="detail-info">
+        <p class="mono detail-index" id="detailIndex">A—01</p>
+        <h3 id="detailTitle">Project Title</h3>
+        <p class="detail-loc mono" id="detailLoc">Location — Year</p>
+        <p class="detail-desc" id="detailDesc">
+          Project description goes here.
+        </p>
+        <div class="detail-meta mono" id="detailMeta">
+          <div><span>Typology</span>Residential</div>
+          <div><span>Status</span>Concept</div>
+          <div><span>Scale</span>420 SQM</div>
+          <div><span>Materials</span>Concrete</div>
+        </div>
+        <div class="detail-gallery" id="detailGallery"></div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Flip.min.js"></script>
+    <script src="https://unpkg.com/split-type@0.3.4"></script>
+    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
