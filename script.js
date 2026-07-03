@@ -204,6 +204,65 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("footerYear").textContent = new Date().getFullYear();
 
+  const footerStatus = document.getElementById("footerStatus");
+  const updateFooterStatus = () => {
+    if (!footerStatus) return;
+
+    const now = new Date();
+    const time = now.toLocaleTimeString("en-AU", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+      timeZone: "Europe/Tirane",
+    });
+    const hour = Number(
+      now.toLocaleString("en-AU", {
+        hour: "numeric",
+        hour12: false,
+        timeZone: "Europe/Tirane",
+      }),
+    );
+    const isOpen = hour >= 8 && hour < 17;
+    footerStatus.textContent = `${time} CET, we are ${isOpen ? "open" : "closed"}`;
+  };
+
+  updateFooterStatus();
+  window.setInterval(updateFooterStatus, 60_000);
+
+  const mobileMenu = document.getElementById("mobileMenu");
+  const mobileMenuOpen = document.getElementById("mobileMenuOpen");
+  const mobileMenuClose = document.getElementById("mobileMenuClose");
+  const mobileMenuBackdrop = document.getElementById("mobileMenuBackdrop");
+
+  const setMobileMenuOpen = (open) => {
+    if (!mobileMenu) return;
+
+    mobileMenu.classList.toggle("is-open", open);
+    mobileMenu.setAttribute("aria-hidden", open ? "false" : "true");
+    mobileMenuOpen?.setAttribute("aria-expanded", open ? "true" : "false");
+    document.body.classList.toggle("is-mobile-menu-open", open);
+
+    if (open) {
+      lenis.stop();
+    } else {
+      lenis.start();
+    }
+  };
+
+  mobileMenuOpen?.addEventListener("click", () => setMobileMenuOpen(true));
+  mobileMenuClose?.addEventListener("click", () => setMobileMenuOpen(false));
+  mobileMenuBackdrop?.addEventListener("click", () => setMobileMenuOpen(false));
+
+  mobileMenu?.querySelectorAll('a[href^="#"]').forEach((link) => {
+    link.addEventListener("click", () => setMobileMenuOpen(false));
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && mobileMenu?.classList.contains("is-open")) {
+      setMobileMenuOpen(false);
+    }
+  });
+
   const manifestoSplit = new SplitType("#manifestoText", { types: "words" });
 
   const cursor = document.getElementById("cursorMorph");
@@ -676,8 +735,8 @@ document.addEventListener("DOMContentLoaded", () => {
     ".works-cap",
     ".topbar a",
     ".topbar-menu",
-    ".footer-nav a",
-    ".footer-bottom a",
+    ".footer-nav-links a",
+    ".footer-bar a",
     ".detail-close",
   ];
 
