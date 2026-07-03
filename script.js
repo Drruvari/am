@@ -95,83 +95,20 @@ document.addEventListener("DOMContentLoaded", () => {
     return pointsToSmoothPath(points);
   };
 
-  const progressBar = document.getElementById("scrollProgress");
-  const progressOrb = document.getElementById("scrollProgressOrb");
-  const progressLabel = document.getElementById("scrollProgressLabel");
-  const progressTicks = gsap.utils.toArray(".scroll-progress__tick");
-  const progressLength = progressBar?.getTotalLength
-    ? progressBar.getTotalLength()
-    : 0;
-  const sectionProgressItems = [
-    { selector: "#top", label: "00 / Top" },
-    { selector: ".manifesto", label: "01 / Philosophy" },
-    { selector: "#work", label: "02 / Archive" },
-    { selector: ".works", label: "03 / Built" },
-    { selector: "#process", label: "04 / Method" },
-    { selector: ".materials", label: "05 / Palette" },
-    { selector: "#studio", label: "06 / Studio" },
-    { selector: "#contact", label: "07 / Contact" },
-  ];
-  let activeProgressIndex = 0;
-
-  if (progressLength) {
-    gsap.set(progressBar, {
-      strokeDasharray: progressLength,
-      strokeDashoffset: progressLength,
-    });
-  }
-
-  const setActiveProgressSection = (index) => {
-    if (index === activeProgressIndex) return;
-    activeProgressIndex = index;
-
-    progressTicks.forEach((tick, tickIndex) => {
-      tick.classList.toggle("is-active", tickIndex === index);
-    });
-
-    if (progressLabel) {
-      progressLabel.textContent =
-        sectionProgressItems[index]?.label || sectionProgressItems[0].label;
-    }
-  };
-
-  setActiveProgressSection(0);
+  const topbar = document.getElementById("topbar");
 
   let lenis;
 
-  const updateScrollProgress = () => {
-    const scrollable =
-      document.documentElement.scrollHeight - window.innerHeight;
+  const updateScrollState = () => {
     const currentScroll =
       typeof lenis?.scroll === "number" ? lenis.scroll : window.scrollY;
-    const progress = scrollable > 0 ? currentScroll / scrollable : 0;
-    const clampedProgress = Math.min(1, Math.max(0, progress));
 
-    if (progressLength) {
-      const drawLength = progressLength * clampedProgress;
-      const point = progressBar.getPointAtLength(drawLength);
-
-      progressBar.style.strokeDashoffset = progressLength - drawLength;
-
-      if (progressOrb) {
-        progressOrb.style.left = `${(point.x / 112) * 100}%`;
-        progressOrb.style.top = `${(point.y / 520) * 100}%`;
-        progressOrb.style.transform = `translate(-50%, -50%) rotate(${clampedProgress * 260 - 18}deg)`;
-      }
-    } else if (progressBar) {
-      progressBar.style.transform = `scaleX(${clampedProgress})`;
+    if (topbar) {
+      document.body.classList.toggle(
+        "is-topbar-compact",
+        currentScroll > window.innerHeight * 0.18,
+      );
     }
-
-    const viewportAnchor = window.innerHeight * 0.48;
-    const nextIndex = sectionProgressItems.reduce((currentIndex, item, index) => {
-      const section = document.querySelector(item.selector);
-      if (!section) return currentIndex;
-      return section.getBoundingClientRect().top <= viewportAnchor
-        ? index
-        : currentIndex;
-    }, 0);
-
-    setActiveProgressSection(nextIndex);
   };
 
   const isTouchOnly = navigator.maxTouchPoints > 0 && !finePointerQuery.matches;
@@ -191,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     lenis.on("scroll", () => {
       ScrollTrigger.update();
-      updateScrollProgress();
+      updateScrollState();
     });
     gsap.ticker.add((time) => {
       lenis.raf(time * 1000);
@@ -227,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "scroll",
       () => {
         ScrollTrigger.update();
-        updateScrollProgress();
+        updateScrollState();
       },
       { passive: true },
     );
@@ -742,7 +679,11 @@ document.addEventListener("DOMContentLoaded", () => {
     ".material-swatch span",
     ".contact-cta .morph-btn__content",
     ".contact-sub a",
-    ".footer-social a",
+    ".topbar a",
+    ".topbar-menu",
+    ".footer-cta",
+    ".footer-nav a",
+    ".footer-bottom a",
     ".detail-close",
   ];
 
@@ -871,7 +812,7 @@ document.addEventListener("DOMContentLoaded", () => {
           lenis.start();
           document.body.style.overflow = "";
           ScrollTrigger.refresh();
-          updateScrollProgress();
+          updateScrollState();
         },
       },
       3.25,
@@ -1470,10 +1411,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   window.addEventListener("load", () => {
     ScrollTrigger.refresh();
-    updateScrollProgress();
+    updateScrollState();
   });
 
   window.addEventListener("resize", () => {
-    updateScrollProgress();
+    updateScrollState();
   });
 });

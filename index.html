@@ -49,45 +49,21 @@
       </svg>
     </div>
 
-    <div class="scroll-progress" id="scrollProgressShell" aria-hidden="true">
-      <span class="scroll-progress__label mono" id="scrollProgressLabel"
-        >00 / Top</span
-      >
-      <svg class="scroll-progress__svg" viewBox="0 0 112 520">
-        <path
-          class="scroll-progress__ghost"
-          d="M57 18 C21 65 91 103 50 153 C24 185 87 228 56 271 C24 315 91 357 52 407 C35 429 39 465 64 502"
-        />
-        <path
-          id="scrollProgress"
-          class="scroll-progress__line"
-          d="M57 18 C21 65 91 103 50 153 C24 185 87 228 56 271 C24 315 91 357 52 407 C35 429 39 465 64 502"
-        />
-        <path
-          class="scroll-progress__sketch scroll-progress__sketch--a"
-          d="M41 42 C54 30 70 31 79 45 C88 59 78 77 61 77 C45 78 33 63 41 42Z"
-        />
-        <path
-          class="scroll-progress__sketch scroll-progress__sketch--b"
-          d="M35 292 C50 276 75 280 83 299 C91 320 72 340 50 334 C31 329 22 307 35 292Z"
-        />
-        <path
-          class="scroll-progress__sketch scroll-progress__sketch--c"
-          d="M40 445 C55 431 77 438 82 456 C87 474 71 490 52 486 C35 482 28 457 40 445Z"
-        />
-      </svg>
-      <span class="scroll-progress__orb" id="scrollProgressOrb"></span>
-      <span class="scroll-progress__tick is-active" data-section-index="0"
-        >00</span
-      >
-      <span class="scroll-progress__tick" data-section-index="1">01</span>
-      <span class="scroll-progress__tick" data-section-index="2">02</span>
-      <span class="scroll-progress__tick" data-section-index="3">03</span>
-      <span class="scroll-progress__tick" data-section-index="4">04</span>
-      <span class="scroll-progress__tick" data-section-index="5">05</span>
-      <span class="scroll-progress__tick" data-section-index="6">06</span>
-      <span class="scroll-progress__tick" data-section-index="7">07</span>
-    </div>
+    <header class="topbar" id="topbar">
+      <a href="#top" class="topbar-brand" data-hover="link">AM Architecture</a>
+      <nav class="topbar-nav" aria-label="Primary navigation">
+        <a href="#work" data-hover="link">Works</a>
+        <a href="#studio" data-hover="link">Studio</a>
+        <a href="#process" data-hover="link">Process</a>
+        <a href="#gallery" data-hover="link">Gallery</a>
+      </nav>
+      <div class="topbar-actions">
+        <a href="mailto:hello@arbermanga.com" class="topbar-brief" data-hover="link">
+          Send Brief
+        </a>
+        <a href="#footer" class="topbar-menu" data-hover="link">Menu</a>
+      </div>
+    </header>
 
     <div
       class="loader"
@@ -267,7 +243,7 @@
         </div>
       </section>
 
-      <section class="works">
+      <section class="works" id="gallery">
         <div class="works-head">
           <p class="eyebrow mono">03 — Built Environments</p>
           <h2>FOUR WAYS<br />OF BUILDING</h2>
@@ -390,7 +366,7 @@
               <svg class="process-glyph" viewBox="0 0 80 80" fill="none">
                 <path
                   d="M10 60L40 20L70 60M20 60V45H60V60"
-                  stroke="#A6422D"
+                  stroke="currentColor"
                   stroke-width="1.2"
                 />
               </svg>
@@ -405,10 +381,10 @@
               <svg class="process-glyph" viewBox="0 0 80 80" fill="none">
                 <path
                   d="M12 65C25 20 55 20 68 65"
-                  stroke="#A6422D"
+                  stroke="currentColor"
                   stroke-width="1.2"
                 />
-                <path d="M20 65h40" stroke="#A6422D" stroke-width="1.2" />
+                <path d="M20 65h40" stroke="currentColor" stroke-width="1.2" />
               </svg>
               <h3>Draw Fast</h3>
               <p>
@@ -421,12 +397,12 @@
               <svg class="process-glyph" viewBox="0 0 80 80" fill="none">
                 <path
                   d="M15 15h50v50h-50z"
-                  stroke="#A6422D"
+                  stroke="currentColor"
                   stroke-width="1.2"
                 />
                 <path
                   d="M15 35h50M35 15v50"
-                  stroke="#A6422D"
+                  stroke="currentColor"
                   stroke-width="1.2"
                 />
               </svg>
@@ -443,12 +419,12 @@
                   cx="40"
                   cy="40"
                   r="24"
-                  stroke="#A6422D"
+                  stroke="currentColor"
                   stroke-width="1.2"
                 />
                 <path
                   d="M40 16v48M16 40h48"
-                  stroke="#A6422D"
+                  stroke="currentColor"
                   stroke-width="1.2"
                 />
               </svg>
@@ -463,7 +439,7 @@
               <svg class="process-glyph" viewBox="0 0 80 80" fill="none">
                 <path
                   d="M12 40h56M40 12v56M20 20l40 40M60 20l-40 40"
-                  stroke="#A6422D"
+                  stroke="currentColor"
                   stroke-width="1.2"
                 />
               </svg>
@@ -481,19 +457,19 @@
         <p class="eyebrow mono">05 — Palette</p>
         <h2>MATERIAL<br />SYSTEMS</h2>
         <div class="materials-strip" id="materialsStrip">
-          <div class="material-swatch" data-color="#D1CCC1">
+          <div class="material-swatch" data-color="#d8d8d2">
             <span class="mono">Exposed Aggregate Concrete</span>
           </div>
-          <div class="material-swatch" data-color="#A6422D">
+          <div class="material-swatch" data-color="#141412">
             <span class="mono">Terracotta & Brick</span>
           </div>
-          <div class="material-swatch" data-color="#A18060">
+          <div class="material-swatch" data-color="#9b9b93">
             <span class="mono">European White Oak</span>
           </div>
-          <div class="material-swatch" data-color="#2D2A26">
+          <div class="material-swatch" data-color="#2d2d29">
             <span class="mono">Oxidized Steel</span>
           </div>
-          <div class="material-swatch" data-color="#F4F1EC">
+          <div class="material-swatch" data-color="#f4f4f0">
             <span class="mono">Mineral Limewash</span>
           </div>
         </div>
@@ -579,29 +555,55 @@
       </section>
     </main>
 
-    <footer class="footer">
-      <div class="footer-block mono">
-        <span class="footer-label">Studio</span>
-        <span>Arbër Manga Architecture</span>
+    <footer class="footer" id="footer">
+      <div class="footer-statement">
+        <h2>Focused on quality<br />driven by restraint</h2>
+        <a href="mailto:hello@arbermanga.com" class="footer-cta" data-hover="link">
+          Tell us about your project
+        </a>
       </div>
-      <div class="footer-block mono">
-        <span class="footer-label">Headquarters</span>
-        <span>Blloku District, Tirana, AL</span>
+      <div class="footer-main">
+        <div class="footer-image-block">
+          <img
+            src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&q=80&w=900"
+            alt="Warm residential architecture with garden path"
+            loading="lazy"
+          />
+          <span class="footer-mark" aria-hidden="true">AM</span>
+        </div>
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <span class="footer-label mono">Navigation</span>
+          <a href="#top" data-hover="link">Home</a>
+          <a href="#work" data-hover="link">Works</a>
+          <a href="#process" data-hover="link">Process</a>
+          <a href="#gallery" data-hover="link">Gallery</a>
+          <a href="#studio" data-hover="link">Studio</a>
+          <a href="#contact" data-hover="link">Contact</a>
+        </nav>
+        <div class="footer-info">
+          <div>
+            <span class="footer-label mono">Acknowledgement</span>
+            <p>
+              AM Architecture works from Tirana and acknowledges the builders,
+              craftspeople, clients, and local communities that make each study
+              possible.
+            </p>
+          </div>
+          <div>
+            <span class="footer-label mono">Info</span>
+            <p>
+              A: Blloku District, Tirana, AL<br />
+              E: hello@arbermanga.com<br />
+              H: Monday to Friday, by appointment
+            </p>
+          </div>
+        </div>
       </div>
-      <div class="footer-block mono">
-        <span class="footer-label">Design Ethos</span>
-        <span>Form Follows Context</span>
-      </div>
-      <div class="footer-block mono">
-        <span class="footer-label">Year</span>
-        <span id="footerYear">2026</span>
-      </div>
-      <div class="footer-block mono footer-social">
-        <span class="footer-label">Connect</span>
-        <span
-          ><a href="#" data-hover="link">Instagram</a>
-          <a href="#" data-hover="link">LinkedIn</a></span
-        >
+      <div class="footer-bottom mono">
+        <span>© <span id="footerYear">2026</span> AM Architecture</span>
+        <span>Privacy Policy</span>
+        <a href="#" data-hover="link">Instagram</a>
+        <span>Site by Arbër Manga</span>
       </div>
     </footer>
 
