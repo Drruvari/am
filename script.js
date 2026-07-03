@@ -1,6 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
   gsap.registerPlugin(ScrollTrigger, Flip);
 
+  if ("scrollRestoration" in history) {
+    history.scrollRestoration = "manual";
+  }
+
+  window.scrollTo(0, 0);
+
   const desktopQuery = window.matchMedia("(min-width: 769px)");
   const finePointerQuery = window.matchMedia(
     "(min-width: 769px) and (pointer: fine)",
@@ -90,6 +96,47 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const progressBar = document.getElementById("scrollProgress");
+  const progressOrb = document.getElementById("scrollProgressOrb");
+  const progressLabel = document.getElementById("scrollProgressLabel");
+  const progressTicks = gsap.utils.toArray(".scroll-progress__tick");
+  const progressLength = progressBar?.getTotalLength
+    ? progressBar.getTotalLength()
+    : 0;
+  const sectionProgressItems = [
+    { selector: "#top", label: "00 / Top" },
+    { selector: ".manifesto", label: "01 / Philosophy" },
+    { selector: "#work", label: "02 / Archive" },
+    { selector: ".works", label: "03 / Built" },
+    { selector: "#process", label: "04 / Method" },
+    { selector: ".materials", label: "05 / Palette" },
+    { selector: "#studio", label: "06 / Studio" },
+    { selector: "#contact", label: "07 / Contact" },
+  ];
+  let activeProgressIndex = 0;
+
+  if (progressLength) {
+    gsap.set(progressBar, {
+      strokeDasharray: progressLength,
+      strokeDashoffset: progressLength,
+    });
+  }
+
+  const setActiveProgressSection = (index) => {
+    if (index === activeProgressIndex) return;
+    activeProgressIndex = index;
+
+    progressTicks.forEach((tick, tickIndex) => {
+      tick.classList.toggle("is-active", tickIndex === index);
+    });
+
+    if (progressLabel) {
+      progressLabel.textContent =
+        sectionProgressItems[index]?.label || sectionProgressItems[0].label;
+    }
+  };
+
+  setActiveProgressSection(0);
+
   let lenis;
 
   const updateScrollProgress = () => {
@@ -98,7 +145,33 @@ document.addEventListener("DOMContentLoaded", () => {
     const currentScroll =
       typeof lenis?.scroll === "number" ? lenis.scroll : window.scrollY;
     const progress = scrollable > 0 ? currentScroll / scrollable : 0;
-    progressBar.style.transform = `scaleX(${Math.min(1, Math.max(0, progress))})`;
+    const clampedProgress = Math.min(1, Math.max(0, progress));
+
+    if (progressLength) {
+      const drawLength = progressLength * clampedProgress;
+      const point = progressBar.getPointAtLength(drawLength);
+
+      progressBar.style.strokeDashoffset = progressLength - drawLength;
+
+      if (progressOrb) {
+        progressOrb.style.left = `${(point.x / 112) * 100}%`;
+        progressOrb.style.top = `${(point.y / 520) * 100}%`;
+        progressOrb.style.transform = `translate(-50%, -50%) rotate(${clampedProgress * 260 - 18}deg)`;
+      }
+    } else if (progressBar) {
+      progressBar.style.transform = `scaleX(${clampedProgress})`;
+    }
+
+    const viewportAnchor = window.innerHeight * 0.48;
+    const nextIndex = sectionProgressItems.reduce((currentIndex, item, index) => {
+      const section = document.querySelector(item.selector);
+      if (!section) return currentIndex;
+      return section.getBoundingClientRect().top <= viewportAnchor
+        ? index
+        : currentIndex;
+    }, 0);
+
+    setActiveProgressSection(nextIndex);
   };
 
   const isTouchOnly = navigator.maxTouchPoints > 0 && !finePointerQuery.matches;
@@ -661,9 +734,6 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const scrambleTargets = [
-    ".nav a",
-    ".nav-cta span",
-    ".nav-cta .morph-btn__content",
     ".hero-cta .morph-btn__content > span",
     ".sheets-index",
     ".sheet-meta",
@@ -797,6 +867,7 @@ document.addEventListener("DOMContentLoaded", () => {
         duration: 1,
         ease: "power3.inOut",
         onComplete: () => {
+          lenis.scrollTo(0, { immediate: true });
           lenis.start();
           document.body.style.overflow = "";
           ScrollTrigger.refresh();
@@ -1266,46 +1337,8 @@ document.addEventListener("DOMContentLoaded", () => {
     return () => cleanups.forEach((cleanup) => cleanup());
   });
 
-  // Mobile Nav Toggle
-  const navBurger = document.getElementById("navBurger");
-  const navMobile = document.getElementById("navMobile");
-  let menuOpen = false;
-  let detailOpen = false;
-
-  const closeMobileMenu = () => {
-    menuOpen = false;
-    navBurger.classList.remove("active");
-    navBurger.setAttribute("aria-expanded", "false");
-    navMobile.classList.remove("active");
-    document.body.classList.remove("is-menu-open");
-    if (!detailOpen) lenis.start();
-  };
-
-  navBurger.addEventListener("click", () => {
-    menuOpen = !menuOpen;
-    navBurger.classList.toggle("active");
-    navBurger.setAttribute("aria-expanded", String(menuOpen));
-    document.body.classList.toggle("is-menu-open", menuOpen);
-    if (menuOpen) {
-      navMobile.classList.add("active");
-      lenis.stop();
-    } else {
-      navMobile.classList.remove("active");
-      lenis.start();
-    }
-  });
-
-  document.querySelectorAll(".mobile-link").forEach((link) => {
-    link.addEventListener("click", () => {
-      closeMobileMenu();
-    });
-  });
-
-  desktopQuery.addEventListener("change", (event) => {
-    if (event.matches && menuOpen) closeMobileMenu();
-  });
-
   // Project Detail View
+  let detailOpen = false;
   const detailOverlay = document.getElementById("detail");
   const detailClose = document.getElementById("detailClose");
   const detailVisual = document.getElementById("detailVisual");

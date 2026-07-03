@@ -49,8 +49,44 @@
       </svg>
     </div>
 
-    <div class="scroll-progress" aria-hidden="true">
-      <span id="scrollProgress"></span>
+    <div class="scroll-progress" id="scrollProgressShell" aria-hidden="true">
+      <span class="scroll-progress__label mono" id="scrollProgressLabel"
+        >00 / Top</span
+      >
+      <svg class="scroll-progress__svg" viewBox="0 0 112 520">
+        <path
+          class="scroll-progress__ghost"
+          d="M57 18 C21 65 91 103 50 153 C24 185 87 228 56 271 C24 315 91 357 52 407 C35 429 39 465 64 502"
+        />
+        <path
+          id="scrollProgress"
+          class="scroll-progress__line"
+          d="M57 18 C21 65 91 103 50 153 C24 185 87 228 56 271 C24 315 91 357 52 407 C35 429 39 465 64 502"
+        />
+        <path
+          class="scroll-progress__sketch scroll-progress__sketch--a"
+          d="M41 42 C54 30 70 31 79 45 C88 59 78 77 61 77 C45 78 33 63 41 42Z"
+        />
+        <path
+          class="scroll-progress__sketch scroll-progress__sketch--b"
+          d="M35 292 C50 276 75 280 83 299 C91 320 72 340 50 334 C31 329 22 307 35 292Z"
+        />
+        <path
+          class="scroll-progress__sketch scroll-progress__sketch--c"
+          d="M40 445 C55 431 77 438 82 456 C87 474 71 490 52 486 C35 482 28 457 40 445Z"
+        />
+      </svg>
+      <span class="scroll-progress__orb" id="scrollProgressOrb"></span>
+      <span class="scroll-progress__tick is-active" data-section-index="0"
+        >00</span
+      >
+      <span class="scroll-progress__tick" data-section-index="1">01</span>
+      <span class="scroll-progress__tick" data-section-index="2">02</span>
+      <span class="scroll-progress__tick" data-section-index="3">03</span>
+      <span class="scroll-progress__tick" data-section-index="4">04</span>
+      <span class="scroll-progress__tick" data-section-index="5">05</span>
+      <span class="scroll-progress__tick" data-section-index="6">06</span>
+      <span class="scroll-progress__tick" data-section-index="7">07</span>
     </div>
 
     <div
@@ -110,37 +146,6 @@
       <div class="loader-count mono" aria-hidden="true">
         <p id="loaderPct">000</p>
       </div>
-    </div>
-
-    <header class="nav">
-      <a href="#top" class="nav-mark" data-hover="link">ARBËR MANGA</a>
-      <nav class="nav-links">
-        <a href="#work" data-hover="link">Selected Works</a>
-        <a href="#process" data-hover="link">Approach</a>
-        <a href="#studio" data-hover="link">Studio</a>
-        <a href="#contact" data-hover="link">Contact</a>
-      </nav>
-      <div class="morph-btn morph-btn--pill">
-        <a href="#contact" class="nav-cta" data-hover="link">
-          <span class="morph-btn__content">Send brief</span>
-        </a>
-      </div>
-      <button
-        class="nav-burger"
-        id="navBurger"
-        aria-label="Toggle menu"
-        aria-expanded="false"
-        aria-controls="navMobile"
-      >
-        <span></span>
-      </button>
-    </header>
-
-    <div class="nav-mobile" id="navMobile">
-      <a href="#work" class="mobile-link">Selected Works</a>
-      <a href="#process" class="mobile-link">Approach</a>
-      <a href="#studio" class="mobile-link">Studio</a>
-      <a href="#contact" class="mobile-link">Contact</a>
     </div>
 
     <main id="top">
