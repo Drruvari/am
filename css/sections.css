@@ -204,6 +204,29 @@
   overflow: hidden;
   background: var(--panel);
   clip-path: inset(0 round 0);
+  transform-style: preserve-3d;
+}
+.works-visual::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  z-index: 2;
+  opacity: var(--spot-opacity, 0);
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle at var(--spot-x, 50%) var(--spot-y, 50%),
+      rgba(252, 252, 252, 0.48),
+      rgba(252, 252, 252, 0.12) 14%,
+      transparent 34%
+    ),
+    linear-gradient(
+      115deg,
+      transparent 34%,
+      rgba(252, 252, 252, 0.24) 48%,
+      transparent 62%
+    );
+  mix-blend-mode: screen;
 }
 .works-figure.large .works-visual {
   aspect-ratio: 5 / 4;
@@ -231,6 +254,8 @@
   padding-top: 0;
   border-top: 0;
   color: var(--muted);
+  transform-origin: 0 50%;
+  will-change: transform, color;
 }
 
 p {

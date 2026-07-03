@@ -130,7 +130,6 @@ function initLoader() {
           document.body.style.overflow = "";
           ScrollTrigger.refresh();
           measureThemeSections();
-          morphButtons.forEach((btn) => btn._renderOrganic?.());
           updateScrollState();
         },
       },

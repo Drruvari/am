@@ -141,7 +141,6 @@ function initGlobalUI() {
 
   window.addEventListener("load", () => {
     measureThemeSections();
-    morphButtons.forEach((btn) => btn._renderOrganic?.());
     ScrollTrigger.refresh();
     updateScrollState();
   });

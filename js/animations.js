@@ -1,65 +1,3 @@
-const round = (value) => Math.round(value * 10) / 10;
-
-const pointsToSmoothPath = (points) => {
-  const count = points.length;
-  let d = `M${round(points[0].x)} ${round(points[0].y)}`;
-
-  for (let index = 0; index < count; index += 1) {
-    const current = points[index];
-    const next = points[(index + 1) % count];
-    const after = points[(index + 2) % count];
-    const before = points[(index - 1 + count) % count];
-
-    const cp1x = current.x + (next.x - before.x) / 6;
-    const cp1y = current.y + (next.y - before.y) / 6;
-    const cp2x = next.x - (after.x - current.x) / 6;
-    const cp2y = next.y - (after.y - current.y) / 6;
-
-    d += ` C${round(cp1x)} ${round(cp1y)} ${round(cp2x)} ${round(cp2y)} ${round(next.x)} ${round(next.y)}`;
-  }
-
-  return `${d}Z`;
-};
-
-const buildOrganicCapsule = (
-  width,
-  height,
-  inset,
-  phase,
-  drift,
-  wobble,
-  leanX = 0,
-  leanY = 0,
-  pointCount = 28,
-) => {
-  const cx = width / 2;
-  const cy = height / 2;
-  const rx = Math.max(8, width / 2 - inset);
-  const ry = Math.max(8, height / 2 - inset);
-
-  const points = Array.from({ length: pointCount }, (_, index) => {
-    const angle = (index / pointCount) * Math.PI * 2 - Math.PI / 2;
-    const ripple =
-      1 +
-      Math.sin(angle * 2 + phase) * 0.022 * wobble +
-      Math.sin(angle * 3 + drift * 1.37) * 0.014 * wobble +
-      Math.cos(angle * 5 + phase * 0.62 + drift * 0.91) * 0.009 * wobble;
-
-    return {
-      x:
-        cx +
-        Math.cos(angle) * rx * ripple +
-        leanX * (Math.cos(angle) * 0.05 + 0.015),
-      y:
-        cy +
-        Math.sin(angle) * ry * ripple +
-        leanY * (Math.sin(angle) * 0.05 + 0.015),
-    };
-  });
-
-  return pointsToSmoothPath(points);
-};
-
 function initScrambleText() {
   const scramblePools = {
     upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
@@ -152,262 +90,244 @@ function initScrambleText() {
   });
 }
 
+function ensureLiquidFilter() {
+  if (document.getElementById("liquid-magnetic-goo")) return;
+
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("class", "morph-btn-filter");
+  svg.setAttribute("aria-hidden", "true");
+  svg.innerHTML = `
+    <defs>
+      <filter id="liquid-magnetic-goo">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8" result="goo" />
+        <feBlend in="SourceGraphic" in2="goo" />
+      </filter>
+    </defs>
+  `;
+
+  document.body.prepend(svg);
+}
+
+function syncTopbarActionMotion(isCompact) {
+  const brief = document.querySelector(".topbar-brief-wrap");
+  const menu = document.querySelector(".topbar-menu-wrap");
+  if (!brief || !menu) return;
+
+  gsap.killTweensOf([brief, menu]);
+
+  if (!desktopQuery.matches) {
+    gsap.set([brief, menu], { clearProps: "all" });
+    return;
+  }
+
+  const actions = document.querySelector(".topbar-actions");
+  if (!actions) return;
+
+  const styles = getComputedStyle(actions);
+  const rootFontSize =
+    parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+  const toPx = (value) => {
+    const numeric = parseFloat(value);
+    if (!Number.isFinite(numeric)) return 0;
+    return value.trim().endsWith("rem") ? numeric * rootFontSize : numeric;
+  };
+  const gap = toPx(styles.getPropertyValue("--topbar-action-gap"));
+  const shift = menu.offsetWidth + gap;
+
+  if (isCompact) {
+    gsap.set(brief, {
+      x: shift,
+      y: 0,
+      scale: 1,
+      opacity: 1,
+      visibility: "visible",
+    });
+    gsap.set(menu, {
+      x: shift,
+      y: 0,
+      scale: 0.98,
+      opacity: 1,
+      visibility: "visible",
+    });
+    gsap.fromTo(
+      [brief, menu],
+      { x: shift },
+      {
+        x: 0,
+        y: 0,
+        scale: 1,
+        duration: 0.46,
+        ease: "back.out(1.55)",
+        overwrite: "auto",
+      },
+    );
+    return;
+  }
+
+  gsap.set(menu, { x: 0, y: 0, scale: 1, opacity: 1, visibility: "visible" });
+  gsap.set(brief, { x: -shift, y: 0, scale: 1, opacity: 1 });
+
+  gsap.to(brief, {
+    x: 0,
+    y: 0,
+    scale: 1,
+    opacity: 1,
+    duration: 0.42,
+    ease: "back.in(1.25)",
+    overwrite: "auto",
+  });
+  gsap.to(menu, {
+    x: shift,
+    y: 0,
+    scale: 1,
+    opacity: 1,
+    duration: 0.42,
+    ease: "back.in(1.25)",
+    overwrite: "auto",
+    onComplete: () => {
+      gsap.set(menu, {
+        x: 0,
+        y: 0,
+        scale: 1,
+        opacity: 1,
+        visibility: "hidden",
+      });
+    },
+  });
+}
+
 function initMorphButtons() {
+  ensureLiquidFilter();
   morphButtons = gsap.utils.toArray(".morph-btn");
 
   morphButtons.forEach((btn) => {
     if (btn.dataset.morphReady === "true") return;
     btn.dataset.morphReady = "true";
 
-    const isOrganic =
-      btn.classList.contains("morph-btn--pill") ||
-      btn.classList.contains("morph-btn--rect");
-
-    const rings = document.createElement("span");
-    rings.className = "morph-btn__rings";
-
+    const layer = document.createElement("span");
+    const body = document.createElement("span");
+    const satA = document.createElement("span");
+    const satB = document.createElement("span");
     const content = btn.querySelector(".morph-btn__content");
     const interactive = btn.querySelector("a, button");
     let isHovering = false;
-    let ringA;
-    let ringB;
-    let pathA;
-    let pathB;
-    let motion;
-    let phaseTween;
-    let driftTween;
-    let resizeObserver;
+    let lastVector = { x: 1, y: 0 };
+    const getVector = () => btn._fluidVector || lastVector;
 
-    if (isOrganic) {
-      btn.classList.add("morph-btn--organic");
+    layer.className = "morph-btn__rings";
+    body.className = "morph-btn__body";
+    satA.className = "morph-btn__sat morph-btn__sat--a";
+    satB.className = "morph-btn__sat morph-btn__sat--b";
+    layer.setAttribute("aria-hidden", "true");
+    layer.append(body, satA, satB);
+    btn.prepend(layer);
 
-      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-      svg.setAttribute("class", "morph-btn__svg");
-      svg.setAttribute("aria-hidden", "true");
-      svg.setAttribute("preserveAspectRatio", "none");
-
-      pathA = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      pathA.setAttribute("class", "morph-btn__path morph-btn__path--a");
-
-      pathB = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      pathB.setAttribute("class", "morph-btn__path morph-btn__path--b");
-
-      svg.append(pathA, pathB);
-      rings.append(svg);
-
-      motion = { phase: 0, drift: 0, wobble: 1, boost: 0, leanX: 0, leanY: 0 };
-
-      const renderOrganic = () => {
-        const rect = btn.getBoundingClientRect();
-        const width = Math.max(rect.width, 1);
-        const height = Math.max(rect.height, 1);
-        const wobble = motion.wobble + motion.boost;
-
-        svg.setAttribute("viewBox", `0 0 ${round(width)} ${round(height)}`);
-        pathA.setAttribute(
-          "d",
-          buildOrganicCapsule(
-            width,
-            height,
-            0,
-            motion.phase,
-            motion.drift,
-            wobble,
-            motion.leanX,
-            motion.leanY,
-          ),
-        );
-        pathB.setAttribute(
-          "d",
-          buildOrganicCapsule(
-            width,
-            height,
-            2,
-            motion.phase + 0.75,
-            motion.drift + 0.55,
-            wobble * 0.92,
-            motion.leanX * 0.45,
-            motion.leanY * 0.45,
-          ),
-        );
-      };
-
-      phaseTween = gsap.to(motion, {
-        phase: Math.PI * 2,
-        duration: 8.4,
-        repeat: -1,
-        ease: "sine.inOut",
-        onUpdate: renderOrganic,
-      });
-
-      driftTween = gsap.to(motion, {
-        drift: -Math.PI * 2,
-        duration: 11.2,
-        repeat: -1,
-        ease: "sine.inOut",
-        onUpdate: renderOrganic,
-      });
-
-      if ("ResizeObserver" in window) {
-        resizeObserver = new ResizeObserver(renderOrganic);
-        resizeObserver.observe(btn);
-      }
-
-      window.addEventListener("load", renderOrganic, { once: true });
-      requestAnimationFrame(renderOrganic);
-
-      btn._renderOrganic = renderOrganic;
-      btn._morphMotion = motion;
-    } else {
-      ringA = document.createElement("span");
-      ringA.className = "morph-btn__ring morph-btn__ring--a";
-      ringA.setAttribute("aria-hidden", "true");
-
-      ringB = document.createElement("span");
-      ringB.className = "morph-btn__ring morph-btn__ring--b";
-      ringB.setAttribute("aria-hidden", "true");
-
-      rings.append(ringA, ringB);
-    }
-
-    btn.prepend(rings);
+    const fluidTargets = [btn, layer, body, satA, satB, content].filter(Boolean);
 
     const setHoverState = (active) => {
       if (isHovering === active) return;
       isHovering = active;
-
-      const hoverTargets = [rings, ringA, ringB, content].filter(Boolean);
-      gsap.killTweensOf(hoverTargets);
+      gsap.killTweensOf(fluidTargets);
 
       if (active) {
+        const vector = getVector();
         btn.classList.add("is-hover");
-
-        if (isOrganic && motion) {
-          phaseTween.timeScale(1.55);
-          driftTween.timeScale(1.45);
-
-          gsap.to(motion, {
-            boost: 0.28,
-            duration: 0.55,
-            ease: "power3.out",
-            onUpdate: btn._renderOrganic,
-          });
-
-          gsap.to(rings, {
-            scale: 1.045,
-            rotation: 2.5,
-            duration: 0.62,
-            ease: "power3.out",
-            overwrite: "auto",
-          });
-
-          if (content) {
-            gsap.to(content, {
-              y: -1,
-              scale: 1,
-              duration: 0.55,
-              ease: "power3.out",
-              overwrite: "auto",
-            });
-          }
-
-          return;
-        }
-
-        ringA.style.animationDuration = "2.2s";
-        ringB.style.animationDuration = "2.6s";
-
-        gsap.to(rings, {
-          scale: 1.055,
-          rotation: 4,
-          duration: 0.62,
+        gsap.to(layer, {
+          scale: 1.025,
+          duration: 0.42,
           ease: "power3.out",
           overwrite: "auto",
         });
-
-        gsap.to(ringA, {
-          scale: 1.02,
-          duration: 0.55,
-          ease: "power2.out",
+        gsap.to(body, {
+          scaleX: 1.035,
+          scaleY: 0.98,
+          duration: 0.42,
+          ease: "power3.out",
           overwrite: "auto",
         });
-
+        gsap.to(satA, {
+          x: vector.x * 18,
+          y: vector.y * 12,
+          opacity: 1,
+          scale: 0.95,
+          duration: 0.38,
+          ease: "power3.out",
+          overwrite: "auto",
+        });
+        gsap.to(satB, {
+          x: vector.x * -14,
+          y: vector.y * -8 + 5,
+          opacity: 1,
+          scale: 0.82,
+          duration: 0.44,
+          ease: "power3.out",
+          overwrite: "auto",
+        });
         if (content) {
           gsap.to(content, {
-            y: -3,
-            scale: 1.02,
-            duration: 0.55,
+            y: -1,
+            duration: 0.42,
             ease: "power3.out",
             overwrite: "auto",
           });
         }
-
         return;
       }
 
       btn.classList.remove("is-hover");
+      gsap.to([btn, layer, body, content].filter(Boolean), {
+        x: 0,
+        y: 0,
+        scale: 1,
+        scaleX: 1,
+        scaleY: 1,
+        duration: 0.78,
+        ease: "elastic.out(1.05, 0.45)",
+        overwrite: "auto",
+      });
+      gsap.to([satA, satB], {
+        x: 0,
+        y: 0,
+        opacity: 0,
+        scale: 1,
+        duration: 0.72,
+        ease: "elastic.out(1.05, 0.42)",
+        overwrite: "auto",
+      });
+    };
 
-      if (isOrganic && motion) {
-        phaseTween.timeScale(1);
-        driftTween.timeScale(1);
-
-        gsap.to(motion, {
-          boost: 0,
-          leanX: 0,
-          leanY: 0,
-          duration: 0.72,
-          ease: "power2.inOut",
-          onUpdate: btn._renderOrganic,
-        });
-
-        gsap.to(rings, {
-          scale: 1,
-          rotation: 0,
-          duration: 0.68,
-          ease: "power2.inOut",
+    const splash = () => {
+      const vector = getVector();
+      gsap.fromTo(
+        body,
+        { scaleX: 0.88, scaleY: 0.88 },
+        {
+          scaleX: isHovering ? 1.05 : 1,
+          scaleY: isHovering ? 0.96 : 1,
+          duration: 0.55,
+          ease: "elastic.out(1.2, 0.35)",
           overwrite: "auto",
-        });
-
-        if (content) {
-          gsap.to(content, {
-            y: 0,
-            scale: 1,
-            duration: 0.62,
-            ease: "power2.inOut",
-            overwrite: "auto",
-          });
-        }
-
-        return;
-      }
-
-      ringA.style.animationDuration = "";
-      ringB.style.animationDuration = "";
-
-      gsap.to(rings, {
-        scale: 1,
-        rotation: 0,
-        duration: 0.68,
-        ease: "power2.inOut",
-        overwrite: "auto",
-      });
-
-      gsap.to(ringA, {
-        scale: 1,
-        duration: 0.6,
-        ease: "power2.inOut",
-        overwrite: "auto",
-      });
-
-      if (content) {
-        gsap.to(content, {
+        },
+      );
+      gsap.fromTo(
+        [satA, satB],
+        {
+          x: (index) => vector.x * (index === 0 ? 58 : -46),
+          y: (index) => vector.y * (index === 0 ? 42 : -34),
+          opacity: 1,
+          scale: 0.42,
+        },
+        {
+          x: 0,
           y: 0,
+          opacity: isHovering ? 1 : 0,
           scale: 1,
-          duration: 0.62,
-          ease: "power2.inOut",
+          duration: 0.9,
+          ease: "elastic.out(1.1, 0.42)",
           overwrite: "auto",
-        });
-      }
+        },
+      );
     };
 
     const onEnter = () => setHoverState(true);
@@ -422,50 +342,74 @@ function initMorphButtons() {
     if (interactive) {
       interactive.addEventListener("focus", onEnter);
       interactive.addEventListener("blur", onLeave);
+      interactive.addEventListener("pointerdown", splash);
     }
   });
 
-  mm.add("(min-width: 769px)", () => {
+  mm.add("(min-width: 769px) and (pointer: fine)", () => {
     const cleanups = [];
 
     morphButtons.forEach((btn) => {
       const content = btn.querySelector(".morph-btn__content");
-      const pull = btn.classList.contains("morph-btn--circle")
-        ? 0.3
-        : btn.classList.contains("morph-btn--rect")
-          ? 0.22
-          : 0.18;
-      const labelPull = pull * 0.34;
+      const body = btn.querySelector(".morph-btn__body");
+      const satA = btn.querySelector(".morph-btn__sat--a");
+      const satB = btn.querySelector(".morph-btn__sat--b");
+      const pull = btn.classList.contains("morph-btn--rect") ? 0.16 : 0.12;
+      const labelPull = pull * 0.36;
 
       const onMove = (e) => {
         const rect = btn.getBoundingClientRect();
         const x = e.clientX - rect.left - rect.width / 2;
         const y = e.clientY - rect.top - rect.height / 2;
+        const distance = Math.max(Math.hypot(x, y), 1);
+        const threshold = Math.max(rect.width, rect.height) * 1.75;
+        const power = gsap.utils.clamp(
+          0.35,
+          1,
+          (threshold - distance) / threshold,
+        );
+        const nx = x / distance;
+        const ny = y / distance;
+        btn._fluidVector = { x: nx, y: ny };
 
         gsap.to(btn, {
           x: x * pull,
           y: y * pull,
-          duration: 0.42,
+          duration: 0.34,
           ease: "power3.out",
           overwrite: "auto",
         });
-
-        if (btn._morphMotion) {
-          gsap.to(btn._morphMotion, {
-            leanX: x * 0.014,
-            leanY: y * 0.012,
-            duration: 0.38,
-            ease: "power3.out",
-            overwrite: "auto",
-            onUpdate: btn._renderOrganic,
-          });
-        }
+        gsap.to(body, {
+          scaleX: 1 + Math.abs(nx) * power * 0.11,
+          scaleY: 1 + Math.abs(ny) * power * 0.075,
+          duration: 0.32,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+        gsap.to(satA, {
+          x: nx * power * 34,
+          y: ny * power * 24,
+          opacity: 1,
+          scale: 0.95,
+          duration: 0.28,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+        gsap.to(satB, {
+          x: Math.cos(Math.atan2(y, x) - 0.35) * power * 26,
+          y: Math.sin(Math.atan2(y, x) - 0.35) * power * 20,
+          opacity: 1,
+          scale: 0.8,
+          duration: 0.34,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
 
         if (content) {
           gsap.to(content, {
             x: x * labelPull,
             y: y * labelPull,
-            duration: 0.42,
+            duration: 0.34,
             ease: "power3.out",
             overwrite: "auto",
           });
@@ -473,34 +417,24 @@ function initMorphButtons() {
       };
 
       const onLeave = () => {
-        gsap.to(btn, {
+        gsap.to([btn, body, content].filter(Boolean), {
           x: 0,
           y: 0,
+          scaleX: 1,
+          scaleY: 1,
           duration: 0.78,
           ease: "elastic.out(1, 0.45)",
           overwrite: "auto",
         });
-
-        if (btn._morphMotion) {
-          gsap.to(btn._morphMotion, {
-            leanX: 0,
-            leanY: 0,
-            duration: 0.72,
-            ease: "power2.inOut",
-            overwrite: "auto",
-            onUpdate: btn._renderOrganic,
-          });
-        }
-
-        if (content) {
-          gsap.to(content, {
-            x: 0,
-            y: 0,
-            duration: 0.78,
-            ease: "elastic.out(1, 0.45)",
-            overwrite: "auto",
-          });
-        }
+        gsap.to([satA, satB].filter(Boolean), {
+          x: 0,
+          y: 0,
+          scale: 1,
+          opacity: 0,
+          duration: 0.62,
+          ease: "power3.out",
+          overwrite: "auto",
+        });
       };
 
       btn.addEventListener("mousemove", onMove);
@@ -509,7 +443,9 @@ function initMorphButtons() {
       cleanups.push(() => {
         btn.removeEventListener("mousemove", onMove);
         btn.removeEventListener("mouseleave", onLeave);
-        gsap.set([btn, content].filter(Boolean), { clearProps: "transform" });
+        gsap.set([btn, body, satA, satB, content].filter(Boolean), {
+          clearProps: "transform,opacity",
+        });
       });
     });
 
@@ -665,13 +601,23 @@ function initScrollAnimations() {
 
   mm.add("(min-width: 769px)", () => {
     const cleanups = gsap.utils.toArray(".works-figure").map((figure) => {
+      const visual = figure.querySelector(".works-visual");
       const image = figure.querySelector(".works-visual img");
+      const caption = figure.querySelector(".works-cap");
       const xTo = gsap.quickTo(figure, "x", {
         duration: 0.45,
         ease: "power3.out",
       });
       const yTo = gsap.quickTo(figure, "y", {
         duration: 0.45,
+        ease: "power3.out",
+      });
+      const rotateXTo = gsap.quickTo(figure, "rotationX", {
+        duration: 0.55,
+        ease: "power3.out",
+      });
+      const rotateYTo = gsap.quickTo(figure, "rotationY", {
+        duration: 0.55,
         ease: "power3.out",
       });
       const imgXTo = gsap.quickTo(image, "xPercent", {
@@ -685,21 +631,65 @@ function initScrollAnimations() {
         const relY = (e.clientY - rect.top) / rect.height - 0.5;
         xTo(relX * 14);
         yTo(relY * 14);
+        rotateXTo(relY * -4);
+        rotateYTo(relX * 5);
         imgXTo(relX * -4);
+
+        if (visual) {
+          gsap.to(visual, {
+            "--spot-x": `${(relX + 0.5) * 100}%`,
+            "--spot-y": `${(relY + 0.5) * 100}%`,
+            "--spot-opacity": 1,
+            duration: 0.28,
+            ease: "power2.out",
+            overwrite: "auto",
+          });
+        }
+      };
+
+      const onEnter = () => {
+        gsap.set(figure, { transformPerspective: 900 });
+        gsap.to(caption, {
+          x: 10,
+          color: "var(--fg)",
+          duration: 0.42,
+          ease: "power3.out",
+          overwrite: "auto",
+        });
       };
 
       const onLeave = () => {
         xTo(0);
         yTo(0);
+        rotateXTo(0);
+        rotateYTo(0);
         imgXTo(0);
+        gsap.to(visual, {
+          "--spot-opacity": 0,
+          duration: 0.34,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+        gsap.to(caption, {
+          x: 0,
+          color: "var(--muted)",
+          duration: 0.38,
+          ease: "power3.out",
+          overwrite: "auto",
+        });
       };
 
+      figure.addEventListener("mouseenter", onEnter);
       figure.addEventListener("mousemove", onMove);
       figure.addEventListener("mouseleave", onLeave);
 
       return () => {
+        figure.removeEventListener("mouseenter", onEnter);
         figure.removeEventListener("mousemove", onMove);
         figure.removeEventListener("mouseleave", onLeave);
+        gsap.set([figure, visual, caption].filter(Boolean), {
+          clearProps: "transform,color",
+        });
       };
     });
 

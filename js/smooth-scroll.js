@@ -1,4 +1,5 @@
 var lenis;
+var topbarCompactState;
 
 function initSmoothScroll() {
   const topbar = document.getElementById("topbar");
@@ -90,10 +91,21 @@ function updateScrollState() {
     typeof lenis?.scroll === "number" ? lenis.scroll : window.scrollY;
 
   if (topbar) {
+    const isCompact = currentScroll > window.innerHeight * 0.18;
+    const shouldAnimateTopbar =
+      topbarCompactState !== undefined && topbarCompactState !== isCompact;
+
     document.body.classList.toggle(
       "is-topbar-compact",
-      currentScroll > window.innerHeight * 0.18,
+      isCompact,
     );
+
+    if (topbarCompactState !== isCompact) {
+      topbarCompactState = isCompact;
+      if (shouldAnimateTopbar && typeof syncTopbarActionMotion === "function") {
+        syncTopbarActionMotion(isCompact);
+      }
+    }
 
     const topbarProbeY = 36;
     const isOverDarkSection = [".sheets"].some((selector) => {

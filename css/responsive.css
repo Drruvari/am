@@ -41,7 +41,7 @@
     top: 1.15rem;
     left: 1.25rem;
     font-size: clamp(1.85rem, 9vw, 2.75rem);
-    max-width: calc(100% - 11rem);
+    max-width: calc(100% - 15.25rem);
     overflow: hidden;
     text-overflow: ellipsis;
   }
@@ -49,9 +49,11 @@
     display: none;
   }
   .topbar-actions {
+    --topbar-brief-width: 7.9rem;
+    --topbar-menu-width: 4.35rem;
+    --topbar-action-gap: 0.4rem;
     top: 0.85rem;
     right: 1.25rem;
-    gap: 0.4rem;
   }
   .topbar-brief,
   .topbar-menu {
@@ -65,9 +67,14 @@
     font-size: 0.62rem;
     letter-spacing: 0.08em;
   }
+  .topbar-brief-wrap {
+    right: calc(var(--topbar-menu-width) + var(--topbar-action-gap));
+  }
   .topbar-menu-wrap {
+    right: 0;
     opacity: 1;
     visibility: visible;
+    transform: translateX(0) scale(1);
   }
   body.is-topbar-compact .topbar-brand {
     opacity: 0;
@@ -304,8 +311,14 @@
 
 @media (max-width: 480px) {
   .topbar-brand {
-    max-width: calc(100% - 9.5rem);
+    max-width: calc(100% - 13.4rem);
     font-size: 1.65rem;
+  }
+  .topbar-actions {
+    --topbar-brief-width: 7.25rem;
+    --topbar-menu-width: 4rem;
+    --topbar-action-gap: 0.35rem;
+    right: 1rem;
   }
   .topbar-brief,
   .topbar-menu {
