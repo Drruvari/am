@@ -1,0 +1,512 @@
+@font-face {
+  font-family: "Epilogue";
+  src: url("../assets/fonts/Epilogue-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DM Sans";
+  src: url("../assets/fonts/DMSans-VariableFont_opsz,wght.ttf") format("truetype");
+  font-weight: 100 1000;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --bg: #fcfcfc;
+  --fg: #141412;
+  --accent: color-mix(in srgb, var(--fg) 82%, black);
+  --hover: color-mix(in srgb, var(--fg) 52%, #666);
+  --panel: #e8e8e2;
+  --muted: color-mix(in srgb, var(--fg) 68%, transparent);
+  --line: color-mix(in srgb, var(--fg) 14%, transparent);
+  --section-pad: clamp(6rem, 10vw, 12rem);
+  --font-display: "Epilogue", sans-serif;
+  --font-heading: "Epilogue", sans-serif;
+  --font-body: "DM Sans", sans-serif;
+  --font-mono: "DM Sans", sans-serif;
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html.lenis {
+  height: auto;
+}
+html {
+  scroll-padding-top: 6rem;
+  scrollbar-width: none;
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.12;
+  background-image:
+    linear-gradient(rgba(24, 23, 21, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(24, 23, 21, 0.028) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+}
+
+body.is-detail-open {
+  overflow: hidden;
+}
+body.is-mobile-menu-open {
+  overflow: hidden;
+}
+body.has-custom-cursor,
+body.has-custom-cursor * {
+  cursor: none !important;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+body:not(.has-custom-cursor) button,
+body:not(.has-custom-cursor) a {
+  cursor: pointer;
+}
+img {
+  display: block;
+  max-width: 100%;
+  object-fit: cover;
+}
+h1,
+h2,
+h3 {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.075em;
+  font-optical-sizing: auto;
+}
+h2 {
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  text-transform: uppercase;
+}
+.mono {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.eyebrow {
+  display: inline-block;
+  margin-bottom: 2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 37px;
+  height: 44px;
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.cursor.is-visible {
+  opacity: 1;
+}
+
+.cursor__img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: auto;
+  height: auto;
+  max-width: none;
+  opacity: 0;
+  transform: scale(0.85);
+  transform-origin: top left;
+  transition:
+    opacity 0.16s ease,
+    transform 0.22s var(--ease-out-expo);
+}
+
+.cursor__img.is-active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.cursor__img--text {
+  transform: translate(-50%, -50%) scale(0.85);
+  transform-origin: center;
+}
+.cursor__img--text.is-active {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+@keyframes morph-btn-a {
+  0%,
+  100% {
+    border-radius: 50%;
+  }
+  50% {
+    border-radius: 50% / 51% 49% 49% 51%;
+  }
+}
+
+@keyframes morph-btn-b {
+  0%,
+  100% {
+    border-radius: 50%;
+  }
+  50% {
+    border-radius: 50% / 49% 51% 51% 49%;
+  }
+}
+
+.morph-btn {
+  --morph-black: #141412;
+  --morph-white: #fcfcfc;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--morph-black);
+  isolation: isolate;
+  will-change: transform;
+}
+
+.morph-btn__rings {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  transform-origin: 50% 50%;
+}
+
+.morph-btn__ring {
+  position: absolute;
+  inset: 0;
+  border: 1px solid currentColor;
+  pointer-events: none;
+  transition:
+    background 0.55s var(--ease-out-expo),
+    border-color 0.45s ease,
+    opacity 0.45s ease;
+}
+
+.morph-btn__ring--a {
+  border-radius: 50%;
+  animation: morph-btn-a 4.2s ease-in-out infinite;
+  transform-origin: 50% 50%;
+}
+
+.morph-btn__ring--b {
+  inset: 3px;
+  border-radius: 50%;
+  opacity: 0.72;
+  animation: morph-btn-b 4.8s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+.morph-btn--organic .morph-btn__ring {
+  display: none;
+}
+
+.morph-btn__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.morph-btn__path {
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition:
+    fill 0.45s var(--ease-out-expo),
+    stroke 0.45s var(--ease-out-expo),
+    opacity 0.45s ease;
+}
+
+.morph-btn__path--a {
+  fill: transparent;
+  stroke: none;
+}
+
+.morph-btn__path--b {
+  fill: none;
+  stroke: var(--morph-black);
+  stroke-width: 1.15;
+  opacity: 0.55;
+}
+
+.morph-btn--fill .morph-btn__path--a {
+  fill: var(--morph-fill, var(--morph-black));
+  stroke: var(--morph-fill, var(--morph-black));
+}
+
+.morph-btn--fill .morph-btn__path--b {
+  stroke: var(--morph-fill-text, var(--morph-white));
+  opacity: 0.18;
+}
+
+.morph-btn--soft .morph-btn__path--a {
+  fill: var(--morph-white);
+  stroke: var(--morph-black);
+}
+
+.morph-btn--soft .morph-btn__path--b {
+  stroke: var(--morph-black);
+  opacity: 0.45;
+}
+
+.morph-btn--organic:not(.morph-btn--fill):not(.morph-btn--soft).is-hover
+  .morph-btn__path--a {
+  fill: var(--morph-black);
+  stroke: var(--morph-black);
+}
+
+.morph-btn--organic:not(.morph-btn--fill):not(.morph-btn--soft).is-hover
+  .morph-btn__path--b {
+  stroke: var(--morph-white);
+  opacity: 0.35;
+}
+
+.morph-btn--organic:not(.morph-btn--fill):not(.morph-btn--soft).is-hover
+  .morph-btn__content {
+  color: var(--morph-white);
+}
+
+.morph-btn--organic.morph-btn--dark.is-hover .morph-btn__path--a {
+  fill: var(--morph-white);
+  stroke: var(--morph-black);
+}
+
+.morph-btn--organic.morph-btn--dark.is-hover .morph-btn__path--b {
+  stroke: var(--morph-black);
+  opacity: 0.22;
+}
+
+.morph-btn--organic.morph-btn--soft.is-hover .morph-btn__path--a {
+  fill: var(--morph-black);
+  stroke: var(--morph-black);
+}
+
+.morph-btn--organic.morph-btn--soft.is-hover .morph-btn__path--b {
+  stroke: var(--morph-white);
+  opacity: 0.28;
+}
+
+.morph-btn--pill > a,
+.morph-btn--pill > button {
+  padding: 0.95rem 1.55rem;
+  min-height: 3.05rem;
+}
+
+.morph-btn--pill .topbar-menu {
+  min-width: 4.7rem;
+}
+
+.morph-btn--fill .morph-btn__content {
+  color: var(--morph-fill-text, var(--morph-white));
+  transition: color 0.45s var(--ease-out-expo);
+}
+
+.morph-btn--dark.is-hover .morph-btn__content,
+.morph-btn--fill.is-hover .morph-btn__content {
+  color: var(--morph-fill-text);
+}
+
+.morph-btn--dark {
+  --morph-fill: var(--morph-black);
+  --morph-fill-text: var(--morph-white);
+}
+
+.morph-btn--dark.is-hover {
+  --morph-fill: var(--morph-white);
+  --morph-fill-text: var(--morph-black);
+}
+
+body.is-topbar-inverted .topbar .morph-btn--dark {
+  --morph-fill: var(--morph-white);
+  --morph-fill-text: var(--morph-black);
+}
+
+body.is-topbar-inverted .topbar .morph-btn--dark.is-hover {
+  --morph-fill: var(--morph-black);
+  --morph-fill-text: var(--morph-white);
+}
+
+.morph-btn--soft {
+  --morph-fill: var(--morph-white);
+  --morph-fill-text: var(--morph-black);
+}
+
+.morph-btn--soft .morph-btn__content {
+  color: var(--morph-black);
+  transition: color 0.45s var(--ease-out-expo);
+}
+
+.morph-btn--soft.is-hover .morph-btn__content {
+  color: var(--morph-white);
+}
+
+body.is-topbar-inverted .morph-btn--soft .morph-btn__path--a {
+  fill: var(--morph-white);
+  stroke: var(--morph-black);
+}
+
+body.is-topbar-inverted .morph-btn--soft .morph-btn__path--b {
+  stroke: var(--morph-black);
+}
+
+body.is-topbar-inverted .morph-btn--soft .morph-btn__content {
+  color: var(--morph-black);
+}
+
+body.is-topbar-inverted .morph-btn--soft.is-hover .morph-btn__path--a {
+  fill: var(--morph-black);
+  stroke: var(--morph-black);
+}
+
+body.is-topbar-inverted .morph-btn--soft.is-hover .morph-btn__content {
+  color: var(--morph-white);
+}
+
+.morph-btn.is-hover .morph-btn__ring--a {
+  background: transparent;
+}
+
+.morph-btn.is-hover .morph-btn__ring--b {
+  opacity: 0.55;
+}
+
+.morph-btn--rect {
+  align-self: flex-start;
+}
+
+.morph-btn--rect > a,
+.morph-btn--rect > button {
+  padding: 1.05rem 1.85rem;
+  min-height: 3.05rem;
+}
+
+.morph-btn--rect .morph-btn__content {
+  color: var(--morph-black);
+}
+
+.morph-btn--circle {
+  width: clamp(220px, 30vw, 380px);
+  aspect-ratio: 1;
+  margin: 5rem 0;
+  color: var(--accent);
+}
+
+.morph-btn--detail {
+  position: absolute;
+  top: 2.5rem;
+  right: 2.5rem;
+  z-index: 2010;
+  color: var(--morph-black);
+}
+
+.morph-btn.is-hover.morph-btn--detail .morph-btn__path--a {
+  fill: var(--morph-black);
+  stroke: var(--morph-black);
+}
+
+.morph-btn.is-hover.morph-btn--detail .morph-btn__path--b {
+  stroke: var(--morph-white);
+  opacity: 0.3;
+}
+
+.morph-btn.is-hover.morph-btn--detail .morph-btn__content {
+  color: var(--morph-white);
+}
+
+.morph-btn.is-hover.morph-btn--detail .morph-btn__ring--a {
+  background: var(--morph-black);
+  border-color: var(--morph-black);
+  transition:
+    background 0.45s var(--ease-out-expo),
+    border-color 0.45s var(--ease-out-expo);
+}
+
+.morph-btn__content {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  transform-origin: 50% 50%;
+  color: inherit;
+  transition: color 0.45s var(--ease-out-expo);
+}
+
+.morph-btn > a,
+.morph-btn > button {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-decoration: none;
+}

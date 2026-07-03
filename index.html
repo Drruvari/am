@@ -8,45 +8,31 @@
       name="description"
       content="Architecture studies by Arbër Manga: houses, pavilions, interiors, and material systems."
     />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@10..48,75..100,300..900&family=Manrope:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="css/styles.css" />
   </head>
   <body>
-    <div class="cursor-morph" id="cursorMorph" aria-hidden="true">
-      <svg class="cursor-morph__svg" viewBox="0 0 120 120">
-        <circle
-          id="cursorMorphFill"
-          class="cursor-morph__fill"
-          cx="60"
-          cy="60"
-          r="47"
-        />
-
-        <path
-          id="cursorMorphCircleA"
-          class="cursor-morph__circle"
-          d="M60 10 C82 8 104 26 108 48 C112 72 96 96 72 106 C46 114 20 100 12 76 C6 52 18 26 42 14 C48 12 54 10 60 10Z"
-        />
-
-        <path
-          id="cursorMorphCircleB"
-          class="cursor-morph__circle cursor-morph__circle--ghost"
-          d="M60 14 C78 12 98 28 102 50 C106 74 90 94 68 102 C44 108 22 94 16 72 C10 50 24 28 46 18 C50 16 55 14 60 14Z"
-        />
-
-        <g id="cursorMorphCore" class="cursor-morph__core">
-          <path
-            id="cursorMorphDot"
-            class="cursor-morph__dot"
-            d="M60 54.5 C63.4 54.5 66 57.1 66 60.5 C66 63.9 63.4 66.5 60 66.5 C56.6 66.5 54 63.9 54 60.5 C54 57.1 56.6 54.5 60 54.5Z"
-          />
-        </g>
-      </svg>
+    <div class="cursor" id="cursor" aria-hidden="true">
+      <img
+        class="cursor__img cursor__img--default is-active"
+        data-cursor-state="default"
+        src="assets/cursor-svg/cursor-default.svg"
+        alt=""
+        draggable="false"
+      />
+      <img
+        class="cursor__img cursor__img--pointer"
+        data-cursor-state="pointer"
+        src="assets/cursor-svg/cursor-pointer.svg"
+        alt=""
+        draggable="false"
+      />
+      <img
+        class="cursor__img cursor__img--text"
+        data-cursor-state="text"
+        src="assets/cursor-svg/cursor-text.svg"
+        alt=""
+        draggable="false"
+      />
     </div>
 
     <header class="topbar" id="topbar">
@@ -136,8 +122,12 @@
           decoding="async"
         />
       </div>
-      <div class="loader-count mono" aria-hidden="true">
-        <p id="loaderPct">000</p>
+
+      <div class="loader-brand">
+        <h1 class="loader-title">AM</h1>
+        <div class="loader-count">
+          <p id="loaderPct">000</p>
+        </div>
       </div>
     </div>
 
@@ -149,9 +139,6 @@
         data-theme-fg="#141412"
         data-theme-panel="#E8E8E2"
       >
-        <div class="hero-mark" aria-hidden="true">
-          <span class="hero-mark-text">AM</span>
-        </div>
         <div class="hero-container">
           <div class="hero-grid">
             <div class="hero-left">
@@ -545,8 +532,16 @@
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Flip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
     <script src="https://unpkg.com/split-type@0.3.4"></script>
     <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
-    <script src="script.js"></script>
+
+    <script src="js/smooth-scroll.js"></script>
+    <script src="js/cursor.js"></script>
+    <script src="js/loader.js"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/mobile-menu.js"></script>
+    <script src="js/project-detail.js"></script>
+    <script src="js/main.js"></script>
   </body>
 </html>
