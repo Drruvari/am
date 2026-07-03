@@ -58,19 +58,27 @@
         <a href="#gallery" data-hover="link">Gallery</a>
       </nav>
       <div class="topbar-actions">
-        <a href="mailto:hello@arbermanga.com" class="topbar-brief" data-hover="link">
-          Get in Touch
-        </a>
-        <button
-          type="button"
-          class="topbar-menu"
-          id="mobileMenuOpen"
-          aria-expanded="false"
-          aria-controls="mobileMenu"
-          data-hover="link"
-        >
-          Menu
-        </button>
+        <div class="morph-btn morph-btn--pill morph-btn--fill morph-btn--dark">
+          <a
+            href="mailto:hello@arbermanga.com"
+            class="topbar-brief"
+            data-hover="link"
+          >
+            <span class="morph-btn__content"><span>Get in Touch</span></span>
+          </a>
+        </div>
+        <div class="morph-btn morph-btn--pill morph-btn--soft topbar-menu-wrap">
+          <button
+            type="button"
+            class="topbar-menu"
+            id="mobileMenuOpen"
+            aria-expanded="false"
+            aria-controls="mobileMenu"
+            data-hover="link"
+          >
+            <span class="morph-btn__content"><span>Menu</span></span>
+          </button>
+        </div>
       </div>
     </header>
 
@@ -134,7 +142,13 @@
     </div>
 
     <main id="top">
-      <section class="hero" id="hero">
+      <section
+        class="hero"
+        id="hero"
+        data-theme-bg="#FCFCFC"
+        data-theme-fg="#141412"
+        data-theme-panel="#E8E8E2"
+      >
         <div class="hero-mark" aria-hidden="true">
           <span class="hero-mark-text">AM</span>
         </div>
@@ -190,7 +204,12 @@
         </div>
       </section>
 
-      <section class="manifesto">
+      <section
+        class="manifesto"
+        data-theme-bg="#F3F2ED"
+        data-theme-fg="#141412"
+        data-theme-panel="#E4E4DE"
+      >
         <p class="manifesto-eyebrow eyebrow mono">01 — Philosophy</p>
         <p class="manifesto-text" id="manifestoText">
           The work starts with what is already there: slope, shade, wind,
@@ -199,7 +218,13 @@
         </p>
       </section>
 
-      <section class="sheets" id="work">
+      <section
+        class="sheets"
+        id="work"
+        data-theme-bg="#211F1C"
+        data-theme-fg="#F4F4F0"
+        data-theme-panel="#3A3632"
+      >
         <div class="sheets-pin" id="sheetsPin">
           <div class="sheets-copy">
             <div class="sheets-index mono" id="sheetsIndex">
@@ -252,7 +277,13 @@
         </div>
       </section>
 
-      <section class="works" id="gallery">
+      <section
+        class="works"
+        id="gallery"
+        data-theme-bg="#FCFCFC"
+        data-theme-fg="#141412"
+        data-theme-panel="#E8E8E2"
+      >
         <div class="works-head">
           <p class="eyebrow mono">03 — Built Environments</p>
           <h2>FOUR WAYS<br />OF BUILDING</h2>
@@ -362,15 +393,22 @@
           </div>
         </div>
       </section>
-
     </main>
 
-    <footer class="footer" id="footer">
+    <footer
+      class="footer"
+      id="footer"
+      data-theme-bg="#F6F5F1"
+      data-theme-fg="#141412"
+      data-theme-panel="#E8E8E2"
+    >
       <div class="footer-hero">
         <h2 class="footer-hero-title">
           Focused on quality<br />driven by restraint
         </h2>
-        <div class="morph-btn morph-btn--pill footer-cta-wrap">
+        <div
+          class="morph-btn morph-btn--pill morph-btn--fill morph-btn--dark footer-cta-wrap"
+        >
           <a
             href="mailto:hello@arbermanga.com"
             class="footer-cta"
@@ -378,7 +416,6 @@
           >
             <span class="morph-btn__content">
               <span>Tell us about your project</span>
-              <span class="footer-cta-icon" aria-hidden="true"></span>
             </span>
           </a>
         </div>
@@ -435,9 +472,7 @@
 
       <div class="footer-bar mono">
         <div class="footer-bar-col footer-bar-col--brand">
-          <span
-            >© <span id="footerYear">2026</span> AM Architecture</span
-          >
+          <span>© <span id="footerYear">2026</span> AM Architecture</span>
           <span id="footerStatus" class="footer-status"></span>
         </div>
         <div class="footer-bar-col footer-bar-col--legal">
@@ -454,14 +489,18 @@
     <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
       <div class="mobile-menu-backdrop" id="mobileMenuBackdrop"></div>
       <div class="mobile-menu-panel" data-lenis-prevent>
-        <button
-          class="mobile-menu-close mono"
-          id="mobileMenuClose"
-          type="button"
-          aria-label="Close menu"
+        <div
+          class="morph-btn morph-btn--pill morph-btn--soft mobile-menu-close-wrap"
         >
-          Close
-        </button>
+          <button
+            class="mobile-menu-close mono"
+            id="mobileMenuClose"
+            type="button"
+            aria-label="Close menu"
+          >
+            <span class="morph-btn__content"><span>Close</span></span>
+          </button>
+        </div>
         <nav class="mobile-menu-nav" aria-label="Mobile navigation">
           <a href="#top" data-hover="link">Home</a>
           <a href="#work" data-hover="link">Works</a>
@@ -470,9 +509,7 @@
           <span>Studio</span>
           <span>Process</span>
           <a href="#gallery" data-hover="link">Gallery</a>
-          <a href="mailto:hello@arbermanga.com" data-hover="link"
-            >Contact Us</a
-          >
+          <a href="mailto:hello@arbermanga.com" data-hover="link">Contact Us</a>
         </nav>
         <div class="mobile-menu-meta mono">
           <p>hello@arbermanga.com</p>

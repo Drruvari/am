@@ -95,6 +95,45 @@ document.addEventListener("DOMContentLoaded", () => {
     return pointsToSmoothPath(points);
   };
 
+  const buildOrganicCapsule = (
+    width,
+    height,
+    inset,
+    phase,
+    drift,
+    wobble,
+    leanX = 0,
+    leanY = 0,
+    pointCount = 28,
+  ) => {
+    const cx = width / 2;
+    const cy = height / 2;
+    const rx = Math.max(8, width / 2 - inset);
+    const ry = Math.max(8, height / 2 - inset);
+
+    const points = Array.from({ length: pointCount }, (_, index) => {
+      const angle = (index / pointCount) * Math.PI * 2 - Math.PI / 2;
+      const ripple =
+        1 +
+        Math.sin(angle * 2 + phase) * 0.022 * wobble +
+        Math.sin(angle * 3 + drift * 1.37) * 0.014 * wobble +
+        Math.cos(angle * 5 + phase * 0.62 + drift * 0.91) * 0.009 * wobble;
+
+      return {
+        x:
+          cx +
+          Math.cos(angle) * rx * ripple +
+          leanX * (Math.cos(angle) * 0.05 + 0.015),
+        y:
+          cy +
+          Math.sin(angle) * ry * ripple +
+          leanY * (Math.sin(angle) * 0.05 + 0.015),
+      };
+    });
+
+    return pointsToSmoothPath(points);
+  };
+
   const topbar = document.getElementById("topbar");
 
   let lenis;
@@ -120,7 +159,95 @@ document.addEventListener("DOMContentLoaded", () => {
 
       document.body.classList.toggle("is-topbar-inverted", isOverDarkSection);
     }
+
+    updateDynamicTheme(currentScroll);
   };
+
+  const root = document.documentElement;
+
+  const hexToRgb = (hex) => {
+    const value = hex.replace("#", "");
+    const chunk = value.length === 3 ? 1 : 2;
+    const read = (start) => {
+      const part = value.slice(start, start + chunk);
+      return parseInt(chunk === 1 ? part + part : part, 16);
+    };
+
+    return { r: read(0), g: read(chunk), b: read(chunk * 2) };
+  };
+
+  const rgbToHex = ({ r, g, b }) =>
+    `#${[r, g, b]
+      .map((channel) =>
+        Math.round(gsap.utils.clamp(0, 255, channel))
+          .toString(16)
+          .padStart(2, "0"),
+      )
+      .join("")}`;
+
+  const mixRgb = (a, b, t) => ({
+    r: a.r + (b.r - a.r) * t,
+    g: a.g + (b.g - a.g) * t,
+    b: a.b + (b.b - a.b) * t,
+  });
+
+  const themeSections = gsap.utils
+    .toArray("[data-theme-bg]")
+    .map((section) => ({
+      section,
+      bg: hexToRgb(section.dataset.themeBg),
+      fg: hexToRgb(section.dataset.themeFg),
+      panel: hexToRgb(section.dataset.themePanel),
+    }));
+
+  let themeMetrics = [];
+
+  const measureThemeSections = () => {
+    themeMetrics = themeSections.map(({ section, bg, fg, panel }) => ({
+      bg,
+      fg,
+      panel,
+      start: section.offsetTop,
+      end: section.offsetTop + section.offsetHeight,
+    }));
+  };
+
+  const applyThemeColors = (bg, fg, panel) => {
+    root.style.setProperty("--bg", rgbToHex(bg));
+    root.style.setProperty("--fg", rgbToHex(fg));
+    root.style.setProperty("--panel", rgbToHex(panel));
+  };
+
+  const updateDynamicTheme = (scrollY = window.scrollY) => {
+    if (!themeMetrics.length) return;
+
+    const probe = scrollY + window.innerHeight * 0.42;
+    let index = 0;
+
+    for (let i = themeMetrics.length - 1; i >= 0; i -= 1) {
+      if (probe >= themeMetrics[i].start) {
+        index = i;
+        break;
+      }
+    }
+
+    const current = themeMetrics[index];
+    const next = themeMetrics[index + 1];
+    const blendEnd = next ? next.start : current.end;
+    const span = Math.max(blendEnd - current.start, 1);
+    const t = next
+      ? gsap.utils.clamp(0, 1, (probe - current.start) / span)
+      : 0;
+
+    applyThemeColors(
+      mixRgb(current.bg, next?.bg ?? current.bg, t),
+      mixRgb(current.fg, next?.fg ?? current.fg, t),
+      mixRgb(current.panel, next?.panel ?? current.panel, t),
+    );
+  };
+
+  measureThemeSections();
+  updateDynamicTheme(0);
 
   const isTouchOnly = navigator.maxTouchPoints > 0 && !finePointerQuery.matches;
   const useSmoothScroll = desktopQuery.matches && !isTouchOnly;
@@ -734,10 +861,13 @@ document.addEventListener("DOMContentLoaded", () => {
     ".sheet-meta",
     ".works-cap",
     ".topbar a",
-    ".topbar-menu",
+    ".topbar-brief .morph-btn__content > span",
+    ".topbar-menu .morph-btn__content > span",
+    ".footer-cta .morph-btn__content > span:first-child",
+    ".mobile-menu-close .morph-btn__content > span",
     ".footer-nav-links a",
     ".footer-bar a",
-    ".detail-close",
+    ".detail-close .morph-btn__content > span",
   ];
 
   const scrambleText = (el) => {
@@ -865,6 +995,8 @@ document.addEventListener("DOMContentLoaded", () => {
           lenis.start();
           document.body.style.overflow = "";
           ScrollTrigger.refresh();
+          measureThemeSections();
+          morphButtons.forEach((btn) => btn._renderOrganic?.());
           updateScrollState();
         },
       },
@@ -1095,37 +1227,173 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   const morphButtons = gsap.utils.toArray(".morph-btn");
+  const organicMorphCleanups = [];
 
   morphButtons.forEach((btn) => {
     if (btn.dataset.morphReady === "true") return;
     btn.dataset.morphReady = "true";
 
+    const isOrganic =
+      btn.classList.contains("morph-btn--pill") ||
+      btn.classList.contains("morph-btn--rect");
+
     const rings = document.createElement("span");
     rings.className = "morph-btn__rings";
-
-    const ringA = document.createElement("span");
-    ringA.className = "morph-btn__ring morph-btn__ring--a";
-    ringA.setAttribute("aria-hidden", "true");
-
-    const ringB = document.createElement("span");
-    ringB.className = "morph-btn__ring morph-btn__ring--b";
-    ringB.setAttribute("aria-hidden", "true");
-
-    rings.append(ringA, ringB);
-    btn.prepend(rings);
 
     const content = btn.querySelector(".morph-btn__content");
     const interactive = btn.querySelector("a, button");
     let isHovering = false;
+    let ringA;
+    let ringB;
+    let pathA;
+    let pathB;
+    let motion;
+    let phaseTween;
+    let driftTween;
+    let resizeObserver;
+
+    if (isOrganic) {
+      btn.classList.add("morph-btn--organic");
+
+      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("class", "morph-btn__svg");
+      svg.setAttribute("aria-hidden", "true");
+      svg.setAttribute("preserveAspectRatio", "none");
+
+      pathA = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      pathA.setAttribute("class", "morph-btn__path morph-btn__path--a");
+
+      pathB = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      pathB.setAttribute("class", "morph-btn__path morph-btn__path--b");
+
+      svg.append(pathA, pathB);
+      rings.append(svg);
+
+      motion = { phase: 0, drift: 0, wobble: 1, boost: 0, leanX: 0, leanY: 0 };
+
+      const renderOrganic = () => {
+        const rect = btn.getBoundingClientRect();
+        const width = Math.max(rect.width, 1);
+        const height = Math.max(rect.height, 1);
+        const wobble = motion.wobble + motion.boost;
+
+        svg.setAttribute("viewBox", `0 0 ${round(width)} ${round(height)}`);
+        pathA.setAttribute(
+          "d",
+          buildOrganicCapsule(
+            width,
+            height,
+            0,
+            motion.phase,
+            motion.drift,
+            wobble,
+            motion.leanX,
+            motion.leanY,
+          ),
+        );
+        pathB.setAttribute(
+          "d",
+          buildOrganicCapsule(
+            width,
+            height,
+            2,
+            motion.phase + 0.75,
+            motion.drift + 0.55,
+            wobble * 0.92,
+            motion.leanX * 0.45,
+            motion.leanY * 0.45,
+          ),
+        );
+      };
+
+      phaseTween = gsap.to(motion, {
+        phase: Math.PI * 2,
+        duration: 8.4,
+        repeat: -1,
+        ease: "sine.inOut",
+        onUpdate: renderOrganic,
+      });
+
+      driftTween = gsap.to(motion, {
+        drift: -Math.PI * 2,
+        duration: 11.2,
+        repeat: -1,
+        ease: "sine.inOut",
+        onUpdate: renderOrganic,
+      });
+
+      if ("ResizeObserver" in window) {
+        resizeObserver = new ResizeObserver(renderOrganic);
+        resizeObserver.observe(btn);
+      }
+
+      window.addEventListener("load", renderOrganic, { once: true });
+      requestAnimationFrame(renderOrganic);
+
+      btn._renderOrganic = renderOrganic;
+      btn._morphMotion = motion;
+
+      organicMorphCleanups.push(() => {
+        phaseTween?.kill();
+        driftTween?.kill();
+        resizeObserver?.disconnect();
+      });
+    } else {
+      ringA = document.createElement("span");
+      ringA.className = "morph-btn__ring morph-btn__ring--a";
+      ringA.setAttribute("aria-hidden", "true");
+
+      ringB = document.createElement("span");
+      ringB.className = "morph-btn__ring morph-btn__ring--b";
+      ringB.setAttribute("aria-hidden", "true");
+
+      rings.append(ringA, ringB);
+    }
+
+    btn.prepend(rings);
 
     const setHoverState = (active) => {
       if (isHovering === active) return;
       isHovering = active;
 
-      gsap.killTweensOf([rings, ringA, ringB, content].filter(Boolean));
+      const hoverTargets = [rings, ringA, ringB, content].filter(Boolean);
+      gsap.killTweensOf(hoverTargets);
 
       if (active) {
         btn.classList.add("is-hover");
+
+        if (isOrganic && motion) {
+          phaseTween.timeScale(1.55);
+          driftTween.timeScale(1.45);
+
+          gsap.to(motion, {
+            boost: 0.28,
+            duration: 0.55,
+            ease: "power3.out",
+            onUpdate: btn._renderOrganic,
+          });
+
+          gsap.to(rings, {
+            scale: 1.045,
+            rotation: 2.5,
+            duration: 0.62,
+            ease: "power3.out",
+            overwrite: "auto",
+          });
+
+          if (content) {
+            gsap.to(content, {
+              y: -1,
+              scale: 1,
+              duration: 0.55,
+              ease: "power3.out",
+              overwrite: "auto",
+            });
+          }
+
+          return;
+        }
+
         ringA.style.animationDuration = "2.2s";
         ringB.style.animationDuration = "2.6s";
 
@@ -1158,6 +1426,41 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       btn.classList.remove("is-hover");
+
+      if (isOrganic && motion) {
+        phaseTween.timeScale(1);
+        driftTween.timeScale(1);
+
+        gsap.to(motion, {
+          boost: 0,
+          leanX: 0,
+          leanY: 0,
+          duration: 0.72,
+          ease: "power2.inOut",
+          onUpdate: btn._renderOrganic,
+        });
+
+        gsap.to(rings, {
+          scale: 1,
+          rotation: 0,
+          duration: 0.68,
+          ease: "power2.inOut",
+          overwrite: "auto",
+        });
+
+        if (content) {
+          gsap.to(content, {
+            y: 0,
+            scale: 1,
+            duration: 0.62,
+            ease: "power2.inOut",
+            overwrite: "auto",
+          });
+        }
+
+        return;
+      }
+
       ringA.style.animationDuration = "";
       ringB.style.animationDuration = "";
 
@@ -1192,6 +1495,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     btn.addEventListener("mouseenter", onEnter);
     btn.addEventListener("mouseleave", onLeave);
+    btn.addEventListener("touchstart", onEnter, { passive: true });
+    btn.addEventListener("touchend", onLeave);
+    btn.addEventListener("touchcancel", onLeave);
 
     if (interactive) {
       interactive.addEventListener("focus", onEnter);
@@ -1224,6 +1530,17 @@ document.addEventListener("DOMContentLoaded", () => {
           overwrite: "auto",
         });
 
+        if (btn._morphMotion) {
+          gsap.to(btn._morphMotion, {
+            leanX: x * 0.014,
+            leanY: y * 0.012,
+            duration: 0.38,
+            ease: "power3.out",
+            overwrite: "auto",
+            onUpdate: btn._renderOrganic,
+          });
+        }
+
         if (content) {
           gsap.to(content, {
             x: x * labelPull,
@@ -1243,6 +1560,17 @@ document.addEventListener("DOMContentLoaded", () => {
           ease: "elastic.out(1, 0.45)",
           overwrite: "auto",
         });
+
+        if (btn._morphMotion) {
+          gsap.to(btn._morphMotion, {
+            leanX: 0,
+            leanY: 0,
+            duration: 0.72,
+            ease: "power2.inOut",
+            overwrite: "auto",
+            onUpdate: btn._renderOrganic,
+          });
+        }
 
         if (content) {
           gsap.to(content, {
@@ -1400,11 +1728,14 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   window.addEventListener("load", () => {
+    measureThemeSections();
+    morphButtons.forEach((btn) => btn._renderOrganic?.());
     ScrollTrigger.refresh();
     updateScrollState();
   });
 
   window.addEventListener("resize", () => {
+    measureThemeSections();
     updateScrollState();
   });
 });

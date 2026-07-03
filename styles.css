@@ -1,11 +1,11 @@
 :root {
-  --bg: #FCFCFC;
+  --bg: #fcfcfc;
   --fg: #141412;
-  --accent: #242421;
-  --hover: #5b5b55;
+  --accent: color-mix(in srgb, var(--fg) 82%, black);
+  --hover: color-mix(in srgb, var(--fg) 52%, #666);
   --panel: #e8e8e2;
-  --muted: rgba(20, 20, 18, 0.68);
-  --line: rgba(20, 20, 18, 0.14);
+  --muted: color-mix(in srgb, var(--fg) 68%, transparent);
+  --line: color-mix(in srgb, var(--fg) 14%, transparent);
   --section-pad: clamp(6rem, 10vw, 12rem);
   --font-display: "Bricolage Grotesque", sans-serif;
   --font-heading: "Bricolage Grotesque", sans-serif;
@@ -155,7 +155,7 @@ h2 {
 body.is-topbar-inverted .topbar-brand,
 body.is-topbar-inverted .topbar-nav a,
 body.is-topbar-inverted .topbar-nav span {
-  color: #FCFCFC;
+  color: #fcfcfc;
 }
 .topbar-brand {
   position: fixed;
@@ -214,40 +214,19 @@ body.is-topbar-inverted .topbar-nav span {
   align-items: center;
   justify-content: center;
   min-height: 2.5rem;
-  border-radius: 999px;
   white-space: nowrap;
-}
-.topbar .topbar-brief {
-  padding: 0.72rem 1.15rem;
-  background: #141412;
-  color: #FCFCFC;
-}
-body.is-topbar-inverted .topbar .topbar-brief {
-  background: #FCFCFC;
-  color: #141412;
-}
-.topbar .topbar-menu {
-  min-width: 4.7rem;
-  padding: 0.72rem 0.95rem;
-  border: 1px solid rgba(20, 20, 18, 0.14);
-  background: #e8e8e2;
-  color: #141412;
+  background: transparent;
+  border: 0;
   font: inherit;
   text-transform: inherit;
+  color: inherit;
+}
+.topbar-menu-wrap {
   opacity: 0;
   visibility: hidden;
   transition:
     opacity 0.28s ease,
-    visibility 0.28s ease,
-    background 0.3s ease;
-}
-body.is-topbar-inverted .topbar .topbar-menu {
-  border-color: rgba(252, 252, 252, 0.24);
-  background: #FCFCFC;
-  color: #141412;
-}
-.topbar .topbar-menu:hover {
-  background: #deded8;
+    visibility 0.28s ease;
 }
 body.is-topbar-compact .topbar-brand,
 body.is-topbar-compact .topbar-nav {
@@ -255,7 +234,7 @@ body.is-topbar-compact .topbar-nav {
   visibility: hidden;
   pointer-events: none;
 }
-body.is-topbar-compact .topbar-menu {
+body.is-topbar-compact .topbar-menu-wrap {
   opacity: 1;
   visibility: visible;
 }
@@ -317,29 +296,31 @@ body.is-topbar-compact .topbar-menu {
 @keyframes morph-btn-a {
   0%,
   100% {
-    border-radius: 46% 54% 49% 51% / 44% 48% 52% 56%;
+    border-radius: 50%;
   }
   50% {
-    border-radius: 35% 65% 65% 35% / 50% 59% 41% 50%;
+    border-radius: 50% / 51% 49% 49% 51%;
   }
 }
 
 @keyframes morph-btn-b {
   0%,
   100% {
-    border-radius: 63% 37% 53% 47% / 63% 59% 41% 37%;
+    border-radius: 50%;
   }
   50% {
-    border-radius: 64% 36% 51% 49% / 40% 75% 25% 60%;
+    border-radius: 50% / 49% 51% 51% 49%;
   }
 }
 
 .morph-btn {
+  --morph-black: #141412;
+  --morph-white: #fcfcfc;
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--fg);
+  color: var(--morph-black);
   isolation: isolate;
   will-change: transform;
 }
@@ -364,29 +345,207 @@ body.is-topbar-compact .topbar-menu {
 }
 
 .morph-btn__ring--a {
-  border-radius: 46% 54% 49% 51% / 44% 48% 52% 56%;
-  animation: morph-btn-a 3.4s linear infinite;
+  border-radius: 50%;
+  animation: morph-btn-a 4.2s ease-in-out infinite;
   transform-origin: 50% 50%;
 }
 
 .morph-btn__ring--b {
-  inset: 2px;
-  border-radius: 63% 37% 53% 47% / 63% 59% 41% 37%;
+  inset: 3px;
+  border-radius: 50%;
   opacity: 0.72;
-  animation: morph-btn-b 3.4s linear infinite;
+  animation: morph-btn-b 4.8s ease-in-out infinite;
   animation-delay: 1s;
 }
 
+.morph-btn--organic .morph-btn__ring {
+  display: none;
+}
+
+.morph-btn__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.morph-btn__path {
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition:
+    fill 0.45s var(--ease-out-expo),
+    stroke 0.45s var(--ease-out-expo),
+    opacity 0.45s ease;
+}
+
+.morph-btn__path--a {
+  fill: transparent;
+  stroke: none;
+}
+
+.morph-btn__path--b {
+  fill: none;
+  stroke: var(--morph-black);
+  stroke-width: 1.15;
+  opacity: 0.55;
+}
+
+.morph-btn--fill .morph-btn__path--a {
+  fill: var(--morph-fill, var(--morph-black));
+  stroke: var(--morph-fill, var(--morph-black));
+}
+
+.morph-btn--fill .morph-btn__path--b {
+  stroke: var(--morph-fill-text, var(--morph-white));
+  opacity: 0.18;
+}
+
+.morph-btn--soft .morph-btn__path--a {
+  fill: var(--morph-white);
+  stroke: var(--morph-black);
+}
+
+.morph-btn--soft .morph-btn__path--b {
+  stroke: var(--morph-black);
+  opacity: 0.45;
+}
+
+.morph-btn--organic:not(.morph-btn--fill):not(.morph-btn--soft).is-hover
+  .morph-btn__path--a {
+  fill: var(--morph-black);
+  stroke: var(--morph-black);
+}
+
+.morph-btn--organic:not(.morph-btn--fill):not(.morph-btn--soft).is-hover
+  .morph-btn__path--b {
+  stroke: var(--morph-white);
+  opacity: 0.35;
+}
+
+.morph-btn--organic:not(.morph-btn--fill):not(.morph-btn--soft).is-hover
+  .morph-btn__content {
+  color: var(--morph-white);
+}
+
+.morph-btn--organic.morph-btn--dark.is-hover .morph-btn__path--a {
+  fill: var(--morph-white);
+  stroke: var(--morph-black);
+}
+
+.morph-btn--organic.morph-btn--dark.is-hover .morph-btn__path--b {
+  stroke: var(--morph-black);
+  opacity: 0.22;
+}
+
+.morph-btn--organic.morph-btn--soft.is-hover .morph-btn__path--a {
+  fill: var(--morph-black);
+  stroke: var(--morph-black);
+}
+
+.morph-btn--organic.morph-btn--soft.is-hover .morph-btn__path--b {
+  stroke: var(--morph-white);
+  opacity: 0.28;
+}
+
+.morph-btn--pill > a,
+.morph-btn--pill > button {
+  padding: 0.95rem 1.55rem;
+  min-height: 3.05rem;
+}
+
+.morph-btn--pill .topbar-menu {
+  min-width: 4.7rem;
+}
+
+.morph-btn--fill .morph-btn__content {
+  color: var(--morph-fill-text, var(--morph-white));
+  transition: color 0.45s var(--ease-out-expo);
+}
+
+.morph-btn--dark.is-hover .morph-btn__content,
+.morph-btn--fill.is-hover .morph-btn__content {
+  color: var(--morph-fill-text);
+}
+
+.morph-btn--dark {
+  --morph-fill: var(--morph-black);
+  --morph-fill-text: var(--morph-white);
+}
+
+.morph-btn--dark.is-hover {
+  --morph-fill: var(--morph-white);
+  --morph-fill-text: var(--morph-black);
+}
+
+body.is-topbar-inverted .topbar .morph-btn--dark {
+  --morph-fill: var(--morph-white);
+  --morph-fill-text: var(--morph-black);
+}
+
+body.is-topbar-inverted .topbar .morph-btn--dark.is-hover {
+  --morph-fill: var(--morph-black);
+  --morph-fill-text: var(--morph-white);
+}
+
+.morph-btn--soft {
+  --morph-fill: var(--morph-white);
+  --morph-fill-text: var(--morph-black);
+}
+
+.morph-btn--soft .morph-btn__content {
+  color: var(--morph-black);
+  transition: color 0.45s var(--ease-out-expo);
+}
+
+.morph-btn--soft.is-hover .morph-btn__content {
+  color: var(--morph-white);
+}
+
+body.is-topbar-inverted .morph-btn--soft .morph-btn__path--a {
+  fill: var(--morph-white);
+  stroke: var(--morph-black);
+}
+
+body.is-topbar-inverted .morph-btn--soft .morph-btn__path--b {
+  stroke: var(--morph-black);
+}
+
+body.is-topbar-inverted .morph-btn--soft .morph-btn__content {
+  color: var(--morph-black);
+}
+
+body.is-topbar-inverted .morph-btn--soft.is-hover .morph-btn__path--a {
+  fill: var(--morph-black);
+  stroke: var(--morph-black);
+}
+
+body.is-topbar-inverted .morph-btn--soft.is-hover .morph-btn__content {
+  color: var(--morph-white);
+}
+
 .morph-btn.is-hover .morph-btn__ring--a {
-  background: color-mix(in srgb, currentColor 7%, transparent);
+  background: transparent;
 }
 
 .morph-btn.is-hover .morph-btn__ring--b {
-  opacity: 1;
+  opacity: 0.55;
 }
 
 .morph-btn--rect {
   align-self: flex-start;
+}
+
+.morph-btn--rect > a,
+.morph-btn--rect > button {
+  padding: 1.05rem 1.85rem;
+  min-height: 3.05rem;
+}
+
+.morph-btn--rect .morph-btn__content {
+  color: var(--morph-black);
 }
 
 .morph-btn--circle {
@@ -401,35 +560,29 @@ body.is-topbar-compact .topbar-menu {
   top: 2.5rem;
   right: 2.5rem;
   z-index: 2010;
-  color: var(--fg);
+  color: var(--morph-black);
 }
 
-.morph-btn.is-hover.morph-btn--pill {
-  color: var(--accent);
+.morph-btn.is-hover.morph-btn--detail .morph-btn__path--a {
+  fill: var(--morph-black);
+  stroke: var(--morph-black);
 }
 
-.morph-btn.footer-cta-wrap > a {
-  border-radius: 999px;
+.morph-btn.is-hover.morph-btn--detail .morph-btn__path--b {
+  stroke: var(--morph-white);
+  opacity: 0.3;
 }
 
-.morph-btn.is-hover.morph-btn--rect {
-  color: var(--accent);
-}
-
-.morph-btn.is-hover.morph-btn--circle {
-  color: var(--fg);
-}
-
-.morph-btn.is-hover.morph-btn--detail {
-  color: var(--bg);
+.morph-btn.is-hover.morph-btn--detail .morph-btn__content {
+  color: var(--morph-white);
 }
 
 .morph-btn.is-hover.morph-btn--detail .morph-btn__ring--a {
-  background: var(--fg);
-  border-color: var(--fg);
+  background: var(--morph-black);
+  border-color: var(--morph-black);
   transition:
-    background 0.55s var(--ease-out-expo),
-    border-color 0.55s var(--ease-out-expo);
+    background 0.45s var(--ease-out-expo),
+    border-color 0.45s var(--ease-out-expo);
 }
 
 .morph-btn__content {
@@ -440,6 +593,8 @@ body.is-topbar-compact .topbar-menu {
   justify-content: center;
   gap: 0.85rem;
   transform-origin: 50% 50%;
+  color: inherit;
+  transition: color 0.45s var(--ease-out-expo);
 }
 
 .morph-btn > a,
@@ -462,7 +617,7 @@ body.is-topbar-compact .topbar-menu {
   inset: 0;
   z-index: 9000;
   overflow: hidden;
-  color: #FCFCFC;
+  color: #fcfcfc;
   background: #12100e;
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
 }
@@ -489,7 +644,7 @@ body.is-topbar-compact .topbar-menu {
   overflow: hidden;
   font-size: clamp(1.25rem, 2vw, 2.5rem);
   font-weight: 500;
-  color: #FCFCFC;
+  color: #fcfcfc;
   letter-spacing: 0.14em;
   text-shadow: 0 2px 24px rgba(0, 0, 0, 0.5);
   pointer-events: none;
@@ -604,7 +759,6 @@ body.is-topbar-compact .topbar-menu {
   color: var(--muted);
 }
 .hero-cta {
-  padding: 1.05rem 1.5rem;
   font-family: var(--font-mono);
   font-size: 0.72rem;
   font-weight: 700;
@@ -648,11 +802,7 @@ body.is-topbar-compact .topbar-menu {
   opacity: 0.62;
   pointer-events: none;
   background:
-    radial-gradient(
-      circle at 18% 28%,
-      rgba(20, 20, 18, 0.18),
-      transparent 34%
-    ),
+    radial-gradient(circle at 18% 28%, rgba(20, 20, 18, 0.18), transparent 34%),
     linear-gradient(90deg, rgba(244, 244, 240, 0.06), transparent 46%);
 }
 .sheets::after {
@@ -859,8 +1009,8 @@ body.is-topbar-compact .topbar-menu {
   min-height: 100svh;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
-  background: #FCFCFC;
-  color: #141412;
+  background: var(--bg);
+  color: var(--fg);
   overflow: hidden;
 }
 
@@ -875,7 +1025,7 @@ body.is-topbar-compact .topbar-menu {
 }
 
 .footer-hero-title {
-  color: #141412;
+  color: var(--fg);
   font-size: clamp(3.3rem, 7.4vw, 7.6rem);
   line-height: 0.88;
   letter-spacing: 0;
@@ -883,33 +1033,21 @@ body.is-topbar-compact .topbar-menu {
 }
 
 .footer-cta-wrap {
-  color: #141412;
+  color: var(--fg);
+  max-width: min(100%, 34rem);
 }
 
 .footer-cta {
-  padding: 0.95rem 1.45rem;
-  background: #141412;
-  color: #FCFCFC;
-  border-radius: 999px;
+  padding: 0.95rem 1.65rem;
+  min-height: 3.05rem;
+  width: 100%;
   font-family: var(--font-mono);
   font-size: clamp(0.66rem, 0.9vw, 0.72rem);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  transition: color 0.35s ease, background 0.35s ease;
-}
-
-.footer-cta-icon {
-  flex: 0 0 0.72rem;
-  width: 0.72rem;
-  height: 0.72rem;
-  border: 1.5px solid currentColor;
-  border-radius: 50%;
-}
-
-.morph-btn.is-hover .footer-cta {
-  background: #FCFCFC;
-  color: #141412;
+  background: transparent;
+  transition: color 0.35s ease;
 }
 
 .footer-grid {
@@ -1073,8 +1211,8 @@ body.is-topbar-compact .topbar-menu {
   flex-direction: column;
   gap: 2.5rem;
   padding: 5.5rem 1.75rem 2rem;
-  background: #FCFCFC;
-  border-left: 1px solid rgba(20, 20, 18, 0.12);
+  background: var(--bg);
+  border-left: 1px solid var(--line);
   transform: translateX(102%);
   transition: transform 0.45s var(--ease-out-expo);
   overflow-y: auto;
@@ -1085,13 +1223,15 @@ body.is-topbar-compact .topbar-menu {
 }
 
 .mobile-menu-close {
-  align-self: flex-start;
-  padding: 0.65rem 1rem;
-  border: 1px solid rgba(20, 20, 18, 0.14);
-  border-radius: 999px;
-  background: #e8e8e2;
-  color: #141412;
+  padding: 0;
+  border: 0;
+  background: transparent;
   font: inherit;
+  color: inherit;
+}
+
+.mobile-menu-close-wrap {
+  align-self: flex-start;
 }
 
 .mobile-menu-nav {
@@ -1314,14 +1454,16 @@ p {
   .topbar-brief,
   .topbar-menu {
     min-height: 2.45rem;
+  }
+  .morph-btn--pill > a.topbar-brief,
+  .morph-btn--pill > button.topbar-menu {
     padding: 0.7rem 0.85rem;
   }
   .topbar-brief {
     font-size: 0.62rem;
     letter-spacing: 0.08em;
   }
-  .topbar-menu {
-    min-width: auto;
+  .topbar-menu-wrap {
     opacity: 1;
     visibility: visible;
   }
@@ -1329,7 +1471,7 @@ p {
     opacity: 0;
     visibility: hidden;
   }
-  body.is-topbar-compact .topbar-menu {
+  body.is-topbar-compact .topbar-menu-wrap {
     opacity: 1;
     visibility: visible;
   }
@@ -1377,8 +1519,8 @@ p {
     max-width: 100%;
     font-size: 0.95rem;
   }
-  .hero-cta {
-    padding: 0.95rem 1.25rem;
+  .morph-btn--rect > a.hero-cta {
+    padding: 0.95rem 1.35rem;
   }
   .manifesto,
   .works {
@@ -1475,8 +1617,8 @@ p {
     line-height: 0.92;
   }
   .footer-cta {
-    width: 100%;
-    max-width: 22rem;
+    width: auto;
+    max-width: 100%;
     justify-content: center;
   }
   .footer-grid {
@@ -1568,20 +1710,24 @@ p {
   .topbar-brief,
   .topbar-menu {
     min-height: 2.35rem;
-    padding: 0.62rem 0.75rem;
     font-size: 0.6rem;
+  }
+  .morph-btn--pill > a.topbar-brief,
+  .morph-btn--pill > button.topbar-menu {
+    padding: 0.62rem 0.75rem;
   }
   .hero-mark {
     font-size: clamp(3.75rem, 28vw, 5rem);
   }
   .footer-cta .morph-btn__content {
-    flex-direction: column;
-    gap: 0.5rem;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 0.75rem;
     text-align: center;
   }
   .footer-cta .morph-btn__content > span:first-child {
-    max-width: 14ch;
-    line-height: 1.35;
+    max-width: none;
+    line-height: 1.2;
   }
   .mobile-menu-panel {
     width: 100%;
