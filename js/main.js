@@ -19,14 +19,22 @@ function measureThemeSections() {
       panel: hexToRgb(section.dataset.themePanel),
     }));
 
-  themeMetrics = themeSections.map(({ section, bg, fg, panel }) => ({
-    section,
-    bg,
-    fg,
-    panel,
-    start: section.offsetTop,
-    end: section.offsetTop + section.offsetHeight,
-  }));
+  themeMetrics = themeSections.map(({ section, bg, fg, panel }) => {
+    const isFixedFooter =
+      section.id === "footer" && getComputedStyle(section).position === "fixed";
+    const start = isFixedFooter
+      ? document.documentElement.scrollHeight - section.offsetHeight
+      : section.offsetTop;
+
+    return {
+      section,
+      bg,
+      fg,
+      panel,
+      start,
+      end: start + section.offsetHeight,
+    };
+  });
 }
 
 function updateDynamicTheme(scrollY = window.scrollY) {

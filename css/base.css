@@ -72,6 +72,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+main {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 100svh;
+  background: var(--bg);
+}
+
 body::before {
   content: "";
   position: fixed;

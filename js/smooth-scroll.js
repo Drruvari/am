@@ -108,7 +108,7 @@ function updateScrollState() {
     }
 
     const topbarProbeY = 36;
-    const isOverDarkSection = [".sheets"].some((selector) => {
+    const isOverDarkSection = [".works"].some((selector) => {
       const section = document.querySelector(selector);
       if (!section) return false;
 

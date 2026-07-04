@@ -34,6 +34,9 @@
   html {
     scroll-padding-top: 5rem;
   }
+  main {
+    margin-bottom: 0;
+  }
   .topbar {
     font-size: 0.66rem;
   }
@@ -212,6 +215,9 @@
     aspect-ratio: 4 / 5;
   }
   .footer {
+    position: relative;
+    z-index: 1;
+    height: auto;
     min-height: auto;
     grid-template-rows: auto auto auto;
     overflow: visible;

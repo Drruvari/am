@@ -20,18 +20,11 @@
   height: 100svh;
   min-height: 720px;
   overflow: hidden;
-  background: #211f1c;
-  color: var(--bg);
+  background: #fcfcfc;
+  color: #141412;
 }
 .sheets::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  opacity: 0.62;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 18% 28%, rgba(20, 20, 18, 0.18), transparent 34%),
-    linear-gradient(90deg, rgba(244, 244, 240, 0.06), transparent 46%);
+  content: none;
 }
 .sheets::after {
   content: none;
@@ -55,12 +48,12 @@
 }
 .sheets-copy h2 {
   margin: 2rem 0 1.5rem;
-  color: var(--bg);
+  color: #141412;
   font-size: clamp(4rem, 7vw, 7.5rem);
 }
 .sheets-copy p {
   max-width: 420px;
-  color: rgba(244, 244, 240, 0.68);
+  color: rgba(20, 20, 18, 0.68);
   font-size: 1.05rem;
   line-height: 1.7;
 }
@@ -69,13 +62,13 @@
   width: auto;
   padding-bottom: 0;
   border-bottom: 0;
-  color: rgba(244, 244, 240, 0.86);
+  color: rgba(20, 20, 18, 0.76);
 }
 .sheets-scrollcue {
   position: absolute;
   right: clamp(1.5rem, 5vw, 5rem);
   bottom: clamp(2rem, 4vw, 3rem);
-  color: rgba(244, 244, 240, 0.68);
+  color: rgba(20, 20, 18, 0.62);
 }
 .sheets-stack {
   position: relative;
@@ -145,6 +138,10 @@
   max-width: 1500px;
   margin: 0 auto;
   padding: var(--section-pad) clamp(1.5rem, 3vw, 2.5rem);
+  background: #141412;
+  box-shadow: 0 0 0 100vmax #141412;
+  clip-path: inset(0 -100vmax);
+  color: #fcfcfc;
 }
 .works-head {
   display: grid;
