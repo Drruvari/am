@@ -87,9 +87,15 @@
     opacity: 1;
     visibility: visible;
   }
-  .loader-card {
-    width: min(62vw, 250px);
-    height: min(74vw, 300px);
+  .loader-pre,
+  .loader-welcome {
+    top: 42%;
+    left: 1.25rem;
+    max-width: calc(100% - 2.5rem);
+  }
+  .loader-line {
+    height: clamp(1.6rem, 7vw, 2rem);
+    font-size: clamp(1.15rem, 5.6vw, 1.7rem);
   }
   .hero {
     min-height: auto;

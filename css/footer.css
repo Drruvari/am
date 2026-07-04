@@ -87,7 +87,7 @@
 .footer-label {
   display: block;
   margin-bottom: clamp(1rem, 2vw, 1.35rem);
-  color: rgba(20, 20, 18, 0.74);
+  color: var(--muted);
   font-size: 0.68rem;
 }
 
@@ -105,7 +105,7 @@
   font-weight: 850;
   line-height: 0.96;
   letter-spacing: 0;
-  color: #141412;
+  color: var(--fg);
 }
 
 .footer-col--info {
@@ -116,7 +116,7 @@
 }
 
 .footer-info-block p {
-  color: #141412;
+  color: var(--fg);
   font-size: clamp(0.88rem, 0.95vw, 0.98rem);
   font-weight: 600;
   line-height: 1.38;
@@ -132,8 +132,8 @@
   gap: clamp(1rem, 2vw, 2rem);
   align-items: end;
   padding: 0.9rem clamp(1.5rem, 3vw, 2.5rem) 1.1rem;
-  color: #141412;
-  border-top: 1px solid rgba(20, 20, 18, 0.14);
+  color: var(--fg);
+  border-top: 1px solid var(--line);
   font-size: 0.68rem;
 }
 
@@ -172,5 +172,5 @@
 }
 
 .footer-status {
-  color: rgba(20, 20, 18, 0.72);
+  color: var(--muted);
 }

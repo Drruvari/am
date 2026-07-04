@@ -77,71 +77,47 @@
       aria-label="Loading portfolio"
       data-cursor-hidden
     >
-      <div class="loader-card">
-        <img
-          src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=900"
-          alt=""
-          loading="eager"
-          decoding="async"
-        />
-      </div>
-      <div class="loader-card">
-        <img
-          src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=900"
-          alt=""
-          loading="eager"
-          decoding="async"
-        />
-      </div>
-      <div class="loader-card">
-        <img
-          src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=900"
-          alt=""
-          loading="eager"
-          decoding="async"
-        />
-      </div>
-      <div class="loader-card">
-        <img
-          src="https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&q=80&w=900"
-          alt=""
-          loading="eager"
-          decoding="async"
-        />
-      </div>
-      <div class="loader-card">
-        <img
-          src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=900"
-          alt=""
-          loading="eager"
-          decoding="async"
-        />
-      </div>
-      <div class="loader-card">
-        <img
-          src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&q=80&w=900"
-          alt=""
-          loading="eager"
-          decoding="async"
-        />
-      </div>
-
-      <div class="loader-brand">
-        <h1 class="loader-title">AM</h1>
-        <div class="loader-count">
-          <p id="loaderPct">000</p>
+      <div class="loader-progress"></div>
+      <div class="loader-pre">
+        <div class="loader-line">
+          <p>Architecture begins with restraint.</p>
         </div>
+        <div class="loader-line">
+          <p>Then light decides the rest.</p>
+        </div>
+      </div>
+      <div class="loader-welcome">
+        <div class="loader-line">
+          <p>Welcome to <strong>AM Architecture.</strong></p>
+        </div>
+        <div class="loader-line">
+          <p>Studies in <strong>structure and light.</strong></p>
+        </div>
+      </div>
+      <div class="loader-numbers" aria-hidden="true">
+        <div class="loader-number loader-number-1">
+          <div class="loader-number-wrap"><span>1</span></div>
+        </div>
+        <div class="loader-number loader-number-2">
+          <div class="loader-number-wrap">
+            <span>1</span><span>2</span><span>3</span><span>4</span
+            ><span>5</span><span>6</span><span>7</span><span>8</span
+            ><span>9</span><span>0</span>
+          </div>
+        </div>
+        <div class="loader-number loader-number-3">
+          <div class="loader-number-wrap">
+            <span>1</span><span>2</span><span>3</span><span>4</span
+            ><span>5</span><span>6</span><span>7</span><span>8</span
+            ><span>9</span><span>0</span>
+          </div>
+        </div>
+        <div class="loader-percent">%</div>
       </div>
     </div>
 
     <main id="top">
-      <section
-        class="hero"
-        id="hero"
-        data-theme-bg="#FCFCFC"
-        data-theme-fg="#141412"
-        data-theme-panel="#E8E8E2"
-      >
+      <section class="hero" id="hero">
         <div class="hero-container">
           <div class="hero-grid">
             <div class="hero-left">
@@ -186,12 +162,7 @@
         </div>
       </section>
 
-      <section
-        class="manifesto"
-        data-theme-bg="#F3F2ED"
-        data-theme-fg="#141412"
-        data-theme-panel="#E4E4DE"
-      >
+      <section class="manifesto">
         <p class="manifesto-eyebrow eyebrow mono">01 — Philosophy</p>
         <p class="manifesto-text" id="manifestoText">
           The work starts with what is already there: slope, shade, wind,
@@ -200,13 +171,7 @@
         </p>
       </section>
 
-      <section
-        class="sheets"
-        id="work"
-        data-theme-bg="#FCFCFC"
-        data-theme-fg="#141412"
-        data-theme-panel="#E8E8E2"
-      >
+      <section class="sheets" id="work">
         <div class="sheets-pin" id="sheetsPin">
           <div class="sheets-copy">
             <div class="sheets-index mono" id="sheetsIndex">
@@ -222,7 +187,7 @@
           <div class="sheets-stack" id="sheetsStack">
             <div class="sheet">
               <img
-                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1200"
+                src="assets/images/image.jpg"
                 alt="Villa Lura"
                 loading="lazy"
               />
@@ -232,7 +197,7 @@
             </div>
             <div class="sheet">
               <img
-                src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1200"
+                src="assets/images/image.jpg"
                 alt="Dajt Pavilion"
                 loading="lazy"
               />
@@ -240,7 +205,7 @@
             </div>
             <div class="sheet">
               <img
-                src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1200"
+                src="assets/images/image.jpg"
                 alt="Krujë Studio"
                 loading="lazy"
               />
@@ -248,7 +213,7 @@
             </div>
             <div class="sheet">
               <img
-                src="https://images.unsplash.com/photo-1600607686527-6fb886090705?auto=format&fit=crop&q=80&w=1200"
+                src="assets/images/image.jpg"
                 alt="Courtyard House"
                 loading="lazy"
               />
@@ -259,13 +224,7 @@
         </div>
       </section>
 
-      <section
-        class="works"
-        id="gallery"
-        data-theme-bg="#141412"
-        data-theme-fg="#FCFCFC"
-        data-theme-panel="#2A2824"
-      >
+      <section class="works" id="gallery">
         <div class="works-head">
           <p class="eyebrow mono">03 — Built Environments</p>
           <h2>FOUR WAYS<br />OF BUILDING</h2>
@@ -288,11 +247,11 @@
             data-year="2026"
             data-materials="Board-formed concrete, limestone, low-iron glass"
             data-note="north light / cliff datum"
-            data-images="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=1400|https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=1000|https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&q=80&w=1000"
+            data-images="assets/images/image.jpg|assets/images/image.jpg|assets/images/image.jpg"
           >
             <div class="works-visual" id="v1">
               <img
-                src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=1400"
+                src="assets/images/image.jpg"
                 alt="Cliff House"
                 loading="lazy"
               />
@@ -312,11 +271,11 @@
             data-year="2025"
             data-materials="Existing brick, blackened steel, pale oak"
             data-note="service core / retained shell"
-            data-images="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80&w=1000|https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&q=80&w=1000|https://images.unsplash.com/photo-1600607687644-c7171b42498f?auto=format&fit=crop&q=80&w=1000"
+            data-images="assets/images/image.jpg|assets/images/image.jpg|assets/images/image.jpg"
           >
             <div class="works-visual" id="v2">
               <img
-                src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80&w=800"
+                src="assets/images/image.jpg"
                 alt="Industrial Loft"
                 loading="lazy"
               />
@@ -338,11 +297,11 @@
             data-year="2026"
             data-materials="Glulam timber, lime plaster, polycarbonate"
             data-note="glulam rhythm / passive skin"
-            data-images="https://images.unsplash.com/photo-1541888087595-8850cb101569?auto=format&fit=crop&q=80&w=1000|https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&q=80&w=1000|https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&q=80&w=1000"
+            data-images="assets/images/image.jpg|assets/images/image.jpg|assets/images/image.jpg"
           >
             <div class="works-visual" id="v3">
               <img
-                src="https://images.unsplash.com/photo-1541888087595-8850cb101569?auto=format&fit=crop&q=80&w=800"
+                src="assets/images/image.jpg"
                 alt="Botanical Pavilion"
                 loading="lazy"
               />
@@ -362,11 +321,11 @@
             data-year="2025"
             data-materials="Local aggregate, darkened timber, mineral render"
             data-note="roof aperture / stone mass"
-            data-images="https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&q=80&w=1400|https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&q=80&w=1000|https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&q=80&w=1000"
+            data-images="assets/images/image.jpg|assets/images/image.jpg|assets/images/image.jpg"
           >
             <div class="works-visual" id="v4">
               <img
-                src="https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&q=80&w=1400"
+                src="assets/images/image.jpg"
                 alt="Monolith Sanctuary"
                 loading="lazy"
               />
@@ -377,13 +336,7 @@
       </section>
     </main>
 
-    <footer
-      class="footer"
-      id="footer"
-      data-theme-bg="#F6F5F1"
-      data-theme-fg="#141412"
-      data-theme-panel="#E8E8E2"
-    >
+    <footer class="footer" id="footer">
       <div class="footer-hero">
         <h2 class="footer-hero-title">
           Focused on quality<br />driven by restraint
@@ -407,7 +360,7 @@
         <div class="footer-col footer-col--brand">
           <div class="footer-image-block">
             <img
-              src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&q=80&w=900"
+              src="assets/images/image.jpg"
               alt="Warm residential architecture with garden path"
               loading="lazy"
             />

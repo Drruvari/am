@@ -107,17 +107,6 @@ function updateScrollState() {
       }
     }
 
-    const topbarProbeY = 36;
-    const isOverDarkSection = [".works"].some((selector) => {
-      const section = document.querySelector(selector);
-      if (!section) return false;
-
-      const rect = section.getBoundingClientRect();
-      return rect.top <= topbarProbeY && rect.bottom >= topbarProbeY;
-    });
-
-    document.body.classList.toggle("is-topbar-inverted", isOverDarkSection);
+    document.body.classList.remove("is-topbar-inverted");
   }
-
-  updateDynamicTheme(currentScroll);
 }

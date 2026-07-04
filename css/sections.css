@@ -20,8 +20,8 @@
   height: 100svh;
   min-height: 720px;
   overflow: hidden;
-  background: #fcfcfc;
-  color: #141412;
+  background: var(--bg);
+  color: var(--fg);
 }
 .sheets::before {
   content: none;
@@ -48,12 +48,12 @@
 }
 .sheets-copy h2 {
   margin: 2rem 0 1.5rem;
-  color: #141412;
+  color: var(--fg);
   font-size: clamp(4rem, 7vw, 7.5rem);
 }
 .sheets-copy p {
   max-width: 420px;
-  color: rgba(20, 20, 18, 0.68);
+  color: var(--muted);
   font-size: 1.05rem;
   line-height: 1.7;
 }
@@ -62,13 +62,13 @@
   width: auto;
   padding-bottom: 0;
   border-bottom: 0;
-  color: rgba(20, 20, 18, 0.76);
+  color: var(--muted);
 }
 .sheets-scrollcue {
   position: absolute;
   right: clamp(1.5rem, 5vw, 5rem);
   bottom: clamp(2rem, 4vw, 3rem);
-  color: rgba(20, 20, 18, 0.62);
+  color: var(--muted);
 }
 .sheets-stack {
   position: relative;
@@ -87,9 +87,9 @@
   height: 86%;
   overflow: hidden;
   padding: 0;
-  background: #12100e;
+  background: var(--fg);
   border: 0;
-  box-shadow: 0 34px 90px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 34px 90px color-mix(in srgb, var(--fg) 30%, transparent);
 }
 .sheet:nth-child(1),
 .sheet:nth-child(4) {
@@ -128,7 +128,7 @@
   z-index: 4;
   max-width: calc(100% - 2rem);
   padding: 0.55rem 0.7rem;
-  background: rgba(18, 16, 14, 0.64);
+  background: color-mix(in srgb, var(--fg) 76%, transparent);
   color: var(--bg);
   opacity: 1;
   backdrop-filter: blur(12px);
@@ -138,10 +138,10 @@
   max-width: 1500px;
   margin: 0 auto;
   padding: var(--section-pad) clamp(1.5rem, 3vw, 2.5rem);
-  background: #141412;
-  box-shadow: 0 0 0 100vmax #141412;
+  background: var(--bg);
+  box-shadow: 0 0 0 100vmax var(--bg);
   clip-path: inset(0 -100vmax);
-  color: #fcfcfc;
+  color: var(--fg);
 }
 .works-head {
   display: grid;
@@ -213,14 +213,14 @@
   background:
     radial-gradient(
       circle at var(--spot-x, 50%) var(--spot-y, 50%),
-      rgba(252, 252, 252, 0.48),
-      rgba(252, 252, 252, 0.12) 14%,
+      color-mix(in srgb, var(--bg) 48%, transparent),
+      color-mix(in srgb, var(--bg) 12%, transparent) 14%,
       transparent 34%
     ),
     linear-gradient(
       115deg,
       transparent 34%,
-      rgba(252, 252, 252, 0.24) 48%,
+      color-mix(in srgb, var(--bg) 24%, transparent) 48%,
       transparent 62%
     );
   mix-blend-mode: screen;
@@ -308,7 +308,7 @@ p {
   content: "";
   position: absolute;
   inset: 1.5rem;
-  border: 1px solid rgba(244, 244, 240, 0.28);
+  border: 1px solid color-mix(in srgb, var(--bg) 28%, transparent);
   pointer-events: none;
 }
 .detail-visual img {

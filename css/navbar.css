@@ -18,7 +18,7 @@
 body.is-topbar-inverted .topbar-brand,
 body.is-topbar-inverted .topbar-nav a,
 body.is-topbar-inverted .topbar-nav span {
-  color: var(--bg);
+  color: var(--fg);
 }
 .topbar-brand {
   position: fixed;
@@ -56,7 +56,7 @@ body.is-topbar-inverted .topbar-nav span {
   position: relative;
   font: inherit;
   font-weight: 800;
-  color: #141412;
+  color: var(--fg);
   white-space: nowrap;
 }
 .topbar-nav > :not(:last-child)::after {
@@ -147,7 +147,7 @@ body.is-topbar-compact .topbar-menu-wrap {
 .mobile-menu-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(18, 16, 14, 0.42);
+  background: color-mix(in srgb, var(--fg) 42%, transparent);
   opacity: 0;
   transition: opacity 0.35s ease;
 }
@@ -202,11 +202,11 @@ body.is-topbar-compact .topbar-menu-wrap {
   font-weight: 850;
   line-height: 1;
   letter-spacing: 0;
-  color: #141412;
+  color: var(--fg);
 }
 
 .mobile-menu-meta {
   margin-top: auto;
-  color: rgba(20, 20, 18, 0.68);
+  color: var(--muted);
   line-height: 1.8;
 }

@@ -16,13 +16,13 @@
 }
 
 :root {
-  --bg: #fcfcfc;
-  --fg: #141412;
-  --accent: color-mix(in srgb, var(--fg) 82%, black);
-  --hover: color-mix(in srgb, var(--fg) 52%, #666);
-  --panel: #e8e8e2;
-  --muted: color-mix(in srgb, var(--fg) 68%, transparent);
-  --line: color-mix(in srgb, var(--fg) 14%, transparent);
+  --bg: #f4f0e8;
+  --fg: #111111;
+  --accent: var(--fg);
+  --hover: var(--fg);
+  --panel: var(--bg);
+  --muted: color-mix(in srgb, var(--fg) 68%, var(--bg));
+  --line: color-mix(in srgb, var(--fg) 16%, var(--bg));
   --section-pad: clamp(6rem, 10vw, 12rem);
   --font-display: "Bricolage Grotesque", sans-serif;
   --font-heading: "Bricolage Grotesque", sans-serif;
@@ -87,14 +87,14 @@ body::before {
   pointer-events: none;
   opacity: 0.12;
   background-image:
-    linear-gradient(rgba(24, 23, 21, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(24, 23, 21, 0.028) 1px, transparent 1px);
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
   background-size: 72px 72px;
   mask-image: linear-gradient(
     to bottom,
     transparent,
-    #000 12%,
-    #000 88%,
+    var(--fg) 12%,
+    var(--fg) 88%,
     transparent
   );
 }
@@ -202,9 +202,9 @@ h2 {
 
 /* Morph buttons */
 .morph-btn {
-  --morph-bg: #fcfcfc;
-  --morph-text: #141412;
-  --morph-border: rgba(20, 20, 18, 0.16);
+  --morph-bg: var(--bg);
+  --morph-text: var(--fg);
+  --morph-border: var(--line);
 
   position: relative;
   display: inline-flex;
@@ -244,21 +244,21 @@ h2 {
 }
 
 .morph-btn--dark {
-  --morph-bg: #141412;
-  --morph-text: #fcfcfc;
-  --morph-border: rgba(252, 252, 252, 0.24);
+  --morph-bg: var(--fg);
+  --morph-text: var(--bg);
+  --morph-border: var(--fg);
 }
 
 .morph-btn--soft {
-  --morph-bg: #f4f4f0;
-  --morph-text: #141412;
-  --morph-border: rgba(20, 20, 18, 0.14);
+  --morph-bg: var(--bg);
+  --morph-text: var(--fg);
+  --morph-border: var(--line);
 }
 
 body.is-topbar-inverted .topbar .morph-btn--dark {
-  --morph-bg: #141412;
-  --morph-text: #fcfcfc;
-  --morph-border: rgba(252, 252, 252, 0.24);
+  --morph-bg: var(--fg);
+  --morph-text: var(--bg);
+  --morph-border: var(--fg);
 }
 
 .morph-btn--pill > a,
