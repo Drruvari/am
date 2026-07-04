@@ -16,13 +16,13 @@
 }
 
 :root {
-  --bg: #f4f0e8;
-  --fg: #111111;
+  --bg: #EDEDEB;
+  --fg: #111213;
   --accent: var(--fg);
   --hover: var(--fg);
   --panel: var(--bg);
-  --muted: color-mix(in srgb, var(--fg) 68%, var(--bg));
-  --line: color-mix(in srgb, var(--fg) 16%, var(--bg));
+  --muted: var(--fg);
+  --line: var(--fg);
   --section-pad: clamp(6rem, 10vw, 12rem);
   --font-display: "Bricolage Grotesque", sans-serif;
   --font-heading: "Bricolage Grotesque", sans-serif;
@@ -224,7 +224,6 @@ h2 {
 .morph-btn__body {
   position: absolute;
   inset: 0;
-  border-radius: 999px;
   background: var(--morph-bg);
   border: 1px solid var(--morph-border);
   box-shadow: none;

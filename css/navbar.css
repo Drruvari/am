@@ -147,13 +147,13 @@ body.is-topbar-compact .topbar-menu-wrap {
 .mobile-menu-backdrop {
   position: absolute;
   inset: 0;
-  background: color-mix(in srgb, var(--fg) 42%, transparent);
+  background: var(--fg);
   opacity: 0;
   transition: opacity 0.35s ease;
 }
 
 .mobile-menu.is-open .mobile-menu-backdrop {
-  opacity: 1;
+  opacity: 0.42;
 }
 
 .mobile-menu-panel {

@@ -89,7 +89,7 @@
   padding: 0;
   background: var(--fg);
   border: 0;
-  box-shadow: 0 34px 90px color-mix(in srgb, var(--fg) 30%, transparent);
+  box-shadow: 0 34px 90px var(--fg);
 }
 .sheet:nth-child(1),
 .sheet:nth-child(4) {
@@ -128,7 +128,7 @@
   z-index: 4;
   max-width: calc(100% - 2rem);
   padding: 0.55rem 0.7rem;
-  background: color-mix(in srgb, var(--fg) 76%, transparent);
+  background: var(--fg);
   color: var(--bg);
   opacity: 1;
   backdrop-filter: blur(12px);
@@ -200,7 +200,7 @@
   aspect-ratio: 4 / 5;
   overflow: hidden;
   background: var(--panel);
-  clip-path: inset(0 round 0);
+  clip-path: inset(0);
   transform-style: preserve-3d;
 }
 .works-visual::after {
@@ -213,14 +213,14 @@
   background:
     radial-gradient(
       circle at var(--spot-x, 50%) var(--spot-y, 50%),
-      color-mix(in srgb, var(--bg) 48%, transparent),
-      color-mix(in srgb, var(--bg) 12%, transparent) 14%,
+      var(--bg),
+      transparent 14%,
       transparent 34%
     ),
     linear-gradient(
       115deg,
       transparent 34%,
-      color-mix(in srgb, var(--bg) 24%, transparent) 48%,
+      var(--bg) 48%,
       transparent 62%
     );
   mix-blend-mode: screen;
@@ -308,7 +308,7 @@ p {
   content: "";
   position: absolute;
   inset: 1.5rem;
-  border: 1px solid color-mix(in srgb, var(--bg) 28%, transparent);
+  border: 1px solid var(--bg);
   pointer-events: none;
 }
 .detail-visual img {
