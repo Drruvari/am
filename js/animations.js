@@ -306,7 +306,27 @@ function initManifestoReveal() {
     });
   };
 
+  const bindLineReveals = (start, end, scrub = 0.6) => {
+    return imgSpans.map((span) => {
+      const line = span.closest(".manifesto-line");
+      if (!line) return null;
+
+      return ScrollTrigger.create({
+        trigger: line,
+        start,
+        end,
+        scrub,
+        invalidateOnRefresh: true,
+        onUpdate(self) {
+          const width = getImgSpanWidth(span);
+          span.style.width = `${width * self.progress}px`;
+        },
+      });
+    }).filter(Boolean);
+  };
+
   mm.add("(min-width: 769px)", () => {
+    gsap.set(imgSpans, { width: 0 });
     const trigger = bindSectionReveal("top 88%", "bottom 18%");
     return () => {
       trigger.kill();
@@ -315,11 +335,79 @@ function initManifestoReveal() {
   });
 
   mm.add("(max-width: 768px)", () => {
-    const trigger = bindSectionReveal("top 92%", "bottom 12%", 0.88);
+    gsap.set(imgSpans, { width: 0 });
+    const triggers = bindLineReveals("top 90%", "top 62%", 0.55);
     return () => {
-      trigger.kill();
+      triggers.forEach((trigger) => trigger.kill());
       gsap.set(imgSpans, { clearProps: "width" });
     };
+  });
+}
+
+function initWorksAnimations(isMobile) {
+  gsap.fromTo(
+    ".works-head h2",
+    { yPercent: isMobile ? 4 : 10 },
+    {
+      yPercent: isMobile ? -3 : -8,
+      ease: "none",
+      scrollTrigger: {
+        trigger: ".works",
+        start: "top bottom",
+        end: isMobile ? "top 25%" : "top 15%",
+        scrub: true,
+      },
+    },
+  );
+
+  gsap.utils.toArray(".works-head").forEach((block) => {
+    gsap.from(block, {
+      y: isMobile ? 28 : 60,
+      opacity: 0,
+      duration: isMobile ? 0.85 : 1.15,
+      ease: "power4.out",
+      scrollTrigger: {
+        trigger: block,
+        start: isMobile ? "top 90%" : "top 82%",
+      },
+    });
+  });
+
+  gsap.utils.toArray(".works-figure").forEach((figure) => {
+    const image = figure.querySelector(".works-visual img");
+
+    gsap.from(figure, {
+      y: isMobile ? 36 : 110,
+      opacity: 0,
+      clipPath: isMobile ? "inset(6% 0% 0% 0%)" : "inset(12% 0% 0% 0%)",
+      duration: isMobile ? 0.85 : 1.35,
+      ease: "power4.out",
+      scrollTrigger: {
+        trigger: figure,
+        start: isMobile ? "top 92%" : "top 86%",
+      },
+    });
+
+    if (!isMobile && image) {
+      gsap.fromTo(
+        image,
+        {
+          yPercent: -10,
+          scale: 1.12,
+        },
+        {
+          yPercent: 10,
+          scale: 1.04,
+          ease: "none",
+          scrollTrigger: {
+            trigger: figure,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        },
+      );
+    }
   });
 }
 
@@ -456,6 +544,8 @@ function initScrollAnimations() {
       );
     });
 
+    initWorksAnimations(false);
+
     return () => {
       if (heroContainer) {
         gsap.set(heroContainer, { clearProps: "transform,opacity" });
@@ -484,13 +574,17 @@ function initScrollAnimations() {
 
   mm.add("(max-width: 768px)", () => {
     const heroImage = document.querySelector(".hero-image");
+    const heroShell = document.querySelector(".hero-facade-shell");
+    const hero = document.querySelector(".hero");
     const heroText = document.querySelectorAll(".hero-kicker, .hero-main");
     const sheetsCopy = document.querySelector(".sheets-copy");
+    const getHeroBleed = () =>
+      hero ? parseFloat(getComputedStyle(hero).paddingLeft) || 0 : 0;
 
-    if (heroImage) {
+    if (heroImage && heroShell) {
       gsap.fromTo(
         heroImage,
-        { scale: 1.06 },
+        { scale: 1.05 },
         {
           scale: 1,
           ease: "none",
@@ -498,23 +592,35 @@ function initScrollAnimations() {
             trigger: ".hero",
             start: "top top",
             end: "bottom top",
-            scrub: true,
+            scrub: 0.55,
             invalidateOnRefresh: true,
           },
         },
       );
-    }
 
-    if (heroText.length) {
-      gsap.to(heroText, {
-        y: -24,
-        opacity: 0.35,
+      gsap.to(heroShell, {
+        "--hero-shell-bleed": () => `${getHeroBleed()}px`,
         ease: "none",
         scrollTrigger: {
           trigger: ".hero",
           start: "top top",
           end: "bottom top",
-          scrub: true,
+          scrub: 0.55,
+          invalidateOnRefresh: true,
+        },
+      });
+    }
+
+    if (heroText.length) {
+      gsap.to(heroText, {
+        y: -16,
+        opacity: 0.4,
+        ease: "none",
+        scrollTrigger: {
+          trigger: ".hero",
+          start: "top top",
+          end: "bottom top",
+          scrub: 0.55,
           invalidateOnRefresh: true,
         },
       });
@@ -522,112 +628,44 @@ function initScrollAnimations() {
 
     if (sheetsCopy) {
       gsap.from(sheetsCopy, {
-        y: 36,
+        y: 28,
         opacity: 0,
-        duration: 0.95,
+        duration: 0.85,
         ease: "power3.out",
         scrollTrigger: {
           trigger: sheetsCopy,
-          start: "top 88%",
+          start: "top 90%",
         },
       });
     }
 
     const sheetCleanups = gsap.utils.toArray(".sheet").map((sheet, index) => {
       const tween = gsap.from(sheet, {
-        y: 52,
+        y: 40,
         opacity: 0,
-        duration: 0.9,
-        delay: index * 0.06,
+        duration: 0.8,
+        delay: index * 0.05,
         ease: "power3.out",
         scrollTrigger: {
           trigger: sheet,
-          start: "top 90%",
+          start: "top 92%",
         },
       });
 
       return () => tween.kill();
     });
 
+    initWorksAnimations(true);
+
     return () => {
       sheetCleanups.forEach((cleanup) => cleanup());
-      gsap.set([heroImage, ...heroText, sheetsCopy, ".sheet"].filter(Boolean), {
-        clearProps: "transform,opacity",
-      });
-    };
-  });
-
-  gsap.fromTo(
-    ".works-head h2",
-    { yPercent: 10 },
-    {
-      yPercent: -8,
-      ease: "none",
-      scrollTrigger: {
-        trigger: ".works",
-        start: "top bottom",
-        end: "top 15%",
-        scrub: true,
-      },
-    },
-  );
-
-  gsap.utils.toArray(".works-head").forEach((block) => {
-    gsap.from(block, {
-      y: 60,
-      opacity: 0,
-      duration: 1.15,
-      ease: "power4.out",
-      scrollTrigger: {
-        trigger: block,
-        start: "top 82%",
-      },
-    });
-  });
-
-  gsap.utils.toArray(".works-figure").forEach((figure) => {
-    const image = figure.querySelector(".works-visual img");
-
-    gsap.fromTo(
-      figure,
-      {
-        y: 110,
-        opacity: 0,
-        clipPath: "inset(12% 0% 0% 0%)",
-      },
-      {
-        y: 0,
-        opacity: 1,
-        clipPath: "inset(0% 0% 0% 0%)",
-        duration: 1.35,
-        ease: "power4.out",
-        scrollTrigger: {
-          trigger: figure,
-          start: "top 86%",
-        },
-      },
-    );
-
-    if (image) {
-      gsap.fromTo(
-        image,
+      gsap.set(
+        [heroImage, heroShell, ...heroText, sheetsCopy, ".sheet"].filter(Boolean),
         {
-          yPercent: -10,
-          scale: 1.12,
-        },
-        {
-          yPercent: 10,
-          scale: 1.04,
-          ease: "none",
-          scrollTrigger: {
-            trigger: figure,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
+          clearProps: "transform,opacity,--hero-shell-bleed",
         },
       );
-    }
+    };
   });
 
   mm.add("(min-width: 769px)", () => {

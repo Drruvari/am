@@ -91,71 +91,65 @@
 
   .manifesto-body {
     align-items: stretch;
-    gap: clamp(0.45rem, 2.5vw, 0.85rem);
+    gap: clamp(0.35rem, 2vw, 0.65rem);
   }
 
   .manifesto-line {
     justify-content: flex-start;
-    gap: clamp(0.35rem, 2vw, 0.55rem);
+    gap: clamp(0.25rem, 1.6vw, 0.45rem);
   }
 
-  .manifesto-line--shift-a {
+  .manifesto-line--shift-a,
+  .manifesto-line--shift-b,
+  .manifesto-line--shift-c,
+  .manifesto-line--shift-d,
+  .manifesto-line--shift-e,
+  .manifesto-line--shift-f {
     padding-left: 0;
+    padding-right: 0;
+    justify-content: flex-start;
   }
 
   .manifesto-line--shift-b {
-    padding-left: clamp(1.25rem, 8vw, 3rem);
-    justify-content: flex-start;
-  }
-
-  .manifesto-line--shift-c {
-    padding-right: 0;
-    justify-content: flex-start;
+    padding-left: clamp(0.35rem, 3vw, 0.85rem);
   }
 
   .manifesto-line--shift-d {
-    padding-left: clamp(2rem, 14vw, 4.5rem);
-  }
-
-  .manifesto-line--shift-e {
-    padding-right: 0;
-    justify-content: flex-start;
+    padding-left: clamp(0.65rem, 5vw, 1.35rem);
   }
 
   .manifesto-line--shift-f {
-    padding-left: clamp(0.75rem, 5vw, 2rem);
-    justify-content: flex-start;
-    gap: clamp(0.2rem, 1.2vw, 0.35rem);
+    gap: clamp(0.18rem, 1vw, 0.3rem);
   }
 
   .manifesto-line > span:not(.manifesto-img-span) {
-    font-size: clamp(1.45rem, 7.2vw, 2.15rem);
-    line-height: 1.14;
-    letter-spacing: -0.015em;
+    font-size: clamp(1.05rem, 5.2vw, 1.45rem);
+    line-height: 1.16;
+    letter-spacing: -0.012em;
   }
 
   .manifesto-line--shift-f > span:not(.manifesto-img-span) {
-    font-size: clamp(1rem, 4vw, 1.45rem);
+    font-size: clamp(0.92rem, 4.2vw, 1.15rem);
   }
 
   .manifesto-line--shift-f .manifesto-img-span {
-    --manifesto-img-width: clamp(2.5rem, 11vw, 4rem);
-    height: clamp(1.4rem, 5vw, 2rem);
+    --manifesto-img-width: clamp(2rem, 9vw, 3.25rem);
+    height: clamp(1.2rem, 4.5vw, 1.75rem);
   }
 
   .manifesto-img-span--sm {
-    --manifesto-img-width: clamp(3.75rem, 18vw, 6.5rem);
-    height: clamp(1.75rem, 7vw, 2.65rem);
+    --manifesto-img-width: clamp(2.75rem, 13vw, 4.75rem);
+    height: clamp(1.35rem, 5vw, 2rem);
   }
 
   .manifesto-img-span--md {
-    --manifesto-img-width: clamp(4.25rem, 20vw, 7.25rem);
-    height: clamp(1.9rem, 7.5vw, 2.85rem);
+    --manifesto-img-width: clamp(3rem, 14vw, 5.25rem);
+    height: clamp(1.45rem, 5.5vw, 2.15rem);
   }
 
   .manifesto-img-span--lg {
-    --manifesto-img-width: clamp(4.75rem, 22vw, 8.5rem);
-    height: clamp(2rem, 8vw, 3.25rem);
+    --manifesto-img-width: clamp(3.25rem, 15vw, 5.75rem);
+    height: clamp(1.55rem, 6vw, 2.35rem);
   }
   .sheets {
     height: auto;
@@ -332,23 +326,38 @@
 
 @media (max-width: 480px) {
   .manifesto-line--shift-d {
-    padding-left: clamp(1.5rem, 12vw, 3rem);
+    padding-left: clamp(0.5rem, 4vw, 1rem);
   }
 
   .manifesto-line--shift-b {
-    padding-left: clamp(0.75rem, 6vw, 1.75rem);
+    padding-left: clamp(0.25rem, 2.5vw, 0.65rem);
   }
 
   .manifesto-line > span:not(.manifesto-img-span) {
-    font-size: clamp(1.3rem, 6.8vw, 1.75rem);
+    font-size: clamp(0.98rem, 4.6vw, 1.2rem);
   }
 
   .manifesto-line--shift-f > span:not(.manifesto-img-span) {
-    font-size: clamp(0.92rem, 3.8vw, 1.08rem);
+    font-size: clamp(0.84rem, 3.8vw, 0.98rem);
   }
 
   .manifesto-line--shift-f .manifesto-img-span {
-    --manifesto-img-width: clamp(2.25rem, 10vw, 3.25rem);
+    --manifesto-img-width: clamp(1.75rem, 8vw, 2.65rem);
+    height: clamp(1.05rem, 4vw, 1.45rem);
+  }
+
+  .manifesto-img-span--sm {
+    --manifesto-img-width: clamp(2.35rem, 11vw, 3.75rem);
+    height: clamp(1.15rem, 4.2vw, 1.55rem);
+  }
+
+  .manifesto-img-span--md {
+    --manifesto-img-width: clamp(2.5rem, 12vw, 4rem);
+    height: clamp(1.2rem, 4.5vw, 1.65rem);
+  }
+
+  .manifesto-img-span--lg {
+    --manifesto-img-width: clamp(2.65rem, 13vw, 4.35rem);
     height: clamp(1.25rem, 4.8vw, 1.75rem);
   }
 

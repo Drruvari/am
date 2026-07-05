@@ -29,6 +29,7 @@ function initSmoothScroll() {
     gsap.ticker.lagSmoothing(0);
   } else {
     document.documentElement.classList.remove("lenis", "lenis-smooth");
+    ScrollTrigger.normalizeScroll(true);
     lenis = {
       get scroll() {
         return window.scrollY;

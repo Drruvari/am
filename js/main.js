@@ -40,6 +40,13 @@ function initGlobalUI() {
   window.addEventListener("resize", () => {
     updateScrollState();
   });
+
+  window.addEventListener("orientationchange", () => {
+    window.setTimeout(() => {
+      ScrollTrigger.refresh();
+      updateScrollState();
+    }, 300);
+  });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
