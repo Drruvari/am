@@ -74,13 +74,17 @@
 }
 
 .hero-facade-shell {
+  --hero-shell-bleed: 0px;
+
   position: relative;
-  width: 100%;
+  width: calc(100% + (var(--hero-shell-bleed) * 2));
   height: clamp(14rem, 30svh, 28rem);
   margin-top: auto;
+  margin-left: calc(var(--hero-shell-bleed) * -1);
   flex: 0 0 auto;
   overflow: hidden;
-  border: 1px solid var(--line);
+  background: var(--fg);
+  will-change: width, margin-left, flex-grow;
 }
 
 .hero-image {

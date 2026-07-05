@@ -130,6 +130,7 @@ function initLoader() {
           lenis.start();
           document.body.style.overflow = "";
           ScrollTrigger.refresh();
+          initManifestoReveal();
           updateScrollState();
         },
       },

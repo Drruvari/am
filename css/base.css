@@ -53,6 +53,7 @@ html.lenis {
 html {
   scroll-padding-top: 6rem;
   scrollbar-width: none;
+  overflow-x: hidden;
 }
 html::-webkit-scrollbar,
 body::-webkit-scrollbar {

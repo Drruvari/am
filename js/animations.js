@@ -22,7 +22,6 @@ function prepareTextHoverElement(el) {
 function initTextHoverEffects() {
   const hoverTargets = [
     ".hero-cta .morph-btn__content > span",
-    ".sheets-index",
     ".sheet-meta",
     ".works-cap",
     ".topbar-nav a",
@@ -250,7 +249,12 @@ function initHeroFacade() {
   });
 }
 
+let manifestoRevealInitialized = false;
+
 function initManifestoReveal() {
+  if (manifestoRevealInitialized) return;
+  manifestoRevealInitialized = true;
+
   const getImgSpanWidth = (imgSpan) => {
     const img = imgSpan.querySelector("img");
     if (!img) return 0;
@@ -269,27 +273,57 @@ function initManifestoReveal() {
     return img.getBoundingClientRect().width;
   };
 
-  document.querySelectorAll(".manifesto-line").forEach((line) => {
-    const imgSpan = line.querySelector(".manifesto-img-span");
-    if (!imgSpan) return;
+  const imgSpans = gsap.utils
+    .toArray(".manifesto-line")
+    .map((line) => line.querySelector(".manifesto-img-span"))
+    .filter(Boolean);
 
-    gsap.to(imgSpan, {
-      width: () => getImgSpanWidth(imgSpan),
-      ease: "none",
-      scrollTrigger: {
-        trigger: line,
-        start: "top 90%",
-        end: "top 40%",
-        scrub: 1,
-        invalidateOnRefresh: true,
+  if (!imgSpans.length) return;
+
+  gsap.set(imgSpans, { width: 0 });
+
+  const bindSectionReveal = (start, end, spread = 0.82) => {
+    return ScrollTrigger.create({
+      trigger: ".manifesto",
+      start,
+      end,
+      scrub: true,
+      invalidateOnRefresh: true,
+      onUpdate(self) {
+        const slot = spread / imgSpans.length;
+
+        imgSpans.forEach((span, index) => {
+          const width = getImgSpanWidth(span);
+          const localStart = index * slot;
+          const localProgress = gsap.utils.clamp(
+            0,
+            1,
+            (self.progress - localStart) / slot,
+          );
+          span.style.width = `${width * localProgress}px`;
+        });
       },
     });
+  };
+
+  mm.add("(min-width: 769px)", () => {
+    const trigger = bindSectionReveal("top 88%", "bottom 18%");
+    return () => {
+      trigger.kill();
+      gsap.set(imgSpans, { clearProps: "width" });
+    };
+  });
+
+  mm.add("(max-width: 768px)", () => {
+    const trigger = bindSectionReveal("top 92%", "bottom 12%", 0.88);
+    return () => {
+      trigger.kill();
+      gsap.set(imgSpans, { clearProps: "width" });
+    };
   });
 }
 
 function initScrollAnimations() {
-  initManifestoReveal();
-
   mm.add("(min-width: 769px)", () => {
     const heroContainer = document.querySelector(".hero-container");
     const heroImage = document.querySelector(".hero-image");
@@ -311,6 +345,13 @@ function initScrollAnimations() {
     // full-bleed, so the scroll reads as pushing into the material before the
     // 01 panel rises directly out of it.
     if (heroContainer && heroImage && heroShell) {
+      const getHeroBleed = () => {
+        const hero = document.querySelector(".hero");
+        if (!hero) return 0;
+
+        return parseFloat(getComputedStyle(hero).paddingLeft) || 0;
+      };
+
       const heroHandoff = gsap.timeline({
         scrollTrigger: {
           trigger: ".hero",
@@ -354,6 +395,15 @@ function initScrollAnimations() {
           heroShell,
           { flexGrow: 0 },
           { flexGrow: 1, ease: "power2.inOut", duration: 1 },
+          0,
+        )
+        .to(
+          heroShell,
+          {
+            "--hero-shell-bleed": () => `${getHeroBleed()}px`,
+            ease: "power2.inOut",
+            duration: 0.45,
+          },
           0,
         )
         .fromTo(
@@ -411,7 +461,9 @@ function initScrollAnimations() {
         gsap.set(heroContainer, { clearProps: "transform,opacity" });
       }
       if (heroShell) {
-        gsap.set(heroShell, { clearProps: "flexGrow,transform,opacity" });
+        gsap.set(heroShell, {
+          clearProps: "flexGrow,transform,opacity,--hero-shell-bleed",
+        });
       }
       if (heroContainer) {
         gsap.set(heroContainer, { clearProps: "gap" });

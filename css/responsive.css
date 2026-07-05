@@ -79,17 +79,83 @@
     padding-block: var(--section-pad);
     padding-inline: var(--content-inset);
   }
+
+  .manifesto {
+    min-height: auto;
+    padding-block: clamp(4.5rem, 14vw, 6rem);
+  }
+
   .manifesto-eyebrow {
     margin-bottom: 1.25rem;
   }
-  .manifesto-line > span:not(.manifesto-img-span) {
-    font-size: clamp(1.65rem, 8.5vw, 2.5rem);
-    line-height: 1.12;
+
+  .manifesto-body {
+    align-items: stretch;
+    gap: clamp(0.45rem, 2.5vw, 0.85rem);
   }
 
-  .manifesto-img-span {
-    --manifesto-img-width: clamp(6.5rem, 28vw, 11rem);
-    height: clamp(2.35rem, 9vw, 3.75rem);
+  .manifesto-line {
+    justify-content: flex-start;
+    gap: clamp(0.35rem, 2vw, 0.55rem);
+  }
+
+  .manifesto-line--shift-a {
+    padding-left: 0;
+  }
+
+  .manifesto-line--shift-b {
+    padding-left: clamp(1.25rem, 8vw, 3rem);
+    justify-content: flex-start;
+  }
+
+  .manifesto-line--shift-c {
+    padding-right: 0;
+    justify-content: flex-start;
+  }
+
+  .manifesto-line--shift-d {
+    padding-left: clamp(2rem, 14vw, 4.5rem);
+  }
+
+  .manifesto-line--shift-e {
+    padding-right: 0;
+    justify-content: flex-start;
+  }
+
+  .manifesto-line--shift-f {
+    padding-left: clamp(0.75rem, 5vw, 2rem);
+    justify-content: flex-start;
+    gap: clamp(0.2rem, 1.2vw, 0.35rem);
+  }
+
+  .manifesto-line > span:not(.manifesto-img-span) {
+    font-size: clamp(1.45rem, 7.2vw, 2.15rem);
+    line-height: 1.14;
+    letter-spacing: -0.015em;
+  }
+
+  .manifesto-line--shift-f > span:not(.manifesto-img-span) {
+    font-size: clamp(1rem, 4vw, 1.45rem);
+  }
+
+  .manifesto-line--shift-f .manifesto-img-span {
+    --manifesto-img-width: clamp(2.5rem, 11vw, 4rem);
+    height: clamp(1.4rem, 5vw, 2rem);
+  }
+
+  .manifesto-img-span--sm {
+    --manifesto-img-width: clamp(3.75rem, 18vw, 6.5rem);
+    height: clamp(1.75rem, 7vw, 2.65rem);
+  }
+
+  .manifesto-img-span--md {
+    --manifesto-img-width: clamp(4.25rem, 20vw, 7.25rem);
+    height: clamp(1.9rem, 7.5vw, 2.85rem);
+  }
+
+  .manifesto-img-span--lg {
+    --manifesto-img-width: clamp(4.75rem, 22vw, 8.5rem);
+    height: clamp(2rem, 8vw, 3.25rem);
   }
   .sheets {
     height: auto;
@@ -265,6 +331,27 @@
 }
 
 @media (max-width: 480px) {
+  .manifesto-line--shift-d {
+    padding-left: clamp(1.5rem, 12vw, 3rem);
+  }
+
+  .manifesto-line--shift-b {
+    padding-left: clamp(0.75rem, 6vw, 1.75rem);
+  }
+
+  .manifesto-line > span:not(.manifesto-img-span) {
+    font-size: clamp(1.3rem, 6.8vw, 1.75rem);
+  }
+
+  .manifesto-line--shift-f > span:not(.manifesto-img-span) {
+    font-size: clamp(0.92rem, 3.8vw, 1.08rem);
+  }
+
+  .manifesto-line--shift-f .manifesto-img-span {
+    --manifesto-img-width: clamp(2.25rem, 10vw, 3.25rem);
+    height: clamp(1.25rem, 4.8vw, 1.75rem);
+  }
+
   .topbar-actions {
     --topbar-brief-width: 7.25rem;
     --topbar-menu-width: 4rem;
