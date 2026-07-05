@@ -39,17 +39,27 @@
   width: 100%;
   height: 100%;
   place-items: center;
+  padding: 0.42rem;
   border: 1px solid var(--fg);
+  border-radius: 999px;
   background: var(--bg);
   color: var(--fg);
-  font-size: clamp(0.72rem, 1vw, 0.82rem);
-  font-weight: 850;
-  line-height: 1;
-  letter-spacing: 0;
   transition:
     background 0.25s ease,
     color 0.25s ease,
     transform 0.7s var(--ease-out-expo);
+}
+
+.topbar-logo-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.topbar-logo-path {
+  fill: none;
+  stroke: currentColor;
 }
 
 .topbar-logo:hover .topbar-logo-mark,

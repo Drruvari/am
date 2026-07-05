@@ -2,6 +2,27 @@ function initLoader() {
   const loader = document.getElementById("loader");
   if (!loader) return;
 
+  const logoPaths = gsap.utils.toArray(".loader-logo-path");
+  const countValue = loader.querySelector(".loader-count-value");
+  const loaderStatus = document.getElementById("loaderStatus");
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  const drawDuration = prefersReducedMotion ? 1.4 : 3.4;
+
+  let totalPathLength = 0;
+
+  logoPaths.forEach((path) => {
+    const pathLength = path.getTotalLength();
+    totalPathLength += pathLength;
+    path.dataset.length = String(pathLength);
+
+    gsap.set(path, {
+      strokeDasharray: pathLength,
+      strokeDashoffset: pathLength,
+    });
+  });
+
   lenis.stop();
   document.body.style.overflow = "hidden";
 
@@ -20,30 +41,9 @@ function initLoader() {
     opacity: 0,
   });
 
-  const logoPaths = gsap.utils.toArray(".loader-logo-path");
-  const countValue = loader.querySelector(".loader-count-value");
-  const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)",
-  ).matches;
-
-  // Keep the signature draw even for reduced-motion users, just quicker and
-  // with a softer ease so it stays comfortable rather than being skipped.
-  const drawDuration = prefersReducedMotion ? 1.4 : 3.4;
-
-  let totalPathLength = 0;
-
-  logoPaths.forEach((path) => {
-    const pathLength = path.getTotalLength();
-    totalPathLength += pathLength;
-    path.dataset.length = String(pathLength);
-
-    gsap.set(path, {
-      strokeDasharray: pathLength,
-      strokeDashoffset: pathLength,
-    });
-  });
-
   const finish = () => {
+    revealHero();
+    loader.setAttribute("aria-busy", "false");
     loader.style.pointerEvents = "none";
     lenis.scrollTo(0, { immediate: true });
     lenis.start();
@@ -53,8 +53,12 @@ function initLoader() {
     updateScrollState();
   };
 
+  const revealHero = () => {
+    document.documentElement.classList.remove("is-loading");
+  };
+
   const updateDrawProgress = () => {
-    if (!countValue || !totalPathLength) return;
+    if (!totalPathLength) return;
 
     let drawnLength = 0;
     logoPaths.forEach((path) => {
@@ -63,19 +67,28 @@ function initLoader() {
       drawnLength += Math.max(0, pathLength - offset);
     });
 
-    countValue.textContent = String(
-      Math.min(100, Math.round((drawnLength / totalPathLength) * 100)),
+    const progress = Math.min(
+      100,
+      Math.round((drawnLength / totalPathLength) * 100),
     );
+
+    if (countValue) {
+      countValue.textContent = String(progress);
+    }
+
+    if (loaderStatus) {
+      loaderStatus.textContent = `Loading, ${progress} percent`;
+    }
   };
 
-  const loaderTL = gsap.timeline({ delay: 0.2 });
+  const loaderTL = gsap.timeline();
 
   loaderTL
     .to(
       ".loader-caption p",
       {
         yPercent: 0,
-        duration: 1,
+        duration: 0.85,
         ease: "power3.out",
       },
       0,
@@ -84,10 +97,10 @@ function initLoader() {
       ".loader-count",
       {
         opacity: 1,
-        duration: 0.8,
+        duration: 0.6,
         ease: "power2.out",
       },
-      0.15,
+      0.08,
     );
 
   if (logoPaths.length) {
@@ -99,15 +112,20 @@ function initLoader() {
         ease: "power1.inOut",
         stagger: prefersReducedMotion ? 0.04 : 0.08,
         onUpdate: updateDrawProgress,
+        onComplete: () => {
+          logoPaths.forEach((path) => {
+            path.style.willChange = "auto";
+          });
+        },
       },
-      0.2,
+      0,
     );
   } else if (countValue) {
     countValue.textContent = "100";
   }
 
   loaderTL
-    .to({}, { duration: 0.35 })
+    .to({}, { duration: 0.3 })
     .to(
       ".loader-meta",
       {
@@ -138,6 +156,7 @@ function initLoader() {
       },
       "<0.15",
     )
+    .call(revealHero, null, "<0.05")
     .to(
       heroHeadlineChars,
       {

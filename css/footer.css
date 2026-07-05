@@ -66,6 +66,11 @@
   min-width: 0;
 }
 
+.footer-image-block picture {
+  display: block;
+  width: min(100%, 320px);
+}
+
 .footer-image-block img {
   width: min(100%, 320px);
   max-height: min(34svh, 360px);

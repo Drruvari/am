@@ -32,6 +32,13 @@ function initGlobalUI() {
   updateFooterStatus();
   window.setInterval(updateFooterStatus, 60_000);
 
+  window.addEventListener("pageshow", (event) => {
+    if (event.persisted) {
+      ScrollTrigger.refresh();
+      updateScrollState();
+    }
+  });
+
   window.addEventListener("load", () => {
     ScrollTrigger.refresh();
     updateScrollState();
@@ -50,7 +57,7 @@ function initGlobalUI() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  gsap.registerPlugin(ScrollTrigger, Flip);
+  gsap.registerPlugin(ScrollTrigger);
 
   if ("scrollRestoration" in history) {
     history.scrollRestoration = "manual";

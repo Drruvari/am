@@ -6,12 +6,121 @@
     <title>Arbër Manga — Architecture & Design</title>
     <meta
       name="description"
+      content="Architecture studies by Arbër Manga: houses, pavilions, interiors, and material systems shaped by light, material, and place."
+    />
+    <meta name="theme-color" content="#EDEDEB" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://arbermanga.com/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Arbër Manga — Architecture & Design" />
+    <meta
+      property="og:description"
+      content="Architecture studies by Arbër Manga: houses, pavilions, interiors, and material systems shaped by light, material, and place."
+    />
+    <meta property="og:image" content="https://arbermanga.com/assets/images/image-1600.jpg" />
+    <meta property="og:url" content="https://arbermanga.com/" />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Arbër Manga — Architecture & Design" />
+    <meta
+      name="twitter:description"
       content="Architecture studies by Arbër Manga: houses, pavilions, interiors, and material systems."
     />
+    <meta name="twitter:image" content="https://arbermanga.com/assets/images/image-1600.jpg" />
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
-    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="apple-touch-icon" href="assets/favicon.svg" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+    <link rel="dns-prefetch" href="https://unpkg.com" />
+    <link
+      rel="preload"
+      href="assets/images/image-600.webp"
+      as="image"
+      type="image/webp"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      href="assets/fonts/BricolageGrotesque-VariableFont_opsz,wdth,wght.ttf"
+      as="font"
+      type="font/ttf"
+      crossorigin
+    />
+    <style id="critical-loader">
+      html.is-loading {
+        overflow: hidden;
+      }
+
+      html.is-loading .hero-container {
+        visibility: hidden;
+      }
+
+      .loader-logo-path {
+        stroke-dasharray: 10000;
+        stroke-dashoffset: 10000;
+      }
+    </style>
+    <script>
+      document.documentElement.classList.add("is-loading");
+    </script>
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/loader.css" />
+    <link rel="stylesheet" href="css/navbar.css" />
+    <link rel="stylesheet" href="css/hero.css" />
+    <link
+      rel="stylesheet"
+      href="css/sections.css"
+      media="print"
+      onload="this.media='all'"
+    />
+    <link
+      rel="stylesheet"
+      href="css/footer.css"
+      media="print"
+      onload="this.media='all'"
+    />
+    <link
+      rel="stylesheet"
+      href="css/responsive.css"
+      media="print"
+      onload="this.media='all'"
+    />
+    <link
+      rel="stylesheet"
+      href="css/fonts-manrope.css"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link rel="stylesheet" href="css/sections.css" />
+      <link rel="stylesheet" href="css/footer.css" />
+      <link rel="stylesheet" href="css/responsive.css" />
+      <link rel="stylesheet" href="css/fonts-manrope.css" />
+    </noscript>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "name": "AM Architecture",
+        "alternateName": "Arbër Manga Architecture",
+        "description": "Independent residential, interior, and spatial architecture studies focused on restraint, proportion, and atmosphere.",
+        "url": "https://arbermanga.com/",
+        "image": "https://arbermanga.com/assets/images/image-1600.jpg",
+        "email": "hello@arbermanga.com",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Tirana",
+          "addressCountry": "AL"
+        },
+        "founder": {
+          "@type": "Person",
+          "name": "Arbër Manga"
+        }
+      }
+    </script>
   </head>
   <body>
+    <a class="skip-link" href="#top">Skip to content</a>
     <div class="cursor" id="cursor" aria-hidden="true">
       <img
         class="cursor__img cursor__img--default is-active"
@@ -43,7 +152,24 @@
         aria-label="AM Architecture home"
         data-hover="link"
       >
-        <span class="topbar-logo-mark">AM</span>
+        <span class="topbar-logo-mark">
+          <svg
+            class="topbar-logo-svg"
+            viewBox="0 0 2941 1300"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <path
+              class="topbar-logo-path"
+              d="M398.51 1199.62C398.51 1199.62 334.099 196.964 775.51 112.119C1257.09 19.5534 1403.38 1199.62 1403.38 1199.62M2822.01 1199.62C2822.01 1199.62 2929.96 6.38751 2618.01 112.119C2306.06 217.851 2245.01 556.816 2245.01 556.816C2245.01 556.816 2073.54 185.891 1854.51 112.119C1418.77 -34.6422 1403.38 1199.62 1403.38 1199.62L100.012 358.619"
+              stroke="currentColor"
+              stroke-width="200"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </span>
       </a>
       <nav class="topbar-nav" aria-label="Primary navigation">
         <a href="#work" data-hover="link">Works</a>
@@ -82,6 +208,7 @@
       class="loader"
       id="loader"
       aria-label="Loading portfolio"
+      aria-busy="true"
       data-cursor-hidden
     >
       <div class="loader-inner">
@@ -115,8 +242,12 @@
             <p>Studies in structure and light.</p>
           </div>
           <div class="loader-count" aria-hidden="true">
-            <span class="loader-count-value">0</span><span class="loader-count-symbol">%</span>
+            <span class="loader-count-value" aria-hidden="true">0</span
+            ><span class="loader-count-symbol" aria-hidden="true">%</span>
           </div>
+          <p class="visually-hidden" id="loaderStatus" aria-live="polite">
+            Loading, 0 percent
+          </p>
         </div>
       </div>
     </div>
@@ -161,11 +292,33 @@
           </div>
 
           <div class="hero-facade-shell">
-            <img
-              class="hero-image"
-              src="assets/images/image.jpg"
-              alt="Architectural study shaped by light and material restraint"
-            />
+            <picture>
+              <source
+                type="image/webp"
+                srcset="
+                  assets/images/image-600.webp 600w,
+                  assets/images/image-1600.webp 1600w
+                "
+                sizes="100vw"
+              />
+              <source
+                type="image/jpeg"
+                srcset="
+                  assets/images/image-600.jpg 600w,
+                  assets/images/image-1600.jpg 1600w
+                "
+                sizes="100vw"
+              />
+              <img
+                class="hero-image"
+                src="assets/images/image-600.jpg"
+                width="3624"
+                height="3618"
+                alt="Architectural study shaped by light and material restraint"
+                fetchpriority="high"
+                decoding="async"
+              />
+            </picture>
           </div>
         </div>
       </section>
@@ -176,24 +329,40 @@
           <div class="manifesto-line manifesto-line--shift-a">
             <span>The work starts with</span>
             <span class="manifesto-img-span manifesto-img-span--md manifesto-img-span--raise">
-              <img
-                src="assets/images/image.jpg"
-                alt=""
-                loading="lazy"
-                decoding="async"
-              />
+              <picture>
+                <source
+                  srcset="assets/images/image-480.webp"
+                  type="image/webp"
+                />
+                <img
+                  src="assets/images/image-480.jpg"
+                  alt=""
+                  width="3624"
+                  height="3618"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
             </span>
             <span>what is</span>
           </div>
           <div class="manifesto-line manifesto-line--shift-b">
             <span>already there:</span>
             <span class="manifesto-img-span manifesto-img-span--lg">
-              <img
-                src="assets/images/image.jpg"
-                alt=""
-                loading="lazy"
-                decoding="async"
-              />
+              <picture>
+                <source
+                  srcset="assets/images/image-480.webp"
+                  type="image/webp"
+                />
+                <img
+                  src="assets/images/image-480.jpg"
+                  alt=""
+                  width="3624"
+                  height="3618"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
             </span>
           </div>
           <div class="manifesto-line manifesto-line--shift-c">
@@ -205,35 +374,59 @@
           <div class="manifesto-line manifesto-line--shift-e">
             <span>close at hand.</span>
             <span class="manifesto-img-span manifesto-img-span--sm manifesto-img-span--drop">
-              <img
-                src="assets/images/image.jpg"
-                alt=""
-                loading="lazy"
-                decoding="async"
-              />
+              <picture>
+                <source
+                  srcset="assets/images/image-480.webp"
+                  type="image/webp"
+                />
+                <img
+                  src="assets/images/image-480.jpg"
+                  alt=""
+                  width="3624"
+                  height="3618"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
             </span>
           </div>
           <div class="manifesto-line manifesto-line--shift-f">
             <span>Form follows those</span>
             <span class="manifesto-img-span manifesto-img-span--md manifesto-img-span--drop">
-              <img
-                src="assets/images/image.jpg"
-                alt=""
-                loading="lazy"
-                decoding="async"
-              />
+              <picture>
+                <source
+                  srcset="assets/images/image-480.webp"
+                  type="image/webp"
+                />
+                <img
+                  src="assets/images/image-480.jpg"
+                  alt=""
+                  width="3624"
+                  height="3618"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
             </span>
             <span>constraints,</span>
           </div>
           <div class="manifesto-line manifesto-line--shift-g">
             <span>then gets edited until</span>
             <span class="manifesto-img-span manifesto-img-span--md manifesto-img-span--raise">
-              <img
-                src="assets/images/image.jpg"
-                alt=""
-                loading="lazy"
-                decoding="async"
-              />
+              <picture>
+                <source
+                  srcset="assets/images/image-480.webp"
+                  type="image/webp"
+                />
+                <img
+                  src="assets/images/image-480.jpg"
+                  alt=""
+                  width="3624"
+                  height="3618"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
             </span>
             <span>nothing extra remains.</span>
           </div>
@@ -255,37 +448,73 @@
           </div>
           <div class="sheets-stack" id="sheetsStack">
             <div class="sheet">
-              <img
-                src="assets/images/image.jpg"
-                alt="Villa Lura"
-                loading="lazy"
-              />
+              <picture>
+                <source
+                  srcset="assets/images/image-600.webp"
+                  type="image/webp"
+                />
+                <img
+                  src="assets/images/image-600.jpg"
+                  alt="Villa Lura"
+                  width="3624"
+                  height="3618"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
               <div class="sheet-meta mono">
                 01 / Villa Lura, Coastal Retreat
               </div>
             </div>
             <div class="sheet">
-              <img
-                src="assets/images/image.jpg"
-                alt="Dajt Pavilion"
-                loading="lazy"
-              />
+              <picture>
+                <source
+                  srcset="assets/images/image-600.webp"
+                  type="image/webp"
+                />
+                <img
+                  src="assets/images/image-600.jpg"
+                  alt="Dajt Pavilion"
+                  width="3624"
+                  height="3618"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
               <div class="sheet-meta mono">02 / Dajt Mountain Pavilion</div>
             </div>
             <div class="sheet">
-              <img
-                src="assets/images/image.jpg"
-                alt="Krujë Studio"
-                loading="lazy"
-              />
+              <picture>
+                <source
+                  srcset="assets/images/image-600.webp"
+                  type="image/webp"
+                />
+                <img
+                  src="assets/images/image-600.jpg"
+                  alt="Krujë Studio"
+                  width="3624"
+                  height="3618"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
               <div class="sheet-meta mono">03 / Timber Studio, Krujë</div>
             </div>
             <div class="sheet">
-              <img
-                src="assets/images/image.jpg"
-                alt="Courtyard House"
-                loading="lazy"
-              />
+              <picture>
+                <source
+                  srcset="assets/images/image-600.webp"
+                  type="image/webp"
+                />
+                <img
+                  src="assets/images/image-600.jpg"
+                  alt="Courtyard House"
+                  width="3624"
+                  height="3618"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
               <div class="sheet-meta mono">04 / Courtyard Residence, South</div>
             </div>
           </div>
@@ -316,14 +545,23 @@
             data-year="2026"
             data-materials="Board-formed concrete, limestone, low-iron glass"
             data-note="north light / cliff datum"
-            data-images="assets/images/image.jpg|assets/images/image.jpg|assets/images/image.jpg"
+            data-images="assets/images/image-600.webp|assets/images/image-600.webp|assets/images/image-600.webp"
           >
             <div class="works-visual" id="v1">
-              <img
-                src="assets/images/image.jpg"
-                alt="Cliff House"
-                loading="lazy"
-              />
+              <picture>
+                <source
+                  srcset="assets/images/image-600.webp"
+                  type="image/webp"
+                />
+                <img
+                  src="assets/images/image-600.jpg"
+                  alt="Cliff House"
+                  width="3624"
+                  height="3618"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
             </div>
             <div class="works-cap mono">A—01 / The Cliff House, Vlorë</div>
           </div>
@@ -340,14 +578,23 @@
             data-year="2025"
             data-materials="Existing brick, blackened steel, pale oak"
             data-note="service core / retained shell"
-            data-images="assets/images/image.jpg|assets/images/image.jpg|assets/images/image.jpg"
+            data-images="assets/images/image-600.webp|assets/images/image-600.webp|assets/images/image-600.webp"
           >
             <div class="works-visual" id="v2">
-              <img
-                src="assets/images/image.jpg"
-                alt="Industrial Loft"
-                loading="lazy"
-              />
+              <picture>
+                <source
+                  srcset="assets/images/image-600.webp"
+                  type="image/webp"
+                />
+                <img
+                  src="assets/images/image-600.jpg"
+                  alt="Industrial Loft"
+                  width="3624"
+                  height="3618"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
             </div>
             <div class="works-cap mono">A—02 / Factory Loft, Tirana</div>
           </div>
@@ -366,14 +613,23 @@
             data-year="2026"
             data-materials="Glulam timber, lime plaster, polycarbonate"
             data-note="glulam rhythm / passive skin"
-            data-images="assets/images/image.jpg|assets/images/image.jpg|assets/images/image.jpg"
+            data-images="assets/images/image-600.webp|assets/images/image-600.webp|assets/images/image-600.webp"
           >
             <div class="works-visual" id="v3">
-              <img
-                src="assets/images/image.jpg"
-                alt="Botanical Pavilion"
-                loading="lazy"
-              />
+              <picture>
+                <source
+                  srcset="assets/images/image-600.webp"
+                  type="image/webp"
+                />
+                <img
+                  src="assets/images/image-600.jpg"
+                  alt="Botanical Pavilion"
+                  width="3624"
+                  height="3618"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
             </div>
             <div class="works-cap mono">A—03 / Botanical Pavilion, Lundër</div>
           </div>
@@ -390,14 +646,23 @@
             data-year="2025"
             data-materials="Local aggregate, darkened timber, mineral render"
             data-note="roof aperture / stone mass"
-            data-images="assets/images/image.jpg|assets/images/image.jpg|assets/images/image.jpg"
+            data-images="assets/images/image-600.webp|assets/images/image-600.webp|assets/images/image-600.webp"
           >
             <div class="works-visual" id="v4">
-              <img
-                src="assets/images/image.jpg"
-                alt="Monolith Sanctuary"
-                loading="lazy"
-              />
+              <picture>
+                <source
+                  srcset="assets/images/image-600.webp"
+                  type="image/webp"
+                />
+                <img
+                  src="assets/images/image-600.jpg"
+                  alt="Monolith Sanctuary"
+                  width="3624"
+                  height="3618"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
             </div>
             <div class="works-cap mono">A—04 / Monolith Sanctuary, Theth</div>
           </div>
@@ -428,11 +693,20 @@
       <div class="footer-grid">
         <div class="footer-col footer-col--brand">
           <div class="footer-image-block">
-            <img
-              src="assets/images/image.jpg"
-              alt="Warm residential architecture with garden path"
-              loading="lazy"
-            />
+            <picture>
+              <source
+                srcset="assets/images/image-600.webp"
+                type="image/webp"
+              />
+              <img
+                src="assets/images/image-600.jpg"
+                alt="Warm residential architecture with garden path"
+                width="3624"
+                height="3618"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
             <span class="footer-mark" aria-hidden="true">AM</span>
           </div>
         </div>
@@ -546,18 +820,17 @@
       </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Flip.min.js"></script>
-    <script src="https://unpkg.com/split-type@0.3.4"></script>
-    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
+    <script src="https://unpkg.com/split-type@0.3.4" defer></script>
+    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" defer></script>
 
-    <script src="js/smooth-scroll.js"></script>
-    <script src="js/cursor.js"></script>
-    <script src="js/animations.js"></script>
-    <script src="js/loader.js"></script>
-    <script src="js/mobile-menu.js"></script>
-    <script src="js/project-detail.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/smooth-scroll.js" defer></script>
+    <script src="js/cursor.js" defer></script>
+    <script src="js/animations.js" defer></script>
+    <script src="js/loader.js" defer></script>
+    <script src="js/mobile-menu.js" defer></script>
+    <script src="js/project-detail.js" defer></script>
+    <script src="js/main.js" defer></script>
   </body>
 </html>

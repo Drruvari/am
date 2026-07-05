@@ -87,6 +87,12 @@
   will-change: width, margin-left, flex-grow;
 }
 
+.hero-facade-shell picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .hero-image {
   display: block;
   width: 100%;
