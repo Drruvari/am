@@ -15,105 +15,115 @@ function initLoader() {
     rotation: 10,
     transformOrigin: "0% 100%",
   });
-  gsap.set(
-    ".hero-kicker span, .hero-support, .hero-cta, .hero-facade-shell",
-    {
-      y: 24,
-      opacity: 0,
-    },
-  );
+  gsap.set(".hero-kicker span, .hero-support, .hero-cta, .hero-facade-shell", {
+    y: 24,
+    opacity: 0,
+  });
 
-  const speed = 0.5;
-  const loaderTL = gsap.timeline({ delay: 0.12 });
+  const logoPaths = gsap.utils.toArray(".loader-logo-path");
+  const countValue = loader.querySelector(".loader-count-value");
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+
+  // Keep the signature draw even for reduced-motion users, just quicker and
+  // with a softer ease so it stays comfortable rather than being skipped.
+  const drawDuration = prefersReducedMotion ? 1.4 : 3.4;
+
+  let totalPathLength = 0;
+
+  logoPaths.forEach((path) => {
+    const pathLength = path.getTotalLength();
+    totalPathLength += pathLength;
+    path.dataset.length = String(pathLength);
+
+    gsap.set(path, {
+      strokeDasharray: pathLength,
+      strokeDashoffset: pathLength,
+    });
+  });
+
+  const finish = () => {
+    loader.style.pointerEvents = "none";
+    lenis.scrollTo(0, { immediate: true });
+    lenis.start();
+    document.body.style.overflow = "";
+    ScrollTrigger.refresh();
+    initManifestoReveal();
+    updateScrollState();
+  };
+
+  const updateDrawProgress = () => {
+    if (!countValue || !totalPathLength) return;
+
+    let drawnLength = 0;
+    logoPaths.forEach((path) => {
+      const pathLength = Number(path.dataset.length);
+      const offset = Number(gsap.getProperty(path, "strokeDashoffset")) || 0;
+      drawnLength += Math.max(0, pathLength - offset);
+    });
+
+    countValue.textContent = String(
+      Math.min(100, Math.round((drawnLength / totalPathLength) * 100)),
+    );
+  };
+
+  const loaderTL = gsap.timeline({ delay: 0.2 });
 
   loaderTL
     .to(
-      ".loader-number-2 .loader-number-wrap",
+      ".loader-caption p",
       {
-        duration: speed * 2.4,
-        yPercent: -90,
-        ease: "power2.inOut",
+        yPercent: 0,
+        duration: 1,
+        ease: "power3.out",
       },
       0,
     )
     .to(
-      ".loader-number-3 .loader-number-wrap",
+      ".loader-count",
       {
-        duration: speed * 2.4,
-        yPercent: -90,
-        ease: "power2.inOut",
+        opacity: 1,
+        duration: 0.8,
+        ease: "power2.out",
       },
-      0,
-    )
-    .to(
-      ".loader-pre .loader-line:nth-child(1) p",
+      0.15,
+    );
+
+  if (logoPaths.length) {
+    loaderTL.to(
+      logoPaths,
       {
-        duration: speed * 0.75,
-        y: 0,
-        ease: "power3.out",
+        strokeDashoffset: 0,
+        duration: drawDuration,
+        ease: "power1.inOut",
+        stagger: prefersReducedMotion ? 0.04 : 0.08,
+        onUpdate: updateDrawProgress,
       },
-      0.12,
-    )
+      0.2,
+    );
+  } else if (countValue) {
+    countValue.textContent = "100";
+  }
+
+  loaderTL
+    .to({}, { duration: 0.35 })
     .to(
-      ".loader-pre .loader-line:nth-child(2) p",
+      ".loader-meta",
       {
-        duration: speed * 0.75,
-        y: 0,
-        ease: "power3.out",
-      },
-      0.22,
-    )
-    .to(
-      ".loader-progress",
-      {
-        duration: speed * 2.4,
-        width: "100%",
-        ease: "power2.inOut",
-      },
-      0,
-    )
-    .to(
-      ".loader-number-1 .loader-number-wrap",
-      {
-        duration: speed * 0.7,
-        y: 0,
-        ease: "power3.out",
-      },
-      0.45,
-    )
-    .to(
-      [".loader-number-wrap", ".loader-numbers"],
-      {
-        duration: speed * 0.85,
-        yPercent: -100,
-        ease: "power3.inOut",
-      },
-      ">",
-    )
-    .to(
-      ".loader-percent",
-      {
-        duration: speed * 0.85,
-        yPercent: -100,
-        ease: "power3.inOut",
-      },
-      "<",
-    )
-    .to(
-      ".loader-pre .loader-line p",
-      {
-        duration: speed * 0.55,
-        yPercent: -110,
-        stagger: 0.07,
+        y: -18,
+        opacity: 0,
+        duration: 0.5,
         ease: "power3.in",
       },
-      "<0.05",
+      ">-0.1",
     )
     .to(
-      ".loader-progress",
+      ".loader-logo",
       {
-        duration: speed * 0.9,
-        height: "100%",
+        opacity: 0,
+        scale: 0.98,
+        duration: 0.6,
         ease: "power3.inOut",
       },
       "<",
@@ -122,40 +132,32 @@ function initLoader() {
       ".loader",
       {
         clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
-        duration: 0.48,
-        ease: "power3.inOut",
-        onComplete: () => {
-          loader.style.pointerEvents = "none";
-          lenis.scrollTo(0, { immediate: true });
-          lenis.start();
-          document.body.style.overflow = "";
-          ScrollTrigger.refresh();
-          initManifestoReveal();
-          updateScrollState();
-        },
+        duration: 0.9,
+        ease: "power4.inOut",
+        onComplete: finish,
       },
-      ">",
+      "<0.15",
     )
     .to(
       heroHeadlineChars,
       {
         yPercent: 0,
         rotation: 0,
-        duration: 0.62,
+        duration: 0.8,
         ease: "power3.out",
-        stagger: 0.018,
+        stagger: 0.02,
       },
-      "<0.12",
+      "<0.2",
     )
     .to(
       ".hero-kicker span, .hero-support, .hero-cta, .hero-facade-shell",
       {
         y: 0,
         opacity: 1,
-        stagger: 0.05,
-        duration: 0.62,
+        stagger: 0.06,
+        duration: 0.8,
         ease: "power3.out",
       },
-      "<0.16",
+      "<0.18",
     );
 }

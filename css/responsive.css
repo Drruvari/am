@@ -65,14 +65,8 @@
     font-size: 0.62rem;
     letter-spacing: 0.08em;
   }
-  .loader-pre,
-  .loader-welcome {
-    top: 42%;
-    max-width: calc(100vw - (var(--content-inset) * 2));
-  }
-  .loader-line {
-    height: clamp(1.6rem, 7vw, 2rem);
-    font-size: clamp(1.15rem, 5.6vw, 1.7rem);
+  .loader-logo {
+    width: min(84vw, 22rem);
   }
   .manifesto,
   .works {
