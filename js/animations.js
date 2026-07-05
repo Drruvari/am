@@ -4,7 +4,6 @@ function prepareTextHoverElement(el) {
   const styles = getComputedStyle(el);
   const needsInnerWrapper =
     el.matches("a, button") ||
-    el.classList.contains("sheet-meta") ||
     el.classList.contains("works-cap") ||
     styles.display === "flex" ||
     parseFloat(styles.paddingTop) > 0 ||
@@ -22,7 +21,6 @@ function prepareTextHoverElement(el) {
 function initTextHoverEffects() {
   const hoverTargets = [
     ".hero-cta .morph-btn__content > span",
-    ".sheet-meta",
     ".works-cap",
     ".topbar-nav a",
     ".topbar-brief .morph-btn__content > span",
@@ -411,6 +409,127 @@ function initWorksAnimations(isMobile) {
   });
 }
 
+function initProjectArchive(isMobile) {
+  const projectList = document.getElementById("projectList");
+  const projectPreview = document.getElementById("projectPreview");
+  if (!projectList) return () => {};
+
+  const projects = gsap.utils.toArray(".project-item");
+  const slides = projectPreview
+    ? gsap.utils.toArray(".project-preview__slide")
+    : [];
+  const cleanups = [];
+  const eyebrow = document.querySelector(".project-archive-eyebrow");
+
+  gsap.set([eyebrow, ...projects].filter(Boolean), {
+    y: isMobile ? 28 : 48,
+    opacity: 0,
+  });
+
+  const revealTimeline = gsap.timeline({
+    scrollTrigger: {
+      trigger: ".project-archive",
+      start: isMobile ? "top 88%" : "top top",
+      end: isMobile
+        ? "bottom 55%"
+        : () => `+=${window.innerHeight * (0.75 + projects.length * 0.12)}`,
+      pin: !isMobile,
+      scrub: isMobile ? 0.55 : 0.75,
+      invalidateOnRefresh: true,
+    },
+  });
+
+  revealTimeline
+    .to(eyebrow, {
+      y: 0,
+      opacity: 1,
+      duration: 0.14,
+      ease: "power2.out",
+    })
+    .to(
+      projects,
+      {
+        y: 0,
+        opacity: 1,
+        stagger: isMobile ? 0.12 : 0.15,
+        duration: 0.82,
+        ease: "power2.out",
+      },
+      0.08,
+    );
+
+  cleanups.push(() => revealTimeline.scrollTrigger?.kill());
+
+  if (isMobile || !projectPreview || !slides.length) {
+    return () => {
+      cleanups.forEach((cleanup) => cleanup());
+      gsap.set([eyebrow, ...projects].filter(Boolean), {
+        clearProps: "transform,opacity",
+      });
+    };
+  }
+
+  gsap.set(projectPreview, { scale: 0, xPercent: -50, yPercent: -50 });
+
+  const xTo = gsap.quickTo(projectPreview, "x", {
+    duration: 0.4,
+    ease: "power3.out",
+  });
+  const yTo = gsap.quickTo(projectPreview, "y", {
+    duration: 0.4,
+    ease: "power3.out",
+  });
+
+  const onMove = (event) => {
+    xTo(event.clientX);
+    yTo(event.clientY);
+  };
+
+  const onLeave = () => {
+    gsap.to(projectPreview, {
+      scale: 0,
+      duration: 0.3,
+      ease: "power2.out",
+      overwrite: "auto",
+    });
+  };
+
+  projectList.addEventListener("mousemove", onMove);
+  projectList.addEventListener("mouseleave", onLeave);
+  cleanups.push(() => {
+    projectList.removeEventListener("mousemove", onMove);
+    projectList.removeEventListener("mouseleave", onLeave);
+  });
+
+  projects.forEach((project, index) => {
+    const onEnter = () => {
+      gsap.to(projectPreview, {
+        scale: 1,
+        duration: 0.4,
+        ease: "power2.out",
+        overwrite: "auto",
+      });
+
+      gsap.to(slides, {
+        yPercent: -100 * index,
+        duration: 0.4,
+        ease: "power2.out",
+        overwrite: "auto",
+      });
+    };
+
+    project.addEventListener("mouseenter", onEnter);
+    cleanups.push(() => project.removeEventListener("mouseenter", onEnter));
+  });
+
+  return () => {
+    cleanups.forEach((cleanup) => cleanup());
+    gsap.set([eyebrow, ...projects, projectPreview, ...slides].filter(Boolean), {
+      clearProps: "all",
+    });
+  };
+}
+
 function initScrollAnimations() {
   mm.add("(min-width: 769px)", () => {
     const heroContainer = document.querySelector(".hero-container");
@@ -418,13 +537,6 @@ function initScrollAnimations() {
     const heroText = document.querySelectorAll(
       ".hero-kicker, .hero-main",
     );
-    const sheetsStack = document.getElementById("sheetsStack");
-    const getHorizontalDistance = (track, endGap = 80) => {
-      return Math.max(
-        0,
-        track.offsetLeft + track.scrollWidth - window.innerWidth + endGap,
-      );
-    };
 
     const heroShell = document.querySelector(".hero-facade-shell");
 
@@ -502,48 +614,7 @@ function initScrollAnimations() {
         );
     }
 
-    gsap.to(sheetsStack, {
-      x: () => -getHorizontalDistance(sheetsStack, 96),
-      ease: "none",
-      scrollTrigger: {
-        trigger: ".sheets",
-        pin: true,
-        start: "top top",
-        end: () => `+=${getHorizontalDistance(sheetsStack, 96)}`,
-        scrub: 1,
-        invalidateOnRefresh: true,
-      },
-    });
-
-    gsap.to(".sheets-copy", {
-      yPercent: -12,
-      ease: "none",
-      scrollTrigger: {
-        trigger: ".sheets",
-        start: "top bottom",
-        end: "bottom top",
-        scrub: true,
-      },
-    });
-
-    gsap.utils.toArray(".sheet").forEach((sheet, index) => {
-      const image = sheet.querySelector("img");
-      gsap.fromTo(
-        image,
-        { yPercent: index % 2 === 0 ? -6 : -12 },
-        {
-          yPercent: index % 2 === 0 ? 8 : 4,
-          ease: "none",
-          scrollTrigger: {
-            trigger: ".sheets",
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
-        },
-      );
-    });
-
+    const cleanupProjectArchive = initProjectArchive(false);
     initWorksAnimations(false);
 
     return () => {
@@ -561,14 +632,10 @@ function initScrollAnimations() {
       heroText.forEach((el) => {
         el.style.overflow = "";
       });
-      gsap.set(
-        [heroImage, ...heroText, sheetsStack, ".sheets-copy", ".sheet img"].filter(
-          Boolean,
-        ),
-        {
-          clearProps: "transform,opacity,height,margin,padding",
-        },
-      );
+      cleanupProjectArchive();
+      gsap.set([heroImage, ...heroText].filter(Boolean), {
+        clearProps: "transform,opacity,height,margin,padding",
+      });
     };
   });
 
@@ -578,7 +645,6 @@ function initScrollAnimations() {
     const heroShell = document.querySelector(".hero-facade-shell");
     const hero = document.querySelector(".hero");
     const heroText = document.querySelectorAll(".hero-kicker, .hero-main");
-    const sheetsCopy = document.querySelector(".sheets-copy");
     const getHeroBleed = () =>
       hero ? parseFloat(getComputedStyle(hero).paddingLeft) || 0 : 0;
 
@@ -643,46 +709,16 @@ function initScrollAnimations() {
         );
     }
 
-    if (sheetsCopy) {
-      gsap.from(sheetsCopy, {
-        y: 28,
-        opacity: 0,
-        duration: 0.85,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sheetsCopy,
-          start: "top 90%",
-        },
-      });
-    }
-
-    const sheetCleanups = gsap.utils.toArray(".sheet").map((sheet, index) => {
-      const tween = gsap.from(sheet, {
-        y: 40,
-        opacity: 0,
-        duration: 0.8,
-        delay: index * 0.05,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sheet,
-          start: "top 92%",
-        },
-      });
-
-      return () => tween.kill();
-    });
-
+    const cleanupProjectArchive = initProjectArchive(true);
     initWorksAnimations(true);
 
     return () => {
-      sheetCleanups.forEach((cleanup) => cleanup());
+      cleanupProjectArchive();
       heroText.forEach((el) => {
         el.style.overflow = "";
       });
       gsap.set(
-        [heroContainer, heroImage, heroShell, ...heroText, sheetsCopy, ".sheet"].filter(
-          Boolean,
-        ),
+        [heroContainer, heroImage, heroShell, ...heroText].filter(Boolean),
         {
           clearProps:
             "transform,opacity,height,margin,padding,gap,flexGrow,--hero-shell-bleed",

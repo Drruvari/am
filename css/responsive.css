@@ -1,11 +1,51 @@
+@media (max-width: 1200px) {
+  .footer-hero {
+    padding: clamp(4rem, 6vw, 5.5rem) var(--content-inset)
+      clamp(1.25rem, 2.5vw, 1.75rem);
+    gap: 1.5rem;
+  }
+
+  .footer-hero-title {
+    font-size: clamp(2.6rem, 6vw, 5.5rem);
+    line-height: 0.9;
+  }
+
+  .footer-grid {
+    gap: clamp(1.5rem, 3vw, 3rem);
+    padding-bottom: clamp(1.25rem, 2.5vw, 2rem);
+  }
+
+  .footer-image-block picture,
+  .footer-image-block img {
+    width: min(100%, 240px);
+  }
+
+  .footer-image-block img {
+    max-height: min(26svh, 260px);
+  }
+
+  .footer-mark {
+    font-size: clamp(3.75rem, 8vw, 6.5rem);
+  }
+
+  .footer-nav-links a,
+  .footer-nav-links span {
+    font-size: clamp(1.85rem, 2.8vw, 3rem);
+    line-height: 1;
+  }
+
+  .footer-col--info {
+    max-width: 360px;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .footer-bar {
+    gap: 0.85rem 1.25rem;
+    padding-block: 0.85rem 1rem;
+  }
+}
+
 @media (max-width: 1024px) {
-  .sheets-stack {
-    margin-left: 5vw;
-    padding-right: 12vw;
-  }
-  .sheet {
-    flex-basis: 75vw;
-  }
   .footer-grid {
     grid-template-columns: minmax(180px, 0.72fr) minmax(220px, 0.9fr);
     row-gap: 2.5rem;
@@ -21,12 +61,76 @@
   .footer-bar-col--meta {
     grid-column: 1 / -1;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: baseline;
+    gap: 0.5rem 1rem;
   }
   .works-head {
     grid-template-columns: 1fr;
     gap: 1.5rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 2rem;
+  }
+
+  .footer-col--brand {
+    grid-column: 1;
+  }
+
+  .footer-col--nav {
+    grid-column: 2;
+  }
+
+  .footer-col--info {
+    grid-column: 1 / -1;
+    max-width: none;
+  }
+
+  .footer-bar {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .footer-bar-col--meta {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-height: 760px) and (min-width: 769px) {
+  .footer-hero {
+    padding-top: clamp(3rem, 5vw, 4rem);
+    padding-bottom: 1rem;
+    gap: 1rem;
+  }
+
+  .footer-hero-title {
+    font-size: clamp(2.2rem, 4.8vw, 3.75rem);
+  }
+
+  .footer-cta {
+    min-height: 2.65rem;
+    padding-block: 0.75rem;
+  }
+
+  .footer-mark {
+    font-size: clamp(3rem, 7vw, 4.5rem);
+  }
+
+  .footer-nav-links a,
+  .footer-nav-links span {
+    font-size: clamp(1.5rem, 2.2vw, 2.2rem);
+  }
+
+  .footer-image-block img {
+    max-height: min(22svh, 200px);
+  }
+
+  .footer-col--info {
+    gap: 1.25rem;
   }
 }
 
@@ -69,7 +173,8 @@
     width: min(84vw, 22rem);
   }
   .manifesto,
-  .works {
+  .works,
+  .project-archive {
     padding-block: var(--section-pad);
     padding-inline: var(--content-inset);
   }
@@ -147,55 +252,35 @@
     --manifesto-img-width: clamp(3.25rem, 15vw, 5.75rem);
     height: clamp(1.55rem, 6vw, 2.35rem);
   }
-  .sheets {
-    height: auto;
-    min-height: 0;
+  .project-archive {
+    min-height: auto;
   }
-  .sheets-pin {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    height: auto;
-    min-height: 0;
-    align-items: stretch;
-    padding-block: var(--section-pad);
-    padding-inline: var(--content-inset);
+
+  .project-archive-eyebrow {
+    margin-bottom: 1.5rem;
   }
-  .sheets-copy h2 {
-    margin: 0.75rem 0 1rem;
-    font-size: clamp(2.75rem, 14vw, 4.25rem);
+
+  .project-item {
+    padding-inline: 0;
   }
-  .sheets-copy p {
-    font-size: 0.98rem;
+
+  .project-item:hover h2,
+  .project-item:hover p {
+    transform: none;
   }
-  .sheets-index,
-  .sheets-scrollcue {
-    position: static;
-    margin-bottom: 1rem;
+
+  .project-item h2 {
+    font-size: clamp(1.75rem, 8vw, 2.5rem);
   }
-  .sheets-scrollcue {
+
+  .project-item p {
+    font-size: 0.68rem;
+  }
+
+  .project-preview {
     display: none;
   }
-  .sheets-stack {
-    flex-direction: column;
-    height: auto;
-    margin-left: 0;
-    padding-right: 0;
-    gap: 1.25rem;
-  }
-  .sheet {
-    flex: none;
-    width: 100%;
-    height: auto;
-    min-height: 0;
-    aspect-ratio: 4 / 5;
-    transform: none !important;
-  }
-  .sheet:nth-child(1),
-  .sheet:nth-child(4) {
-    height: auto;
-    flex-basis: auto;
-  }
+
   .works-head,
   .works-row,
   .works-row.reverse {
@@ -243,6 +328,7 @@
     grid-template-columns: 1fr;
     gap: 2.5rem;
     padding: var(--page-gutter) var(--content-inset) 2rem;
+    overflow: visible;
   }
   .footer-col--info {
     grid-column: auto;
