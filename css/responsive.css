@@ -38,15 +38,11 @@
     margin-bottom: 0;
   }
   .topbar {
-    font-size: 0.66rem;
+    top: 1rem;
+    align-items: flex-start;
   }
-  .topbar-brand {
-    top: 1.15rem;
-    left: 1.25rem;
-    font-size: clamp(1.85rem, 9vw, 2.75rem);
-    max-width: calc(100% - 15.25rem);
-    overflow: hidden;
-    text-overflow: ellipsis;
+  .topbar-logo {
+    width: 2.6rem;
   }
   .topbar-nav {
     display: none;
@@ -54,9 +50,8 @@
   .topbar-actions {
     --topbar-brief-width: 7.9rem;
     --topbar-menu-width: 4.35rem;
-    --topbar-action-gap: 1rem;
-    top: 0.85rem;
-    right: 1.25rem;
+    --topbar-action-gap: 0.65rem;
+    height: 2.55rem;
   }
   .topbar-brief,
   .topbar-menu {
@@ -70,85 +65,31 @@
     font-size: 0.62rem;
     letter-spacing: 0.08em;
   }
-  .topbar-brief-wrap {
-    right: calc(var(--topbar-menu-width) + var(--topbar-action-gap));
-  }
-  .topbar-menu-wrap {
-    right: 0;
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(0) scale(1);
-  }
-  body.is-topbar-compact .topbar-brand {
-    opacity: 0;
-    visibility: hidden;
-  }
-  body.is-topbar-compact .topbar-menu-wrap {
-    opacity: 1;
-    visibility: visible;
-  }
   .loader-pre,
   .loader-welcome {
     top: 42%;
-    left: 1.25rem;
-    max-width: calc(100% - 2.5rem);
+    max-width: calc(100vw - (var(--content-inset) * 2));
   }
   .loader-line {
     height: clamp(1.6rem, 7vw, 2rem);
     font-size: clamp(1.15rem, 5.6vw, 1.7rem);
   }
-  .hero {
-    min-height: auto;
-    padding: 6.75rem 1.25rem 3rem;
-  }
-  .hero-grid {
-    grid-template-columns: 1fr;
-    min-height: auto;
-    padding-top: clamp(2.25rem, 10vw, 3.5rem);
-    gap: 2.5rem;
-  }
-  .hero-left,
-  .hero-right {
-    grid-column: 1 / -1;
-    gap: 1.75rem;
-    padding-bottom: 0;
-  }
-  .hero-meta-top {
-    width: 100%;
-    max-width: none;
-    font-size: 0.66rem;
-  }
-  .hero-lede {
-    margin-top: 0;
-    max-width: 100%;
-    padding-right: 0;
-    font-size: 0.95rem;
-  }
-  .hero-headline {
-    font-size: clamp(1.85rem, 8vw, 2.55rem);
-    line-height: 1.14;
-    letter-spacing: 0;
-  }
-  .hero-support {
-    max-width: 100%;
-    font-size: 0.95rem;
-  }
-  .hero-right .morph-btn {
-    margin-top: 0.5rem;
-  }
-  .morph-btn--rect > a.hero-cta {
-    padding: 0.95rem 1.35rem;
-  }
   .manifesto,
   .works {
-    padding: clamp(4rem, 12vw, 5rem) 1.25rem;
+    padding-block: var(--section-pad);
+    padding-inline: var(--content-inset);
   }
   .manifesto-eyebrow {
     margin-bottom: 1.25rem;
   }
-  .manifesto-text {
+  .manifesto-line > span:not(.manifesto-img-span) {
     font-size: clamp(1.65rem, 8.5vw, 2.5rem);
     line-height: 1.12;
+  }
+
+  .manifesto-img-span {
+    --manifesto-img-width: clamp(6.5rem, 28vw, 11rem);
+    height: clamp(2.35rem, 9vw, 3.75rem);
   }
   .sheets {
     height: auto;
@@ -161,7 +102,8 @@
     height: auto;
     min-height: 0;
     align-items: stretch;
-    padding: clamp(4rem, 12vw, 5rem) 1.25rem;
+    padding-block: var(--section-pad);
+    padding-inline: var(--content-inset);
   }
   .sheets-copy h2 {
     margin: 0.75rem 0 1rem;
@@ -229,7 +171,7 @@
     overflow: visible;
   }
   .footer-hero {
-    padding: clamp(4rem, 12vw, 5rem) 1.25rem 1.5rem;
+    padding: var(--section-pad) var(--content-inset) 1.5rem;
     gap: 1.5rem;
   }
   .footer-hero-title {
@@ -244,7 +186,7 @@
   .footer-grid {
     grid-template-columns: 1fr;
     gap: 2.5rem;
-    padding: 1.25rem 1.25rem 2rem;
+    padding: var(--page-gutter) var(--content-inset) 2rem;
   }
   .footer-col--info {
     grid-column: auto;
@@ -267,7 +209,7 @@
   .footer-bar {
     grid-template-columns: 1fr;
     gap: 0.65rem;
-    padding: 1.15rem 1.25rem 1.35rem;
+    padding: 1.15rem var(--content-inset) 1.35rem;
   }
   .footer-bar-col--meta {
     flex-direction: column;
@@ -280,8 +222,8 @@
     overflow-y: auto;
   }
   .morph-btn--detail {
-    top: 1.25rem;
-    right: 1.25rem;
+    top: var(--page-gutter);
+    right: var(--content-inset);
   }
   .detail-visual {
     height: 40svh;
@@ -294,7 +236,7 @@
     height: auto;
     display: block;
     overflow: visible;
-    padding: 2rem 1.25rem 3.5rem;
+    padding: 2rem var(--content-inset) 3.5rem;
     border-left: 0;
   }
   .detail-info h3 {
@@ -323,15 +265,10 @@
 }
 
 @media (max-width: 480px) {
-  .topbar-brand {
-    max-width: calc(100% - 13.4rem);
-    font-size: 1.65rem;
-  }
   .topbar-actions {
     --topbar-brief-width: 7.25rem;
     --topbar-menu-width: 4rem;
-    --topbar-action-gap: 0.85rem;
-    right: 1rem;
+    --topbar-action-gap: 0.55rem;
   }
   .topbar-brief,
   .topbar-menu {

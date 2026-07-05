@@ -15,94 +15,76 @@ function initLoader() {
     rotation: 10,
     transformOrigin: "0% 100%",
   });
-  gsap.set(".hero-meta-top span, .hero-lede, .hero-support, .hero-cta", {
-    y: 24,
-    opacity: 0,
-  });
+  gsap.set(
+    ".hero-kicker span, .hero-support, .hero-cta, .hero-facade-shell",
+    {
+      y: 24,
+      opacity: 0,
+    },
+  );
 
-  const speed = 0.9;
-  const phases = [
-    { second: 3, third: 5 },
-    { second: 7, third: 8 },
-  ];
-  const loaderTL = gsap.timeline({ delay: 0.25 });
-
-  phases.forEach(({ second, third }, index) => {
-    const progress = second * 10 + third;
-
-    loaderTL.to(
-      ".loader-number-2 .loader-number-wrap",
-      {
-        duration: speed,
-        yPercent: (second - 1) * -10,
-        ease: "power2.inOut",
-      },
-      ">",
-    );
-    loaderTL.to(
-      ".loader-number-3 .loader-number-wrap",
-      {
-        duration: speed,
-        yPercent: (third - 1) * -10,
-        ease: "power2.inOut",
-      },
-      "<",
-    );
-    loaderTL.to(
-      `.loader-pre .loader-line:nth-child(${index + 1}) p`,
-      {
-        duration: speed / 2,
-        y: 0,
-        ease: "power3.out",
-      },
-      "<",
-    );
-    loaderTL.to(
-      ".loader-progress",
-      {
-        duration: speed,
-        width: `${progress}%`,
-        ease: "power2.inOut",
-      },
-      "<",
-    );
-  });
+  const speed = 0.5;
+  const loaderTL = gsap.timeline({ delay: 0.12 });
 
   loaderTL
     .to(
-      [
-        ".loader-number-2 .loader-number-wrap",
-        ".loader-number-3 .loader-number-wrap",
-      ],
+      ".loader-number-2 .loader-number-wrap",
       {
-        duration: speed,
+        duration: speed * 2.4,
         yPercent: -90,
         ease: "power2.inOut",
       },
-      ">",
+      0,
+    )
+    .to(
+      ".loader-number-3 .loader-number-wrap",
+      {
+        duration: speed * 2.4,
+        yPercent: -90,
+        ease: "power2.inOut",
+      },
+      0,
+    )
+    .to(
+      ".loader-pre .loader-line:nth-child(1) p",
+      {
+        duration: speed * 0.75,
+        y: 0,
+        ease: "power3.out",
+      },
+      0.12,
+    )
+    .to(
+      ".loader-pre .loader-line:nth-child(2) p",
+      {
+        duration: speed * 0.75,
+        y: 0,
+        ease: "power3.out",
+      },
+      0.22,
     )
     .to(
       ".loader-progress",
       {
-        duration: speed,
+        duration: speed * 2.4,
         width: "100%",
         ease: "power2.inOut",
       },
-      "<",
+      0,
     )
     .to(
       ".loader-number-1 .loader-number-wrap",
       {
-        duration: speed,
+        duration: speed * 0.7,
         y: 0,
         ease: "power3.out",
       },
-      "<",
+      0.45,
     )
     .to(
-      ".loader-number-wrap, .loader-numbers",
+      [".loader-number-wrap", ".loader-numbers"],
       {
-        duration: speed,
+        duration: speed * 0.85,
         yPercent: -100,
         ease: "power3.inOut",
       },
@@ -111,7 +93,7 @@ function initLoader() {
     .to(
       ".loader-percent",
       {
-        duration: speed,
+        duration: speed * 0.85,
         yPercent: -100,
         ease: "power3.inOut",
       },
@@ -120,45 +102,30 @@ function initLoader() {
     .to(
       ".loader-pre .loader-line p",
       {
-        duration: speed / 2,
+        duration: speed * 0.55,
         yPercent: -110,
-        stagger: 0.12,
+        stagger: 0.07,
         ease: "power3.in",
+      },
+      "<0.05",
+    )
+    .to(
+      ".loader-progress",
+      {
+        duration: speed * 0.9,
+        height: "100%",
+        ease: "power3.inOut",
       },
       "<",
-    )
-    .to(".loader-progress", {
-      duration: speed / 1.5,
-      height: "100%",
-      ease: "power3.inOut",
-    })
-    .to(
-      ".loader-welcome .loader-line p",
-      {
-        duration: speed / 2,
-        y: 0,
-        stagger: 0.12,
-        ease: "power3.out",
-      },
-      ">",
-    )
-    .to(
-      ".loader-welcome .loader-line p",
-      {
-        duration: 0.45,
-        yPercent: -110,
-        stagger: 0.08,
-        ease: "power3.in",
-      },
-      ">0.65",
     )
     .to(
       ".loader",
       {
         clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
-        duration: 0.9,
+        duration: 0.48,
         ease: "power3.inOut",
         onComplete: () => {
+          loader.style.pointerEvents = "none";
           lenis.scrollTo(0, { immediate: true });
           lenis.start();
           document.body.style.overflow = "";
@@ -173,21 +140,21 @@ function initLoader() {
       {
         yPercent: 0,
         rotation: 0,
-        duration: 1,
+        duration: 0.62,
         ease: "power3.out",
-        stagger: 0.04,
+        stagger: 0.018,
       },
-      "<0.25",
+      "<0.12",
     )
     .to(
-      ".hero-meta-top span, .hero-lede, .hero-support, .hero-cta",
+      ".hero-kicker span, .hero-support, .hero-cta, .hero-facade-shell",
       {
         y: 0,
         opacity: 1,
-        stagger: 0.1,
-        duration: 1,
+        stagger: 0.05,
+        duration: 0.62,
         ease: "power3.out",
       },
-      "<0.3",
+      "<0.16",
     );
 }

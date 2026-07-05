@@ -1,35 +1,30 @@
-function initScrambleText() {
-  const scramblePools = {
-    upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-    lower: "abcdefghijklmnopqrstuvwxyz",
-    digit: "0123456789",
-    symbol: "/—·+",
-    mixed: "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/—",
-  };
+function prepareTextHoverElement(el) {
+  if (el.classList.contains("text-hover-target")) return el;
 
-  const scramblePoolFor = (char) => {
-    if (/[A-Z]/.test(char)) return scramblePools.upper;
-    if (/[a-z]/.test(char)) return scramblePools.lower;
-    if (/[0-9]/.test(char)) return scramblePools.digit;
-    if (/[^\s]/.test(char)) return scramblePools.symbol;
-    return scramblePools.mixed;
-  };
+  const styles = getComputedStyle(el);
+  const needsInnerWrapper =
+    el.matches("a, button") ||
+    el.classList.contains("sheet-meta") ||
+    el.classList.contains("works-cap") ||
+    styles.display === "flex" ||
+    parseFloat(styles.paddingTop) > 0 ||
+    parseFloat(styles.paddingBottom) > 0;
 
-  const scrambleRandom = (pool, avoid) => {
-    if (pool.length < 2) return pool[0] || avoid;
-    let next = pool[Math.floor(Math.random() * pool.length)];
-    while (next === avoid) {
-      next = pool[Math.floor(Math.random() * pool.length)];
-    }
-    return next;
-  };
+  if (!needsInnerWrapper) return el;
 
-  const scrambleTargets = [
+  const wrapper = document.createElement("span");
+  wrapper.className = "text-hover-inner";
+  wrapper.textContent = el.textContent.trim();
+  el.replaceChildren(wrapper);
+  return wrapper;
+}
+
+function initTextHoverEffects() {
+  const hoverTargets = [
     ".hero-cta .morph-btn__content > span",
     ".sheets-index",
     ".sheet-meta",
     ".works-cap",
-    ".topbar-brand",
     ".topbar-nav a",
     ".topbar-brief .morph-btn__content > span",
     ".topbar-menu .morph-btn__content > span",
@@ -40,54 +35,58 @@ function initScrambleText() {
     ".detail-close .morph-btn__content > span",
   ];
 
-  const scrambleText = (el) => {
-    const original = el.dataset.scrambleText || el.textContent;
-    const originalHtml = el.dataset.scrambleHtml || el.innerHTML;
-    el.dataset.scrambleText = original;
-    el.dataset.scrambleHtml = originalHtml;
+  document.querySelectorAll(hoverTargets.join(",")).forEach((target) => {
+    const el = prepareTextHoverElement(target);
+    if (el.dataset.textHoverReady === "true") return;
+    el.dataset.textHoverReady = "true";
+    el.classList.add("text-hover-target");
 
-    const chars = [...original];
-    const proxy = { progress: 0 };
+    const label = el.textContent.trim();
+    if (!label) return;
+    el.dataset.textHoverLabel = label;
 
-    if (el._scrambleTween) el._scrambleTween.kill();
+    const track = document.createElement("span");
+    const current = document.createElement("span");
+    const next = document.createElement("span");
 
-    el._scrambleTween = gsap.to(proxy, {
-      progress: 1,
-      duration: 0.78,
-      ease: "power2.out",
-      onUpdate: () => {
-        const total = chars.length;
-        el.textContent = chars
-          .map((char, index) => {
-            if (/\s/.test(char)) return char;
+    track.className = "text-hover-track";
+    current.className = "text-hover-line";
+    next.className = "text-hover-line";
+    next.setAttribute("aria-hidden", "true");
+    current.textContent = label;
+    next.textContent = label;
+    track.append(current, next);
+    el.replaceChildren(track);
 
-            const start = (index / total) * 0.55;
-            const local = gsap.utils.clamp(
-              0,
-              1,
-              (proxy.progress - start) / 0.45,
-            );
+    let lineShift = 0;
+    const measure = () => {
+      lineShift = current.getBoundingClientRect().height;
 
-            if (local >= 1) return char;
-            if (local <= 0) return scrambleRandom(scramblePoolFor(char), char);
+      if (el.classList.contains("is-text-hover")) {
+        gsap.set(track, { y: -lineShift });
+      }
+    };
 
-            const settle = local * local;
-            return Math.random() < settle
-              ? char
-              : scrambleRandom(scramblePoolFor(char), char);
-          })
-          .join("");
-      },
-      onComplete: () => {
-        el.innerHTML = originalHtml;
-      },
-    });
-  };
+    measure();
+    document.fonts?.ready.then(measure);
+    window.addEventListener("resize", measure);
 
-  document.querySelectorAll(scrambleTargets.join(",")).forEach((el) => {
-    el.dataset.scrambleText = el.textContent;
-    el.dataset.scrambleHtml = el.innerHTML;
-    el.addEventListener("mouseenter", () => scrambleText(el));
+    const trigger = el.closest(".morph-btn") || el.closest("a, button") || el;
+    const setHover = (active) => {
+      measure();
+      el.classList.toggle("is-text-hover", active);
+      gsap.to(track, {
+        y: active ? -lineShift : 0,
+        duration: active ? 0.46 : 0.38,
+        ease: active ? "power4.out" : "power3.inOut",
+        overwrite: "auto",
+      });
+    };
+
+    trigger.addEventListener("mouseenter", () => setHover(true));
+    trigger.addEventListener("mouseleave", () => setHover(false));
+    trigger.addEventListener("focus", () => setHover(true));
+    trigger.addEventListener("blur", () => setHover(false));
   });
 }
 
@@ -108,94 +107,6 @@ function ensureLiquidFilter() {
   `;
 
   document.body.prepend(svg);
-}
-
-function syncTopbarActionMotion(isCompact) {
-  const brief = document.querySelector(".topbar-brief-wrap");
-  const menu = document.querySelector(".topbar-menu-wrap");
-  if (!brief || !menu) return;
-
-  gsap.killTweensOf([brief, menu]);
-
-  if (!desktopQuery.matches) {
-    gsap.set([brief, menu], { clearProps: "all" });
-    return;
-  }
-
-  const actions = document.querySelector(".topbar-actions");
-  if (!actions) return;
-
-  const styles = getComputedStyle(actions);
-  const rootFontSize =
-    parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-  const toPx = (value) => {
-    const numeric = parseFloat(value);
-    if (!Number.isFinite(numeric)) return 0;
-    return value.trim().endsWith("rem") ? numeric * rootFontSize : numeric;
-  };
-  const gap = toPx(styles.getPropertyValue("--topbar-action-gap"));
-  const shift = menu.offsetWidth + gap;
-
-  if (isCompact) {
-    gsap.set(brief, {
-      x: shift,
-      y: 0,
-      scale: 1,
-      opacity: 1,
-      visibility: "visible",
-    });
-    gsap.set(menu, {
-      x: shift,
-      y: 0,
-      scale: 0.98,
-      opacity: 1,
-      visibility: "visible",
-    });
-    gsap.fromTo(
-      [brief, menu],
-      { x: shift },
-      {
-        x: 0,
-        y: 0,
-        scale: 1,
-        duration: 0.46,
-        ease: "back.out(1.55)",
-        overwrite: "auto",
-      },
-    );
-    return;
-  }
-
-  gsap.set(menu, { x: 0, y: 0, scale: 1, opacity: 1, visibility: "visible" });
-  gsap.set(brief, { x: -shift, y: 0, scale: 1, opacity: 1 });
-
-  gsap.to(brief, {
-    x: 0,
-    y: 0,
-    scale: 1,
-    opacity: 1,
-    duration: 0.42,
-    ease: "back.in(1.25)",
-    overwrite: "auto",
-  });
-  gsap.to(menu, {
-    x: shift,
-    y: 0,
-    scale: 1,
-    opacity: 1,
-    duration: 0.42,
-    ease: "back.in(1.25)",
-    overwrite: "auto",
-    onComplete: () => {
-      gsap.set(menu, {
-        x: 0,
-        y: 0,
-        scale: 1,
-        opacity: 1,
-        visibility: "hidden",
-      });
-    },
-  });
 }
 
 function initMorphButtons() {
@@ -227,7 +138,7 @@ function initMorphButtons() {
         overwrite: "auto",
       });
 
-      if (content) {
+      if (content && !content.querySelector(".text-hover-target")) {
         gsap.to(content, {
           y: active ? -1 : 0,
           duration: 0.28,
@@ -299,22 +210,92 @@ function initMorphButtons() {
   });
 }
 
-function initScrollAnimations() {
-  const manifestoSplit = new SplitType("#manifestoText", { types: "words" });
+function initHeroFacade() {
+  const bays = gsap.utils.toArray(".hero-bay");
+  if (!bays.length) return;
 
-  gsap.from(manifestoSplit.words, {
-    scrollTrigger: {
-      trigger: ".manifesto",
-      start: "top 85%",
-      end: "bottom 60%",
-      scrub: 1,
-    },
-    opacity: 0.1,
-    y: 10,
-    stagger: 0.05,
+  const defaultIndex = Math.max(
+    0,
+    bays.findIndex((bay) => bay.classList.contains("is-active")),
+  );
+
+  const setActive = (activeIndex) => {
+    bays.forEach((bay, index) => {
+      bay.classList.toggle("is-active", index === activeIndex);
+    });
+  };
+
+  bays.forEach((bay, index) => {
+    bay.addEventListener("focus", () => setActive(index));
+    bay.addEventListener("blur", () => setActive(defaultIndex));
   });
 
+  mm.add("(min-width: 769px) and (pointer: fine)", () => {
+    const cleanups = bays.map((bay, index) => {
+      const onEnter = () => setActive(index);
+      bay.addEventListener("mouseenter", onEnter);
+
+      return () => bay.removeEventListener("mouseenter", onEnter);
+    });
+
+    const facade = document.querySelector(".hero-facade");
+    const onLeave = () => setActive(defaultIndex);
+    facade?.addEventListener("mouseleave", onLeave);
+
+    return () => {
+      cleanups.forEach((cleanup) => cleanup());
+      facade?.removeEventListener("mouseleave", onLeave);
+      setActive(defaultIndex);
+    };
+  });
+}
+
+function initManifestoReveal() {
+  const getImgSpanWidth = (imgSpan) => {
+    const img = imgSpan.querySelector("img");
+    if (!img) return 0;
+
+    const styles = getComputedStyle(imgSpan);
+    const target = styles.getPropertyValue("--manifesto-img-width").trim();
+    if (target) {
+      const probe = document.createElement("div");
+      probe.style.cssText = `position:absolute;visibility:hidden;width:${target};`;
+      document.body.appendChild(probe);
+      const width = probe.getBoundingClientRect().width;
+      probe.remove();
+      return width;
+    }
+
+    return img.getBoundingClientRect().width;
+  };
+
+  document.querySelectorAll(".manifesto-line").forEach((line) => {
+    const imgSpan = line.querySelector(".manifesto-img-span");
+    if (!imgSpan) return;
+
+    gsap.to(imgSpan, {
+      width: () => getImgSpanWidth(imgSpan),
+      ease: "none",
+      scrollTrigger: {
+        trigger: line,
+        start: "top 90%",
+        end: "top 40%",
+        scrub: 1,
+        invalidateOnRefresh: true,
+      },
+    });
+  });
+}
+
+function initScrollAnimations() {
+  initManifestoReveal();
+
   mm.add("(min-width: 769px)", () => {
+    const heroContainer = document.querySelector(".hero-container");
+    const heroImage = document.querySelector(".hero-image");
+    const heroText = document.querySelectorAll(
+      ".hero-kicker, .hero-main",
+    );
     const sheetsStack = document.getElementById("sheetsStack");
     const getHorizontalDistance = (track, endGap = 80) => {
       return Math.max(
@@ -322,6 +303,66 @@ function initScrollAnimations() {
         track.offsetLeft + track.scrollWidth - window.innerWidth + endGap,
       );
     };
+
+    const heroShell = document.querySelector(".hero-facade-shell");
+
+    // Connected handoff: pin the hero for an extra viewport of scroll. During
+    // the pin the text lifts and collapses while the image grows upward to
+    // full-bleed, so the scroll reads as pushing into the material before the
+    // 01 panel rises directly out of it.
+    if (heroContainer && heroImage && heroShell) {
+      const heroHandoff = gsap.timeline({
+        scrollTrigger: {
+          trigger: ".hero",
+          start: "top top",
+          end: "+=90%",
+          pin: true,
+          pinSpacing: true,
+          scrub: 0.6,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      heroText.forEach((el) => {
+        el.style.overflow = "hidden";
+      });
+
+      const heroContainerEl = heroContainer;
+
+      heroHandoff
+        .to(
+          heroText,
+          {
+            yPercent: -14,
+            opacity: 0,
+            height: 0,
+            marginTop: 0,
+            marginBottom: 0,
+            paddingTop: 0,
+            paddingBottom: 0,
+            ease: "power2.in",
+            duration: 0.7,
+          },
+          0,
+        )
+        .to(
+          heroContainerEl,
+          { gap: 0, ease: "power2.in", duration: 0.7 },
+          0,
+        )
+        .fromTo(
+          heroShell,
+          { flexGrow: 0 },
+          { flexGrow: 1, ease: "power2.inOut", duration: 1 },
+          0,
+        )
+        .fromTo(
+          heroImage,
+          { scale: 1.1 },
+          { scale: 1, ease: "none", duration: 1 },
+          0,
+        );
+    }
 
     gsap.to(sheetsStack, {
       x: () => -getHorizontalDistance(sheetsStack, 96),
@@ -366,8 +407,100 @@ function initScrollAnimations() {
     });
 
     return () => {
-      gsap.set([sheetsStack, ".sheets-copy", ".sheet img"], {
-        clearProps: "transform",
+      if (heroContainer) {
+        gsap.set(heroContainer, { clearProps: "transform,opacity" });
+      }
+      if (heroShell) {
+        gsap.set(heroShell, { clearProps: "flexGrow,transform,opacity" });
+      }
+      if (heroContainer) {
+        gsap.set(heroContainer, { clearProps: "gap" });
+      }
+      heroText.forEach((el) => {
+        el.style.overflow = "";
+      });
+      gsap.set(
+        [heroImage, ...heroText, sheetsStack, ".sheets-copy", ".sheet img"].filter(
+          Boolean,
+        ),
+        {
+          clearProps: "transform,opacity,height,margin,padding",
+        },
+      );
+    };
+  });
+
+  mm.add("(max-width: 768px)", () => {
+    const heroImage = document.querySelector(".hero-image");
+    const heroText = document.querySelectorAll(".hero-kicker, .hero-main");
+    const sheetsCopy = document.querySelector(".sheets-copy");
+
+    if (heroImage) {
+      gsap.fromTo(
+        heroImage,
+        { scale: 1.06 },
+        {
+          scale: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: ".hero",
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+            invalidateOnRefresh: true,
+          },
+        },
+      );
+    }
+
+    if (heroText.length) {
+      gsap.to(heroText, {
+        y: -24,
+        opacity: 0.35,
+        ease: "none",
+        scrollTrigger: {
+          trigger: ".hero",
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+          invalidateOnRefresh: true,
+        },
+      });
+    }
+
+    if (sheetsCopy) {
+      gsap.from(sheetsCopy, {
+        y: 36,
+        opacity: 0,
+        duration: 0.95,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: sheetsCopy,
+          start: "top 88%",
+        },
+      });
+    }
+
+    const sheetCleanups = gsap.utils.toArray(".sheet").map((sheet, index) => {
+      const tween = gsap.from(sheet, {
+        y: 52,
+        opacity: 0,
+        duration: 0.9,
+        delay: index * 0.06,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: sheet,
+          start: "top 90%",
+        },
+      });
+
+      return () => tween.kill();
+    });
+
+    return () => {
+      sheetCleanups.forEach((cleanup) => cleanup());
+      gsap.set([heroImage, ...heroText, sheetsCopy, ".sheet"].filter(Boolean), {
+        clearProps: "transform,opacity",
       });
     };
   });
@@ -545,6 +678,7 @@ function initScrollAnimations() {
 
 function initAnimations() {
   initMorphButtons();
-  initScrambleText();
+  initHeroFacade();
+  initTextHoverEffects();
   initScrollAnimations();
 }

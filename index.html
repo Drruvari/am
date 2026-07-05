@@ -37,7 +37,14 @@
     </div>
 
     <header class="topbar" id="topbar">
-      <a href="#top" class="topbar-brand" data-hover="link">AM Architecture</a>
+      <a
+        href="#top"
+        class="topbar-logo"
+        aria-label="AM Architecture home"
+        data-hover="link"
+      >
+        <span class="topbar-logo-mark">AM</span>
+      </a>
       <nav class="topbar-nav" aria-label="Primary navigation">
         <a href="#work" data-hover="link">Works</a>
         <span>Studio</span>
@@ -119,30 +126,25 @@
     <main id="top">
       <section class="hero" id="hero">
         <div class="hero-container">
-          <div class="hero-grid">
-            <div class="hero-left">
-              <div class="hero-meta-top mono">
-                <span>Arbër Manga</span>
-                <span>Architecture</span>
-              </div>
-              <p class="hero-lede" id="heroSub">
-                Independent studies in residential form, interior space, and
-                material restraint — shaped by site, structure, and light.
+          <div class="hero-kicker mono">
+            <span>Arbër Manga</span>
+            <span>Architecture / Studies</span>
+          </div>
+
+          <div class="hero-main">
+            <h1 class="hero-headline" id="heroTitle">
+              <span class="line">Quiet</span>
+              <span class="line">architecture</span>
+              <span class="line">shaped by light,</span>
+              <span class="line">material, and place.</span>
+            </h1>
+
+            <div class="hero-side">
+              <p class="hero-support">
+                Independent residential, interior, and spatial studies focused on
+                restraint, proportion, and atmosphere.
               </p>
-            </div>
-            <div class="hero-right">
-              <div class="hero-copy">
-                <h1 class="hero-headline" id="heroTitle">
-                  <span class="line">Architecture that</span>
-                  <span class="line">merges structure</span>
-                  <span class="line">with light, weight,</span>
-                  <span class="line">and place.</span>
-                </h1>
-                <p class="hero-support">
-                  Houses, pavilions, interiors, and material systems — developed
-                  independently, edited until nothing extra remains.
-                </p>
-              </div>
+
               <div class="morph-btn morph-btn--rect">
                 <a href="#work" class="hero-cta" data-hover="link">
                   <span class="morph-btn__content">
@@ -159,16 +161,83 @@
               </div>
             </div>
           </div>
+
+          <div class="hero-facade-shell">
+            <img
+              class="hero-image"
+              src="assets/images/image.jpg"
+              alt="Architectural study shaped by light and material restraint"
+            />
+          </div>
         </div>
       </section>
 
       <section class="manifesto">
         <p class="manifesto-eyebrow eyebrow mono">01 — Philosophy</p>
-        <p class="manifesto-text" id="manifestoText">
-          The work starts with what is already there: slope, shade, wind,
-          access, budget, and the material close at hand. Form follows those
-          constraints, then gets edited until nothing extra remains.
-        </p>
+        <div class="manifesto-body" id="manifestoBody">
+          <div class="manifesto-line">
+            <span>The work starts with</span>
+            <span class="manifesto-img-span">
+              <img
+                src="assets/images/image.jpg"
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
+            </span>
+            <span>what is already</span>
+          </div>
+          <div class="manifesto-line">
+            <span>there: slope, shade,</span>
+            <span class="manifesto-img-span">
+              <img
+                src="assets/images/image.jpg"
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
+            </span>
+            <span>wind, access,</span>
+          </div>
+          <div class="manifesto-line">
+            <span>budget, and the material</span>
+          </div>
+          <div class="manifesto-line">
+            <span>close at hand.</span>
+            <span class="manifesto-img-span">
+              <img
+                src="assets/images/image.jpg"
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
+            </span>
+          </div>
+          <div class="manifesto-line">
+            <span>Form follows those</span>
+            <span class="manifesto-img-span">
+              <img
+                src="assets/images/image.jpg"
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
+            </span>
+            <span>constraints,</span>
+          </div>
+          <div class="manifesto-line">
+            <span>then gets edited until nothing</span>
+            <span class="manifesto-img-span">
+              <img
+                src="assets/images/image.jpg"
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
+            </span>
+            <span>extra remains.</span>
+          </div>
+        </div>
       </section>
 
       <section class="sheets" id="work">

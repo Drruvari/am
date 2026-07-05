@@ -23,12 +23,22 @@
   --panel: var(--bg);
   --muted: var(--fg);
   --line: var(--fg);
+  --page-gutter: clamp(1.25rem, 3vw, 2.5rem);
+  --page-max: 1440px;
+  --content-inset: max(var(--page-gutter), (100vw - var(--page-max)) / 2);
   --section-pad: clamp(6rem, 10vw, 12rem);
   --font-display: "Bricolage Grotesque", sans-serif;
   --font-heading: "Bricolage Grotesque", sans-serif;
   --font-body: "Manrope", sans-serif;
   --font-mono: "Manrope", sans-serif;
   --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+@media (max-width: 768px) {
+  :root {
+    --page-gutter: 1.25rem;
+    --section-pad: clamp(4rem, 12vw, 5rem);
+  }
 }
 
 * {
@@ -113,6 +123,52 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+.text-hover-inner {
+  display: inline-block;
+  max-width: 100%;
+  vertical-align: bottom;
+}
+
+.text-hover-target {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  line-height: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+}
+
+.text-hover-target::before {
+  content: attr(data-text-hover-label);
+  display: block;
+  visibility: hidden;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.text-hover-target .text-hover-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+}
+
+.text-hover-line {
+  display: block;
+  white-space: nowrap;
+  line-height: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+}
+
 a:focus-visible,
 button:focus-visible {
   outline: 2px solid var(--accent);
@@ -266,10 +322,6 @@ body.is-topbar-inverted .topbar .morph-btn--dark {
   min-height: 3.05rem;
 }
 
-.morph-btn--pill .topbar-menu {
-  min-width: 4.7rem;
-}
-
 .morph-btn--rect {
   align-self: flex-start;
 }
@@ -288,8 +340,8 @@ body.is-topbar-inverted .topbar .morph-btn--dark {
 
 .morph-btn--detail {
   position: absolute;
-  top: 2.5rem;
-  right: 2.5rem;
+  top: clamp(1.25rem, 2.5vw, 2.5rem);
+  right: var(--content-inset);
   z-index: 2010;
 }
 

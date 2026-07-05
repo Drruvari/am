@@ -15,6 +15,21 @@ function initCursor() {
       close: "pointer",
       text: "text",
     };
+    const textCursorSelector = [
+      ".hero-headline",
+      ".hero-kicker",
+      ".hero-support",
+      ".manifesto-line > span:not(.manifesto-img-span)",
+      ".sheets-copy h2",
+      ".sheets-copy p",
+      ".works-head h2",
+      ".works-head p",
+      ".footer-hero-title",
+      ".footer-mark",
+      ".footer-info-block p",
+      ".detail-info h3",
+      ".detail-desc",
+    ].join(",");
 
     gsap.set(cursor, { xPercent: 0, yPercent: 0 });
 
@@ -67,16 +82,21 @@ function initCursor() {
       setCursorVisible(true);
 
       const hoverTarget = pointerTarget.closest("[data-hover], [data-cursor]");
-      if (!hoverTarget) {
-        applyCursorState("default");
+      if (hoverTarget) {
+        const key =
+          hoverTarget.getAttribute("data-cursor") ||
+          hoverTarget.getAttribute("data-hover") ||
+          "link";
+        applyCursorState(hoverToState[key] || "pointer");
         return;
       }
 
-      const key =
-        hoverTarget.getAttribute("data-cursor") ||
-        hoverTarget.getAttribute("data-hover") ||
-        "link";
-      applyCursorState(hoverToState[key] || "pointer");
+      if (pointerTarget.closest(textCursorSelector)) {
+        applyCursorState("text");
+        return;
+      }
+
+      applyCursorState("default");
     };
 
     const onMouseMove = (e) => {

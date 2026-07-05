@@ -1,6 +1,14 @@
 .topbar {
   z-index: 7001;
-  display: contents;
+  position: fixed;
+  top: clamp(0.9rem, 2vw, 1.35rem);
+  left: var(--content-inset);
+  right: var(--content-inset);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  pointer-events: none;
   color: var(--fg);
   font-family: var(--font-mono);
   font-size: 0.68rem;
@@ -8,74 +16,91 @@
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
+
+.topbar a {
+  color: var(--fg);
+}
+
 .topbar a,
-.topbar button,
-.topbar-brand,
-.topbar-nav a,
-.topbar-nav span {
-  color: var(--fg);
+.topbar button {
+  pointer-events: auto;
 }
-body.is-topbar-inverted .topbar-brand,
-body.is-topbar-inverted .topbar-nav a,
-body.is-topbar-inverted .topbar-nav span {
-  color: var(--fg);
+
+.topbar-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(2.65rem, 4vw, 3.3rem);
+  aspect-ratio: 1;
 }
-.topbar-brand {
-  position: fixed;
-  top: 1.65rem;
-  left: clamp(1rem, 2.5vw, 2rem);
-  z-index: 7001;
-  font-family: var(--font-body);
-  font-size: clamp(2.5rem, 4.6vw, 4.25rem);
-  font-weight: 800;
-  line-height: 0.9;
+
+.topbar-logo-mark {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  border: 1px solid var(--fg);
+  background: var(--bg);
+  color: var(--fg);
+  font-size: clamp(0.72rem, 1vw, 0.82rem);
+  font-weight: 850;
+  line-height: 1;
   letter-spacing: 0;
-  text-transform: none;
-  white-space: nowrap;
   transition:
-    opacity 0.25s ease,
-    visibility 0.25s ease;
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.7s var(--ease-out-expo);
 }
+
+.topbar-logo:hover .topbar-logo-mark,
+.topbar-logo:focus-visible .topbar-logo-mark {
+  background: var(--fg);
+  color: var(--bg);
+  transform: rotate(360deg);
+}
+
 .topbar-nav {
-  position: fixed;
-  top: 2rem;
+  position: absolute;
+  top: 0.85rem;
   left: 50%;
-  z-index: 7001;
   display: flex;
   align-items: center;
   gap: 0.45rem;
   transform: translateX(-50%);
-  font-size: clamp(0.82rem, 1vw, 1rem);
+  font-size: clamp(0.78rem, 0.95vw, 0.92rem);
   line-height: 1;
   transition:
     opacity 0.25s ease,
     visibility 0.25s ease;
 }
-.topbar-nav a,
-.topbar-nav span {
+
+.topbar-nav > a,
+.topbar-nav > span {
   position: relative;
+  color: var(--fg);
   font: inherit;
   font-weight: 800;
-  color: var(--fg);
   white-space: nowrap;
+  pointer-events: auto;
 }
+
 .topbar-nav > :not(:last-child)::after {
   content: ",";
 }
+
 .topbar-actions {
   --topbar-brief-width: 9.35rem;
   --topbar-menu-width: 4.7rem;
-  --topbar-action-gap: 1.6rem;
-  position: fixed;
-  top: 1.25rem;
-  right: clamp(1rem, 2.5vw, 2rem);
-  z-index: 7001;
+  --topbar-action-gap: 0.8rem;
+  position: relative;
   width: calc(
     var(--topbar-brief-width) + var(--topbar-menu-width) +
       var(--topbar-action-gap)
   );
-  height: 3.2rem;
+  height: 3.05rem;
+  pointer-events: auto;
 }
+
 .topbar-brief,
 .topbar-menu {
   display: inline-flex;
@@ -89,48 +114,42 @@ body.is-topbar-inverted .topbar-nav span {
   text-transform: inherit;
   color: inherit;
 }
+
 .topbar-brief-wrap,
 .topbar-menu-wrap {
   position: absolute;
   top: 0;
-  right: 0;
   transform-origin: 100% 50%;
 }
+
 .topbar-brief-wrap {
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(0) scale(1);
+  right: calc(var(--topbar-menu-width) + var(--topbar-action-gap));
 }
+
 .topbar-brief-wrap,
 .topbar-brief {
   width: var(--topbar-brief-width);
 }
+
 .topbar-menu-wrap {
   right: 0;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateX(0.6rem) scale(0.92);
 }
-body.is-topbar-compact .topbar-brand,
+
+.topbar-menu-wrap,
+.topbar-menu {
+  width: var(--topbar-menu-width);
+}
+
+.topbar-actions .morph-btn__rings {
+  inset: -0.28rem;
+}
+
 body.is-topbar-compact .topbar-nav {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
 }
-body.is-topbar-compact .topbar-brief-wrap {
-  right: calc(var(--topbar-menu-width) + var(--topbar-action-gap));
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(0) scale(1);
-}
-body.is-topbar-compact .topbar-menu-wrap {
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(0) scale(1);
-}
-.topbar-actions .morph-btn__rings {
-  inset: -0.28rem;
-}
+
 .mobile-menu {
   position: fixed;
   inset: 0;
@@ -165,7 +184,7 @@ body.is-topbar-compact .topbar-menu-wrap {
   display: flex;
   flex-direction: column;
   gap: 2.5rem;
-  padding: 5.5rem 1.75rem 2rem;
+  padding: 5.5rem var(--content-inset) 2rem;
   background: var(--bg);
   border-left: 1px solid var(--line);
   transform: translateX(102%);
