@@ -336,7 +336,7 @@ function initManifestoReveal() {
 
   mm.add("(max-width: 768px)", () => {
     gsap.set(imgSpans, { width: 0 });
-    const triggers = bindLineReveals("top 90%", "top 62%", 0.55);
+    const triggers = bindLineReveals("top 88%", "top 68%", 0.5);
     return () => {
       triggers.forEach((trigger) => trigger.kill());
       gsap.set(imgSpans, { clearProps: "width" });
@@ -573,6 +573,7 @@ function initScrollAnimations() {
   });
 
   mm.add("(max-width: 768px)", () => {
+    const heroContainer = document.querySelector(".hero-container");
     const heroImage = document.querySelector(".hero-image");
     const heroShell = document.querySelector(".hero-facade-shell");
     const hero = document.querySelector(".hero");
@@ -581,49 +582,65 @@ function initScrollAnimations() {
     const getHeroBleed = () =>
       hero ? parseFloat(getComputedStyle(hero).paddingLeft) || 0 : 0;
 
-    if (heroImage && heroShell) {
-      gsap.fromTo(
-        heroImage,
-        { scale: 1.05 },
-        {
-          scale: 1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: ".hero",
-            start: "top top",
-            end: "bottom top",
-            scrub: 0.55,
-            invalidateOnRefresh: true,
+    if (heroContainer && heroImage && heroShell) {
+      heroText.forEach((el) => {
+        el.style.overflow = "hidden";
+      });
+
+      const heroHandoff = gsap.timeline({
+        scrollTrigger: {
+          trigger: ".hero",
+          start: "top top",
+          end: "+=75%",
+          pin: true,
+          pinSpacing: true,
+          scrub: 0.55,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      heroHandoff
+        .to(
+          heroText,
+          {
+            yPercent: -10,
+            opacity: 0,
+            height: 0,
+            marginTop: 0,
+            marginBottom: 0,
+            paddingTop: 0,
+            paddingBottom: 0,
+            ease: "power2.in",
+            duration: 0.65,
           },
-        },
-      );
-
-      gsap.to(heroShell, {
-        "--hero-shell-bleed": () => `${getHeroBleed()}px`,
-        ease: "none",
-        scrollTrigger: {
-          trigger: ".hero",
-          start: "top top",
-          end: "bottom top",
-          scrub: 0.55,
-          invalidateOnRefresh: true,
-        },
-      });
-    }
-
-    if (heroText.length) {
-      gsap.to(heroText, {
-        y: -16,
-        opacity: 0.4,
-        ease: "none",
-        scrollTrigger: {
-          trigger: ".hero",
-          start: "top top",
-          end: "bottom top",
-          scrub: 0.55,
-          invalidateOnRefresh: true,
-        },
-      });
+          0,
+        )
+        .to(
+          heroContainer,
+          { gap: 0, ease: "power2.in", duration: 0.65 },
+          0,
+        )
+        .fromTo(
+          heroShell,
+          { flexGrow: 0 },
+          { flexGrow: 1, ease: "power2.inOut", duration: 1 },
+          0,
+        )
+        .to(
+          heroShell,
+          {
+            "--hero-shell-bleed": () => `${getHeroBleed()}px`,
+            ease: "power2.inOut",
+            duration: 0.45,
+          },
+          0,
+        )
+        .fromTo(
+          heroImage,
+          { scale: 1.06 },
+          { scale: 1, ease: "none", duration: 1 },
+          0,
+        );
     }
 
     if (sheetsCopy) {
@@ -659,10 +676,16 @@ function initScrollAnimations() {
 
     return () => {
       sheetCleanups.forEach((cleanup) => cleanup());
+      heroText.forEach((el) => {
+        el.style.overflow = "";
+      });
       gsap.set(
-        [heroImage, heroShell, ...heroText, sheetsCopy, ".sheet"].filter(Boolean),
+        [heroContainer, heroImage, heroShell, ...heroText, sheetsCopy, ".sheet"].filter(
+          Boolean,
+        ),
         {
-          clearProps: "transform,opacity,--hero-shell-bleed",
+          clearProps:
+            "transform,opacity,height,margin,padding,gap,flexGrow,--hero-shell-bleed",
         },
       );
     };

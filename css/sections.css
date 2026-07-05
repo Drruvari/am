@@ -34,33 +34,38 @@
 }
 
 .manifesto-line--shift-c {
+  justify-content: flex-start;
+  padding-left: clamp(1.5rem, 8vw, 6rem);
+}
+
+.manifesto-line--shift-d {
   justify-content: flex-end;
   padding-right: clamp(1rem, 5vw, 4rem);
 }
 
-.manifesto-line--shift-d {
+.manifesto-line--shift-e {
   justify-content: flex-start;
   padding-left: clamp(3rem, 14vw, 11rem);
 }
 
-.manifesto-line--shift-e {
+.manifesto-line--shift-f {
   justify-content: center;
   padding-right: clamp(1.5rem, 7vw, 5.5rem);
 }
 
-.manifesto-line--shift-f {
+.manifesto-line--shift-g {
   justify-content: flex-end;
   padding-left: clamp(0.5rem, 4vw, 3rem);
   flex-wrap: nowrap;
   white-space: nowrap;
 }
 
-.manifesto-line--shift-f > span:not(.manifesto-img-span) {
+.manifesto-line--shift-g > span:not(.manifesto-img-span) {
   white-space: nowrap;
   flex-shrink: 0;
 }
 
-.manifesto-line--shift-f .manifesto-img-span {
+.manifesto-line--shift-g .manifesto-img-span {
   flex-shrink: 0;
 }
 
