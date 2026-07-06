@@ -30,44 +30,44 @@
 .topbar-logo {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: clamp(2.65rem, 4vw, 3.3rem);
-  aspect-ratio: 1;
+  width: clamp(5.5rem, 11vw, 8.5rem);
 }
 
 .topbar-logo-mark {
-  display: grid;
+  display: block;
   width: 100%;
-  height: 100%;
-  place-items: center;
-  padding: 0.42rem;
-  border: 1px solid var(--fg);
-  border-radius: 999px;
-  background: var(--bg);
-  color: var(--fg);
-  transition:
-    background 0.25s ease,
-    color 0.25s ease,
-    transform 0.7s var(--ease-out-expo);
 }
 
-.topbar-logo-svg {
+.topbar-logo-stage {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.topbar-logo-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.topbar-logo-hover {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.topbar-logo-hover svg {
   display: block;
   width: 100%;
   height: auto;
   overflow: visible;
 }
 
-.topbar-logo-path {
-  fill: none;
-  stroke: currentColor;
-}
-
-.topbar-logo:hover .topbar-logo-mark,
-.topbar-logo:focus-visible .topbar-logo-mark {
-  background: var(--fg);
-  color: var(--bg);
-  transform: rotate(360deg);
+.topbar-logo.is-drawing .topbar-logo-hover path {
+  vector-effect: non-scaling-stroke;
 }
 
 .topbar-nav {

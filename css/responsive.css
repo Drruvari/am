@@ -147,7 +147,7 @@
     align-items: flex-start;
   }
   .topbar-logo {
-    width: 2.6rem;
+    width: clamp(4.75rem, 24vw, 6.5rem);
   }
   .topbar-nav {
     display: none;
@@ -171,7 +171,7 @@
     letter-spacing: 0.08em;
   }
   .loader-logo {
-    width: min(84vw, 22rem);
+    width: min(88vw, 28rem);
   }
   .manifesto,
   .works,

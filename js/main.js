@@ -74,6 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initCursor();
   initAnimations();
   initLoader();
+  initLogoHover();
   initMobileMenu();
   initProjectDetail();
   initGlobalUI();

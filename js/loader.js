@@ -2,7 +2,7 @@ function initLoader() {
   const loader = document.getElementById("loader");
   if (!loader) return;
 
-  const logoPaths = gsap.utils.toArray(".loader-logo-path");
+  const logoEl = loader.querySelector(".loader-logo-img");
   const countValue = loader.querySelector(".loader-count-value");
   const loaderStatus = document.getElementById("loaderStatus");
   const prefersReducedMotion = window.matchMedia(
@@ -10,18 +10,9 @@ function initLoader() {
   ).matches;
   const drawDuration = prefersReducedMotion ? 1.4 : 3.4;
 
-  let totalPathLength = 0;
-
-  logoPaths.forEach((path) => {
-    const pathLength = path.getTotalLength();
-    totalPathLength += pathLength;
-    path.dataset.length = String(pathLength);
-
-    gsap.set(path, {
-      strokeDasharray: pathLength,
-      strokeDashoffset: pathLength,
-    });
-  });
+  if (logoEl) {
+    gsap.set(logoEl, { clipPath: "inset(0 100% 0 0)" });
+  }
 
   lenis.stop();
   document.body.style.overflow = "hidden";
@@ -57,20 +48,8 @@ function initLoader() {
     document.documentElement.classList.remove("is-loading");
   };
 
-  const updateDrawProgress = () => {
-    if (!totalPathLength) return;
-
-    let drawnLength = 0;
-    logoPaths.forEach((path) => {
-      const pathLength = Number(path.dataset.length);
-      const offset = Number(gsap.getProperty(path, "strokeDashoffset")) || 0;
-      drawnLength += Math.max(0, pathLength - offset);
-    });
-
-    const progress = Math.min(
-      100,
-      Math.round((drawnLength / totalPathLength) * 100),
-    );
+  const updateDrawProgress = (progressRatio) => {
+    const progress = Math.min(100, Math.round(progressRatio * 100));
 
     if (countValue) {
       countValue.textContent = String(progress);
@@ -103,19 +82,18 @@ function initLoader() {
       0.08,
     );
 
-  if (logoPaths.length) {
+  if (logoEl) {
     loaderTL.to(
-      logoPaths,
+      logoEl,
       {
-        strokeDashoffset: 0,
+        clipPath: "inset(0 0% 0 0)",
         duration: drawDuration,
         ease: "power1.inOut",
-        stagger: prefersReducedMotion ? 0.04 : 0.08,
-        onUpdate: updateDrawProgress,
+        onUpdate: function () {
+          updateDrawProgress(this.progress());
+        },
         onComplete: () => {
-          logoPaths.forEach((path) => {
-            path.style.willChange = "auto";
-          });
+          logoEl.style.willChange = "auto";
         },
       },
       0,
@@ -135,6 +113,15 @@ function initLoader() {
         ease: "power3.in",
       },
       ">-0.1",
+    )
+    .to(
+      ".loader-count",
+      {
+        opacity: 0,
+        duration: 0.5,
+        ease: "power3.in",
+      },
+      "<",
     )
     .to(
       ".loader-logo",

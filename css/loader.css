@@ -21,23 +21,17 @@
 }
 
 .loader-logo {
-  width: min(72vw, 34rem);
+  width: min(88vw, 36rem);
   display: flex;
   align-items: center;
   justify-content: center;
   pointer-events: none;
 }
 
-.loader-logo-svg {
+.loader-logo-img {
+  display: block;
   width: 100%;
   height: auto;
-  color: var(--fg);
-  overflow: visible;
-}
-
-.loader-logo-path {
-  fill: none;
-  stroke: currentColor;
 }
 
 .loader-meta {
@@ -61,18 +55,22 @@
 }
 
 .loader-count {
+  position: absolute;
+  right: var(--content-inset);
+  bottom: clamp(1.25rem, 3vw, 2.5rem);
   display: flex;
   align-items: baseline;
   gap: 0.05em;
   font-family: var(--font-mono);
-  font-size: clamp(0.82rem, 1.4vw, 1rem);
+  font-size: clamp(1.75rem, 4vw, 3.25rem);
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.08em;
+  line-height: 1;
   opacity: 0;
 }
 
 .loader-count-symbol {
-  font-size: 0.72em;
+  font-size: 0.62em;
 }
 
 .hero-headline .char {
