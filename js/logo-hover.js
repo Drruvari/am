@@ -16,11 +16,11 @@ function initLogoHover() {
   let isReady = false;
   let touchDrawActive = false;
 
-  const DRAW_DURATION = prefersReducedMotion ? 0 : 5.5;
-  const DRAW_STAGGER = prefersReducedMotion ? 0 : 0.16;
+  const DRAW_DURATION = prefersReducedMotion ? 0 : 5;
+  const DRAW_STAGGER = prefersReducedMotion ? 0 : 0.12;
   const UNDRAW_DURATION = prefersReducedMotion ? 0 : 3.5;
   const UNDRAW_STAGGER = prefersReducedMotion ? 0 : 0.1;
-  const FADE_DURATION = 1;
+  const FADE_DURATION = 0.9;
 
   const sortPathsLeftToRight = (paths) => {
     try {

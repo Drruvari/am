@@ -16,6 +16,7 @@ function initCursor() {
       text: "text",
     };
     const textCursorSelector = [
+      ".loader-caption p",
       ".hero-headline",
       ".hero-kicker",
       ".hero-support",
