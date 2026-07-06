@@ -171,10 +171,8 @@
   }
 
   .hero-facade-shell {
-    height: clamp(11rem, 26svh, 16rem);
-    min-height: 0;
+    min-height: clamp(11rem, 26svh, 16rem);
     margin-top: auto;
-    flex: 0 0 auto;
   }
 
   .morph-btn--rect > a.hero-cta {

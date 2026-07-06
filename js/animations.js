@@ -82,8 +82,8 @@ function initTextHoverEffects() {
       });
     };
 
-    trigger.addEventListener("mouseenter", () => setHover(true));
-    trigger.addEventListener("mouseleave", () => setHover(false));
+    trigger.addEventListener("pointerenter", () => setHover(true));
+    trigger.addEventListener("pointerleave", () => setHover(false));
     trigger.addEventListener("focus", () => setHover(true));
     trigger.addEventListener("blur", () => setHover(false));
   });
@@ -147,8 +147,8 @@ function initMorphButtons() {
       }
     };
 
-    btn.addEventListener("mouseenter", () => setHover(true));
-    btn.addEventListener("mouseleave", () => setHover(false));
+    btn.addEventListener("pointerenter", () => setHover(true));
+    btn.addEventListener("pointerleave", () => setHover(false));
 
     if (interactive) {
       interactive.addEventListener("focus", () => setHover(true));
@@ -591,10 +591,10 @@ function initScrollAnimations() {
         scrollTrigger: {
           trigger: ".hero",
           start: "top top",
-          end: "+=75%",
+          end: "+=90%",
           pin: true,
           pinSpacing: true,
-          scrub: 0.55,
+          scrub: 0.6,
           invalidateOnRefresh: true,
         },
       });
@@ -603,7 +603,7 @@ function initScrollAnimations() {
         .to(
           heroText,
           {
-            yPercent: -10,
+            yPercent: -14,
             opacity: 0,
             height: 0,
             marginTop: 0,
@@ -611,11 +611,11 @@ function initScrollAnimations() {
             paddingTop: 0,
             paddingBottom: 0,
             ease: "power2.in",
-            duration: 0.65,
+            duration: 0.7,
           },
           0,
         )
-        .to(heroContainer, { gap: 0, ease: "power2.in", duration: 0.65 }, 0)
+        .to(heroContainer, { gap: 0, ease: "power2.in", duration: 0.7 }, 0)
         .fromTo(
           heroShell,
           { flexGrow: 0 },
@@ -633,7 +633,7 @@ function initScrollAnimations() {
         )
         .fromTo(
           heroImage,
-          { scale: 1.06 },
+          { scale: 1.1 },
           { scale: 1, ease: "none", duration: 1 },
           0,
         );
@@ -668,7 +668,7 @@ function initScrollAnimations() {
       return () => tween.kill();
     });
 
-    initWorksAnimations(true);
+    initWorksAnimations(false);
 
     return () => {
       sheetCleanups.forEach((cleanup) => cleanup());

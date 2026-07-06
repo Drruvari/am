@@ -8,11 +8,13 @@ function initLogoHover() {
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
   ).matches;
+  const finePointerQuery = window.matchMedia("(pointer: fine)");
 
   let hoverPaths = [];
   let hoverTL = null;
   let isHovering = false;
   let isReady = false;
+  let touchDrawActive = false;
 
   const DRAW_DURATION = prefersReducedMotion ? 0 : 5.5;
   const DRAW_STAGGER = prefersReducedMotion ? 0 : 0.16;
@@ -74,6 +76,7 @@ function initLogoHover() {
     hoverTL?.kill();
     hoverTL = null;
     isHovering = false;
+    touchDrawActive = false;
     logo.classList.remove("is-hovering", "is-drawing");
 
     gsap.set(hoverHost, { autoAlpha: 0, pointerEvents: "none" });
@@ -118,12 +121,17 @@ function initLogoHover() {
     hoverPaths.forEach((path) => setDrawState(path, false));
     gsap.set(hoverHost, { autoAlpha: 1, pointerEvents: "none" });
 
+    if (!finePointerQuery.matches) {
+      touchDrawActive = true;
+    }
+
     hoverTL = gsap.timeline({
       defaults: { ease: "power1.inOut" },
       onComplete: () => {
         if (!isHovering) return;
         logo.classList.remove("is-drawing");
         setFilledState(hoverPaths);
+        touchDrawActive = false;
       },
     });
 
@@ -150,6 +158,7 @@ function initLogoHover() {
 
   const playHoverOut = () => {
     if (!isReady || !isHovering) return;
+    if (!finePointerQuery.matches && touchDrawActive) return;
 
     if (!hoverPaths.length || prefersReducedMotion) {
       resetHover();
@@ -200,9 +209,36 @@ function initLogoHover() {
     isReady = true;
   };
 
+  const onPointerLeave = () => {
+    if (!finePointerQuery.matches && touchDrawActive) return;
+    playHoverOut();
+  };
+
+  const onDocumentPointerDown = (event) => {
+    if (finePointerQuery.matches) return;
+    if (logo.contains(event.target) || !isHovering || touchDrawActive) return;
+    playHoverOut();
+  };
+
   const bindEvents = () => {
-    logo.addEventListener("pointerenter", playHoverIn);
-    logo.addEventListener("pointerleave", playHoverOut);
+    if (finePointerQuery.matches) {
+      logo.addEventListener("pointerenter", playHoverIn);
+      logo.addEventListener("pointerleave", onPointerLeave);
+      return;
+    }
+
+    logo.addEventListener("pointerdown", (event) => {
+      if (event.pointerType === "mouse") return;
+
+      if (isHovering) {
+        if (!touchDrawActive) playHoverOut();
+        return;
+      }
+
+      playHoverIn();
+    });
+
+    document.addEventListener("pointerdown", onDocumentPointerDown);
   };
 
   const inlineSvg = hoverHost.querySelector("svg");

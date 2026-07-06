@@ -30,6 +30,8 @@
   display: inline-flex;
   align-items: center;
   width: clamp(5.5rem, 11vw, 8.5rem);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .topbar-logo-mark {
