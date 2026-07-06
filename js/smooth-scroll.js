@@ -96,10 +96,7 @@ function updateScrollState() {
     const shouldAnimateTopbar =
       topbarCompactState !== undefined && topbarCompactState !== isCompact;
 
-    document.body.classList.toggle(
-      "is-topbar-compact",
-      isCompact,
-    );
+    document.body.classList.toggle("is-topbar-compact", isCompact);
 
     if (topbarCompactState !== isCompact) {
       topbarCompactState = isCompact;

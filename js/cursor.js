@@ -58,10 +58,7 @@ function initCursor() {
       cursor.classList.add(`is-${state}`);
 
       cursorImages.forEach((img) => {
-        img.classList.toggle(
-          "is-active",
-          img.dataset.cursorState === state,
-        );
+        img.classList.toggle("is-active", img.dataset.cursorState === state);
       });
     };
 

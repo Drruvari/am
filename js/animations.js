@@ -305,22 +305,24 @@ function initManifestoReveal() {
   };
 
   const bindLineReveals = (start, end, scrub = 0.6) => {
-    return imgSpans.map((span) => {
-      const line = span.closest(".manifesto-line");
-      if (!line) return null;
+    return imgSpans
+      .map((span) => {
+        const line = span.closest(".manifesto-line");
+        if (!line) return null;
 
-      return ScrollTrigger.create({
-        trigger: line,
-        start,
-        end,
-        scrub,
-        invalidateOnRefresh: true,
-        onUpdate(self) {
-          const width = getImgSpanWidth(span);
-          span.style.width = `${width * self.progress}px`;
-        },
-      });
-    }).filter(Boolean);
+        return ScrollTrigger.create({
+          trigger: line,
+          start,
+          end,
+          scrub,
+          invalidateOnRefresh: true,
+          onUpdate(self) {
+            const width = getImgSpanWidth(span);
+            span.style.width = `${width * self.progress}px`;
+          },
+        });
+      })
+      .filter(Boolean);
   };
 
   mm.add("(min-width: 769px)", () => {
@@ -621,11 +623,7 @@ function initScrollAnimations() {
           },
           0,
         )
-        .to(
-          heroContainerEl,
-          { gap: 0, ease: "power2.in", duration: 0.7 },
-          0,
-        )
+        .to(heroContainerEl, { gap: 0, ease: "power2.in", duration: 0.7 }, 0)
         .fromTo(
           heroShell,
           { flexGrow: 0 },
@@ -717,11 +715,7 @@ function initScrollAnimations() {
           },
           0,
         )
-        .to(
-          heroContainer,
-          { gap: 0, ease: "power2.in", duration: 0.65 },
-          0,
-        )
+        .to(heroContainer, { gap: 0, ease: "power2.in", duration: 0.65 }, 0)
         .fromTo(
           heroShell,
           { flexGrow: 0 },

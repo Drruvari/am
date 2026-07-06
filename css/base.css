@@ -8,7 +8,7 @@
 }
 
 :root {
-  --bg: #EDEDEB;
+  --bg: #ededeb;
   --fg: #111213;
   --accent: var(--fg);
   --panel: var(--bg);

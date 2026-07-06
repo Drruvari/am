@@ -333,12 +333,7 @@
       transparent 14%,
       transparent 34%
     ),
-    linear-gradient(
-      115deg,
-      transparent 34%,
-      var(--bg) 48%,
-      transparent 62%
-    );
+    linear-gradient(115deg, transparent 34%, var(--bg) 48%, transparent 62%);
   mix-blend-mode: screen;
 }
 .works-figure.large .works-visual {

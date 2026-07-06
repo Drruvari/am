@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "context-engine": {
+      "command": "/Users/kejdiballa/.cache/uv/archive-v0/sxcpGnVHUurJ3fM7/bin/cce",
+      "args": ["serve", "--project-dir", "/Users/kejdiballa/Desktop/gsap"]
+    }
+  }
+}

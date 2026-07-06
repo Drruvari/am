@@ -75,15 +75,17 @@
 
 .hero-facade-shell {
   --hero-shell-bleed: 0px;
+  --hero-radius: clamp(1.5rem, 4vw, 4rem);
 
   position: relative;
   width: calc(100% + (var(--hero-shell-bleed) * 2));
-  height: clamp(14rem, 30svh, 28rem);
+  /* height: clamp(44rem, 30svh, 28rem); */
   margin-top: auto;
   margin-left: calc(var(--hero-shell-bleed) * -1);
   flex: 0 0 auto;
   overflow: hidden;
-  background: var(--fg);
+  border-radius: var(--hero-radius);
+  corner-shape: squircle;
   will-change: width, margin-left, flex-grow;
 }
 
@@ -99,9 +101,10 @@
   height: 100%;
   object-fit: cover;
   object-position: center 42%;
-  filter: grayscale(1) contrast(1.05);
   transform-origin: 50% 100%;
   will-change: transform;
+  border-radius: inherit;
+  corner-shape: inherit;
 }
 
 .hero-cta {
