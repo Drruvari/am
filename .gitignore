@@ -1,0 +1,7 @@
+# CCE (code-context-engine)
+# CCE local cache, per-machine
+.cce/
+
+# CCE-generated local MCP configs with absolute paths
+.mcp.json
+.cursor/mcp.json

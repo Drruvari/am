@@ -1,0 +1,21 @@
+---
+alwaysApply: true
+---
+
+## Context Engine (CCE)
+
+Use `context_search` instead of reading files directly when exploring the codebase, answering code questions, or understanding how things work.
+
+Use `Read` or direct file open only when editing a known file or when exact full file content is needed.
+
+If `context_search` is unavailable, say CCE/MCP is unavailable and use normal search/read tools as fallback.
+
+Use:
+
+- `expand_chunk` for full source of a compressed result
+- `related_context` for calls/imports
+- `session_recall` before non-trivial architecture/design questions
+- `record_decision` after non-obvious choices
+- `record_code_area` after meaningful file work
+
+Respond compactly. Show only changed lines with 3 lines of context when suggesting code changes.

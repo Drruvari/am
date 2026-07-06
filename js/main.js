@@ -4,8 +4,7 @@ var finePointerQuery;
 var morphButtons = [];
 
 function initGlobalUI() {
-  document.getElementById("footerYear").textContent =
-    new Date().getFullYear();
+  document.getElementById("footerYear").textContent = new Date().getFullYear();
 
   const footerStatus = document.getElementById("footerStatus");
   const updateFooterStatus = () => {

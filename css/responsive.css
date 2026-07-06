@@ -6,7 +6,7 @@
   }
 
   .footer-hero-title {
-    font-size: clamp(2.6rem, 6vw, 5.5rem);
+    font-size: clamp(48px, 6vw, 96px);
     line-height: 0.9;
   }
 
@@ -25,13 +25,13 @@
   }
 
   .footer-mark {
-    font-size: clamp(3.75rem, 8vw, 6.5rem);
+    font-size: clamp(4.5rem, 10vw, 8rem);
   }
 
   .footer-nav-links a,
   .footer-nav-links span {
-    font-size: clamp(1.85rem, 2.8vw, 3rem);
-    line-height: 1;
+    font-size: clamp(40px, 4vw, 72px);
+    line-height: 0.95;
   }
 
   .footer-col--info {
@@ -117,7 +117,7 @@
   }
 
   .footer-mark {
-    font-size: clamp(3rem, 7vw, 4.5rem);
+    font-size: clamp(4rem, 9vw, 6rem);
   }
 
   .footer-nav-links a,
@@ -136,13 +136,14 @@
 
 @media (max-width: 768px) {
   html {
-    scroll-padding-top: 5rem;
+    scroll-padding-top: var(--space-7);
   }
   main {
     margin-bottom: 0;
   }
   .topbar {
-    top: 1rem;
+    top: var(--space-3);
+    min-height: 64px;
     align-items: flex-start;
   }
   .topbar-logo {
@@ -181,11 +182,11 @@
 
   .manifesto {
     min-height: auto;
-    padding-block: clamp(4.5rem, 14vw, 6rem);
+    padding-block: 72px;
   }
 
   .manifesto-eyebrow {
-    margin-bottom: 1.25rem;
+    margin-bottom: var(--space-4);
   }
 
   .manifesto-body {
@@ -257,7 +258,7 @@
   }
 
   .project-archive-eyebrow {
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--space-4);
   }
 
   .project-item {
@@ -270,11 +271,11 @@
   }
 
   .project-item h2 {
-    font-size: clamp(1.75rem, 8vw, 2.5rem);
+    font-size: clamp(48px, 18vw, 88px);
   }
 
   .project-item p {
-    font-size: 0.68rem;
+    font-size: 12px;
   }
 
   .project-preview {
@@ -285,14 +286,14 @@
   .works-row,
   .works-row.reverse {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
-    margin-bottom: 3rem;
+    gap: var(--grid-gap);
+    margin-bottom: clamp(var(--space-6), 10vw, var(--space-8));
   }
   .works-head h2 {
-    font-size: clamp(2.5rem, 12vw, 4rem);
+    font-size: clamp(48px, 18vw, 88px);
   }
   .works-head p {
-    font-size: 0.98rem;
+    font-size: clamp(16px, 4vw, 18px);
   }
   .works-figure.large,
   .works-figure.small {
@@ -312,13 +313,18 @@
     overflow: visible;
   }
   .footer-hero {
-    padding: var(--section-pad) var(--content-inset) 1.5rem;
-    gap: 1.5rem;
+    padding: var(--section-y) var(--content-inset) var(--space-4);
+    gap: var(--space-4);
   }
   .footer-hero-title {
-    font-size: clamp(2.4rem, 11vw, 4rem);
+    font-size: clamp(48px, 18vw, 88px);
     line-height: 0.92;
   }
+
+  .footer-hero-title .line {
+    white-space: normal;
+  }
+
   .footer-cta {
     width: auto;
     max-width: 100%;
@@ -326,32 +332,32 @@
   }
   .footer-grid {
     grid-template-columns: 1fr;
-    gap: 2.5rem;
-    padding: var(--page-gutter) var(--content-inset) 2rem;
+    gap: var(--space-6);
+    padding: var(--page-x) var(--content-inset) var(--space-5);
     overflow: visible;
   }
   .footer-col--info {
     grid-column: auto;
     max-width: none;
-    gap: 2rem;
+    gap: var(--space-5);
   }
   .footer-image-block img {
     width: min(100%, 280px);
     max-height: 320px;
   }
   .footer-mark {
-    font-size: clamp(4rem, 22vw, 6.5rem);
+    font-size: clamp(5rem, 24vw, 8rem);
   }
   .footer-nav-links a,
   .footer-nav-links span {
-    font-size: clamp(2rem, 10vw, 3.2rem);
-    line-height: 1;
+    font-size: clamp(48px, 18vw, 88px);
+    line-height: 0.95;
     padding: 0.08em 0;
   }
   .footer-bar {
     grid-template-columns: 1fr;
-    gap: 0.65rem;
-    padding: 1.15rem var(--content-inset) 1.35rem;
+    gap: var(--space-2);
+    padding: var(--space-4) var(--content-inset) var(--space-4);
   }
   .footer-bar-col--meta {
     flex-direction: column;
@@ -378,11 +384,11 @@
     height: auto;
     display: block;
     overflow: visible;
-    padding: 2rem var(--content-inset) 3.5rem;
+    padding: var(--space-5) var(--content-inset) var(--space-7);
     border-left: 0;
   }
   .detail-info h3 {
-    font-size: clamp(1.75rem, 8vw, 2.25rem);
+    font-size: clamp(28px, 8vw, 48px);
   }
   .detail-meta {
     grid-template-columns: 1fr;

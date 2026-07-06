@@ -209,7 +209,6 @@
       id="loader"
       aria-label="Loading portfolio"
       aria-busy="true"
-      data-cursor-hidden
     >
       <div class="loader-inner">
         <div class="loader-logo" aria-hidden="true">
@@ -437,19 +436,83 @@
         <div class="project-archive-inner">
           <p class="project-archive-eyebrow eyebrow mono">02 — Project Archive</p>
           <div class="project-list" id="projectList">
-            <div class="project-item" data-hover="project">
+            <div
+              class="project-item"
+              data-hover="project"
+              role="button"
+              tabindex="0"
+              aria-label="View Villa Lura, Coastal Retreat"
+              data-title="Villa Lura"
+              data-loc="Coastal Albania"
+              data-year="2025"
+              data-index="02—01"
+              data-desc="A low coastal retreat shaped by wind exposure and limestone terrain. Concrete walls carry salt and structure; openings are held back where rooms need shade."
+              data-type="Residential"
+              data-status="Concept Study"
+              data-scale="380 SQM"
+              data-materials="Board-formed concrete, local stone, pale oak"
+              data-images="assets/images/image-600.webp|assets/images/image-800.webp|assets/images/image-480.webp"
+            >
               <h2>Villa Lura</h2>
               <p class="mono">Coastal Retreat</p>
             </div>
-            <div class="project-item" data-hover="project">
+            <div
+              class="project-item"
+              data-hover="project"
+              role="button"
+              tabindex="0"
+              aria-label="View Dajt Pavilion, Mountain Study"
+              data-title="Dajt Pavilion"
+              data-loc="Dajt Mountains"
+              data-year="2026"
+              data-index="02—02"
+              data-desc="A mountain pavilion study testing a timber frame against snow load and slope. The roof folds to shed weather while the platform stays level with the ridge path."
+              data-type="Pavilion"
+              data-status="Schematic Design"
+              data-scale="210 SQM"
+              data-materials="Douglas fir, dark steel, mineral render"
+              data-images="assets/images/image-800.webp|assets/images/image-600.webp|assets/images/image-1600.webp"
+            >
               <h2>Dajt Pavilion</h2>
               <p class="mono">Mountain Study</p>
             </div>
-            <div class="project-item" data-hover="project">
+            <div
+              class="project-item"
+              data-hover="project"
+              role="button"
+              tabindex="0"
+              aria-label="View Timber Studio, Krujë Workshop"
+              data-title="Timber Studio"
+              data-loc="Krujë"
+              data-year="2025"
+              data-index="02—03"
+              data-desc="A compact workshop built from local timber stock. Structure, cladding, and interior lining share one dimensional logic to keep the shell readable and easy to maintain."
+              data-type="Workshop"
+              data-status="Built Study"
+              data-scale="145 SQM"
+              data-materials="Local timber, lime wash, steel fixings"
+              data-images="assets/images/image-480.webp|assets/images/image-600.webp|assets/images/image-800.webp"
+            >
               <h2>Timber Studio</h2>
               <p class="mono">Krujë Workshop</p>
             </div>
-            <div class="project-item" data-hover="project">
+            <div
+              class="project-item"
+              data-hover="project"
+              role="button"
+              tabindex="0"
+              aria-label="View Courtyard House, Southern Residence"
+              data-title="Courtyard House"
+              data-loc="Southern Albania"
+              data-year="2024"
+              data-index="02—04"
+              data-desc="A courtyard house organized around shade and cross ventilation. Rooms turn inward to a planted court while perimeter walls filter heat and street noise."
+              data-type="Residential"
+              data-status="Concept Study"
+              data-scale="320 SQM"
+              data-materials="Limestone, lime plaster, timber screens"
+              data-images="assets/images/image-1600.webp|assets/images/image-800.webp|assets/images/image-600.webp"
+            >
               <h2>Courtyard House</h2>
               <p class="mono">Southern Residence</p>
             </div>
@@ -541,6 +604,9 @@
           <div
             class="works-figure large"
             data-hover="view"
+            role="button"
+            tabindex="0"
+            aria-label="View The Cliff House project details"
             data-title="The Cliff House"
             data-loc="Vlorë Riviera"
             data-desc="A coastal house set into limestone terrain. Concrete walls take the load and salt exposure; deep glazing is held back where the rooms need shade and opened where the view matters."
@@ -574,6 +640,9 @@
           <div
             class="works-figure small"
             data-hover="view"
+            role="button"
+            tabindex="0"
+            aria-label="View Industrial Loft project details"
             data-title="Industrial Loft"
             data-loc="Tirana Center"
             data-desc="A former textile floor converted into a compact live-work interior. Brick and steel stay visible; new oak and limewash volumes organize storage, services, and work rooms."
@@ -609,6 +678,9 @@
           <div
             class="works-figure small"
             data-hover="view"
+            role="button"
+            tabindex="0"
+            aria-label="View Botanical Spine project details"
             data-title="Botanical Spine"
             data-loc="Lundër"
             data-desc="A small research pavilion built around a glulam spine. The structure sets the rhythm, while the skin filters heat, rain, and glare without hiding the frame."
@@ -642,6 +714,9 @@
           <div
             class="works-figure large"
             data-hover="view"
+            role="button"
+            tabindex="0"
+            aria-label="View Monolith Sanctuary project details"
             data-title="Monolith Sanctuary"
             data-loc="Theth National Park"
             data-desc="A mountain retreat with a heavy mineral shell and a single roof opening. The study tests how little a room needs when the site already carries the atmosphere."
@@ -679,7 +754,8 @@
     <footer class="footer" id="footer">
       <div class="footer-hero">
         <h2 class="footer-hero-title">
-          Focused on quality<br />driven by restraint
+          <span class="line">Focused on quality</span>
+          <span class="line">driven by restraint</span>
         </h2>
         <div
           class="morph-btn morph-btn--pill morph-btn--fill morph-btn--dark footer-cta-wrap"

@@ -1,17 +1,18 @@
 .topbar {
   z-index: 7001;
   position: fixed;
-  top: clamp(0.9rem, 2vw, 1.35rem);
+  top: var(--space-4);
   left: var(--content-inset);
   right: var(--content-inset);
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 1.5rem;
+  gap: var(--space-4);
+  min-height: clamp(72px, 8vw, 96px);
   pointer-events: none;
   color: var(--fg);
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -71,13 +72,13 @@
 
 .topbar-nav {
   position: absolute;
-  top: 0.85rem;
+  top: var(--space-3);
   left: 50%;
   display: flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: clamp(var(--space-4), 2.5vw, 40px);
   transform: translateX(-50%);
-  font-size: clamp(0.78rem, 0.95vw, 0.92rem);
+  font-size: clamp(12px, 0.95vw, 15px);
   line-height: 1;
   transition:
     opacity 0.25s ease,
@@ -116,7 +117,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 2.5rem;
+  min-height: 2.75rem;
+  min-width: 24px;
   white-space: nowrap;
   background: transparent;
   border: 0;
