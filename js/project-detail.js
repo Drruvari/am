@@ -8,43 +8,30 @@ function initProjectDetail() {
 
   let detailOpen = false;
 
-  const getTriggerImageSrc = (trigger) => {
-    const embeddedImage = trigger.querySelector(".works-visual img");
-    const dataImages = (trigger.getAttribute("data-images") || "")
-      .split("|")
-      .filter(Boolean);
-
-    return (
-      trigger.getAttribute("data-image") ||
-      dataImages[0] ||
-      (embeddedImage ? embeddedImage.currentSrc || embeddedImage.src : "")
-    );
-  };
-
-  const populateDetail = (trigger) => {
-    const title = trigger.getAttribute("data-title") || "Project Study";
-    const loc = trigger.getAttribute("data-loc") || "Location";
-    const year = trigger.getAttribute("data-year") || "Study";
-    const imageSrc = getTriggerImageSrc(trigger);
-    const embeddedImage = trigger.querySelector(".works-visual img");
-    const imageAlt = embeddedImage?.alt || title;
+  const populateDetail = (figure) => {
+    const image = figure.querySelector(".works-visual img");
+    const title = figure.getAttribute("data-title") || "Project Study";
+    const loc = figure.getAttribute("data-loc") || "Location";
+    const year = figure.getAttribute("data-year") || "Study";
+    const imageSrc = image ? image.currentSrc || image.src : "";
+    const imageAlt = image ? image.alt : title;
 
     detailVisual.innerHTML = imageSrc
       ? `<img src="${imageSrc}" alt="${imageAlt}">`
       : "";
     document.getElementById("detailTitle").textContent = title;
     document.getElementById("detailIndex").textContent =
-      trigger.getAttribute("data-index") || "A—00";
+      figure.getAttribute("data-index") || "A—00";
     document.getElementById("detailLoc").textContent = `${loc} — ${year}`;
     document.getElementById("detailDesc").textContent =
-      trigger.getAttribute("data-desc") || "";
+      figure.getAttribute("data-desc") || "";
     document.getElementById("detailMeta").innerHTML = `
-      <div><span>Typology</span>${trigger.getAttribute("data-type") || "Study"}</div>
-      <div><span>Status</span>${trigger.getAttribute("data-status") || "Concept"}</div>
-      <div><span>Scale</span>${trigger.getAttribute("data-scale") || "TBD"}</div>
-      <div><span>Materials</span>${trigger.getAttribute("data-materials") || "Material study"}</div>
+      <div><span>Typology</span>${figure.getAttribute("data-type") || "Study"}</div>
+      <div><span>Status</span>${figure.getAttribute("data-status") || "Concept"}</div>
+      <div><span>Scale</span>${figure.getAttribute("data-scale") || "TBD"}</div>
+      <div><span>Materials</span>${figure.getAttribute("data-materials") || "Material study"}</div>
     `;
-    detailGallery.innerHTML = (trigger.getAttribute("data-images") || "")
+    detailGallery.innerHTML = (figure.getAttribute("data-images") || "")
       .split("|")
       .filter(Boolean)
       .slice(1)
@@ -54,11 +41,11 @@ function initProjectDetail() {
       .join("");
   };
 
-  const openDetail = (trigger) => {
+  const openDetail = (figure) => {
     if (detailOpen) return;
     detailOpen = true;
 
-    populateDetail(trigger);
+    populateDetail(figure);
     detailOverlay.classList.add("active");
     document.body.classList.add("is-detail-open");
     lenis.stop();
@@ -133,20 +120,9 @@ function initProjectDetail() {
     });
   };
 
-  const bindDetailTrigger = (trigger) => {
-    const activate = () => openDetail(trigger);
-
-    trigger.addEventListener("click", activate);
-    trigger.addEventListener("keydown", (event) => {
-      if (event.key !== "Enter" && event.key !== " ") return;
-      event.preventDefault();
-      activate();
-    });
-  };
-
-  document
-    .querySelectorAll(".works-figure, .project-item")
-    .forEach(bindDetailTrigger);
+  document.querySelectorAll(".works-figure").forEach((figure) => {
+    figure.addEventListener("click", () => openDetail(figure));
+  });
 
   detailClose.addEventListener("click", closeDetail);
   detailOverlay.addEventListener("click", (e) => {

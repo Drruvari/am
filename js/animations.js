@@ -4,6 +4,7 @@ function prepareTextHoverElement(el) {
   const styles = getComputedStyle(el);
   const needsInnerWrapper =
     el.matches("a, button") ||
+    el.classList.contains("sheet-meta") ||
     el.classList.contains("works-cap") ||
     styles.display === "flex" ||
     parseFloat(styles.paddingTop) > 0 ||
@@ -21,6 +22,7 @@ function prepareTextHoverElement(el) {
 function initTextHoverEffects() {
   const hoverTargets = [
     ".hero-cta .morph-btn__content > span",
+    ".sheet-meta",
     ".works-cap",
     ".topbar-nav a",
     ".topbar-brief .morph-btn__content > span",
@@ -345,69 +347,50 @@ function initManifestoReveal() {
 }
 
 function initWorksAnimations(isMobile) {
-  const works = document.querySelector(".works");
-  if (!works) return () => {};
-
-  const eyebrow = works.querySelector(".works-head .eyebrow");
-  const headCopy = gsap.utils.toArray(".works-head h2, .works-head p");
-  const figures = gsap.utils.toArray(".works-figure");
-  const cleanups = [];
-
-  gsap.set([eyebrow, ...headCopy, ...figures].filter(Boolean), {
-    y: isMobile ? 28 : 48,
-    opacity: 0,
-  });
-
-  const revealTimeline = gsap.timeline({
-    scrollTrigger: {
-      trigger: ".works",
-      start: isMobile ? "top 88%" : "top top",
-      end: isMobile
-        ? "bottom 62%"
-        : () => `+=${window.innerHeight * (0.58 + figures.length * 0.1)}`,
-      pin: !isMobile,
-      scrub: isMobile ? 0.45 : 0.6,
-      invalidateOnRefresh: true,
+  gsap.fromTo(
+    ".works-head h2",
+    { yPercent: isMobile ? 4 : 10 },
+    {
+      yPercent: isMobile ? -3 : -8,
+      ease: "none",
+      scrollTrigger: {
+        trigger: ".works",
+        start: "top bottom",
+        end: isMobile ? "top 25%" : "top 15%",
+        scrub: true,
+      },
     },
+  );
+
+  gsap.utils.toArray(".works-head").forEach((block) => {
+    gsap.from(block, {
+      y: isMobile ? 28 : 60,
+      opacity: 0,
+      duration: isMobile ? 0.85 : 1.15,
+      ease: "power4.out",
+      scrollTrigger: {
+        trigger: block,
+        start: isMobile ? "top 90%" : "top 82%",
+      },
+    });
   });
 
-  revealTimeline
-    .to(eyebrow, {
-      y: 0,
-      opacity: 1,
-      duration: 0.12,
-      ease: "power2.out",
-    })
-    .to(
-      headCopy,
-      {
-        y: 0,
-        opacity: 1,
-        stagger: isMobile ? 0.08 : 0.1,
-        duration: 0.55,
-        ease: "power2.out",
+  gsap.utils.toArray(".works-figure").forEach((figure) => {
+    const image = figure.querySelector(".works-visual img");
+
+    gsap.from(figure, {
+      y: isMobile ? 36 : 110,
+      opacity: 0,
+      clipPath: isMobile ? "inset(6% 0% 0% 0%)" : "inset(12% 0% 0% 0%)",
+      duration: isMobile ? 0.85 : 1.35,
+      ease: "power4.out",
+      scrollTrigger: {
+        trigger: figure,
+        start: isMobile ? "top 92%" : "top 86%",
       },
-      0.06,
-    )
-    .to(
-      figures,
-      {
-        y: 0,
-        opacity: 1,
-        stagger: isMobile ? 0.1 : 0.12,
-        duration: 0.68,
-        ease: "power2.out",
-      },
-      0.2,
-    );
+    });
 
-  cleanups.push(() => revealTimeline.scrollTrigger?.kill());
-
-  if (!isMobile) {
-    figures.forEach((figure) => {
-      const image = figure.querySelector(".works-visual img");
-      if (!image) return;
-
+    if (!isMobile && image) {
       gsap.fromTo(
         image,
         {
@@ -426,154 +409,22 @@ function initWorksAnimations(isMobile) {
           },
         },
       );
-    });
-  }
-
-  return () => {
-    cleanups.forEach((cleanup) => cleanup());
-    gsap.set([eyebrow, ...headCopy, ...figures].filter(Boolean), {
-      clearProps: "transform,opacity",
-    });
-  };
-}
-
-function initProjectArchive(isMobile) {
-  const projectList = document.getElementById("projectList");
-  const projectPreview = document.getElementById("projectPreview");
-  if (!projectList) return () => {};
-
-  const projects = gsap.utils.toArray(".project-item");
-  const slides = projectPreview
-    ? gsap.utils.toArray(".project-preview__slide")
-    : [];
-  const cleanups = [];
-  const eyebrow = document.querySelector(".project-archive-eyebrow");
-
-  gsap.set([eyebrow, ...projects].filter(Boolean), {
-    y: isMobile ? 28 : 48,
-    opacity: 0,
+    }
   });
-
-  const revealTimeline = gsap.timeline({
-    scrollTrigger: {
-      trigger: ".project-archive",
-      start: isMobile ? "top 88%" : "top top",
-      end: isMobile
-        ? "bottom 62%"
-        : () => `+=${window.innerHeight * (0.58 + projects.length * 0.1)}`,
-      pin: !isMobile,
-      scrub: isMobile ? 0.45 : 0.6,
-      invalidateOnRefresh: true,
-    },
-  });
-
-  revealTimeline
-    .to(eyebrow, {
-      y: 0,
-      opacity: 1,
-      duration: 0.12,
-      ease: "power2.out",
-    })
-    .to(
-      projects,
-      {
-        y: 0,
-        opacity: 1,
-        stagger: isMobile ? 0.1 : 0.12,
-        duration: 0.68,
-        ease: "power2.out",
-      },
-      0.06,
-    );
-
-  cleanups.push(() => revealTimeline.scrollTrigger?.kill());
-
-  if (isMobile || !projectPreview || !slides.length) {
-    return () => {
-      cleanups.forEach((cleanup) => cleanup());
-      gsap.set([eyebrow, ...projects].filter(Boolean), {
-        clearProps: "transform,opacity",
-      });
-    };
-  }
-
-  gsap.set(projectPreview, { scale: 0, xPercent: -50, yPercent: -50 });
-
-  const xTo = gsap.quickTo(projectPreview, "x", {
-    duration: 0.4,
-    ease: "power3.out",
-  });
-  const yTo = gsap.quickTo(projectPreview, "y", {
-    duration: 0.4,
-    ease: "power3.out",
-  });
-
-  const onMove = (event) => {
-    xTo(event.clientX);
-    yTo(event.clientY);
-  };
-
-  const onListEnter = () => {
-    projectList.classList.add("is-project-hovering");
-  };
-
-  const onListLeave = () => {
-    projectList.classList.remove("is-project-hovering");
-
-    gsap.to(projectPreview, {
-      scale: 0,
-      duration: 0.3,
-      ease: "power2.out",
-      overwrite: "auto",
-    });
-  };
-
-  projectList.addEventListener("mousemove", onMove);
-  projectList.addEventListener("mouseenter", onListEnter);
-  projectList.addEventListener("mouseleave", onListLeave);
-  cleanups.push(() => {
-    projectList.removeEventListener("mousemove", onMove);
-    projectList.removeEventListener("mouseenter", onListEnter);
-    projectList.removeEventListener("mouseleave", onListLeave);
-    projectList.classList.remove("is-project-hovering");
-  });
-
-  projects.forEach((project, index) => {
-    const onEnter = () => {
-      gsap.to(projectPreview, {
-        scale: 1,
-        duration: 0.4,
-        ease: "power2.out",
-        overwrite: "auto",
-      });
-
-      gsap.to(slides, {
-        yPercent: -100 * index,
-        duration: 0.4,
-        ease: "power2.out",
-        overwrite: "auto",
-      });
-    };
-
-    project.addEventListener("mouseenter", onEnter);
-    cleanups.push(() => project.removeEventListener("mouseenter", onEnter));
-  });
-
-  return () => {
-    cleanups.forEach((cleanup) => cleanup());
-    gsap.set([eyebrow, ...projects, projectPreview, ...slides].filter(Boolean), {
-      clearProps: "all",
-    });
-  };
 }
 
 function initScrollAnimations() {
   mm.add("(min-width: 769px)", () => {
     const heroContainer = document.querySelector(".hero-container");
     const heroImage = document.querySelector(".hero-image");
-    const heroText = document.querySelectorAll(
-      ".hero-kicker, .hero-main",
-    );
+    const heroText = document.querySelectorAll(".hero-kicker, .hero-main");
+    const sheetsStack = document.getElementById("sheetsStack");
+    const getHorizontalDistance = (track, endGap = 80) => {
+      return Math.max(
+        0,
+        track.offsetLeft + track.scrollWidth - window.innerWidth + endGap,
+      );
+    };
 
     const heroShell = document.querySelector(".hero-facade-shell");
 
@@ -647,8 +498,49 @@ function initScrollAnimations() {
         );
     }
 
-    const cleanupProjectArchive = initProjectArchive(false);
-    const cleanupWorks = initWorksAnimations(false);
+    gsap.to(sheetsStack, {
+      x: () => -getHorizontalDistance(sheetsStack, 96),
+      ease: "none",
+      scrollTrigger: {
+        trigger: ".sheets",
+        pin: true,
+        start: "top top",
+        end: () => `+=${getHorizontalDistance(sheetsStack, 96)}`,
+        scrub: 1,
+        invalidateOnRefresh: true,
+      },
+    });
+
+    gsap.to(".sheets-copy", {
+      yPercent: -12,
+      ease: "none",
+      scrollTrigger: {
+        trigger: ".sheets",
+        start: "top bottom",
+        end: "bottom top",
+        scrub: true,
+      },
+    });
+
+    gsap.utils.toArray(".sheet").forEach((sheet, index) => {
+      const image = sheet.querySelector("img");
+      gsap.fromTo(
+        image,
+        { yPercent: index % 2 === 0 ? -6 : -12 },
+        {
+          yPercent: index % 2 === 0 ? 8 : 4,
+          ease: "none",
+          scrollTrigger: {
+            trigger: ".sheets",
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        },
+      );
+    });
+
+    initWorksAnimations(false);
 
     return () => {
       if (heroContainer) {
@@ -665,11 +557,18 @@ function initScrollAnimations() {
       heroText.forEach((el) => {
         el.style.overflow = "";
       });
-      cleanupProjectArchive();
-      cleanupWorks();
-      gsap.set([heroImage, ...heroText].filter(Boolean), {
-        clearProps: "transform,opacity,height,margin,padding",
-      });
+      gsap.set(
+        [
+          heroImage,
+          ...heroText,
+          sheetsStack,
+          ".sheets-copy",
+          ".sheet img",
+        ].filter(Boolean),
+        {
+          clearProps: "transform,opacity,height,margin,padding",
+        },
+      );
     };
   });
 
@@ -679,6 +578,7 @@ function initScrollAnimations() {
     const heroShell = document.querySelector(".hero-facade-shell");
     const hero = document.querySelector(".hero");
     const heroText = document.querySelectorAll(".hero-kicker, .hero-main");
+    const sheetsCopy = document.querySelector(".sheets-copy");
     const getHeroBleed = () =>
       hero ? parseFloat(getComputedStyle(hero).paddingLeft) || 0 : 0;
 
@@ -739,17 +639,51 @@ function initScrollAnimations() {
         );
     }
 
-    const cleanupProjectArchive = initProjectArchive(true);
-    const cleanupWorks = initWorksAnimations(true);
+    if (sheetsCopy) {
+      gsap.from(sheetsCopy, {
+        y: 28,
+        opacity: 0,
+        duration: 0.85,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: sheetsCopy,
+          start: "top 90%",
+        },
+      });
+    }
+
+    const sheetCleanups = gsap.utils.toArray(".sheet").map((sheet, index) => {
+      const tween = gsap.from(sheet, {
+        y: 40,
+        opacity: 0,
+        duration: 0.8,
+        delay: index * 0.05,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: sheet,
+          start: "top 92%",
+        },
+      });
+
+      return () => tween.kill();
+    });
+
+    initWorksAnimations(true);
 
     return () => {
-      cleanupProjectArchive();
-      cleanupWorks();
+      sheetCleanups.forEach((cleanup) => cleanup());
       heroText.forEach((el) => {
         el.style.overflow = "";
       });
       gsap.set(
-        [heroContainer, heroImage, heroShell, ...heroText].filter(Boolean),
+        [
+          heroContainer,
+          heroImage,
+          heroShell,
+          ...heroText,
+          sheetsCopy,
+          ".sheet",
+        ].filter(Boolean),
         {
           clearProps:
             "transform,opacity,height,margin,padding,gap,flexGrow,--hero-shell-bleed",
@@ -856,184 +790,9 @@ function initScrollAnimations() {
   });
 }
 
-function initFooterReveal() {
-  const footerTitle = document.querySelector(".footer-hero-title");
-  const footerLines = gsap.utils.toArray(".footer-hero-title .line");
-  const otherRevealItems = gsap.utils.toArray(
-    ".footer-cta-wrap, .footer-image-block, .footer-mark, .footer-nav-links > *, .footer-info-block, .footer-bar",
-  );
-
-  if (!footerTitle && !otherRevealItems.length) return;
-
-  let footerLineSplits = [];
-  let footerTitleChars = [];
-
-  const mountFooterTitleSplit = () => {
-    footerLineSplits.forEach((split) => split.revert?.());
-    footerLineSplits = [];
-    footerTitleChars = [];
-
-    if (!footerLines.length || typeof SplitType === "undefined") return;
-
-    footerLineSplits = footerLines.map(
-      (line) => new SplitType(line, { types: "chars" }),
-    );
-    footerTitleChars = footerLineSplits.flatMap((split) => split.chars);
-    gsap.set(footerTitleChars, {
-      yPercent: 100,
-      rotation: 10,
-      transformOrigin: "0% 100%",
-    });
-    gsap.set(footerTitle, { opacity: 1, y: 0 });
-  };
-
-  const unmountFooterTitleSplit = () => {
-    footerLineSplits.forEach((split) => split.revert?.());
-    footerLineSplits = [];
-    footerTitleChars = [];
-  };
-
-  const revealFooterTitle = (duration = 0.8, stagger = 0.02) => {
-    if (footerTitleChars.length) {
-      return gsap.to(footerTitleChars, {
-        yPercent: 0,
-        rotation: 0,
-        duration,
-        ease: "power3.out",
-        stagger,
-        overwrite: "auto",
-      });
-    }
-
-    if (!footerTitle) return null;
-
-    return gsap.to(footerTitle, {
-      y: 0,
-      opacity: 1,
-      duration,
-      ease: "power3.out",
-      overwrite: "auto",
-    });
-  };
-
-  const hideFooterTitle = (duration = 0.4, stagger = 0.015) => {
-    if (footerTitleChars.length) {
-      return gsap.to(footerTitleChars, {
-        yPercent: 100,
-        rotation: 10,
-        duration,
-        ease: "power2.in",
-        stagger,
-        overwrite: "auto",
-      });
-    }
-
-    if (!footerTitle) return null;
-
-    return gsap.to(footerTitle, {
-      y: 36,
-      opacity: 0,
-      duration,
-      ease: "power2.in",
-      overwrite: "auto",
-    });
-  };
-
-  mm.add("(min-width: 769px)", () => {
-    const main = document.querySelector("main");
-    if (!main) return;
-
-    mountFooterTitleSplit();
-    gsap.set(otherRevealItems, { y: 36, opacity: 0 });
-
-    if (!footerTitleChars.length && footerTitle) {
-      gsap.set(footerTitle, { y: 36, opacity: 0 });
-    }
-
-    const trigger = ScrollTrigger.create({
-      trigger: main,
-      start: "bottom bottom",
-      end: "bottom top",
-      onEnter: () => {
-        revealFooterTitle();
-        gsap.to(otherRevealItems, {
-          y: 0,
-          opacity: 1,
-          duration: 0.9,
-          ease: "power3.out",
-          stagger: 0.05,
-          delay: 0.18,
-          overwrite: "auto",
-        });
-      },
-      onLeaveBack: () => {
-        hideFooterTitle();
-        gsap.to(otherRevealItems, {
-          y: 36,
-          opacity: 0,
-          duration: 0.4,
-          ease: "power2.in",
-          stagger: 0.03,
-          overwrite: "auto",
-        });
-      },
-    });
-
-    return () => {
-      trigger.kill();
-      unmountFooterTitleSplit();
-      gsap.set([footerTitle, ...otherRevealItems].filter(Boolean), {
-        clearProps: "transform,opacity",
-      });
-    };
-  });
-
-  mm.add("(max-width: 768px)", () => {
-    mountFooterTitleSplit();
-    gsap.set(otherRevealItems, { y: 24, opacity: 0 });
-
-    if (!footerTitleChars.length && footerTitle) {
-      gsap.set(footerTitle, { y: 24, opacity: 0 });
-    }
-
-    const titleTrigger =
-      footerTitle &&
-      ScrollTrigger.create({
-        trigger: footerTitle,
-        start: "top 92%",
-        onEnter: () => revealFooterTitle(0.75, 0.018),
-      });
-
-    const itemTriggers = otherRevealItems.map((item) =>
-      ScrollTrigger.create({
-        trigger: item,
-        start: "top 92%",
-        onEnter: () =>
-          gsap.to(item, {
-            y: 0,
-            opacity: 1,
-            duration: 0.7,
-            ease: "power3.out",
-            overwrite: "auto",
-          }),
-      }),
-    );
-
-    return () => {
-      titleTrigger?.kill();
-      itemTriggers.forEach((trigger) => trigger.kill());
-      unmountFooterTitleSplit();
-      gsap.set([footerTitle, ...otherRevealItems].filter(Boolean), {
-        clearProps: "transform,opacity",
-      });
-    };
-  });
-}
-
 function initAnimations() {
   initMorphButtons();
   initHeroFacade();
   initTextHoverEffects();
   initScrollAnimations();
-  initFooterReveal();
 }
