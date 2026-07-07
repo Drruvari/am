@@ -1,270 +1,157 @@
 function initLogoHover() {
   const logo = document.querySelector(".topbar-logo");
-  const hoverHost = logo?.querySelector(".topbar-logo-hover");
-  const defaultImg = logo?.querySelector(".topbar-logo-img--default");
+  const svgHost = logo?.querySelector(".topbar-logo-svg-host");
+  const svg = svgHost?.querySelector("svg");
 
-  if (!logo || !hoverHost || !defaultImg) return;
+  if (!logo || !svg) return;
 
-  const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)",
-  ).matches;
-  const finePointerQuery = window.matchMedia("(pointer: fine)");
+  svg.setAttribute("aria-hidden", "true");
+  svg.classList.add("topbar-logo-svg");
 
-  let hoverPaths = [];
+  const rightClip = svg.querySelector("#rightLidReveal");
+  const leftClip = svg.querySelector("#leftLidReveal");
+  const rightPupil = svg.querySelector("#rightPupil");
+  const leftPupil = svg.querySelector("#leftPupil");
+
+  if (!rightClip || !leftClip || !rightPupil || !leftPupil) return;
+
+  const pupilHoverScale = 0.965;
+  const pupilHoverXOffset = 24;
+  const duration = 0.5;
+
+  const clipStates = {
+    right: { fromY: 672, toY: 444, fromH: 0, toH: 228 },
+    left: { fromY: 672, toY: 449, fromH: 0, toH: 223 },
+  };
+
+  const pupilTransforms = [
+    { node: rightPupil, cx: 2518, cy: 407 },
+    { node: leftPupil, cx: 1731, cy: 407 },
+  ];
+
   let hoverTL = null;
-  let isHovering = false;
-  let isReady = false;
-  let touchDrawActive = false;
+  let progress = 0;
+  let target = 0;
+  let raf = null;
 
-  const DRAW_DURATION = prefersReducedMotion ? 0 : 5;
-  const DRAW_STAGGER = prefersReducedMotion ? 0 : 0.12;
-  const UNDRAW_DURATION = prefersReducedMotion ? 0 : 3.5;
-  const UNDRAW_STAGGER = prefersReducedMotion ? 0 : 0.1;
-  const FADE_DURATION = 0.9;
+  const setPupilTransform = (value) => {
+    const scale = 1 + (pupilHoverScale - 1) * value;
+    const x = pupilHoverXOffset * value;
 
-  const sortPathsLeftToRight = (paths) => {
-    try {
-      return paths.slice().sort((a, b) => {
-        const boxA = a.getBBox();
-        const boxB = b.getBBox();
-        return boxA.x + boxA.width * 0.5 - (boxB.x + boxB.width * 0.5);
-      });
-    } catch {
-      return paths;
-    }
-  };
-
-  const getStrokeColor = (path) => {
-    const fill = path.getAttribute("fill");
-    return fill === "#EDEDEB" || fill === "white" ? "#111213" : fill || "#111213";
-  };
-
-  const setDrawState = (path, drawn = false) => {
-    const length = Number(path.dataset.length);
-    if (!length) return;
-
-    path.style.vectorEffect = "non-scaling-stroke";
-
-    gsap.set(path, {
-      fill: "none",
-      stroke: path.dataset.stroke,
-      strokeWidth: 2.25,
-      strokeLinecap: "round",
-      strokeLinejoin: "round",
-      strokeDasharray: length,
-      strokeDashoffset: drawn ? 0 : length,
-      opacity: 1,
+    pupilTransforms.forEach(({ node, cx, cy }) => {
+      node.setAttribute(
+        "transform",
+        `translate(${x} 0) translate(${cx} ${cy}) scale(${scale}) translate(${-cx} ${-cy})`,
+      );
     });
   };
 
-  const setFilledState = (paths) => {
-    paths.forEach((path) => {
-      path.style.vectorEffect = "";
+  const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+  const lerp = (a, b, t) => a + (b - a) * t;
 
-      gsap.set(path, {
-        fill: path.dataset.fill,
-        stroke: "none",
-        strokeWidth: 0,
-        strokeDasharray: "none",
-        strokeDashoffset: 0,
-        opacity: 1,
-      });
-    });
-  };
+  const render = (value) => {
+    const e = easeOut(value);
 
-  const resetHover = () => {
-    hoverTL?.kill();
-    hoverTL = null;
-    isHovering = false;
-    touchDrawActive = false;
-    logo.classList.remove("is-hovering", "is-drawing");
-
-    gsap.set(hoverHost, { autoAlpha: 0, pointerEvents: "none" });
-    gsap.set(defaultImg, { autoAlpha: 1 });
-
-    if (hoverPaths.length) {
-      setFilledState(hoverPaths);
-    }
-  };
-
-  const preparePaths = (paths) => {
-    return paths.filter((path) => {
-      const length = path.getTotalLength();
-      if (length < 8) return false;
-
-      path.dataset.length = String(length);
-      path.dataset.fill = path.getAttribute("fill") || "#111213";
-      path.dataset.stroke = getStrokeColor(path);
-      return true;
-    });
-  };
-
-  const showStaticHover = () => {
-    gsap.set(hoverHost, { autoAlpha: 1, pointerEvents: "none" });
-    gsap.set(defaultImg, { autoAlpha: 0 });
-    logo.classList.add("is-hovering");
-    isHovering = true;
-  };
-
-  const playHoverIn = () => {
-    if (!isReady || isHovering) return;
-
-    if (prefersReducedMotion) {
-      showStaticHover();
-      return;
-    }
-
-    hoverTL?.kill();
-    isHovering = true;
-    logo.classList.add("is-hovering", "is-drawing");
-
-    hoverPaths.forEach((path) => setDrawState(path, false));
-    gsap.set(hoverHost, { autoAlpha: 1, pointerEvents: "none" });
-
-    if (!finePointerQuery.matches) {
-      touchDrawActive = true;
-    }
-
-    hoverTL = gsap.timeline({
-      defaults: { ease: "power1.inOut" },
-      onComplete: () => {
-        if (!isHovering) return;
-        logo.classList.remove("is-drawing");
-        setFilledState(hoverPaths);
-        touchDrawActive = false;
-      },
-    });
-
-    hoverTL.to(
-      defaultImg,
-      {
-        autoAlpha: 0,
-        duration: FADE_DURATION,
-        ease: "power2.out",
-      },
-      DRAW_DURATION * 0.45,
+    rightClip.setAttribute(
+      "y",
+      String(lerp(clipStates.right.fromY, clipStates.right.toY, e)),
     );
-
-    hoverTL.to(
-      hoverPaths,
-      {
-        strokeDashoffset: 0,
-        duration: DRAW_DURATION,
-        stagger: DRAW_STAGGER,
-      },
-      0,
+    rightClip.setAttribute(
+      "height",
+      String(lerp(clipStates.right.fromH, clipStates.right.toH, e)),
     );
-  };
-
-  const playHoverOut = () => {
-    if (!isReady || !isHovering) return;
-    if (!finePointerQuery.matches && touchDrawActive) return;
-
-    if (!hoverPaths.length || prefersReducedMotion) {
-      resetHover();
-      return;
-    }
-
-    hoverTL?.kill();
-    isHovering = false;
-    logo.classList.remove("is-hovering");
-    logo.classList.add("is-drawing");
-
-    hoverPaths.forEach((path) => setDrawState(path, true));
-
-    hoverTL = gsap.timeline({
-      defaults: { ease: "power1.inOut" },
-      onComplete: resetHover,
-    });
-
-    hoverTL.to(
-      defaultImg,
-      {
-        autoAlpha: 1,
-        duration: FADE_DURATION,
-        ease: "power2.inOut",
-      },
-      UNDRAW_DURATION * 0.2,
+    leftClip.setAttribute(
+      "y",
+      String(lerp(clipStates.left.fromY, clipStates.left.toY, e)),
     );
-
-    hoverTL.to(
-      [...hoverPaths].reverse(),
-      {
-        strokeDashoffset: (index, target) => Number(target.dataset.length),
-        duration: UNDRAW_DURATION,
-        stagger: UNDRAW_STAGGER,
-      },
-      0,
+    leftClip.setAttribute(
+      "height",
+      String(lerp(clipStates.left.fromH, clipStates.left.toH, e)),
     );
+    setPupilTransform(e);
   };
 
-  const setupHoverSvg = (svg) => {
-    svg.setAttribute("aria-hidden", "true");
-    svg.classList.add("topbar-logo-svg");
+  const animateTo = (to) => {
+    target = to;
+    const start = progress;
+    const startTime = performance.now();
+    const ms = duration * 1000;
 
-    hoverPaths = sortPathsLeftToRight(
-      preparePaths(gsap.utils.toArray("path", svg)),
-    );
-    resetHover();
-    isReady = true;
-  };
+    cancelAnimationFrame(raf);
 
-  const onPointerLeave = () => {
-    if (!finePointerQuery.matches && touchDrawActive) return;
-    playHoverOut();
-  };
+    const tick = (now) => {
+      const local = ms <= 0 ? 1 : Math.min(1, (now - startTime) / ms);
+      progress = lerp(start, target, local);
+      render(progress);
 
-  const onDocumentPointerDown = (event) => {
-    if (finePointerQuery.matches) return;
-    if (logo.contains(event.target) || !isHovering || touchDrawActive) return;
-    playHoverOut();
-  };
-
-  const bindEvents = () => {
-    if (finePointerQuery.matches) {
-      logo.addEventListener("pointerenter", playHoverIn);
-      logo.addEventListener("pointerleave", onPointerLeave);
-      return;
-    }
-
-    logo.addEventListener("pointerdown", (event) => {
-      if (event.pointerType === "mouse") return;
-
-      if (isHovering) {
-        if (!touchDrawActive) playHoverOut();
-        return;
+      if (local < 1) {
+        raf = requestAnimationFrame(tick);
+      } else if (target === 0) {
+        setPupilTransform(0);
       }
+    };
 
-      playHoverIn();
-    });
-
-    document.addEventListener("pointerdown", onDocumentPointerDown);
+    raf = requestAnimationFrame(tick);
   };
 
-  const inlineSvg = hoverHost.querySelector("svg");
+  setPupilTransform(0);
 
-  if (inlineSvg) {
-    requestAnimationFrame(() => {
-      setupHoverSvg(inlineSvg);
-      bindEvents();
+  if (window.gsap) {
+    const state = { p: 0 };
+
+    hoverTL = gsap.timeline({
+      paused: true,
+      defaults: { ease: "power2.out" },
     });
-    return;
+
+    hoverTL.to(
+      rightClip,
+      {
+        attr: { y: clipStates.right.toY, height: clipStates.right.toH },
+        duration,
+      },
+      0,
+    );
+
+    hoverTL.to(
+      leftClip,
+      {
+        attr: { y: clipStates.left.toY, height: clipStates.left.toH },
+        duration,
+      },
+      0,
+    );
+
+    hoverTL.to(
+      state,
+      {
+        p: 1,
+        duration,
+        onUpdate: () => setPupilTransform(state.p),
+        onReverseComplete: () => setPupilTransform(0),
+      },
+      0.03,
+    );
   }
 
-  fetch("assets/logo-hover.svg")
-    .then((response) => {
-      if (!response.ok) throw new Error("Failed to load hover logo");
-      return response.text();
-    })
-    .then((svgText) => {
-      hoverHost.innerHTML = svgText;
-      const svg = hoverHost.querySelector("svg");
-      if (!svg) throw new Error("Hover logo SVG missing");
-      setupHoverSvg(svg);
-      bindEvents();
-    })
-    .catch(() => {
-      isReady = true;
-      bindEvents();
-    });
+  const playIn = () => {
+    if (hoverTL) {
+      hoverTL.play();
+      return;
+    }
+
+    animateTo(1);
+  };
+
+  const playOut = () => {
+    if (hoverTL) {
+      hoverTL.reverse();
+      return;
+    }
+
+    animateTo(0);
+  };
+
+  logo.addEventListener("pointerenter", playIn);
+  logo.addEventListener("pointerleave", playOut);
 }

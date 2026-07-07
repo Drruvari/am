@@ -45,30 +45,28 @@
   width: 100%;
 }
 
+.topbar-logo-svg-host {
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+
+.topbar-logo-svg-host svg,
 .topbar-logo-img {
   display: block;
   width: 100%;
   height: auto;
+  overflow: visible;
 }
 
-.topbar-logo-hover {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  visibility: hidden;
+.topbar-logo-svg-host .eye-mask,
+.topbar-logo-svg-host .bottom-lid,
+.topbar-logo-svg-host .pupil {
   pointer-events: none;
-  overflow: visible;
 }
 
-.topbar-logo-hover svg {
-  display: block;
-  width: 100%;
-  height: auto;
-  overflow: visible;
-}
-
-.topbar-logo.is-drawing .topbar-logo-hover path {
-  vector-effect: non-scaling-stroke;
+.topbar-logo-svg-host .pupil {
+  will-change: transform;
 }
 
 .topbar-nav {
