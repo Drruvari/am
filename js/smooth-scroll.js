@@ -1,9 +1,67 @@
 var lenis;
-var topbarCompactState;
+var headerCompactState;
+var savedScrollY = 0;
+
+function isMobileViewport() {
+  return window.matchMedia("(max-width: 768px)").matches;
+}
+
+function getHeaderOffset() {
+  const header = document.getElementById("site-header");
+  return header ? header.getBoundingClientRect().height + 12 : 72;
+}
+
+function lockPageScroll() {
+  savedScrollY = window.scrollY;
+  document.body.classList.add("is-scroll-locked");
+  document.body.style.top = `-${savedScrollY}px`;
+}
+
+function unlockPageScroll() {
+  document.body.classList.remove("is-scroll-locked");
+  document.body.style.top = "";
+  window.scrollTo(0, savedScrollY);
+}
+
+function scrollToTarget(target, options = {}) {
+  const el =
+    typeof target === "number"
+      ? null
+      : typeof target === "string"
+        ? document.querySelector(target)
+        : target;
+
+  const offset = options.offset ?? getHeaderOffset();
+
+  if (document.documentElement.classList.contains("lenis-smooth") && lenis?.scrollTo) {
+    if (typeof target === "number") {
+      lenis.scrollTo(target, {
+        duration: options.immediate ? 0 : 1.2,
+        immediate: options.immediate,
+      });
+      return;
+    }
+
+    lenis.scrollTo(el, {
+      offset: -offset,
+      duration: options.immediate ? 0 : 1.2,
+      immediate: options.immediate,
+    });
+    return;
+  }
+
+  const top =
+    typeof target === "number"
+      ? target
+      : el.getBoundingClientRect().top + window.scrollY - offset;
+
+  window.scrollTo({
+    top,
+    behavior: options.immediate ? "auto" : "smooth",
+  });
+}
 
 function initSmoothScroll() {
-  const topbar = document.getElementById("topbar");
-
   const isTouchOnly = navigator.maxTouchPoints > 0 && !finePointerQuery.matches;
   const useSmoothScroll = desktopQuery.matches && !isTouchOnly;
 
@@ -29,28 +87,19 @@ function initSmoothScroll() {
     gsap.ticker.lagSmoothing(0);
   } else {
     document.documentElement.classList.remove("lenis", "lenis-smooth");
-    ScrollTrigger.normalizeScroll(true);
     lenis = {
       get scroll() {
         return window.scrollY;
       },
       on() {},
       stop() {
-        document.body.style.overflow = "hidden";
+        lockPageScroll();
       },
       start() {
-        document.body.style.overflow = "";
+        unlockPageScroll();
       },
       scrollTo(target, options = {}) {
-        const top =
-          typeof target === "number"
-            ? target
-            : target.getBoundingClientRect().top + window.scrollY;
-
-        window.scrollTo({
-          top,
-          behavior: options.immediate ? "auto" : "smooth",
-        });
+        scrollToTarget(target, options);
       },
     };
 
@@ -79,32 +128,18 @@ function initSmoothScroll() {
 
     e.preventDefault();
     history.pushState(null, "", hash);
-    lenis.scrollTo(target, {
-      duration: 1.9,
-      easing: (t) => 1 - Math.pow(1 - t, 3),
-    });
+    scrollToTarget(target, { offset: getHeaderOffset() });
   });
 }
 
 function updateScrollState() {
-  const topbar = document.getElementById("topbar");
+  const header = document.getElementById("site-header");
+  if (!header) return;
+
   const currentScroll =
     typeof lenis?.scroll === "number" ? lenis.scroll : window.scrollY;
+  const isCompact = currentScroll > window.innerHeight * 0.12;
 
-  if (topbar) {
-    const isCompact = currentScroll > window.innerHeight * 0.18;
-    const shouldAnimateTopbar =
-      topbarCompactState !== undefined && topbarCompactState !== isCompact;
-
-    document.body.classList.toggle("is-topbar-compact", isCompact);
-
-    if (topbarCompactState !== isCompact) {
-      topbarCompactState = isCompact;
-      if (shouldAnimateTopbar && typeof syncTopbarActionMotion === "function") {
-        syncTopbarActionMotion(isCompact);
-      }
-    }
-
-    document.body.classList.remove("is-topbar-inverted");
-  }
+  document.body.classList.toggle("is-header-compact", isCompact);
+  headerCompactState = isCompact;
 }

@@ -1,7 +1,8 @@
 var mm;
 var desktopQuery;
+var mobileQuery;
 var finePointerQuery;
-var morphButtons = [];
+var prefersReducedMotionQuery;
 
 function initGlobalUI() {
   document.getElementById("footerYear").textContent = new Date().getFullYear();
@@ -65,10 +66,19 @@ document.addEventListener("DOMContentLoaded", () => {
   window.scrollTo(0, 0);
 
   desktopQuery = window.matchMedia("(min-width: 769px)");
+  mobileQuery = window.matchMedia("(max-width: 768px)");
   finePointerQuery = window.matchMedia(
     "(min-width: 769px) and (pointer: fine)",
   );
+  prefersReducedMotionQuery = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  );
   mm = gsap.matchMedia();
+
+  ScrollTrigger.config({
+    ignoreMobileResize: true,
+    limitCallbacks: true,
+  });
 
   initSmoothScroll();
   initCursor();

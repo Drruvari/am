@@ -2,13 +2,18 @@ function initLoader() {
   const loader = document.getElementById("loader");
   if (!loader) return;
 
-  const logoSvg = loader.querySelector(".loader-logo-svg-host svg");
-  const countValue = loader.querySelector(".loader-count-value");
+  const logoSvg = loader.querySelector(".loader__logo-svg svg");
+  const countValue = loader.querySelector(".loader__progress-value");
   const loaderStatus = document.getElementById("loaderStatus");
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
   ).matches;
-  const eyeRevealDuration = prefersReducedMotion ? 1.4 : 3.4;
+  const isMobile = window.matchMedia("(max-width: 768px)").matches;
+  const eyeRevealDuration = prefersReducedMotion
+    ? 0.8
+    : isMobile
+      ? 1.8
+      : 3.4;
   const eyeElements = logoSvg
     ? getLogoEyeElements(logoSvg, "loader-")
     : null;
@@ -18,10 +23,9 @@ function initLoader() {
   }
 
   lenis.stop();
-  document.body.style.overflow = "hidden";
 
   const heroLineSplits = gsap.utils
-    .toArray(".hero-headline .line")
+    .toArray(".hero__title .line")
     .map((line) => new SplitType(line, { types: "chars" }));
   const heroHeadlineChars = heroLineSplits.flatMap((split) => split.chars);
 
@@ -30,7 +34,7 @@ function initLoader() {
     rotation: 10,
     transformOrigin: "0% 100%",
   });
-  gsap.set(".hero-kicker span, .hero-support, .hero-cta, .hero-facade-shell", {
+  gsap.set(".hero__meta span, .hero__lede, .hero__cta, .hero__media", {
     y: 24,
     opacity: 0,
   });
@@ -40,9 +44,8 @@ function initLoader() {
     loader.style.pointerEvents = "none";
     lenis.scrollTo(0, { immediate: true });
     lenis.start();
-    document.body.style.overflow = "";
-    ScrollTrigger.refresh();
-    initManifestoReveal();
+    ScrollTrigger.refresh(true);
+    initPageScroll();
     updateScrollState();
   };
 
@@ -67,7 +70,7 @@ function initLoader() {
 
     loaderTL
       .to(
-        ".loader-caption p",
+        ".loader__tagline span",
         {
           yPercent: 0,
           duration: 0.85,
@@ -76,7 +79,7 @@ function initLoader() {
         0,
       )
       .to(
-        ".loader-count",
+        ".loader__progress",
         {
           opacity: 1,
           duration: 0.6,
@@ -98,7 +101,7 @@ function initLoader() {
     loaderTL
       .to({}, { duration: 0.3 })
       .to(
-        ".loader-meta",
+        ".loader__meta",
         {
           y: -18,
           opacity: 0,
@@ -108,7 +111,7 @@ function initLoader() {
         ">-0.1",
       )
       .to(
-        ".loader-count",
+        ".loader__progress",
         {
           opacity: 0,
           duration: 0.5,
@@ -117,7 +120,7 @@ function initLoader() {
         "<",
       )
       .to(
-        ".loader-logo",
+        ".loader__logo",
         {
           opacity: 0,
           scale: 0.98,
@@ -144,7 +147,7 @@ function initLoader() {
         stagger: 0.02,
       })
       .to(
-        ".hero-kicker span, .hero-support, .hero-cta, .hero-facade-shell",
+        ".hero__meta span, .hero__lede, .hero__cta, .hero__media",
         {
           y: 0,
           opacity: 1,

@@ -31,12 +31,12 @@
   text-transform: uppercase;
 }
 
-.footer-cta-wrap {
+.footer__cta {
   color: var(--fg);
   max-width: min(100%, 34rem);
 }
 
-.footer-cta {
+.footer__cta-link {
   padding: 0.95rem 1.65rem;
   min-height: 3.05rem;
   width: 100%;

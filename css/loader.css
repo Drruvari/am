@@ -2,6 +2,12 @@
   position: fixed;
   inset: 0;
   z-index: 9000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.75rem, 4vw, 3rem);
+  padding: var(--content-inset);
   overflow: hidden;
   background: var(--bg);
   color: var(--fg);
@@ -9,18 +15,7 @@
   isolation: isolate;
 }
 
-.loader-inner {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: clamp(1.75rem, 4vw, 3rem);
-  padding: var(--content-inset);
-}
-
-.loader-logo {
+.loader__logo {
   width: min(88vw, 28rem);
   display: flex;
   align-items: center;
@@ -28,29 +23,29 @@
   pointer-events: none;
 }
 
-.loader-logo-svg-host {
+.loader__logo-svg {
   display: block;
   width: 100%;
 }
 
-.loader-logo-svg-host svg {
+.loader__logo-svg svg {
   display: block;
   width: 100%;
   height: auto;
   overflow: visible;
 }
 
-.loader-logo-svg-host .eye-mask,
-.loader-logo-svg-host .bottom-lid,
-.loader-logo-svg-host .pupil {
+.loader__logo-svg .eye-mask,
+.loader__logo-svg .bottom-lid,
+.loader__logo-svg .pupil {
   pointer-events: none;
 }
 
-.loader-logo-svg-host .pupil {
+.loader__logo-svg .pupil {
   will-change: transform;
 }
 
-.loader-meta {
+.loader__meta {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -58,7 +53,7 @@
   text-align: center;
 }
 
-.loader-caption {
+.loader__tagline {
   overflow: hidden;
   font-family: var(--font-heading);
   font-size: clamp(0.95rem, 0.75rem + 1.5vw, 1.45rem);
@@ -66,12 +61,13 @@
   max-width: 22ch;
 }
 
-.loader-caption p {
+.loader__tagline span {
+  display: block;
   transform: translateY(110%);
   will-change: transform;
 }
 
-.loader-count {
+.loader__progress {
   position: absolute;
   right: var(--content-inset);
   bottom: clamp(1.25rem, 3vw, 2.5rem);
@@ -87,19 +83,19 @@
 }
 
 @media (min-width: 640px) {
-  .loader-logo {
+  .loader__logo {
     width: min(88vw, 36rem);
   }
 
-  .loader-caption {
+  .loader__tagline {
     max-width: none;
   }
 }
 
-.loader-count-symbol {
+.loader__progress-unit {
   font-size: 0.62em;
 }
 
-.hero-headline .char {
+.hero__title .char {
   display: inline-block;
 }

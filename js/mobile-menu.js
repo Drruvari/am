@@ -10,12 +10,13 @@ function initMobileMenu() {
     mobileMenu.classList.toggle("is-open", open);
     mobileMenu.setAttribute("aria-hidden", open ? "false" : "true");
     mobileMenuOpen?.setAttribute("aria-expanded", open ? "true" : "false");
-    document.body.classList.toggle("is-mobile-menu-open", open);
+    document.body.classList.toggle("is-nav-drawer-open", open);
 
     if (open) {
       lenis.stop();
     } else {
       lenis.start();
+      window.setTimeout(() => ScrollTrigger.refresh(true), 50);
     }
   };
 

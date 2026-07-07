@@ -139,11 +139,16 @@ body::before {
   );
 }
 
-body.is-detail-open {
+body.is-project-panel-open,
+body.is-nav-drawer-open,
+body.is-scroll-locked {
   overflow: hidden;
 }
-body.is-mobile-menu-open {
-  overflow: hidden;
+
+body.is-scroll-locked {
+  position: fixed;
+  inset: 0 auto auto 0;
+  width: 100%;
 }
 body.has-custom-cursor,
 body.has-custom-cursor * {
@@ -287,33 +292,33 @@ h2 {
 }
 
 /* Morph buttons */
-.morph-btn {
-  --morph-bg: var(--bg);
-  --morph-text: var(--fg);
-  --morph-border: var(--line);
-  --morph-radius: 999px;
+.btn {
+  --btn-bg: var(--bg);
+  --btn-text: var(--fg);
+  --btn-border: var(--line);
+  --btn-radius: 999px;
 
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--morph-text);
+  color: var(--btn-text);
   isolation: isolate;
 }
 
-.morph-btn__rings {
+.btn__bg {
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
 }
 
-.morph-btn__body {
+.btn__surface {
   position: absolute;
   inset: 0;
-  background: var(--morph-bg);
-  border: 1px solid var(--morph-border);
-  border-radius: var(--morph-radius);
+  background: var(--btn-bg);
+  border: 1px solid var(--btn-border);
+  border-radius: var(--btn-radius);
   box-shadow: none;
   transition:
     background 0.28s ease,
@@ -321,78 +326,72 @@ h2 {
     transform 0.28s ease;
 }
 
-.morph-btn.is-hover {
-  color: var(--morph-text);
+.btn.is-hover {
+  color: var(--btn-text);
 }
 
-.morph-btn.is-hover .morph-btn__body {
-  background: var(--morph-bg);
+.btn.is-hover .btn__surface {
+  background: var(--btn-bg);
   box-shadow: none;
 }
 
-.morph-btn--dark {
-  --morph-bg: var(--fg);
-  --morph-text: var(--bg);
-  --morph-border: var(--fg);
+.btn--dark {
+  --btn-bg: var(--fg);
+  --btn-text: var(--bg);
+  --btn-border: var(--fg);
 }
 
-.morph-btn--soft {
-  --morph-bg: var(--bg);
-  --morph-text: var(--fg);
-  --morph-border: var(--line);
+.btn--soft {
+  --btn-bg: var(--bg);
+  --btn-text: var(--fg);
+  --btn-border: var(--line);
 }
 
-body.is-topbar-inverted .topbar .morph-btn--dark {
-  --morph-bg: var(--fg);
-  --morph-text: var(--bg);
-  --morph-border: var(--fg);
-}
-
-.morph-btn--pill > a,
-.morph-btn--pill > button {
+.btn--pill > a,
+.btn--pill > button {
   padding: 0.95rem 1.55rem;
   min-height: 3.05rem;
 }
 
-.morph-btn--rect {
+.btn--rect {
   align-self: flex-start;
 }
 
-.morph-btn--rect > a,
-.morph-btn--rect > button {
+.btn--rect > a,
+.btn--rect > button {
   padding: 1.05rem 1.85rem;
   min-height: 3.05rem;
 }
 
-.morph-btn--circle {
+.btn--circle {
   width: clamp(220px, 30vw, 380px);
   aspect-ratio: 1;
   margin: 5rem 0;
-  --morph-radius: 50%;
+  --btn-radius: 50%;
 }
 
-.morph-btn--detail {
+.btn--panel {
   position: absolute;
   top: clamp(1.25rem, 2.5vw, 2.5rem);
   right: var(--content-inset);
   z-index: 2010;
 }
 
-.morph-btn__content {
+.btn__label {
   position: relative;
   z-index: 2;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.85rem;
-  color: var(--morph-text);
+  color: var(--btn-text);
   transition:
     color 0.28s ease,
     transform 0.28s ease;
 }
 
-.morph-btn > a,
-.morph-btn > button {
+.btn > a,
+.btn > button {
   position: relative;
   z-index: 2;
   display: inline-flex;

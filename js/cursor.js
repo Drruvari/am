@@ -16,20 +16,20 @@ function initCursor() {
       text: "text",
     };
     const textCursorSelector = [
-      ".loader-caption p",
-      ".hero-headline",
-      ".hero-kicker",
-      ".hero-support",
-      ".manifesto-line > span:not(.manifesto-img-span)",
-      ".sheets-copy h2",
-      ".sheets-copy p",
-      ".works-head h2",
-      ".works-head p",
+      ".loader__tagline span",
+      ".hero__title",
+      ".hero__meta",
+      ".hero__lede",
+      ".manifesto__line > span:not(.manifesto__image)",
+      ".archive__intro h2",
+      ".archive__intro p",
+      ".projects__intro h2",
+      ".projects__intro p",
       ".footer-hero-title",
       ".footer-mark",
       ".footer-info-block p",
-      ".detail-info h3",
-      ".detail-desc",
+      ".project-panel__info h3",
+      ".project-panel__description",
     ].join(",");
 
     gsap.set(cursor, { xPercent: 0, yPercent: 0 });
