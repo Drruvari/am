@@ -15,10 +15,14 @@
   --panel: var(--bg);
   --muted: var(--fg);
   --line: var(--fg);
-  --page-gutter: clamp(1.25rem, 3vw, 2.5rem);
+  --page-gutter: clamp(1rem, 4vw, 1.25rem);
   --page-max: 1440px;
   --content-inset: max(var(--page-gutter), (100vw - var(--page-max)) / 2);
-  --section-pad: clamp(6rem, 10vw, 12rem);
+  --section-pad: clamp(3.5rem, 10vw, 5rem);
+  --text-fluid-sm: clamp(0.88rem, 0.5rem + 1.2vw, 1rem);
+  --text-fluid-base: clamp(0.92rem, 0.6rem + 1.1vw, 1.05rem);
+  --text-fluid-lg: clamp(1.15rem, 0.75rem + 2.5vw, 1.65rem);
+  --text-fluid-display: clamp(2.1rem, 1rem + 5.5vw, 6.75rem);
   --font-display: "Bricolage Grotesque", sans-serif;
   --font-heading: "Bricolage Grotesque", sans-serif;
   --font-body: "Manrope", sans-serif;
@@ -26,10 +30,28 @@
   --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-@media (max-width: 768px) {
+@media (min-width: 640px) {
   :root {
-    --page-gutter: 1.25rem;
-    --section-pad: clamp(4rem, 12vw, 5rem);
+    --page-gutter: clamp(1.15rem, 3.5vw, 1.75rem);
+    --section-pad: clamp(4rem, 8vw, 7rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --page-gutter: clamp(1.25rem, 3vw, 2.5rem);
+    --section-pad: clamp(6rem, 10vw, 12rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
@@ -43,9 +65,15 @@ html.lenis {
   height: auto;
 }
 html {
-  scroll-padding-top: 6rem;
+  scroll-padding-top: 5rem;
   scrollbar-width: none;
   overflow-x: hidden;
+}
+
+@media (min-width: 769px) {
+  html {
+    scroll-padding-top: 6rem;
+  }
 }
 
 .skip-link {
@@ -105,7 +133,7 @@ body {
   background: var(--bg);
   color: var(--fg);
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: clamp(0.9375rem, 0.875rem + 0.25vw, 1rem);
   line-height: 1.6;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -223,22 +251,22 @@ h3 {
   font-optical-sizing: auto;
 }
 h2 {
-  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-size: clamp(2.5rem, 1.5rem + 4vw, 5.5rem);
   text-transform: uppercase;
 }
 .mono {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: clamp(0.62rem, 0.55rem + 0.3vw, 0.72rem);
   font-weight: 600;
   letter-spacing: 0.02em;
   text-transform: uppercase;
 }
 .eyebrow {
   display: inline-block;
-  margin-bottom: 2rem;
+  margin-bottom: clamp(1.25rem, 3vw, 2rem);
   padding-bottom: 0.5rem;
   border-bottom: 0;
-  font-size: 0.75rem;
+  font-size: clamp(0.68rem, 0.6rem + 0.3vw, 0.75rem);
   color: var(--muted);
 }
 

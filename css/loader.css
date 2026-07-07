@@ -21,7 +21,7 @@
 }
 
 .loader-logo {
-  width: min(88vw, 36rem);
+  width: min(88vw, 28rem);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -45,8 +45,9 @@
 .loader-caption {
   overflow: hidden;
   font-family: var(--font-heading);
-  font-size: clamp(1rem, 2vw, 1.45rem);
+  font-size: clamp(0.95rem, 0.75rem + 1.5vw, 1.45rem);
   line-height: 1.2;
+  max-width: 22ch;
 }
 
 .loader-caption p {
@@ -62,11 +63,21 @@
   align-items: baseline;
   gap: 0.05em;
   font-family: var(--font-mono);
-  font-size: clamp(1.75rem, 4vw, 3.25rem);
+  font-size: clamp(1.5rem, 1rem + 3vw, 3.25rem);
   font-weight: 700;
   letter-spacing: 0.08em;
   line-height: 1;
   opacity: 0;
+}
+
+@media (min-width: 640px) {
+  .loader-logo {
+    width: min(88vw, 36rem);
+  }
+
+  .loader-caption {
+    max-width: none;
+  }
 }
 
 .loader-count-symbol {

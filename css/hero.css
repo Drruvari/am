@@ -20,6 +20,12 @@
   display: flex;
   flex-direction: column;
   gap: clamp(1.25rem, 2.5vw, 2.5rem);
+  overflow: hidden;
+}
+
+.hero-copy {
+  flex-shrink: 0;
+  transform-origin: top center;
 }
 
 .hero-kicker {
@@ -79,14 +85,13 @@
 
   position: relative;
   width: calc(100% + (var(--hero-shell-bleed) * 2));
-  /* height: clamp(44rem, 30svh, 28rem); */
   margin-top: auto;
   margin-left: calc(var(--hero-shell-bleed) * -1);
   flex: 0 0 auto;
   overflow: hidden;
   border-radius: var(--hero-radius);
   corner-shape: squircle;
-  will-change: width, margin-left, flex-grow;
+  transform-origin: 50% 100%;
 }
 
 .hero-facade-shell picture {
@@ -102,7 +107,6 @@
   object-fit: cover;
   object-position: center 42%;
   transform-origin: 50% 100%;
-  will-change: transform;
   border-radius: inherit;
   corner-shape: inherit;
 }
@@ -118,13 +122,6 @@
 
 .hero-cta svg {
   flex: 0 0 auto;
-}
-
-@media (min-width: 769px) {
-  .hero-container {
-    transform-origin: center center;
-    will-change: transform, opacity;
-  }
 }
 
 @media (max-width: 768px) {

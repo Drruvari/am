@@ -4,7 +4,7 @@ function prepareTextHoverElement(el) {
   const styles = getComputedStyle(el);
   const needsInnerWrapper =
     el.matches("a, button") ||
-    el.classList.contains("sheet-meta") ||
+    el.classList.contains("archive-card-label") ||
     el.classList.contains("works-cap") ||
     styles.display === "flex" ||
     parseFloat(styles.paddingTop) > 0 ||
@@ -22,7 +22,7 @@ function prepareTextHoverElement(el) {
 function initTextHoverEffects() {
   const hoverTargets = [
     ".hero-cta .morph-btn__content > span",
-    ".sheet-meta",
+    ".archive-card-label",
     ".works-cap",
     ".topbar-nav a",
     ".topbar-brief .morph-btn__content > span",
@@ -250,27 +250,40 @@ function initHeroFacade() {
 }
 
 let manifestoRevealInitialized = false;
+let manifestoWidthCache = new WeakMap();
+
+function clearManifestoWidthCache() {
+  manifestoWidthCache = new WeakMap();
+}
 
 function initManifestoReveal() {
   if (manifestoRevealInitialized) return;
   manifestoRevealInitialized = true;
 
   const getImgSpanWidth = (imgSpan) => {
+    if (manifestoWidthCache.has(imgSpan)) {
+      return manifestoWidthCache.get(imgSpan);
+    }
+
     const img = imgSpan.querySelector("img");
     if (!img) return 0;
 
     const styles = getComputedStyle(imgSpan);
     const target = styles.getPropertyValue("--manifesto-img-width").trim();
+    let width = 0;
+
     if (target) {
       const probe = document.createElement("div");
       probe.style.cssText = `position:absolute;visibility:hidden;width:${target};`;
       document.body.appendChild(probe);
-      const width = probe.getBoundingClientRect().width;
+      width = probe.getBoundingClientRect().width;
       probe.remove();
-      return width;
+    } else {
+      width = img.getBoundingClientRect().width;
     }
 
-    return img.getBoundingClientRect().width;
+    manifestoWidthCache.set(imgSpan, width);
+    return width;
   };
 
   const imgSpans = gsap.utils
@@ -280,6 +293,9 @@ function initManifestoReveal() {
 
   if (!imgSpans.length) return;
 
+  const onResize = () => clearManifestoWidthCache();
+  window.addEventListener("resize", onResize);
+
   gsap.set(imgSpans, { width: 0 });
 
   const bindSectionReveal = (start, end, spread = 0.82) => {
@@ -288,6 +304,7 @@ function initManifestoReveal() {
       start,
       end,
       scrub: true,
+      refreshPriority: 1,
       invalidateOnRefresh: true,
       onUpdate(self) {
         const slot = spread / imgSpans.length;
@@ -317,6 +334,7 @@ function initManifestoReveal() {
           start,
           end,
           scrub,
+          refreshPriority: 1,
           invalidateOnRefresh: true,
           onUpdate(self) {
             const width = getImgSpanWidth(span);
@@ -332,6 +350,7 @@ function initManifestoReveal() {
     const trigger = bindSectionReveal("top 88%", "bottom 18%");
     return () => {
       trigger.kill();
+      window.removeEventListener("resize", onResize);
       gsap.set(imgSpans, { clearProps: "width" });
     };
   });
@@ -341,6 +360,7 @@ function initManifestoReveal() {
     const triggers = bindLineReveals("top 88%", "top 68%", 0.5);
     return () => {
       triggers.forEach((trigger) => trigger.kill());
+      window.removeEventListener("resize", onResize);
       gsap.set(imgSpans, { clearProps: "width" });
     };
   });
@@ -358,6 +378,7 @@ function initWorksAnimations(isMobile) {
         start: "top bottom",
         end: isMobile ? "top 25%" : "top 15%",
         scrub: true,
+        refreshPriority: 3,
       },
     },
   );
@@ -413,254 +434,239 @@ function initWorksAnimations(isMobile) {
   });
 }
 
+function getArchiveScrollDistance(track, endGap = 96) {
+  if (!track) return 0;
+
+  const paddingEnd = parseFloat(getComputedStyle(track).paddingRight) || 0;
+  return Math.max(
+    0,
+    track.scrollWidth - track.clientWidth + paddingEnd + endGap,
+  );
+}
+
+function ensureHeroCopyWrap(container) {
+  if (!container) return null;
+
+  const existing = container.querySelector(".hero-copy");
+  if (existing) return existing;
+
+  const kicker = container.querySelector(".hero-kicker");
+  const main = container.querySelector(".hero-main");
+  if (!kicker || !main) return null;
+
+  const wrap = document.createElement("div");
+  wrap.className = "hero-copy";
+  kicker.before(wrap);
+  wrap.append(kicker, main);
+  return wrap;
+}
+
+function initHeroHandoff({ hero, heroContainer, heroImage, heroShell }) {
+  const heroCopy = ensureHeroCopyWrap(heroContainer);
+  if (!hero || !heroContainer || !heroImage || !heroShell || !heroCopy) {
+    return null;
+  }
+
+  const getHeroBleed = () => parseFloat(getComputedStyle(hero).paddingLeft) || 0;
+
+  const getCollapseDistance = () => {
+    const gap = parseFloat(getComputedStyle(heroContainer).gap) || 0;
+    return heroCopy.offsetHeight + gap;
+  };
+
+  const getShellScaleX = () => {
+    const bleed = getHeroBleed();
+    const shellWidth = heroShell.offsetWidth || 1;
+    return (shellWidth + bleed * 2) / shellWidth;
+  };
+
+  const getShellStartScaleY = () => {
+    const target = heroContainer.clientHeight * 0.92;
+    const current = heroShell.offsetHeight || 1;
+    return Math.min(1, current / target);
+  };
+
+  const setHeroMotionState = (active) => {
+    const value = active ? "transform" : "auto";
+    heroShell.style.willChange = value;
+    heroImage.style.willChange = value;
+  };
+
+  setHeroMotionState(true);
+
+  const timeline = gsap.timeline({
+    scrollTrigger: {
+      trigger: ".hero",
+      start: "top top",
+      end: () => `+=${window.innerHeight * 0.9}`,
+      pin: true,
+      pinType: "transform",
+      pinSpacing: true,
+      scrub: 0.6,
+      anticipatePin: 1,
+      refreshPriority: 0,
+      invalidateOnRefresh: true,
+      onLeave: () => setHeroMotionState(false),
+      onEnterBack: () => setHeroMotionState(true),
+    },
+  });
+
+  timeline
+    .to(
+      heroCopy,
+      {
+        scaleY: 0,
+        opacity: 0,
+        ease: "power2.in",
+        duration: 0.7,
+      },
+      0,
+    )
+    .fromTo(
+      heroShell,
+      {
+        y: 0,
+        scaleY: () => getShellStartScaleY(),
+        scaleX: 1,
+      },
+      {
+        y: () => -getCollapseDistance(),
+        scaleY: 1,
+        scaleX: () => getShellScaleX(),
+        ease: "power2.inOut",
+        duration: 1,
+      },
+      0,
+    )
+    .fromTo(
+      heroImage,
+      { scale: 1.1 },
+      { scale: 1, ease: "none", duration: 1 },
+      0,
+    );
+
+  return { timeline, heroCopy, heroShell, heroImage, setHeroMotionState };
+}
+
+function initArchiveScroll(intro, track) {
+  if (!track) return null;
+
+  const distance = () => getArchiveScrollDistance(track);
+  const timeline = gsap.timeline({
+    scrollTrigger: {
+      trigger: ".archive",
+      start: "top top",
+      end: () => `+=${Math.max(distance(), 1)}`,
+      pin: true,
+      pinType: "transform",
+      pinSpacing: true,
+      scrub: 0.65,
+      anticipatePin: 1,
+      refreshPriority: 2,
+      invalidateOnRefresh: true,
+    },
+  });
+
+  timeline.to(track, { x: () => -distance(), ease: "none" }, 0);
+
+  if (intro) {
+    timeline.to(intro, { yPercent: -12, ease: "none" }, 0);
+  }
+
+  gsap.utils.toArray(".archive-card img").forEach((image, index) => {
+    timeline.fromTo(
+      image,
+      { yPercent: index % 2 === 0 ? -6 : -12 },
+      { yPercent: index % 2 === 0 ? 8 : 4, ease: "none" },
+      0,
+    );
+  });
+
+  return timeline;
+}
+
 function initScrollAnimations() {
   mm.add("(min-width: 769px)", () => {
+    const hero = document.querySelector(".hero");
     const heroContainer = document.querySelector(".hero-container");
     const heroImage = document.querySelector(".hero-image");
-    const heroText = document.querySelectorAll(".hero-kicker, .hero-main");
-    const sheetsStack = document.getElementById("sheetsStack");
-    const getHorizontalDistance = (track, endGap = 80) => {
-      return Math.max(
-        0,
-        track.offsetLeft + track.scrollWidth - window.innerWidth + endGap,
-      );
-    };
-
     const heroShell = document.querySelector(".hero-facade-shell");
+    const archiveIntro = document.querySelector(".archive-intro");
+    const archiveTrack = document.getElementById("archiveTrack");
 
-    // Connected handoff: pin the hero for an extra viewport of scroll. During
-    // the pin the text lifts and collapses while the image grows upward to
-    // full-bleed, so the scroll reads as pushing into the material before the
-    // 01 panel rises directly out of it.
-    if (heroContainer && heroImage && heroShell) {
-      const getHeroBleed = () => {
-        const hero = document.querySelector(".hero");
-        if (!hero) return 0;
-
-        return parseFloat(getComputedStyle(hero).paddingLeft) || 0;
-      };
-
-      const heroHandoff = gsap.timeline({
-        scrollTrigger: {
-          trigger: ".hero",
-          start: "top top",
-          end: "+=90%",
-          pin: true,
-          pinSpacing: true,
-          scrub: 0.6,
-          invalidateOnRefresh: true,
-        },
-      });
-
-      heroText.forEach((el) => {
-        el.style.overflow = "hidden";
-      });
-
-      const heroContainerEl = heroContainer;
-
-      heroHandoff
-        .to(
-          heroText,
-          {
-            yPercent: -14,
-            opacity: 0,
-            height: 0,
-            marginTop: 0,
-            marginBottom: 0,
-            paddingTop: 0,
-            paddingBottom: 0,
-            ease: "power2.in",
-            duration: 0.7,
-          },
-          0,
-        )
-        .to(heroContainerEl, { gap: 0, ease: "power2.in", duration: 0.7 }, 0)
-        .fromTo(
-          heroShell,
-          { flexGrow: 0 },
-          { flexGrow: 1, ease: "power2.inOut", duration: 1 },
-          0,
-        )
-        .to(
-          heroShell,
-          {
-            "--hero-shell-bleed": () => `${getHeroBleed()}px`,
-            ease: "power2.inOut",
-            duration: 0.45,
-          },
-          0,
-        )
-        .fromTo(
-          heroImage,
-          { scale: 1.1 },
-          { scale: 1, ease: "none", duration: 1 },
-          0,
-        );
-    }
-
-    gsap.to(sheetsStack, {
-      x: () => -getHorizontalDistance(sheetsStack, 96),
-      ease: "none",
-      scrollTrigger: {
-        trigger: ".sheets",
-        pin: true,
-        start: "top top",
-        end: () => `+=${getHorizontalDistance(sheetsStack, 96)}`,
-        scrub: 1,
-        invalidateOnRefresh: true,
-      },
+    const heroHandoff = initHeroHandoff({
+      hero,
+      heroContainer,
+      heroImage,
+      heroShell,
     });
 
-    gsap.to(".sheets-copy", {
-      yPercent: -12,
-      ease: "none",
-      scrollTrigger: {
-        trigger: ".sheets",
-        start: "top bottom",
-        end: "bottom top",
-        scrub: true,
-      },
-    });
-
-    gsap.utils.toArray(".sheet").forEach((sheet, index) => {
-      const image = sheet.querySelector("img");
-      gsap.fromTo(
-        image,
-        { yPercent: index % 2 === 0 ? -6 : -12 },
-        {
-          yPercent: index % 2 === 0 ? 8 : 4,
-          ease: "none",
-          scrollTrigger: {
-            trigger: ".sheets",
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
-        },
-      );
-    });
+    const archiveTimeline = initArchiveScroll(archiveIntro, archiveTrack);
 
     initWorksAnimations(false);
+    const worksHoverCleanups = initWorksFigureHover();
 
     return () => {
-      if (heroContainer) {
-        gsap.set(heroContainer, { clearProps: "transform,opacity" });
-      }
-      if (heroShell) {
-        gsap.set(heroShell, {
-          clearProps: "flexGrow,transform,opacity,--hero-shell-bleed",
-        });
-      }
-      if (heroContainer) {
-        gsap.set(heroContainer, { clearProps: "gap" });
-      }
-      heroText.forEach((el) => {
-        el.style.overflow = "";
-      });
+      heroHandoff?.timeline?.scrollTrigger?.kill();
+      heroHandoff?.timeline?.kill();
+      heroHandoff?.setHeroMotionState(false);
+      archiveTimeline?.scrollTrigger?.kill();
+      archiveTimeline?.kill();
+      worksHoverCleanups.forEach((cleanup) => cleanup());
       gsap.set(
         [
+          heroContainer,
+          heroHandoff?.heroCopy,
           heroImage,
-          ...heroText,
-          sheetsStack,
-          ".sheets-copy",
-          ".sheet img",
+          heroShell,
+          archiveTrack,
+          ".archive-intro",
+          ".archive-card img",
         ].filter(Boolean),
         {
-          clearProps: "transform,opacity,height,margin,padding",
+          clearProps: "transform,opacity",
         },
       );
     };
   });
 
   mm.add("(max-width: 768px)", () => {
+    const hero = document.querySelector(".hero");
     const heroContainer = document.querySelector(".hero-container");
     const heroImage = document.querySelector(".hero-image");
     const heroShell = document.querySelector(".hero-facade-shell");
-    const hero = document.querySelector(".hero");
-    const heroText = document.querySelectorAll(".hero-kicker, .hero-main");
-    const sheetsCopy = document.querySelector(".sheets-copy");
-    const getHeroBleed = () =>
-      hero ? parseFloat(getComputedStyle(hero).paddingLeft) || 0 : 0;
+    const archiveIntro = document.querySelector(".archive-intro");
 
-    if (heroContainer && heroImage && heroShell) {
-      heroText.forEach((el) => {
-        el.style.overflow = "hidden";
-      });
+    const heroHandoff = initHeroHandoff({
+      hero,
+      heroContainer,
+      heroImage,
+      heroShell,
+    });
 
-      const heroHandoff = gsap.timeline({
-        scrollTrigger: {
-          trigger: ".hero",
-          start: "top top",
-          end: "+=90%",
-          pin: true,
-          pinSpacing: true,
-          scrub: 0.6,
-          invalidateOnRefresh: true,
-        },
-      });
-
-      heroHandoff
-        .to(
-          heroText,
-          {
-            yPercent: -14,
-            opacity: 0,
-            height: 0,
-            marginTop: 0,
-            marginBottom: 0,
-            paddingTop: 0,
-            paddingBottom: 0,
-            ease: "power2.in",
-            duration: 0.7,
-          },
-          0,
-        )
-        .to(heroContainer, { gap: 0, ease: "power2.in", duration: 0.7 }, 0)
-        .fromTo(
-          heroShell,
-          { flexGrow: 0 },
-          { flexGrow: 1, ease: "power2.inOut", duration: 1 },
-          0,
-        )
-        .to(
-          heroShell,
-          {
-            "--hero-shell-bleed": () => `${getHeroBleed()}px`,
-            ease: "power2.inOut",
-            duration: 0.45,
-          },
-          0,
-        )
-        .fromTo(
-          heroImage,
-          { scale: 1.1 },
-          { scale: 1, ease: "none", duration: 1 },
-          0,
-        );
-    }
-
-    if (sheetsCopy) {
-      gsap.from(sheetsCopy, {
+    let archiveIntroTween;
+    if (archiveIntro) {
+      archiveIntroTween = gsap.from(archiveIntro, {
         y: 28,
         opacity: 0,
         duration: 0.85,
         ease: "power3.out",
         scrollTrigger: {
-          trigger: sheetsCopy,
+          trigger: archiveIntro,
           start: "top 90%",
         },
       });
     }
 
-    const sheetCleanups = gsap.utils.toArray(".sheet").map((sheet, index) => {
-      const tween = gsap.from(sheet, {
+    const cardCleanups = gsap.utils.toArray(".archive-card").map((card, index) => {
+      const tween = gsap.from(card, {
         y: 40,
         opacity: 0,
         duration: 0.8,
         delay: index * 0.05,
         ease: "power3.out",
         scrollTrigger: {
-          trigger: sheet,
+          trigger: card,
           start: "top 92%",
         },
       });
@@ -668,131 +674,162 @@ function initScrollAnimations() {
       return () => tween.kill();
     });
 
-    initWorksAnimations(false);
+    initWorksAnimations(true);
 
     return () => {
-      sheetCleanups.forEach((cleanup) => cleanup());
-      heroText.forEach((el) => {
-        el.style.overflow = "";
-      });
+      heroHandoff?.timeline?.scrollTrigger?.kill();
+      heroHandoff?.timeline?.kill();
+      heroHandoff?.setHeroMotionState(false);
+      cardCleanups.forEach((cleanup) => cleanup());
+      archiveIntroTween?.kill();
       gsap.set(
         [
           heroContainer,
+          heroHandoff?.heroCopy,
           heroImage,
           heroShell,
-          ...heroText,
-          sheetsCopy,
-          ".sheet",
+          archiveIntro,
+          ".archive-card",
         ].filter(Boolean),
         {
-          clearProps:
-            "transform,opacity,height,margin,padding,gap,flexGrow,--hero-shell-bleed",
+          clearProps: "transform,opacity",
         },
       );
     };
   });
+}
 
-  mm.add("(min-width: 769px)", () => {
-    const cleanups = gsap.utils.toArray(".works-figure").map((figure) => {
-      const visual = figure.querySelector(".works-visual");
-      const image = figure.querySelector(".works-visual img");
-      const caption = figure.querySelector(".works-cap");
-      const xTo = gsap.quickTo(figure, "x", {
-        duration: 0.45,
-        ease: "power3.out",
-      });
-      const yTo = gsap.quickTo(figure, "y", {
-        duration: 0.45,
-        ease: "power3.out",
-      });
-      const rotateXTo = gsap.quickTo(figure, "rotationX", {
-        duration: 0.55,
-        ease: "power3.out",
-      });
-      const rotateYTo = gsap.quickTo(figure, "rotationY", {
-        duration: 0.55,
-        ease: "power3.out",
-      });
-      const imgXTo = gsap.quickTo(image, "xPercent", {
-        duration: 0.6,
-        ease: "power3.out",
-      });
+function initWorksFigureHover() {
+  return gsap.utils.toArray(".works-figure").map((figure) => {
+    const visual = figure.querySelector(".works-visual");
+    const image = figure.querySelector(".works-visual img");
+    const caption = figure.querySelector(".works-cap");
+    const xTo = gsap.quickTo(figure, "x", {
+      duration: 0.45,
+      ease: "power3.out",
+    });
+    const yTo = gsap.quickTo(figure, "y", {
+      duration: 0.45,
+      ease: "power3.out",
+    });
+    const rotateXTo = gsap.quickTo(figure, "rotationX", {
+      duration: 0.55,
+      ease: "power3.out",
+    });
+    const rotateYTo = gsap.quickTo(figure, "rotationY", {
+      duration: 0.55,
+      ease: "power3.out",
+    });
+    const imgXTo = gsap.quickTo(image, "xPercent", {
+      duration: 0.6,
+      ease: "power3.out",
+    });
 
-      const onMove = (e) => {
-        const rect = figure.getBoundingClientRect();
-        const relX = (e.clientX - rect.left) / rect.width - 0.5;
-        const relY = (e.clientY - rect.top) / rect.height - 0.5;
-        xTo(relX * 14);
-        yTo(relY * 14);
-        rotateXTo(relY * -4);
-        rotateYTo(relX * 5);
-        imgXTo(relX * -4);
+    const onMove = (e) => {
+      const rect = figure.getBoundingClientRect();
+      const relX = (e.clientX - rect.left) / rect.width - 0.5;
+      const relY = (e.clientY - rect.top) / rect.height - 0.5;
+      xTo(relX * 14);
+      yTo(relY * 14);
+      rotateXTo(relY * -4);
+      rotateYTo(relX * 5);
+      imgXTo(relX * -4);
 
-        if (visual) {
-          gsap.to(visual, {
-            "--spot-x": `${(relX + 0.5) * 100}%`,
-            "--spot-y": `${(relY + 0.5) * 100}%`,
-            "--spot-opacity": 1,
-            duration: 0.28,
-            ease: "power2.out",
-            overwrite: "auto",
-          });
-        }
-      };
-
-      const onEnter = () => {
-        gsap.set(figure, { transformPerspective: 900 });
-        gsap.to(caption, {
-          x: 10,
-          color: "var(--fg)",
-          duration: 0.42,
-          ease: "power3.out",
-          overwrite: "auto",
-        });
-      };
-
-      const onLeave = () => {
-        xTo(0);
-        yTo(0);
-        rotateXTo(0);
-        rotateYTo(0);
-        imgXTo(0);
+      if (visual) {
         gsap.to(visual, {
-          "--spot-opacity": 0,
-          duration: 0.34,
+          "--spot-x": `${(relX + 0.5) * 100}%`,
+          "--spot-y": `${(relY + 0.5) * 100}%`,
+          "--spot-opacity": 1,
+          duration: 0.28,
           ease: "power2.out",
           overwrite: "auto",
         });
-        gsap.to(caption, {
-          x: 0,
-          color: "var(--muted)",
-          duration: 0.38,
-          ease: "power3.out",
-          overwrite: "auto",
-        });
-      };
+      }
+    };
 
-      figure.addEventListener("mouseenter", onEnter);
-      figure.addEventListener("mousemove", onMove);
-      figure.addEventListener("mouseleave", onLeave);
+    const onEnter = () => {
+      gsap.set(figure, { transformPerspective: 900 });
+      gsap.to(caption, {
+        x: 10,
+        color: "var(--fg)",
+        duration: 0.42,
+        ease: "power3.out",
+        overwrite: "auto",
+      });
+    };
 
-      return () => {
-        figure.removeEventListener("mouseenter", onEnter);
-        figure.removeEventListener("mousemove", onMove);
-        figure.removeEventListener("mouseleave", onLeave);
-        gsap.set([figure, visual, caption].filter(Boolean), {
-          clearProps: "transform,color",
-        });
-      };
-    });
+    const onLeave = () => {
+      xTo(0);
+      yTo(0);
+      rotateXTo(0);
+      rotateYTo(0);
+      imgXTo(0);
+      gsap.to(visual, {
+        "--spot-opacity": 0,
+        duration: 0.34,
+        ease: "power2.out",
+        overwrite: "auto",
+      });
+      gsap.to(caption, {
+        x: 0,
+        color: "var(--muted)",
+        duration: 0.38,
+        ease: "power3.out",
+        overwrite: "auto",
+      });
+    };
 
-    return () => cleanups.forEach((cleanup) => cleanup());
+    figure.addEventListener("mouseenter", onEnter);
+    figure.addEventListener("mousemove", onMove);
+    figure.addEventListener("mouseleave", onLeave);
+
+    return () => {
+      figure.removeEventListener("mouseenter", onEnter);
+      figure.removeEventListener("mousemove", onMove);
+      figure.removeEventListener("mouseleave", onLeave);
+      gsap.set([figure, visual, caption].filter(Boolean), {
+        clearProps: "transform,color",
+      });
+    };
   });
+}
+
+let pageScrollInitialized = false;
+
+function refreshScrollLayout() {
+  clearManifestoWidthCache();
+  ScrollTrigger.refresh(true);
+  updateScrollState();
+}
+
+function scheduleScrollRefresh() {
+  const refresh = () => requestAnimationFrame(refreshScrollLayout);
+
+  if (document.fonts?.ready) {
+    document.fonts.ready.then(refresh).catch(refresh);
+  } else {
+    refresh();
+  }
+}
+
+function initPageScroll() {
+  if (pageScrollInitialized) return;
+  pageScrollInitialized = true;
+
+  initScrollAnimations();
+  initManifestoReveal();
+
+  scheduleScrollRefresh();
+
+  if (document.readyState === "complete") {
+    scheduleScrollRefresh();
+  } else {
+    window.addEventListener("load", scheduleScrollRefresh, { once: true });
+  }
 }
 
 function initAnimations() {
   initMorphButtons();
   initHeroFacade();
   initTextHoverEffects();
-  initScrollAnimations();
 }

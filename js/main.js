@@ -33,25 +33,28 @@ function initGlobalUI() {
 
   window.addEventListener("pageshow", (event) => {
     if (event.persisted) {
-      ScrollTrigger.refresh();
-      updateScrollState();
+      if (!pageScrollInitialized) {
+        initPageScroll();
+      } else {
+        scheduleScrollRefresh();
+      }
     }
   });
 
   window.addEventListener("load", () => {
-    ScrollTrigger.refresh();
-    updateScrollState();
+    if (!pageScrollInitialized) {
+      initPageScroll();
+    } else {
+      scheduleScrollRefresh();
+    }
   });
 
   window.addEventListener("resize", () => {
-    updateScrollState();
+    scheduleScrollRefresh();
   });
 
   window.addEventListener("orientationchange", () => {
-    window.setTimeout(() => {
-      ScrollTrigger.refresh();
-      updateScrollState();
-    }, 300);
+    window.setTimeout(scheduleScrollRefresh, 300);
   });
 }
 

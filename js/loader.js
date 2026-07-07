@@ -33,15 +33,12 @@ function initLoader() {
   });
 
   const finish = () => {
-    revealHero();
     loader.setAttribute("aria-busy", "false");
     loader.style.pointerEvents = "none";
     lenis.scrollTo(0, { immediate: true });
     lenis.start();
     document.body.style.overflow = "";
-    ScrollTrigger.refresh();
-    initManifestoReveal();
-    updateScrollState();
+    initPageScroll();
   };
 
   const revealHero = () => {
@@ -60,110 +57,116 @@ function initLoader() {
     }
   };
 
-  const loaderTL = gsap.timeline();
+  const runLoaderTimeline = () => {
+    const loaderTL = gsap.timeline();
 
-  loaderTL
-    .to(
-      ".loader-caption p",
-      {
-        yPercent: 0,
-        duration: 0.85,
-        ease: "power3.out",
-      },
-      0,
-    )
-    .to(
-      ".loader-count",
-      {
-        opacity: 1,
-        duration: 0.6,
-        ease: "power2.out",
-      },
-      0.08,
-    );
-
-  if (logoEl) {
-    loaderTL.to(
-      logoEl,
-      {
-        clipPath: "inset(0 0% 0 0)",
-        duration: drawDuration,
-        ease: "power1.inOut",
-        onUpdate: function () {
-          updateDrawProgress(this.progress());
+    loaderTL
+      .to(
+        ".loader-caption p",
+        {
+          yPercent: 0,
+          duration: 0.85,
+          ease: "power3.out",
         },
-        onComplete: () => {
-          logoEl.style.willChange = "auto";
+        0,
+      )
+      .to(
+        ".loader-count",
+        {
+          opacity: 1,
+          duration: 0.6,
+          ease: "power2.out",
         },
-      },
-      0,
-    );
-  } else if (countValue) {
-    countValue.textContent = "100";
-  }
+        0.08,
+      );
 
-  loaderTL
-    .to({}, { duration: 0.3 })
-    .to(
-      ".loader-meta",
-      {
-        y: -18,
-        opacity: 0,
-        duration: 0.5,
-        ease: "power3.in",
-      },
-      ">-0.1",
-    )
-    .to(
-      ".loader-count",
-      {
-        opacity: 0,
-        duration: 0.5,
-        ease: "power3.in",
-      },
-      "<",
-    )
-    .to(
-      ".loader-logo",
-      {
-        opacity: 0,
-        scale: 0.98,
-        duration: 0.6,
-        ease: "power3.inOut",
-      },
-      "<",
-    )
-    .to(
-      ".loader",
-      {
-        clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
-        duration: 0.9,
-        ease: "power4.inOut",
-        onComplete: finish,
-      },
-      "<0.15",
-    )
-    .call(revealHero, null, "<0.05")
-    .to(
-      heroHeadlineChars,
-      {
+    if (logoEl) {
+      loaderTL.to(
+        logoEl,
+        {
+          clipPath: "inset(0 0% 0 0)",
+          duration: drawDuration,
+          ease: "power1.inOut",
+          onUpdate: function () {
+            updateDrawProgress(this.progress());
+          },
+          onComplete: () => {
+            logoEl.style.willChange = "auto";
+          },
+        },
+        0,
+      );
+    } else if (countValue) {
+      countValue.textContent = "100";
+    }
+
+    loaderTL
+      .to({}, { duration: 0.3 })
+      .to(
+        ".loader-meta",
+        {
+          y: -18,
+          opacity: 0,
+          duration: 0.5,
+          ease: "power3.in",
+        },
+        ">-0.1",
+      )
+      .to(
+        ".loader-count",
+        {
+          opacity: 0,
+          duration: 0.5,
+          ease: "power3.in",
+        },
+        "<",
+      )
+      .to(
+        ".loader-logo",
+        {
+          opacity: 0,
+          scale: 0.98,
+          duration: 0.6,
+          ease: "power3.inOut",
+        },
+        "<",
+      )
+      .to(
+        ".loader",
+        {
+          clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
+          duration: 0.9,
+          ease: "power4.inOut",
+        },
+        "<0.15",
+      )
+      .call(revealHero, null, ">")
+      .to(heroHeadlineChars, {
         yPercent: 0,
         rotation: 0,
         duration: 0.8,
         ease: "power3.out",
         stagger: 0.02,
-      },
-      "<0.2",
-    )
-    .to(
-      ".hero-kicker span, .hero-support, .hero-cta, .hero-facade-shell",
-      {
-        y: 0,
-        opacity: 1,
-        stagger: 0.06,
-        duration: 0.8,
-        ease: "power3.out",
-      },
-      "<0.18",
-    );
+      })
+      .to(
+        ".hero-kicker span, .hero-support, .hero-cta, .hero-facade-shell",
+        {
+          y: 0,
+          opacity: 1,
+          stagger: 0.06,
+          duration: 0.8,
+          ease: "power3.out",
+        },
+        "<0.1",
+      )
+      .call(finish, null, ">");
+  };
+
+  const startLoader = () => runLoaderTimeline();
+
+  if (document.fonts?.ready) {
+    document.fonts.ready.then(startLoader).catch(startLoader);
+  } else {
+    startLoader();
+  }
 }

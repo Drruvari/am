@@ -29,7 +29,7 @@
 .topbar-logo {
   display: inline-flex;
   align-items: center;
-  width: clamp(5.5rem, 11vw, 8.5rem);
+  width: clamp(4.75rem, 24vw, 8.5rem);
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
@@ -72,44 +72,19 @@
 }
 
 .topbar-nav {
-  position: absolute;
-  top: 0.85rem;
-  left: 50%;
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  transform: translateX(-50%);
-  font-size: clamp(0.78rem, 0.95vw, 0.92rem);
-  line-height: 1;
-  transition:
-    opacity 0.25s ease,
-    visibility 0.25s ease;
-}
-
-.topbar-nav > a,
-.topbar-nav > span {
-  position: relative;
-  color: var(--fg);
-  font: inherit;
-  font-weight: 800;
-  white-space: nowrap;
-  pointer-events: auto;
-}
-
-.topbar-nav > :not(:last-child)::after {
-  content: ",";
+  display: none;
 }
 
 .topbar-actions {
-  --topbar-brief-width: 9.35rem;
-  --topbar-menu-width: 4.7rem;
-  --topbar-action-gap: 0.8rem;
+  --topbar-brief-width: 7.25rem;
+  --topbar-menu-width: 4rem;
+  --topbar-action-gap: 0.55rem;
   position: relative;
   width: calc(
     var(--topbar-brief-width) + var(--topbar-menu-width) +
       var(--topbar-action-gap)
   );
-  height: 3.05rem;
+  height: 2.55rem;
   pointer-events: auto;
 }
 
@@ -118,13 +93,91 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 2.5rem;
+  min-height: 2.45rem;
   white-space: nowrap;
   background: transparent;
   border: 0;
   font: inherit;
   text-transform: inherit;
   color: inherit;
+}
+
+.morph-btn--pill > a.topbar-brief,
+.morph-btn--pill > button.topbar-menu {
+  padding: 0.7rem 0.85rem;
+}
+
+.topbar-brief {
+  font-size: clamp(0.58rem, 0.5rem + 0.35vw, 0.62rem);
+  letter-spacing: 0.08em;
+}
+
+@media (min-width: 480px) {
+  .topbar-actions {
+    --topbar-brief-width: 7.9rem;
+    --topbar-menu-width: 4.35rem;
+    --topbar-action-gap: 0.65rem;
+  }
+}
+
+@media (min-width: 769px) {
+  .topbar-nav {
+    position: absolute;
+    top: 0.85rem;
+    left: 50%;
+    display: none;
+    align-items: center;
+    gap: 0.45rem;
+    transform: translateX(-50%);
+    font-size: clamp(0.72rem, 0.85vw, 0.92rem);
+    line-height: 1;
+    transition:
+      opacity 0.25s ease,
+      visibility 0.25s ease;
+  }
+
+  .topbar-nav > a,
+  .topbar-nav > span {
+    position: relative;
+    color: var(--fg);
+    font: inherit;
+    font-weight: 800;
+    white-space: nowrap;
+    pointer-events: auto;
+  }
+
+  .topbar-nav > :not(:last-child)::after {
+    content: ",";
+  }
+
+  .topbar-actions {
+    --topbar-brief-width: 9.35rem;
+    --topbar-menu-width: 4.7rem;
+    --topbar-action-gap: 0.8rem;
+    height: 3.05rem;
+  }
+
+  .topbar-brief,
+  .topbar-menu {
+    min-height: 2.5rem;
+  }
+
+  .morph-btn--pill > a.topbar-brief,
+  .morph-btn--pill > button.topbar-menu {
+    padding: 0.95rem 1.55rem;
+  }
+
+  .topbar-brief {
+    font-size: inherit;
+    letter-spacing: inherit;
+  }
+}
+
+@media (min-width: 1024px) {
+  .topbar-nav {
+    display: flex;
+    font-size: clamp(0.78rem, 0.95vw, 0.92rem);
+  }
 }
 
 .topbar-brief-wrap,
