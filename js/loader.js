@@ -2,16 +2,19 @@ function initLoader() {
   const loader = document.getElementById("loader");
   if (!loader) return;
 
-  const logoEl = loader.querySelector(".loader-logo-img");
+  const logoSvg = loader.querySelector(".loader-logo-svg-host svg");
   const countValue = loader.querySelector(".loader-count-value");
   const loaderStatus = document.getElementById("loaderStatus");
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
   ).matches;
-  const drawDuration = prefersReducedMotion ? 1.4 : 3.4;
+  const eyeRevealDuration = prefersReducedMotion ? 1.4 : 3.4;
+  const eyeElements = logoSvg
+    ? getLogoEyeElements(logoSvg, "loader-")
+    : null;
 
-  if (logoEl) {
-    gsap.set(logoEl, { clipPath: "inset(0 100% 0 0)" });
+  if (eyeElements) {
+    resetLogoEye(eyeElements);
   }
 
   lenis.stop();
@@ -80,22 +83,12 @@ function initLoader() {
         0.08,
       );
 
-    if (logoEl) {
-      loaderTL.to(
-        logoEl,
-        {
-          clipPath: "inset(0 0% 0 0)",
-          duration: drawDuration,
-          ease: "power1.inOut",
-          onUpdate: function () {
-            updateDrawProgress(this.progress());
-          },
-          onComplete: () => {
-            logoEl.style.willChange = "auto";
-          },
-        },
-        0,
-      );
+    if (eyeElements) {
+      addLogoEyeReveal(loaderTL, eyeElements, {
+        duration: eyeRevealDuration,
+        position: 0,
+        onProgress: updateDrawProgress,
+      });
     } else if (countValue) {
       countValue.textContent = "100";
     }

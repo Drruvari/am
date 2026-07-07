@@ -28,10 +28,26 @@
   pointer-events: none;
 }
 
-.loader-logo-img {
+.loader-logo-svg-host {
+  display: block;
+  width: 100%;
+}
+
+.loader-logo-svg-host svg {
   display: block;
   width: 100%;
   height: auto;
+  overflow: visible;
+}
+
+.loader-logo-svg-host .eye-mask,
+.loader-logo-svg-host .bottom-lid,
+.loader-logo-svg-host .pupil {
+  pointer-events: none;
+}
+
+.loader-logo-svg-host .pupil {
+  will-change: transform;
 }
 
 .loader-meta {
