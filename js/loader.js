@@ -41,7 +41,9 @@ function initLoader() {
     lenis.scrollTo(0, { immediate: true });
     lenis.start();
     document.body.style.overflow = "";
-    initPageScroll();
+    ScrollTrigger.refresh();
+    initManifestoReveal();
+    updateScrollState();
   };
 
   const revealHero = () => {

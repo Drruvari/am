@@ -50,14 +50,7 @@
       href="assets/fonts/BricolageGrotesque-VariableFont_opsz,wdth,wght.ttf"
       as="font"
       type="font/ttf"
-      crossorigin="anonymous"
-    />
-    <link
-      rel="preload"
-      href="assets/fonts/Manrope-VariableFont_wght.ttf"
-      as="font"
-      type="font/ttf"
-      crossorigin="anonymous"
+      crossorigin
     />
     <style id="critical-loader">
       @font-face {
@@ -114,10 +107,17 @@
       media="print"
       onload="this.media = 'all'"
     />
+    <link
+      rel="stylesheet"
+      href="css/fonts-manrope.css"
+      media="print"
+      onload="this.media = 'all'"
+    />
     <noscript>
       <link rel="stylesheet" href="css/sections.css" />
       <link rel="stylesheet" href="css/footer.css" />
       <link rel="stylesheet" href="css/responsive.css" />
+      <link rel="stylesheet" href="css/fonts-manrope.css" />
     </noscript>
     <script type="application/ld+json">
       {
@@ -219,8 +219,7 @@
   </g>
   </g>
 
-</svg>
-</span>
+</svg></span>
           </span>
         </span>
       </a>
@@ -366,7 +365,6 @@
           </div>
 
           <div class="hero-facade-shell">
-            <div class="hero-facade-media">
             <picture>
               <source
                 type="image/webp"
@@ -391,10 +389,9 @@
                 height="3618"
                 alt="Architectural study shaped by light and material restraint"
                 fetchpriority="high"
-                decoding="auto"
+                decoding="async"
               />
             </picture>
-            </div>
           </div>
         </div>
       </section>
@@ -517,19 +514,21 @@
         </div>
       </section>
 
-      <section class="archive" id="work">
-        <div class="archive-inner">
-          <header class="archive-intro">
-            <p class="archive-eyebrow mono">02 — Project Archive</p>
+      <section class="sheets" id="work">
+        <div class="sheets-pin" id="sheetsPin">
+          <div class="sheets-copy">
+            <div class="sheets-index mono" id="sheetsIndex">
+              02 — Project Archive
+            </div>
             <h2>SELECTED<br />STUDIES</h2>
             <p>
               Four studies arranged by atmosphere and massing. No campaign
               language, just the image, the place, and the architectural
               problem.
             </p>
-          </header>
-          <div class="archive-track" id="archiveTrack">
-            <article class="archive-card">
+          </div>
+          <div class="sheets-stack" id="sheetsStack">
+            <div class="sheet">
               <picture>
                 <source
                   srcset="assets/images/image-600.webp"
@@ -544,11 +543,11 @@
                   decoding="async"
                 />
               </picture>
-              <div class="archive-card-label mono">
+              <div class="sheet-meta mono">
                 01 / Villa Lura, Coastal Retreat
               </div>
-            </article>
-            <article class="archive-card">
+            </div>
+            <div class="sheet">
               <picture>
                 <source
                   srcset="assets/images/image-600.webp"
@@ -563,11 +562,9 @@
                   decoding="async"
                 />
               </picture>
-              <div class="archive-card-label mono">
-                02 / Dajt Mountain Pavilion
-              </div>
-            </article>
-            <article class="archive-card">
+              <div class="sheet-meta mono">02 / Dajt Mountain Pavilion</div>
+            </div>
+            <div class="sheet">
               <picture>
                 <source
                   srcset="assets/images/image-600.webp"
@@ -582,11 +579,9 @@
                   decoding="async"
                 />
               </picture>
-              <div class="archive-card-label mono">
-                03 / Timber Studio, Krujë
-              </div>
-            </article>
-            <article class="archive-card">
+              <div class="sheet-meta mono">03 / Timber Studio, Krujë</div>
+            </div>
+            <div class="sheet">
               <picture>
                 <source
                   srcset="assets/images/image-600.webp"
@@ -601,12 +596,10 @@
                   decoding="async"
                 />
               </picture>
-              <div class="archive-card-label mono">
-                04 / Courtyard Residence, South
-              </div>
-            </article>
+              <div class="sheet-meta mono">04 / Courtyard Residence, South</div>
+            </div>
           </div>
-          <p class="archive-cue mono">Scroll through archive &rarr;</p>
+          <div class="sheets-scrollcue mono">Scroll through archive &rarr;</div>
         </div>
       </section>
 
