@@ -50,15 +50,43 @@
       href="assets/fonts/BricolageGrotesque-VariableFont_opsz,wdth,wght.ttf"
       as="font"
       type="font/ttf"
-      crossorigin
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preload"
+      href="assets/fonts/Manrope-VariableFont_wght.ttf"
+      as="font"
+      type="font/ttf"
+      crossorigin="anonymous"
     />
     <style id="critical-loader">
+      @font-face {
+        font-family: "Bricolage Grotesque";
+        src: url("assets/fonts/BricolageGrotesque-VariableFont_opsz,wdth,wght.ttf")
+          format("truetype");
+        font-weight: 200 800;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "Manrope";
+        src: url("assets/fonts/Manrope-VariableFont_wght.ttf") format("truetype");
+        font-weight: 200 800;
+        font-style: normal;
+        font-display: swap;
+      }
+
       html.is-loading {
         overflow: hidden;
       }
 
       html.is-loading .hero-container {
         visibility: hidden;
+      }
+
+      .loader-caption {
+        font-family: "Bricolage Grotesque", sans-serif;
       }
     </style>
     <script>
@@ -86,17 +114,10 @@
       media="print"
       onload="this.media = 'all'"
     />
-    <link
-      rel="stylesheet"
-      href="css/fonts-manrope.css"
-      media="print"
-      onload="this.media = 'all'"
-    />
     <noscript>
       <link rel="stylesheet" href="css/sections.css" />
       <link rel="stylesheet" href="css/footer.css" />
       <link rel="stylesheet" href="css/responsive.css" />
-      <link rel="stylesheet" href="css/fonts-manrope.css" />
     </noscript>
     <script type="application/ld+json">
       {
@@ -345,6 +366,7 @@
           </div>
 
           <div class="hero-facade-shell">
+            <div class="hero-facade-media">
             <picture>
               <source
                 type="image/webp"
@@ -369,9 +391,10 @@
                 height="3618"
                 alt="Architectural study shaped by light and material restraint"
                 fetchpriority="high"
-                decoding="async"
+                decoding="auto"
               />
             </picture>
+            </div>
           </div>
         </div>
       </section>

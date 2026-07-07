@@ -1,5 +1,29 @@
 var lenis;
 var topbarCompactState;
+var stableViewportHeight = window.innerHeight;
+var lastViewportWidth = window.innerWidth;
+
+function getStableViewportHeight() {
+  return stableViewportHeight;
+}
+
+function updateStableViewportHeight() {
+  const nextHeight = window.visualViewport?.height ?? window.innerHeight;
+  const widthChanged = window.innerWidth !== lastViewportWidth;
+  const heightDelta = Math.abs(nextHeight - stableViewportHeight);
+
+  if (widthChanged || heightDelta > 80) {
+    stableViewportHeight = nextHeight;
+    lastViewportWidth = window.innerWidth;
+    return true;
+  }
+
+  return false;
+}
+
+function isHeroPinned() {
+  return document.body.classList.contains("is-hero-pinned");
+}
 
 function initSmoothScroll() {
   const topbar = document.getElementById("topbar");
@@ -37,7 +61,6 @@ function initSmoothScroll() {
           height: window.innerHeight,
         };
       },
-      pinType: "transform",
     });
 
     ScrollTrigger.addEventListener("refresh", () => lenis.resize());
@@ -103,17 +126,33 @@ function initSmoothScroll() {
       easing: (t) => 1 - Math.pow(1 - t, 3),
     });
   });
+
+  const onViewportChange = () => {
+    if (!updateStableViewportHeight()) return;
+    if (typeof scheduleScrollRefresh === "function") {
+      scheduleScrollRefresh();
+    }
+  };
+
+  window.addEventListener("resize", onViewportChange);
+  window.visualViewport?.addEventListener("resize", onViewportChange);
 }
 
 function updateScrollState() {
+  if (isHeroPinned()) return;
+
   const topbar = document.getElementById("topbar");
   const currentScroll =
     typeof lenis?.scroll === "number" ? lenis.scroll : window.scrollY;
+  const viewportHeight = getStableViewportHeight();
+  const compactOn = viewportHeight * 0.22;
 
   if (topbar) {
-    const isCompact = currentScroll > window.innerHeight * 0.18;
+    const isCompact = currentScroll > compactOn;
+
     const shouldAnimateTopbar =
-      topbarCompactState !== undefined && topbarCompactState !== isCompact;
+      topbarCompactState !== undefined &&
+      topbarCompactState !== isCompact;
 
     document.body.classList.toggle("is-topbar-compact", isCompact);
 

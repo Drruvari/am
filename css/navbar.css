@@ -15,6 +15,24 @@
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  contain: layout style paint;
+  isolation: isolate;
+}
+
+body.is-hero-pinned::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: clamp(5.5rem, 12vw, 7rem);
+  background: var(--bg);
+  z-index: 7000;
+  pointer-events: none;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 .topbar a {
@@ -211,6 +229,17 @@ body.is-topbar-compact .topbar-nav {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+}
+
+body.is-hero-pinned .topbar-nav {
+  transition: none;
+}
+
+body.is-hero-pinned .topbar-actions .morph-btn__body,
+body.is-hero-pinned .topbar-actions .morph-btn__content,
+body.is-hero-pinned .topbar-actions .morph-btn__ring {
+  transition: none;
+  animation: none;
 }
 
 .mobile-menu {

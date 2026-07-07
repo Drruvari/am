@@ -128,6 +128,13 @@ function initMorphButtons() {
     btn.prepend(layer);
 
     const setHover = (active) => {
+      if (
+        document.body.classList.contains("is-hero-pinned") &&
+        btn.closest(".topbar")
+      ) {
+        return;
+      }
+
       btn.classList.toggle("is-hover", active);
 
       gsap.to(body, {
@@ -163,6 +170,8 @@ function initMorphButtons() {
       const content = btn.querySelector(".morph-btn__content");
 
       const onMove = (e) => {
+        if (document.body.classList.contains("is-hero-pinned")) return;
+
         const rect = btn.getBoundingClientRect();
         const x = e.clientX - rect.left - rect.width / 2;
         const y = e.clientY - rect.top - rect.height / 2;
@@ -461,51 +470,104 @@ function ensureHeroCopyWrap(container) {
   return wrap;
 }
 
+function ensureHeroTransformWrap(shell) {
+  if (!shell) return null;
+
+  const parent = shell.parentElement;
+  if (parent?.classList.contains("hero-facade-transform")) {
+    return parent;
+  }
+
+  const wrap = document.createElement("div");
+  wrap.className = "hero-facade-transform";
+  shell.before(wrap);
+  wrap.append(shell);
+  return wrap;
+}
+
 function initHeroHandoff({ hero, heroContainer, heroImage, heroShell }) {
   const heroCopy = ensureHeroCopyWrap(heroContainer);
-  if (!hero || !heroContainer || !heroImage || !heroShell || !heroCopy) {
+  const heroTransform = ensureHeroTransformWrap(heroShell);
+  const heroMedia = heroShell?.querySelector(".hero-facade-media");
+  if (
+    !hero ||
+    !heroContainer ||
+    !heroImage ||
+    !heroShell ||
+    !heroCopy ||
+    !heroTransform ||
+    !heroMedia
+  ) {
     return null;
   }
 
   const getHeroBleed = () => parseFloat(getComputedStyle(hero).paddingLeft) || 0;
 
-  const getCollapseDistance = () => {
-    const gap = parseFloat(getComputedStyle(heroContainer).gap) || 0;
-    return heroCopy.offsetHeight + gap;
+  const heroMetrics = {
+    coverScale: 1,
+    targetX: 0,
+    targetY: 0,
   };
 
-  const getShellScaleX = () => {
+  const measureHeroHandoff = (resetTransform = false) => {
+    if (resetTransform) {
+      gsap.set(heroTransform, { clearProps: "transform" });
+    }
+
     const bleed = getHeroBleed();
-    const shellWidth = heroShell.offsetWidth || 1;
-    return (shellWidth + bleed * 2) / shellWidth;
-  };
+    const viewportW = window.innerWidth;
+    const viewportH = getStableViewportHeight();
+    const shellRect = heroShell.getBoundingClientRect();
+    const shellW = shellRect.width || 1;
+    const shellH = shellRect.height || 1;
 
-  const getShellStartScaleY = () => {
-    const target = heroContainer.clientHeight * 0.92;
-    const current = heroShell.offsetHeight || 1;
-    return Math.min(1, current / target);
+    heroMetrics.coverScale = Math.max(
+      (viewportW + bleed * 2) / shellW,
+      viewportH / shellH,
+    );
+
+    const shellCenterX = shellRect.left + shellW / 2;
+    const shellCenterY = shellRect.top + shellH / 2;
+
+    heroMetrics.targetX = viewportW / 2 - shellCenterX;
+    heroMetrics.targetY = viewportH / 2 - shellCenterY;
   };
 
   const setHeroMotionState = (active) => {
-    const value = active ? "transform" : "auto";
-    heroShell.style.willChange = value;
-    heroImage.style.willChange = value;
+    heroTransform.style.willChange = active ? "transform" : "auto";
+    heroMedia.style.willChange = active ? "transform" : "auto";
   };
 
+  measureHeroHandoff(true);
   setHeroMotionState(true);
 
   const timeline = gsap.timeline({
     scrollTrigger: {
+      id: "hero-handoff",
       trigger: ".hero",
       start: "top top",
-      end: () => `+=${window.innerHeight * 0.9}`,
+      end: () => `+=${getStableViewportHeight() * 0.9}`,
       pin: true,
-      pinType: "transform",
+      pinType: "fixed",
       pinSpacing: true,
-      scrub: 0.6,
+      scrub: true,
       anticipatePin: 1,
       refreshPriority: 0,
       invalidateOnRefresh: true,
+      onRefreshInit: (self) => {
+        if (self.progress <= 0.001) measureHeroHandoff(true);
+      },
+      onToggle: (self) => {
+        document.body.classList.toggle("is-hero-pinned", self.isActive);
+        if (self.isActive) {
+          document.body.classList.remove("is-topbar-compact");
+          if (typeof topbarCompactState !== "undefined") {
+            topbarCompactState = false;
+          }
+        } else if (typeof updateScrollState === "function") {
+          updateScrollState();
+        }
+      },
       onLeave: () => setHeroMotionState(false),
       onEnterBack: () => setHeroMotionState(true),
     },
@@ -515,37 +577,49 @@ function initHeroHandoff({ hero, heroContainer, heroImage, heroShell }) {
     .to(
       heroCopy,
       {
-        scaleY: 0,
+        y: -32,
         opacity: 0,
         ease: "power2.in",
         duration: 0.7,
+        force3D: true,
       },
       0,
     )
     .fromTo(
-      heroShell,
+      heroTransform,
       {
+        x: 0,
         y: 0,
-        scaleY: () => getShellStartScaleY(),
-        scaleX: 1,
+        scale: 1,
+        immediateRender: false,
       },
       {
-        y: () => -getCollapseDistance(),
-        scaleY: 1,
-        scaleX: () => getShellScaleX(),
+        x: () => heroMetrics.targetX,
+        y: () => heroMetrics.targetY,
+        scale: () => heroMetrics.coverScale,
         ease: "power2.inOut",
         duration: 1,
+        force3D: true,
+        immediateRender: false,
       },
       0,
     )
     .fromTo(
-      heroImage,
-      { scale: 1.1 },
-      { scale: 1, ease: "none", duration: 1 },
+      heroMedia,
+      { yPercent: -5, force3D: true },
+      { yPercent: 0, ease: "none", duration: 1, force3D: true },
       0,
     );
 
-  return { timeline, heroCopy, heroShell, heroImage, setHeroMotionState };
+  return {
+    timeline,
+    heroCopy,
+    heroTransform,
+    heroShell,
+    heroMedia,
+    heroImage,
+    setHeroMotionState,
+  };
 }
 
 function initArchiveScroll(intro, track) {
@@ -558,7 +632,7 @@ function initArchiveScroll(intro, track) {
       start: "top top",
       end: () => `+=${Math.max(distance(), 1)}`,
       pin: true,
-      pinType: "transform",
+      pinType: "fixed",
       pinSpacing: true,
       scrub: 0.65,
       anticipatePin: 1,
@@ -607,6 +681,7 @@ function initScrollAnimations() {
     const worksHoverCleanups = initWorksFigureHover();
 
     return () => {
+      document.body.classList.remove("is-hero-pinned");
       heroHandoff?.timeline?.scrollTrigger?.kill();
       heroHandoff?.timeline?.kill();
       heroHandoff?.setHeroMotionState(false);
@@ -618,31 +693,22 @@ function initScrollAnimations() {
           heroContainer,
           heroHandoff?.heroCopy,
           heroImage,
+          heroHandoff?.heroTransform,
           heroShell,
+          heroHandoff?.heroMedia,
           archiveTrack,
           ".archive-intro",
           ".archive-card img",
         ].filter(Boolean),
         {
-          clearProps: "transform,opacity",
+          clearProps: "transform,opacity,willChange",
         },
       );
     };
   });
 
   mm.add("(max-width: 768px)", () => {
-    const hero = document.querySelector(".hero");
-    const heroContainer = document.querySelector(".hero-container");
-    const heroImage = document.querySelector(".hero-image");
-    const heroShell = document.querySelector(".hero-facade-shell");
     const archiveIntro = document.querySelector(".archive-intro");
-
-    const heroHandoff = initHeroHandoff({
-      hero,
-      heroContainer,
-      heroImage,
-      heroShell,
-    });
 
     let archiveIntroTween;
     if (archiveIntro) {
@@ -677,24 +743,11 @@ function initScrollAnimations() {
     initWorksAnimations(true);
 
     return () => {
-      heroHandoff?.timeline?.scrollTrigger?.kill();
-      heroHandoff?.timeline?.kill();
-      heroHandoff?.setHeroMotionState(false);
       cardCleanups.forEach((cleanup) => cleanup());
       archiveIntroTween?.kill();
-      gsap.set(
-        [
-          heroContainer,
-          heroHandoff?.heroCopy,
-          heroImage,
-          heroShell,
-          archiveIntro,
-          ".archive-card",
-        ].filter(Boolean),
-        {
-          clearProps: "transform,opacity",
-        },
-      );
+      gsap.set([archiveIntro, ".archive-card"].filter(Boolean), {
+        clearProps: "transform,opacity",
+      });
     };
   });
 }
@@ -795,21 +848,26 @@ function initWorksFigureHover() {
 }
 
 let pageScrollInitialized = false;
+let scrollRefreshTimer;
 
 function refreshScrollLayout() {
+  updateStableViewportHeight();
   clearManifestoWidthCache();
   ScrollTrigger.refresh(true);
   updateScrollState();
 }
 
 function scheduleScrollRefresh() {
-  const refresh = () => requestAnimationFrame(refreshScrollLayout);
+  window.clearTimeout(scrollRefreshTimer);
+  scrollRefreshTimer = window.setTimeout(() => {
+    const refresh = () => requestAnimationFrame(refreshScrollLayout);
 
-  if (document.fonts?.ready) {
-    document.fonts.ready.then(refresh).catch(refresh);
-  } else {
-    refresh();
-  }
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(refresh).catch(refresh);
+    } else {
+      refresh();
+    }
+  }, isHeroPinned() ? 180 : 80);
 }
 
 function initPageScroll() {
