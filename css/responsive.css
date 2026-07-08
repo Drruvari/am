@@ -78,7 +78,7 @@
   }
 
   .site-header__actions {
-    --header-contact-width: 7.5rem;
+    --header-contact-width: 9rem;
     --header-menu-width: 4.2rem;
     --header-action-gap: 0.55rem;
     flex: 0 0 auto;
@@ -92,16 +92,6 @@
     min-height: 2.35rem;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
-  }
-
-  .btn--pill > a.site-header__contact-link,
-  .btn--pill > button.site-header__menu-btn {
-    padding: 0.68rem 0.8rem;
-  }
-
-  .site-header__contact-link {
-    font-size: clamp(0.56rem, 2.6vw, 0.62rem);
-    letter-spacing: 0.06em;
   }
 
   .loader {
@@ -280,12 +270,6 @@
     line-height: 0.92;
   }
 
-  .footer__cta-link {
-    width: auto;
-    max-width: 100%;
-    justify-content: center;
-  }
-
   .footer-grid {
     grid-template-columns: 1fr;
     gap: 2.5rem;
@@ -334,11 +318,6 @@
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     height: 100dvh;
-  }
-
-  .btn--panel {
-    top: calc(var(--page-gutter) + env(safe-area-inset-top, 0px));
-    right: var(--content-inset);
   }
 
   .project-panel__visual {
@@ -422,7 +401,7 @@
   }
 
   .site-header__actions {
-    --header-contact-width: 6.75rem;
+    --header-contact-width: 8.25rem;
     --header-menu-width: 3.85rem;
     --header-action-gap: 0.45rem;
     height: 2.25rem;
@@ -432,26 +411,6 @@
     width: clamp(3.75rem, 19vw, 5rem);
   }
 
-  .site-header__contact-link,
-  .site-header__menu-btn {
-    min-height: 2.2rem;
-    font-size: 0.58rem;
-  }
-
-  .btn--pill > a.site-header__contact-link,
-  .btn--pill > button.site-header__menu-btn {
-    padding: 0.58rem 0.68rem;
-  }
-  .footer__cta-link .btn__label {
-    flex-direction: row;
-    flex-wrap: nowrap;
-    gap: 0.75rem;
-    text-align: center;
-  }
-  .footer__cta-link .btn__label > span:first-child {
-    max-width: none;
-    line-height: 1.2;
-  }
   .nav-drawer__panel {
     width: 100%;
     border-left: 0;
@@ -463,14 +422,9 @@
 
 @media (max-width: 22.5rem) {
   .site-header__actions {
-    --header-contact-width: 6.25rem;
+    --header-contact-width: 7.75rem;
     --header-menu-width: 3.5rem;
     --header-action-gap: 0.35rem;
-  }
-
-  .site-header__contact-link {
-    font-size: 0.52rem;
-    letter-spacing: 0.04em;
   }
 
   .hero__title {
@@ -499,11 +453,6 @@
   .hero__media {
     min-height: clamp(8rem, 42dvh, 12rem);
   }
-
-  .btn--rect > a.hero__cta {
-    min-height: 2.35rem;
-    padding: 0.6rem 0.95rem;
-  }
 }
 
 @media (hover: none) and (pointer: coarse) {
@@ -525,21 +474,8 @@
     scroll-behavior: auto;
   }
 
-  .cursor,
-  .cursor__img {
-    display: none !important;
-    transition: none !important;
-  }
-
-  body.has-custom-cursor,
-  body.has-custom-cursor * {
-    cursor: auto !important;
-  }
-
   .nav-drawer__panel,
-  .nav-drawer__backdrop,
-  .btn__surface,
-  .text-hover-track {
+  .nav-drawer__backdrop {
     transition: none !important;
   }
 }

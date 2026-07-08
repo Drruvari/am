@@ -31,24 +31,6 @@
   text-transform: uppercase;
 }
 
-.footer__cta {
-  color: var(--fg);
-  max-width: min(100%, 34rem);
-}
-
-.footer__cta-link {
-  padding: 0.95rem 1.65rem;
-  min-height: 3.05rem;
-  width: 100%;
-  font-family: var(--font-mono);
-  font-size: clamp(0.66rem, 0.9vw, 0.72rem);
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  background: transparent;
-  transition: color 0.35s ease;
-}
-
 .footer-grid {
   display: grid;
   grid-template-columns: minmax(0, 0.68fr) minmax(0, 0.88fr) minmax(0, 0.92fr);

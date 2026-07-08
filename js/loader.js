@@ -51,6 +51,7 @@ function initLoader() {
 
   const revealHero = () => {
     document.documentElement.classList.remove("is-loading");
+    gsap.set(".hero__img", { scale: 1, transformOrigin: "50% 100%" });
   };
 
   const updateDrawProgress = (progressRatio) => {

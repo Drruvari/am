@@ -1,1 +1,2 @@
-/* Stylesheets are linked directly from index.html to avoid @import chains. */
+/* Stylesheets are linked directly from index.html to avoid @import chains.
+   Component files: button.css, hero.css, navbar.css, footer.css, etc. */

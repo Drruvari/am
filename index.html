@@ -90,6 +90,7 @@
       document.documentElement.classList.add("is-loading");
     </script>
     <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/button.css" />
     <link rel="stylesheet" href="css/loader.css" />
     <link rel="stylesheet" href="css/navbar.css" />
     <link rel="stylesheet" href="css/hero.css" />
@@ -323,6 +324,16 @@
             class="site-header__contact-link"
             data-hover="link"
           >
+            <div class="btn__icon" aria-hidden="true">
+              <img
+                src="assets/arrow.svg"
+                alt=""
+                width="17"
+                height="17"
+                decoding="async"
+                class="btn__icon-img"
+              />
+            </div>
             <span class="btn__label"><span>Get in Touch</span></span>
           </a>
         </div>
@@ -526,13 +537,15 @@
                 <a href="#work" class="hero__cta" data-hover="link">
                   <span class="btn__label">
                     <span>View work</span>
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                      <path
-                        d="M1 13L13 1M13 1H4M13 1V10"
-                        stroke="currentColor"
-                        stroke-width="1.4"
-                      />
-                    </svg>
+                    <img
+                      class="hero__cta-icon"
+                      src="assets/arrow.svg"
+                      alt=""
+                      width="17"
+                      height="17"
+                      decoding="async"
+                      aria-hidden="true"
+                    />
                   </span>
                 </a>
               </div>
@@ -545,7 +558,7 @@
                 type="image/webp"
                 srcset="
                   assets/images/image-600.webp   600w,
-                  assets/images/image-1600.webp 1600w
+                  assets/images/image-1600.webp 1470w
                 "
                 sizes="100vw"
               />
@@ -553,15 +566,15 @@
                 type="image/jpeg"
                 srcset="
                   assets/images/image-600.jpg   600w,
-                  assets/images/image-1600.jpg 1600w
+                  assets/images/image-1600.jpg 1470w
                 "
                 sizes="100vw"
               />
               <img
                 class="hero__img"
                 src="assets/images/image-600.jpg"
-                width="3624"
-                height="3618"
+                width="1470"
+                height="980"
                 alt="Architectural study shaped by light and material restraint"
                 fetchpriority="high"
                 decoding="async"
@@ -587,8 +600,8 @@
                 <img
                   src="assets/images/image-480.jpg"
                   alt=""
-                  width="3624"
-                  height="3618"
+                  width="1470"
+                  height="980"
                   loading="lazy"
                   decoding="async"
                 />
@@ -607,8 +620,8 @@
                 <img
                   src="assets/images/image-480.jpg"
                   alt=""
-                  width="3624"
-                  height="3618"
+                  width="1470"
+                  height="980"
                   loading="lazy"
                   decoding="async"
                 />
@@ -634,8 +647,8 @@
                 <img
                   src="assets/images/image-480.jpg"
                   alt=""
-                  width="3624"
-                  height="3618"
+                  width="1470"
+                  height="980"
                   loading="lazy"
                   decoding="async"
                 />
@@ -655,8 +668,8 @@
                 <img
                   src="assets/images/image-480.jpg"
                   alt=""
-                  width="3624"
-                  height="3618"
+                  width="1470"
+                  height="980"
                   loading="lazy"
                   decoding="async"
                 />
@@ -677,8 +690,8 @@
                 <img
                   src="assets/images/image-480.jpg"
                   alt=""
-                  width="3624"
-                  height="3618"
+                  width="1470"
+                  height="980"
                   loading="lazy"
                   decoding="async"
                 />
@@ -704,14 +717,30 @@
             <div class="archive-card">
               <picture>
                 <source
-                  srcset="assets/images/image-600.webp"
                   type="image/webp"
+                  srcset="
+                    assets/images/image-480.webp   480w,
+                    assets/images/image-600.webp   600w,
+                    assets/images/image-800.webp   800w,
+                    assets/images/image-1600.webp 1470w
+                  "
+                  sizes="(max-width: 48rem) 100vw, 50vw"
+                />
+                <source
+                  type="image/jpeg"
+                  srcset="
+                    assets/images/image-480.jpg   480w,
+                    assets/images/image-600.jpg   600w,
+                    assets/images/image-800.jpg   800w,
+                    assets/images/image-1600.jpg 1470w
+                  "
+                  sizes="(max-width: 48rem) 100vw, 50vw"
                 />
                 <img
                   src="assets/images/image-600.jpg"
                   alt="Villa Lura"
-                  width="3624"
-                  height="3618"
+                  width="1470"
+                  height="980"
                   loading="lazy"
                   decoding="async"
                 />
@@ -723,14 +752,30 @@
             <div class="archive-card">
               <picture>
                 <source
-                  srcset="assets/images/image-600.webp"
                   type="image/webp"
+                  srcset="
+                    assets/images/image-480.webp   480w,
+                    assets/images/image-600.webp   600w,
+                    assets/images/image-800.webp   800w,
+                    assets/images/image-1600.webp 1470w
+                  "
+                  sizes="(max-width: 48rem) 100vw, 50vw"
+                />
+                <source
+                  type="image/jpeg"
+                  srcset="
+                    assets/images/image-480.jpg   480w,
+                    assets/images/image-600.jpg   600w,
+                    assets/images/image-800.jpg   800w,
+                    assets/images/image-1600.jpg 1470w
+                  "
+                  sizes="(max-width: 48rem) 100vw, 50vw"
                 />
                 <img
                   src="assets/images/image-600.jpg"
                   alt="Dajt Pavilion"
-                  width="3624"
-                  height="3618"
+                  width="1470"
+                  height="980"
                   loading="lazy"
                   decoding="async"
                 />
@@ -742,14 +787,30 @@
             <div class="archive-card">
               <picture>
                 <source
-                  srcset="assets/images/image-600.webp"
                   type="image/webp"
+                  srcset="
+                    assets/images/image-480.webp   480w,
+                    assets/images/image-600.webp   600w,
+                    assets/images/image-800.webp   800w,
+                    assets/images/image-1600.webp 1470w
+                  "
+                  sizes="(max-width: 48rem) 100vw, 50vw"
+                />
+                <source
+                  type="image/jpeg"
+                  srcset="
+                    assets/images/image-480.jpg   480w,
+                    assets/images/image-600.jpg   600w,
+                    assets/images/image-800.jpg   800w,
+                    assets/images/image-1600.jpg 1470w
+                  "
+                  sizes="(max-width: 48rem) 100vw, 50vw"
                 />
                 <img
                   src="assets/images/image-600.jpg"
                   alt="Krujë Studio"
-                  width="3624"
-                  height="3618"
+                  width="1470"
+                  height="980"
                   loading="lazy"
                   decoding="async"
                 />
@@ -761,14 +822,30 @@
             <div class="archive-card">
               <picture>
                 <source
-                  srcset="assets/images/image-600.webp"
                   type="image/webp"
+                  srcset="
+                    assets/images/image-480.webp   480w,
+                    assets/images/image-600.webp   600w,
+                    assets/images/image-800.webp   800w,
+                    assets/images/image-1600.webp 1470w
+                  "
+                  sizes="(max-width: 48rem) 100vw, 50vw"
+                />
+                <source
+                  type="image/jpeg"
+                  srcset="
+                    assets/images/image-480.jpg   480w,
+                    assets/images/image-600.jpg   600w,
+                    assets/images/image-800.jpg   800w,
+                    assets/images/image-1600.jpg 1470w
+                  "
+                  sizes="(max-width: 48rem) 100vw, 50vw"
                 />
                 <img
                   src="assets/images/image-600.jpg"
                   alt="Courtyard House"
-                  width="3624"
-                  height="3618"
+                  width="1470"
+                  height="980"
                   loading="lazy"
                   decoding="async"
                 />
@@ -812,14 +889,30 @@
             <div class="project-card__media">
               <picture>
                 <source
-                  srcset="assets/images/image-600.webp"
                   type="image/webp"
+                  srcset="
+                    assets/images/image-480.webp   480w,
+                    assets/images/image-600.webp   600w,
+                    assets/images/image-800.webp   800w,
+                    assets/images/image-1600.webp 1470w
+                  "
+                  sizes="(max-width: 48rem) 100vw, 50vw"
+                />
+                <source
+                  type="image/jpeg"
+                  srcset="
+                    assets/images/image-480.jpg   480w,
+                    assets/images/image-600.jpg   600w,
+                    assets/images/image-800.jpg   800w,
+                    assets/images/image-1600.jpg 1470w
+                  "
+                  sizes="(max-width: 48rem) 100vw, 50vw"
                 />
                 <img
                   src="assets/images/image-600.jpg"
                   alt="Cliff House"
-                  width="3624"
-                  height="3618"
+                  width="1470"
+                  height="980"
                   loading="lazy"
                   decoding="async"
                 />
@@ -847,14 +940,30 @@
             <div class="project-card__media">
               <picture>
                 <source
-                  srcset="assets/images/image-600.webp"
                   type="image/webp"
+                  srcset="
+                    assets/images/image-480.webp   480w,
+                    assets/images/image-600.webp   600w,
+                    assets/images/image-800.webp   800w,
+                    assets/images/image-1600.webp 1470w
+                  "
+                  sizes="(max-width: 48rem) 100vw, 50vw"
+                />
+                <source
+                  type="image/jpeg"
+                  srcset="
+                    assets/images/image-480.jpg   480w,
+                    assets/images/image-600.jpg   600w,
+                    assets/images/image-800.jpg   800w,
+                    assets/images/image-1600.jpg 1470w
+                  "
+                  sizes="(max-width: 48rem) 100vw, 50vw"
                 />
                 <img
                   src="assets/images/image-600.jpg"
                   alt="Industrial Loft"
-                  width="3624"
-                  height="3618"
+                  width="1470"
+                  height="980"
                   loading="lazy"
                   decoding="async"
                 />
@@ -884,14 +993,30 @@
             <div class="project-card__media">
               <picture>
                 <source
-                  srcset="assets/images/image-600.webp"
                   type="image/webp"
+                  srcset="
+                    assets/images/image-480.webp   480w,
+                    assets/images/image-600.webp   600w,
+                    assets/images/image-800.webp   800w,
+                    assets/images/image-1600.webp 1470w
+                  "
+                  sizes="(max-width: 48rem) 100vw, 50vw"
+                />
+                <source
+                  type="image/jpeg"
+                  srcset="
+                    assets/images/image-480.jpg   480w,
+                    assets/images/image-600.jpg   600w,
+                    assets/images/image-800.jpg   800w,
+                    assets/images/image-1600.jpg 1470w
+                  "
+                  sizes="(max-width: 48rem) 100vw, 50vw"
                 />
                 <img
                   src="assets/images/image-600.jpg"
                   alt="Botanical Pavilion"
-                  width="3624"
-                  height="3618"
+                  width="1470"
+                  height="980"
                   loading="lazy"
                   decoding="async"
                 />
@@ -919,14 +1044,30 @@
             <div class="project-card__media">
               <picture>
                 <source
-                  srcset="assets/images/image-600.webp"
                   type="image/webp"
+                  srcset="
+                    assets/images/image-480.webp   480w,
+                    assets/images/image-600.webp   600w,
+                    assets/images/image-800.webp   800w,
+                    assets/images/image-1600.webp 1470w
+                  "
+                  sizes="(max-width: 48rem) 100vw, 50vw"
+                />
+                <source
+                  type="image/jpeg"
+                  srcset="
+                    assets/images/image-480.jpg   480w,
+                    assets/images/image-600.jpg   600w,
+                    assets/images/image-800.jpg   800w,
+                    assets/images/image-1600.jpg 1470w
+                  "
+                  sizes="(max-width: 48rem) 100vw, 50vw"
                 />
                 <img
                   src="assets/images/image-600.jpg"
                   alt="Monolith Sanctuary"
-                  width="3624"
-                  height="3618"
+                  width="1470"
+                  height="980"
                   loading="lazy"
                   decoding="async"
                 />
@@ -966,8 +1107,8 @@
               <img
                 src="assets/images/image-600.jpg"
                 alt="Warm residential architecture with garden path"
-                width="3624"
-                height="3618"
+                width="1470"
+                height="980"
                 loading="lazy"
                 decoding="async"
               />
@@ -1106,6 +1247,7 @@
 
     <script src="js/smooth-scroll.js" defer></script>
     <script src="js/cursor.js" defer></script>
+    <script src="js/button.js" defer></script>
     <script src="js/animations.js" defer></script>
     <script src="js/logo-eyes.js" defer></script>
     <script src="js/loader.js" defer></script>

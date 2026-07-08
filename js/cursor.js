@@ -2,7 +2,7 @@ function initCursor() {
   const cursor = document.getElementById("cursor");
   if (!cursor) return;
 
-  mm.add("(min-width: 769px)", () => {
+  mm.add("(min-width: 769px) and (hover: hover) and (pointer: fine)", () => {
     document.body.classList.add("has-custom-cursor");
 
     const cursorImages = Array.from(cursor.querySelectorAll(".cursor__img"));

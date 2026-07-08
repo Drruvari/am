@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
   desktopQuery = window.matchMedia("(min-width: 769px)");
   mobileQuery = window.matchMedia("(max-width: 768px)");
   finePointerQuery = window.matchMedia(
-    "(min-width: 769px) and (pointer: fine)",
+    "(min-width: 769px) and (hover: hover) and (pointer: fine)",
   );
   prefersReducedMotionQuery = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
@@ -82,6 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   initSmoothScroll();
   initCursor();
+  initButtonSystem();
   initAnimations();
   initLoader();
   initLogoHover();
