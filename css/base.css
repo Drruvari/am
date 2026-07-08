@@ -48,11 +48,13 @@ html.lenis {
   height: auto;
 }
 html {
+  width: 100%;
+  max-width: 100%;
   scroll-padding-top: calc(
     var(--header-offset) + env(safe-area-inset-top, 0px)
   );
   scrollbar-width: none;
-  overflow-x: hidden;
+  overflow-x: clip;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
@@ -111,14 +113,23 @@ body::-webkit-scrollbar {
 }
 
 body {
+  width: 100%;
+  max-width: 100%;
   background: var(--bg);
   color: var(--fg);
   font-family: var(--font-body);
   font-size: clamp(0.9375rem, 0.2vw + 0.9rem, 1rem);
   line-height: 1.6;
-  overflow-x: hidden;
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+img,
+picture,
+video,
+canvas {
+  max-width: 100%;
 }
 
 main {
