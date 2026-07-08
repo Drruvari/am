@@ -15,21 +15,26 @@
   --panel: var(--bg);
   --muted: var(--fg);
   --line: var(--fg);
-  --page-gutter: clamp(1.25rem, 3vw, 2.5rem);
-  --page-max: 1440px;
+  --page-gutter: clamp(1rem, 2.5vw + 0.5rem, 2.5rem);
+  --page-max: 90rem;
   --content-inset: max(var(--page-gutter), (100vw - var(--page-max)) / 2);
-  --section-pad: clamp(6rem, 10vw, 12rem);
+  --section-pad: clamp(4rem, 6vw + 2rem, 12rem);
+  --header-offset: clamp(4.75rem, 5vw + 3rem, 6.5rem);
+  --radius-sm: clamp(0.75rem, 1.5vw, 1.25rem);
+  --radius-lg: clamp(1.25rem, 3vw, 4rem);
   --font-display: "Bricolage Grotesque", sans-serif;
   --font-heading: "Bricolage Grotesque", sans-serif;
   --font-body: "Manrope", sans-serif;
   --font-mono: "Manrope", sans-serif;
   --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  color-scheme: light;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 48rem) {
   :root {
-    --page-gutter: 1.25rem;
-    --section-pad: clamp(4rem, 12vw, 5rem);
+    --page-gutter: clamp(1rem, 4vw, 1.25rem);
+    --section-pad: clamp(3.5rem, 10vw + 1rem, 5rem);
+    --header-offset: calc(4.75rem + env(safe-area-inset-top, 0px));
   }
 }
 
@@ -43,9 +48,13 @@ html.lenis {
   height: auto;
 }
 html {
-  scroll-padding-top: 6rem;
+  scroll-padding-top: calc(
+    var(--header-offset) + env(safe-area-inset-top, 0px)
+  );
   scrollbar-width: none;
-  overflow-x: hidden;
+  overflow-x: clip;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 .skip-link {
@@ -105,9 +114,9 @@ body {
   background: var(--bg);
   color: var(--fg);
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: clamp(0.9375rem, 0.2vw + 0.9rem, 1rem);
   line-height: 1.6;
-  overflow-x: hidden;
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -226,6 +235,16 @@ h3 {
   line-height: 0.9;
   letter-spacing: 0;
   font-optical-sizing: auto;
+  text-wrap: balance;
+}
+
+p,
+.hero__lede,
+.archive__intro p,
+.projects__intro p,
+.project-panel__description,
+.footer-info-block p {
+  text-wrap: pretty;
 }
 h2 {
   font-size: clamp(3rem, 6vw, 5.5rem);

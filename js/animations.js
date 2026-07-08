@@ -133,7 +133,7 @@ function initButtons() {
 
   mm.add("(min-width: 769px) and (pointer: fine)", () => {
     const MAGNET_STRENGTH = 0.24;
-    const TEXT_FOLLOW_STRENGTH = 0.38;
+    const TEXT_FOLLOW_STRENGTH = 0.32;
 
     const cleanups = buttons.map((btn) => {
       const content = btn.querySelector(".btn__label");

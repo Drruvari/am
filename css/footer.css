@@ -51,15 +51,12 @@
 
 .footer-grid {
   display: grid;
-  grid-template-columns: minmax(200px, 0.68fr) minmax(240px, 0.88fr) minmax(
-      280px,
-      0.92fr
-    );
+  grid-template-columns: minmax(0, 0.68fr) minmax(0, 0.88fr) minmax(0, 0.92fr);
   align-items: start;
-  gap: clamp(2rem, 5vw, 6rem);
+  gap: clamp(1.5rem, 4vw + 0.5rem, 6rem);
   min-height: 0;
   padding: clamp(1rem, 2vw, 1.5rem) var(--content-inset)
-    clamp(2rem, 3.5vw, 3rem);
+    clamp(1.5rem, 3vw, 3rem);
 }
 
 .footer-col {
@@ -130,16 +127,14 @@
 
 .footer-bar {
   display: grid;
-  grid-template-columns: minmax(200px, 0.68fr) minmax(240px, 0.88fr) minmax(
-      280px,
-      0.92fr
-    );
-  gap: clamp(1rem, 2vw, 2rem);
+  grid-template-columns: minmax(0, 0.68fr) minmax(0, 0.88fr) minmax(0, 0.92fr);
+  gap: clamp(0.75rem, 2vw, 2rem);
   align-items: end;
-  padding: 0.9rem var(--content-inset) 1.1rem;
+  padding: 0.9rem var(--content-inset)
+    calc(1.1rem + env(safe-area-inset-bottom, 0px));
   color: var(--fg);
   border-top: 1px solid var(--line);
-  font-size: 0.68rem;
+  font-size: clamp(0.62rem, 0.55rem + 0.2vw, 0.68rem);
 }
 
 .footer-bar-col {

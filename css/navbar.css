@@ -1,17 +1,17 @@
 .site-header {
   z-index: 7001;
   position: fixed;
-  top: clamp(0.9rem, 2vw, 1.35rem);
+  top: max(clamp(0.9rem, 2vw, 1.35rem), env(safe-area-inset-top, 0px));
   left: var(--content-inset);
   right: var(--content-inset);
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 1.5rem;
+  gap: clamp(0.75rem, 2vw, 1.5rem);
   pointer-events: none;
   color: var(--fg);
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: clamp(0.62rem, 0.55rem + 0.25vw, 0.68rem);
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -19,6 +19,7 @@
   backface-visibility: hidden;
   overflow: visible;
   isolation: isolate;
+  min-width: 0;
 }
 
 .site-header a {
@@ -185,7 +186,20 @@
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 48.0625rem) and (max-width: 63.9375rem) {
+  .site-header__nav {
+    display: flex;
+    gap: 0.35rem;
+    font-size: clamp(0.68rem, 1.2vw, 0.82rem);
+  }
+
+  .site-header__actions {
+    --header-contact-width: 8.25rem;
+    --header-menu-width: 4.25rem;
+  }
+}
+
+@media (min-width: 64rem) {
   .site-header__nav {
     display: flex;
     font-size: clamp(0.78rem, 0.95vw, 0.92rem);
@@ -277,12 +291,16 @@ body.is-header-compact .site-header__nav {
   display: flex;
   flex-direction: column;
   gap: 2.5rem;
-  padding: 5.5rem var(--content-inset) 2rem;
+  padding:
+    calc(5.5rem + env(safe-area-inset-top, 0px))
+    max(var(--content-inset), env(safe-area-inset-right, 0px))
+    calc(2rem + env(safe-area-inset-bottom, 0px));
   background: var(--bg);
   border-left: 1px solid var(--line);
   transform: translateX(100%);
   transition: transform 0.45s var(--ease-out-expo);
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .nav-drawer.is-open .nav-drawer__panel {
