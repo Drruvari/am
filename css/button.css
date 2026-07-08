@@ -195,7 +195,6 @@
 }
 
 .site-header__contact-link {
-  gap: 0.45rem;
   font-size: clamp(0.58rem, 0.5rem + 0.35vw, 0.62rem);
   letter-spacing: 0.08em;
 }
@@ -288,16 +287,6 @@
 }
 
 @media (min-width: 769px) {
-  .site-header__contact-link .btn__icon {
-    width: 1.65rem;
-    height: 1.65rem;
-  }
-
-  .site-header__contact-link .btn__icon-img {
-    width: 0.7rem;
-    height: 0.7rem;
-  }
-
   .btn--pill > a.site-header__contact-link,
   .btn--pill > button.site-header__menu-btn {
     padding: 0.95rem 1.55rem;
