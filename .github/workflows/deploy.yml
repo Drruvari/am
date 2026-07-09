@@ -32,6 +32,19 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          GITHUB_ACTIONS: true
+
+      - name: Verify production build
+        run: |
+          if grep -q '/src/main.tsx' dist/index.html; then
+            echo 'Build is serving source files, not dist output.'
+            exit 1
+          fi
+          if ! grep -q '/am/assets/' dist/index.html; then
+            echo 'Build is missing /am/ asset prefix.'
+            exit 1
+          fi
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
