@@ -1,6 +1,6 @@
-import './style.scss'
-import Button from '@/components/Button'
-import Logo from '@/components/Logo/index'
+import Button from "@/components/Button";
+import Logo from "@/components/Logo/index";
+import "./style.scss";
 
 function MobileMenu() {
   return (
@@ -44,7 +44,7 @@ function MobileMenu() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default function Header() {
@@ -97,5 +97,5 @@ export default function Header() {
       </header>
       <MobileMenu />
     </>
-  )
+  );
 }

@@ -113,7 +113,7 @@
   gap: clamp(0.75rem, 2vw, 2rem);
   align-items: end;
   padding: 0.9rem var(--content-inset)
-    calc(1.1rem + env(safe-area-inset-bottom, 0px));
+    calc(var(--page-margin) + env(safe-area-inset-bottom, 0px));
   color: var(--fg);
   border-top: 1px solid var(--line);
   font-size: clamp(0.62rem, 0.55rem + 0.2vw, 0.68rem);
@@ -231,7 +231,7 @@
     gap: 0.65rem;
     padding:
       1.15rem var(--content-inset)
-      calc(1.35rem + env(safe-area-inset-bottom, 0px));
+      calc(var(--page-margin) + env(safe-area-inset-bottom, 0px));
   }
 
   .footer__bar-col--meta {

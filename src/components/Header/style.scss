@@ -1,7 +1,7 @@
 .header {
   z-index: 7001;
   position: fixed;
-  top: max(clamp(0.9rem, 2vw, 1.35rem), env(safe-area-inset-top, 0px));
+  top: max(var(--page-margin), env(safe-area-inset-top, 0px));
   left: var(--content-inset);
   right: var(--content-inset);
   display: flex;
@@ -356,7 +356,7 @@ body.is-header-compact .header__nav {
 
 @media (max-width: 48rem) {
   .header {
-    top: max(0.75rem, env(safe-area-inset-top, 0px));
+    top: max(var(--page-margin), env(safe-area-inset-top, 0px));
     align-items: center;
     gap: clamp(0.5rem, 2vw, 0.85rem);
     min-width: 0;

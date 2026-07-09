@@ -1,4 +1,4 @@
-@use './breakpoints' as *;
+@use "./breakpoints" as *;
 
 :root {
   --bg: #ededeb;
@@ -8,24 +8,24 @@
   --panel: var(--bg);
   --muted: var(--fg);
   --line: var(--fg);
-  --page-gutter: clamp(1rem, 2.5vw + 0.5rem, 2.5rem);
+  --page-margin: 1.25rem;
+  --page-gutter: var(--page-margin);
   --page-max: 90rem;
-  --content-inset: max(var(--page-gutter), (100vw - var(--page-max)) / 2);
+  --content-inset: var(--page-margin);
   --section-pad: clamp(4rem, 6vw + 2rem, 12rem);
   --header-offset: clamp(4.75rem, 5vw + 3rem, 6.5rem);
   --radius-sm: clamp(0.75rem, 1.5vw, 1.25rem);
   --radius-lg: clamp(1.25rem, 3vw, 4rem);
-  --font-display: 'Bricolage Grotesque', sans-serif;
-  --font-heading: 'Bricolage Grotesque', sans-serif;
-  --font-body: 'Manrope', sans-serif;
-  --font-mono: 'Manrope', sans-serif;
+  --font-display: "Bricolage Grotesque", sans-serif;
+  --font-heading: "Bricolage Grotesque", sans-serif;
+  --font-body: "Manrope", sans-serif;
+  --font-mono: "Manrope", sans-serif;
   --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
   color-scheme: light;
 }
 
 @include below($bp-md) {
   :root {
-    --page-gutter: clamp(1rem, 4vw, 1.25rem);
     --section-pad: clamp(3.5rem, 10vw + 1rem, 5rem);
     --header-offset: calc(4.75rem + env(safe-area-inset-top, 0px));
   }
@@ -80,7 +80,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 
   &::before {
-    content: '';
+    content: "";
     position: fixed;
     inset: 0;
     z-index: -1;

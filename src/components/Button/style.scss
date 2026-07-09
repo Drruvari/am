@@ -150,7 +150,7 @@
 
   &--panel {
     position: absolute;
-    top: clamp(1.25rem, 2.5vw, 2.5rem);
+    top: var(--page-margin);
     right: var(--content-inset);
     z-index: 2010;
   }

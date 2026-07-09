@@ -70,7 +70,7 @@
 .loader__progress {
   position: absolute;
   right: var(--content-inset);
-  bottom: clamp(1.25rem, 3vw, 2.5rem);
+  bottom: var(--page-margin);
   display: flex;
   align-items: baseline;
   gap: 0.05em;

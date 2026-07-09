@@ -1,26 +1,26 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @font-face {
-  font-family: 'Bricolage Grotesque';
-  src: url('./assets/fonts/BricolageGrotesque-VariableFont_opsz,wdth,wght.ttf')
-    format('truetype');
+  font-family: "Bricolage Grotesque";
+  src: url("./assets/fonts/BricolageGrotesque-VariableFont_opsz,wdth,wght.ttf")
+    format("truetype");
   font-weight: 200 800;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Manrope';
-  src: url('./assets/fonts/Manrope-VariableFont_wght.ttf') format('truetype');
+  font-family: "Manrope";
+  src: url("./assets/fonts/Manrope-VariableFont_wght.ttf") format("truetype");
   font-weight: 200 800;
   font-style: normal;
   font-display: swap;
 }
 
 .loader__tagline {
-  font-family: 'Bricolage Grotesque', sans-serif;
+  font-family: "Bricolage Grotesque", sans-serif;
 }
 
-@import './styles/base.scss';
-@import './components/Button/style.scss';
-@import './components/CustomCursor/style.scss';
+@import "./styles/base.scss";
+@import "./components/Button/style.scss";
+@import "./components/CustomCursor/style.scss";
