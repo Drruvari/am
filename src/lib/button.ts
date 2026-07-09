@@ -2,6 +2,38 @@ import { gsap } from 'gsap'
 import { mm } from './globals'
 import { addCleanup } from './cleanup'
 
+function getButtonHoverTarget(btn: HTMLElement) {
+  return btn.querySelector<HTMLElement>('a, button') ?? btn
+}
+
+function resetButtonElement(btn: HTMLElement) {
+  delete btn.dataset.btnReady
+  btn.classList.remove('is-hover')
+  btn.querySelector(':scope > .btn__bg')?.remove()
+  gsap.set(btn, { clearProps: 'transform' })
+
+  const content = btn.querySelector('.btn__label')
+  if (content && !content.querySelector('.text-hover-target')) {
+    gsap.set(content, { clearProps: 'transform' })
+  }
+}
+
+function resetTextHoverElement(originalTarget: HTMLElement, label: string) {
+  originalTarget.textContent = label
+  originalTarget.classList.remove('text-hover-target', 'is-text-hover')
+  delete originalTarget.dataset.textHoverReady
+  delete originalTarget.dataset.textHoverLabel
+
+  originalTarget
+    .querySelectorAll<HTMLElement>('.text-hover-inner, .text-hover-target')
+    .forEach((node) => {
+      delete node.dataset.textHoverReady
+      delete node.dataset.textHoverLabel
+      node.classList.remove('text-hover-target', 'is-text-hover')
+      gsap.killTweensOf(node.querySelector('.text-hover-track'))
+    })
+}
+
 const BUTTON_TEXT_HOVER_TARGETS = [
   '.hero__cta .btn__label > span',
   '.archive-card__label',
@@ -39,14 +71,29 @@ function prepareTextHoverElement(el: HTMLElement) {
 
 function initTextHoverEffects(selectors: string[] = BUTTON_TEXT_HOVER_TARGETS) {
   document.querySelectorAll(selectors.join(',')).forEach((target) => {
-    const el = prepareTextHoverElement(target as HTMLElement)
-    if (el.dataset.textHoverReady === 'true') return
+    const originalTarget = target as HTMLElement
+    const existingLabel =
+      originalTarget.dataset.textHoverLabel ||
+      originalTarget.textContent?.trim() ||
+      ''
+
+    if (
+      originalTarget.dataset.textHoverReady === 'true' ||
+      originalTarget.classList.contains('text-hover-target') ||
+      originalTarget.querySelector('.text-hover-target')
+    ) {
+      resetTextHoverElement(originalTarget, existingLabel)
+    }
+
+    const el = prepareTextHoverElement(originalTarget)
     el.dataset.textHoverReady = 'true'
+    originalTarget.dataset.textHoverReady = 'true'
     el.classList.add('text-hover-target')
 
-    const label = el.textContent?.trim() ?? ''
+    const label = el.textContent?.trim() ?? existingLabel
     if (!label) return
     el.dataset.textHoverLabel = label
+    originalTarget.dataset.textHoverLabel = label
 
     const track = document.createElement('span')
     const current = document.createElement('span')
@@ -73,8 +120,11 @@ function initTextHoverEffects(selectors: string[] = BUTTON_TEXT_HOVER_TARGETS) {
     document.fonts?.ready.then(measure)
     window.addEventListener('resize', measure)
 
+    const btn = el.closest<HTMLElement>('.btn')
     const trigger =
-      el.closest('.btn') || el.closest('a, button') || el
+      (btn ? getButtonHoverTarget(btn) : null) ||
+      el.closest<HTMLElement>('a, button') ||
+      el
     const setHover = (active: boolean) => {
       measure()
       el.classList.toggle('is-text-hover', active)
@@ -102,6 +152,7 @@ function initTextHoverEffects(selectors: string[] = BUTTON_TEXT_HOVER_TARGETS) {
       trigger.removeEventListener('mouseleave', onMouseLeave)
       trigger.removeEventListener('focus', onFocus)
       trigger.removeEventListener('blur', onBlur)
+      resetTextHoverElement(originalTarget, label)
     })
   })
 }
@@ -110,13 +161,16 @@ function initButtons() {
   const buttons = gsap.utils.toArray<HTMLElement>('.btn')
 
   buttons.forEach((btn) => {
-    if (btn.dataset.btnReady === 'true') return
+    if (btn.dataset.btnReady === 'true') {
+      resetButtonElement(btn)
+    }
+
     btn.dataset.btnReady = 'true'
 
     const layer = document.createElement('span')
     const body = document.createElement('span')
     const content = btn.querySelector('.btn__label')
-    const interactive = btn.querySelector('a, button')
+    const interactive = getButtonHoverTarget(btn)
 
     layer.className = 'btn__bg'
     body.className = 'btn__surface'
@@ -148,16 +202,17 @@ function initButtons() {
     const onFocus = () => setHover(true)
     const onBlur = () => setHover(false)
 
-    btn.addEventListener('mouseenter', onMouseEnter)
-    btn.addEventListener('mouseleave', onMouseLeave)
-    interactive?.addEventListener('focus', onFocus)
-    interactive?.addEventListener('blur', onBlur)
+    interactive.addEventListener('mouseenter', onMouseEnter)
+    interactive.addEventListener('mouseleave', onMouseLeave)
+    interactive.addEventListener('focus', onFocus)
+    interactive.addEventListener('blur', onBlur)
 
     addCleanup(() => {
-      btn.removeEventListener('mouseenter', onMouseEnter)
-      btn.removeEventListener('mouseleave', onMouseLeave)
-      interactive?.removeEventListener('focus', onFocus)
-      interactive?.removeEventListener('blur', onBlur)
+      interactive.removeEventListener('mouseenter', onMouseEnter)
+      interactive.removeEventListener('mouseleave', onMouseLeave)
+      interactive.removeEventListener('focus', onFocus)
+      interactive.removeEventListener('blur', onBlur)
+      resetButtonElement(btn)
     })
   })
 
