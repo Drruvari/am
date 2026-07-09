@@ -1,6 +1,7 @@
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
+import { addCleanup } from './cleanup'
 import { finePointerQuery, desktopQuery } from './globals'
 
 export type LenisLike = Lenis | FallbackLenis
@@ -110,14 +111,24 @@ export function initSmoothScroll() {
     })
     lenis = smoothLenis
 
-    lenis.on('scroll', () => {
+    const onLenisScroll = () => {
       ScrollTrigger.update()
       updateScrollState()
-    })
-    gsap.ticker.add((time) => {
+    }
+    smoothLenis.on('scroll', onLenisScroll)
+
+    const onTicker = (time: number) => {
       smoothLenis.raf(time * 1000)
-    })
+    }
+    gsap.ticker.add(onTicker)
     gsap.ticker.lagSmoothing(0)
+
+    addCleanup(() => {
+      smoothLenis.off('scroll', onLenisScroll)
+      gsap.ticker.remove(onTicker)
+      smoothLenis.destroy()
+      document.documentElement.classList.remove('lenis', 'lenis-smooth')
+    })
   } else {
     document.documentElement.classList.remove('lenis', 'lenis-smooth')
     lenis = {
@@ -139,17 +150,15 @@ export function initSmoothScroll() {
       },
     }
 
-    window.addEventListener(
-      'scroll',
-      () => {
-        ScrollTrigger.update()
-        updateScrollState()
-      },
-      { passive: true },
-    )
+    const onScroll = () => {
+      ScrollTrigger.update()
+      updateScrollState()
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    addCleanup(() => window.removeEventListener('scroll', onScroll))
   }
 
-  document.addEventListener('click', (e) => {
+  const onHashClick = (e: MouseEvent) => {
     const link = (e.target as Element).closest('a[href^="#"]')
     if (!link) return
 
@@ -165,7 +174,9 @@ export function initSmoothScroll() {
     e.preventDefault()
     history.pushState(null, '', hash)
     scrollToTarget(target, { offset: getHeaderOffset() })
-  })
+  }
+  document.addEventListener('click', onHashClick)
+  addCleanup(() => document.removeEventListener('click', onHashClick))
 }
 
 export function updateScrollState() {

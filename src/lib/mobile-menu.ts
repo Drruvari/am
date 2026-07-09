@@ -1,4 +1,5 @@
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { addCleanup } from './cleanup'
 import { lenis } from './smooth-scroll'
 
 export function initMobileMenu() {
@@ -23,17 +24,29 @@ export function initMobileMenu() {
     }
   }
 
-  mobileMenuOpen?.addEventListener('click', () => setMobileMenuOpen(true))
-  mobileMenuClose?.addEventListener('click', () => setMobileMenuOpen(false))
-  mobileMenuBackdrop?.addEventListener('click', () => setMobileMenuOpen(false))
+  const openMenu = () => setMobileMenuOpen(true)
+  const closeMenu = () => setMobileMenuOpen(false)
 
-  mobileMenu?.querySelectorAll('a[href^="#"]').forEach((link) => {
-    link.addEventListener('click', () => setMobileMenuOpen(false))
+  mobileMenuOpen?.addEventListener('click', openMenu)
+  mobileMenuClose?.addEventListener('click', closeMenu)
+  mobileMenuBackdrop?.addEventListener('click', closeMenu)
+  addCleanup(() => {
+    mobileMenuOpen?.removeEventListener('click', openMenu)
+    mobileMenuClose?.removeEventListener('click', closeMenu)
+    mobileMenuBackdrop?.removeEventListener('click', closeMenu)
   })
 
-  document.addEventListener('keydown', (event) => {
+  mobileMenu?.querySelectorAll('a[href^="#"]').forEach((link) => {
+    const onLinkClick = () => setMobileMenuOpen(false)
+    link.addEventListener('click', onLinkClick)
+    addCleanup(() => link.removeEventListener('click', onLinkClick))
+  })
+
+  const onKeydown = (event: KeyboardEvent) => {
     if (event.key === 'Escape' && mobileMenu?.classList.contains('is-open')) {
       setMobileMenuOpen(false)
     }
-  })
+  }
+  document.addEventListener('keydown', onKeydown)
+  addCleanup(() => document.removeEventListener('keydown', onKeydown))
 }

@@ -1,4 +1,5 @@
 import { createLogoEyeHoverTimeline } from './logo-eyes'
+import { addCleanup } from './cleanup'
 
 export function initLogoHover() {
   const logo = document.querySelector('.site-header__logo')
@@ -14,6 +15,13 @@ export function initLogoHover() {
   const hoverTL = createLogoEyeHoverTimeline(svg, 0.5)
   if (!hoverTL) return
 
-  logo.addEventListener('pointerenter', () => hoverTL.play())
-  logo.addEventListener('pointerleave', () => hoverTL.reverse())
+  const onEnter = () => hoverTL.play()
+  const onLeave = () => hoverTL.reverse()
+
+  logo.addEventListener('pointerenter', onEnter)
+  logo.addEventListener('pointerleave', onLeave)
+  addCleanup(() => {
+    logo.removeEventListener('pointerenter', onEnter)
+    logo.removeEventListener('pointerleave', onLeave)
+  })
 }

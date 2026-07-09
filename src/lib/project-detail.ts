@@ -1,6 +1,17 @@
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { addCleanup } from './cleanup'
 import { lenis } from './smooth-scroll'
+
+function createMetaItem(label: string, value: string) {
+  const item = document.createElement('div')
+  const labelEl = document.createElement('span')
+
+  labelEl.textContent = label
+  item.append(labelEl, value)
+
+  return item
+}
 
 export function initProjectDetail() {
   const panel = document.getElementById('project-panel')
@@ -21,9 +32,15 @@ export function initProjectDetail() {
     const imageSrc = image ? image.currentSrc || image.src : ''
     const imageAlt = image ? image.alt : title
 
-    visual.innerHTML = imageSrc
-      ? `<img src="${imageSrc}" alt="${imageAlt}">`
-      : ''
+    visual.replaceChildren()
+
+    if (imageSrc) {
+      const img = document.createElement('img')
+      img.src = imageSrc
+      img.alt = imageAlt
+      visual.append(img)
+    }
+
     const titleEl = document.getElementById('project-panel-title')
     const indexEl = document.getElementById('project-panel-index')
     const locationEl = document.getElementById('project-panel-location')
@@ -36,22 +53,30 @@ export function initProjectDetail() {
     if (descriptionEl) {
       descriptionEl.textContent = card.getAttribute('data-desc') || ''
     }
-    if (metaEl) {
-      metaEl.innerHTML = `
-      <div><span>Typology</span>${card.getAttribute('data-type') || 'Study'}</div>
-      <div><span>Status</span>${card.getAttribute('data-status') || 'Concept'}</div>
-      <div><span>Scale</span>${card.getAttribute('data-scale') || 'TBD'}</div>
-      <div><span>Materials</span>${card.getAttribute('data-materials') || 'Material study'}</div>
-    `
-    }
-    gallery.innerHTML = (card.getAttribute('data-images') || '')
-      .split('|')
-      .filter(Boolean)
-      .slice(1)
-      .map(
-        (src) => `<img src="${src}" alt="${title} study image" loading="lazy">`,
-      )
-      .join('')
+
+    metaEl?.replaceChildren(
+      createMetaItem('Typology', card.getAttribute('data-type') || 'Study'),
+      createMetaItem('Status', card.getAttribute('data-status') || 'Concept'),
+      createMetaItem('Scale', card.getAttribute('data-scale') || 'TBD'),
+      createMetaItem(
+        'Materials',
+        card.getAttribute('data-materials') || 'Material study',
+      ),
+    )
+
+    gallery.replaceChildren(
+      ...(card.getAttribute('data-images') || '')
+        .split('|')
+        .filter(Boolean)
+        .slice(1)
+        .map((src) => {
+          const img = document.createElement('img')
+          img.src = src
+          img.alt = `${title} study image`
+          img.loading = 'lazy'
+          return img
+        }),
+    )
   }
 
   const openPanel = (card: HTMLElement) => {
@@ -129,8 +154,8 @@ export function initProjectDetail() {
         isOpen = false
         panel.classList.remove('is-open')
         document.body.classList.remove('is-project-panel-open')
-        visual.innerHTML = ''
-        gallery.innerHTML = ''
+        visual.replaceChildren()
+        gallery.replaceChildren()
         lenis.start()
         ScrollTrigger.refresh(true)
       },
@@ -138,25 +163,24 @@ export function initProjectDetail() {
   }
 
   document.querySelectorAll<HTMLElement>('.project-card').forEach((card) => {
-    card.setAttribute('role', 'button')
-    card.setAttribute('tabindex', '0')
-
     const activate = () => openPanel(card)
 
     card.addEventListener('click', activate)
-    card.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault()
-        activate()
-      }
-    })
+    addCleanup(() => card.removeEventListener('click', activate))
   })
 
   closeBtn.addEventListener('click', closePanel)
-  panel.addEventListener('click', (e) => {
+  addCleanup(() => closeBtn.removeEventListener('click', closePanel))
+
+  const onPanelClick = (e: MouseEvent) => {
     if (e.target === panel) closePanel()
-  })
-  window.addEventListener('keydown', (e) => {
+  }
+  panel.addEventListener('click', onPanelClick)
+  addCleanup(() => panel.removeEventListener('click', onPanelClick))
+
+  const onKeydown = (e: KeyboardEvent) => {
     if (e.key === 'Escape') closePanel()
-  })
+  }
+  window.addEventListener('keydown', onKeydown)
+  addCleanup(() => window.removeEventListener('keydown', onKeydown))
 }

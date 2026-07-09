@@ -2,6 +2,7 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import SplitType from 'split-type'
 import { mm } from './globals'
+import { addCleanup } from './cleanup'
 import { lenis } from './smooth-scroll'
 import { updateScrollState } from './smooth-scroll'
 import {
@@ -257,7 +258,14 @@ export function initPageScroll() {
     scheduleScrollRefresh()
   } else {
     window.addEventListener('load', scheduleScrollRefresh, { once: true })
+    addCleanup(() =>
+      window.removeEventListener('load', scheduleScrollRefresh),
+    )
   }
+
+  addCleanup(() => {
+    pageScrollInitialized = false
+  })
 }
 
 function initProjectCardHover() {
@@ -568,4 +576,13 @@ export function initLoader() {
   } else {
     startLoader()
   }
+
+  addCleanup(() => {
+    loaderTimeline?.kill()
+    if (loaderFailsafe !== undefined) {
+      window.clearTimeout(loaderFailsafe)
+      loaderFailsafe = undefined
+    }
+    loaderFinished = false
+  })
 }

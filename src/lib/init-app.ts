@@ -1,5 +1,6 @@
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { addCleanup, runCleanups } from './cleanup'
 import { initMediaQueries, mm } from './globals'
 import { initSmoothScroll, resetScrollLock, updateScrollState } from './smooth-scroll'
 import { initButtonSystem } from './button'
@@ -26,6 +27,7 @@ function initGlobalUI() {
       minute: '2-digit',
       hour12: true,
       timeZone: 'Europe/Tirane',
+      timeZoneName: 'short',
     })
     const hour = Number(
       now.toLocaleString('en-AU', {
@@ -35,37 +37,58 @@ function initGlobalUI() {
       }),
     )
     const isOpen = hour >= 8 && hour < 17
-    footerStatus.textContent = `${time} CET, we are ${isOpen ? 'open' : 'closed'}`
+    footerStatus.textContent = `${time}, we are ${isOpen ? 'open' : 'closed'}`
   }
 
   updateFooterStatus()
-  window.setInterval(updateFooterStatus, 60_000)
+  const footerStatusInterval = window.setInterval(updateFooterStatus, 60_000)
+  addCleanup(() => window.clearInterval(footerStatusInterval))
 
-  window.addEventListener('pageshow', (event) => {
+  const onPageShow = (event: PageTransitionEvent) => {
     if (event.persisted) {
       ScrollTrigger.refresh()
       updateScrollState()
     }
-  })
+  }
+  window.addEventListener('pageshow', onPageShow)
+  addCleanup(() => window.removeEventListener('pageshow', onPageShow))
 
-  window.addEventListener('load', () => {
+  const onLoad = () => {
     ScrollTrigger.refresh()
     updateScrollState()
-  })
+  }
+  window.addEventListener('load', onLoad)
+  addCleanup(() => window.removeEventListener('load', onLoad))
 
-  window.addEventListener('resize', () => {
+  const onResize = () => {
     updateScrollState()
-  })
+  }
+  window.addEventListener('resize', onResize)
+  addCleanup(() => window.removeEventListener('resize', onResize))
 
-  window.addEventListener('orientationchange', () => {
-    window.setTimeout(() => {
+  let orientationTimeout: number | undefined
+  const onOrientationChange = () => {
+    if (orientationTimeout !== undefined) {
+      window.clearTimeout(orientationTimeout)
+    }
+    orientationTimeout = window.setTimeout(() => {
+      orientationTimeout = undefined
       ScrollTrigger.refresh()
       updateScrollState()
     }, 300)
+  }
+  window.addEventListener('orientationchange', onOrientationChange)
+  addCleanup(() => {
+    window.removeEventListener('orientationchange', onOrientationChange)
+    if (orientationTimeout !== undefined) {
+      window.clearTimeout(orientationTimeout)
+    }
   })
 }
 
 export function disposeApp() {
+  runCleanups()
+
   ScrollTrigger.getAll().forEach((trigger) => trigger.kill())
   gsap.killTweensOf('*')
   mm?.revert()

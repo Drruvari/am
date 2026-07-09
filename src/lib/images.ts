@@ -29,4 +29,8 @@ export const cardSizes = '(max-width: 48rem) 100vw, 50vw'
 export const heroSrcsetWebp = `${image600Webp} 600w, ${image1600Webp} 1470w`
 export const heroSrcsetJpg = `${image600Jpg} 600w, ${image1600Jpg} 1470w`
 
-export const projectGalleryImages = `${image600Webp}|${image600Webp}|${image600Webp}`
+export const projectGalleryImages = [
+  image600Webp,
+  image600Webp,
+  image600Webp,
+] as const

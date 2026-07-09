@@ -1,5 +1,6 @@
 import { gsap } from 'gsap'
 import { mm } from './globals'
+import { addCleanup } from './cleanup'
 
 const BUTTON_TEXT_HOVER_TARGETS = [
   '.hero__cta .btn__label > span',
@@ -85,10 +86,23 @@ function initTextHoverEffects(selectors: string[] = BUTTON_TEXT_HOVER_TARGETS) {
       })
     }
 
-    trigger.addEventListener('mouseenter', () => setHover(true))
-    trigger.addEventListener('mouseleave', () => setHover(false))
-    trigger.addEventListener('focus', () => setHover(true))
-    trigger.addEventListener('blur', () => setHover(false))
+    const onMouseEnter = () => setHover(true)
+    const onMouseLeave = () => setHover(false)
+    const onFocus = () => setHover(true)
+    const onBlur = () => setHover(false)
+
+    trigger.addEventListener('mouseenter', onMouseEnter)
+    trigger.addEventListener('mouseleave', onMouseLeave)
+    trigger.addEventListener('focus', onFocus)
+    trigger.addEventListener('blur', onBlur)
+
+    addCleanup(() => {
+      window.removeEventListener('resize', measure)
+      trigger.removeEventListener('mouseenter', onMouseEnter)
+      trigger.removeEventListener('mouseleave', onMouseLeave)
+      trigger.removeEventListener('focus', onFocus)
+      trigger.removeEventListener('blur', onBlur)
+    })
   })
 }
 
@@ -129,10 +143,22 @@ function initButtons() {
       }
     }
 
-    btn.addEventListener('mouseenter', () => setHover(true))
-    btn.addEventListener('mouseleave', () => setHover(false))
-    interactive?.addEventListener('focus', () => setHover(true))
-    interactive?.addEventListener('blur', () => setHover(false))
+    const onMouseEnter = () => setHover(true)
+    const onMouseLeave = () => setHover(false)
+    const onFocus = () => setHover(true)
+    const onBlur = () => setHover(false)
+
+    btn.addEventListener('mouseenter', onMouseEnter)
+    btn.addEventListener('mouseleave', onMouseLeave)
+    interactive?.addEventListener('focus', onFocus)
+    interactive?.addEventListener('blur', onBlur)
+
+    addCleanup(() => {
+      btn.removeEventListener('mouseenter', onMouseEnter)
+      btn.removeEventListener('mouseleave', onMouseLeave)
+      interactive?.removeEventListener('focus', onFocus)
+      interactive?.removeEventListener('blur', onBlur)
+    })
   })
 
   mm.add('(min-width: 769px) and (pointer: fine)', () => {
