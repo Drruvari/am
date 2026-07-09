@@ -1,24 +1,24 @@
 import './style.scss'
+import Button from '@/components/Button'
 import Logo from '@/components/Logo/index'
 
 function MobileMenu() {
   return (
-    <div className="nav-drawer" id="mobileMenu" aria-hidden="true">
-      <div className="nav-drawer__backdrop" id="mobileMenuBackdrop" />
-      <div className="nav-drawer__panel" data-lenis-prevent>
-        <div className="btn btn--pill btn--soft nav-drawer__close-wrap">
-          <button
-            className="nav-drawer__close mono"
-            id="mobileMenuClose"
-            type="button"
-            aria-label="Close menu"
-          >
-            <span className="btn__label">
-              <span>Close</span>
-            </span>
-          </button>
-        </div>
-        <nav className="nav-drawer__nav" aria-label="Mobile navigation">
+    <div className="menu" id="mobileMenu" aria-hidden="true">
+      <div className="menu__backdrop" id="mobileMenuBackdrop" />
+      <div className="menu__panel" data-lenis-prevent>
+        <Button
+          variant="pill"
+          theme="soft"
+          className="menu__close-wrap"
+          innerClassName="menu__close mono"
+          id="mobileMenuClose"
+          type="button"
+          aria-label="Close menu"
+        >
+          Close
+        </Button>
+        <nav className="menu__nav" aria-label="Mobile navigation">
           <a href="#top" data-hover="link">
             Home
           </a>
@@ -38,7 +38,7 @@ function MobileMenu() {
             Contact Us
           </a>
         </nav>
-        <div className="nav-drawer__meta mono">
+        <div className="menu__meta mono">
           <p>hello@arbermanga.com</p>
           <p>Blloku District, Tirana, AL</p>
         </div>
@@ -50,16 +50,16 @@ function MobileMenu() {
 export default function Header() {
   return (
     <>
-      <header className="site-header header" id="site-header">
+      <header className="header" id="site-header">
         <a
           href="#top"
-          className="site-header__logo"
+          className="header__logo"
           aria-label="AM Architecture home"
           data-hover="link"
         >
-          <Logo className="site-header__logo-svg" />
+          <Logo className="header__logo-svg" />
         </a>
-        <nav className="site-header__nav" aria-label="Primary navigation">
+        <nav className="header__nav" aria-label="Primary navigation">
           <a href="#work" data-hover="link">
             Works
           </a>
@@ -69,32 +69,30 @@ export default function Header() {
             Gallery
           </a>
         </nav>
-        <div className="site-header__actions">
-          <div className="btn btn--pill btn--fill btn--dark site-header__contact">
-            <a
-              href="mailto:hello@arbermanga.com"
-              className="site-header__contact-link"
-              data-hover="link"
-            >
-              <span className="btn__label">
-                <span>Get in Touch</span>
-              </span>
-            </a>
-          </div>
-          <div className="btn btn--pill btn--soft site-header__menu">
-            <button
-              type="button"
-              className="site-header__menu-btn"
-              id="mobileMenuOpen"
-              aria-expanded="false"
-              aria-controls="mobileMenu"
-              data-hover="link"
-            >
-              <span className="btn__label">
-                <span>Menu</span>
-              </span>
-            </button>
-          </div>
+        <div className="header__actions">
+          <Button
+            variant="pill"
+            theme="dark"
+            fill
+            href="mailto:hello@arbermanga.com"
+            className="header__contact"
+            innerClassName="header__contact-link"
+            data-hover="link"
+          >
+            <span>Get in Touch</span>
+          </Button>
+          <Button
+            variant="pill"
+            theme="soft"
+            className="header__menu"
+            innerClassName="header__menu-btn"
+            id="mobileMenuOpen"
+            aria-expanded="false"
+            aria-controls="mobileMenu"
+            data-hover="link"
+          >
+            <span>Menu</span>
+          </Button>
         </div>
       </header>
       <MobileMenu />

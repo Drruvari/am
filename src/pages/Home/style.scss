@@ -1,3 +1,4 @@
 .home-page {
-  @apply min-h-screen overflow-x-clip;
+  min-height: 100svh;
+  overflow-x: clip;
 }

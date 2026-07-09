@@ -2,7 +2,6 @@ import cursorDefault from "@/assets/cursor-svg/cursor-default.svg";
 import cursorPointer from "@/assets/cursor-svg/cursor-pointer.svg";
 import cursorText from "@/assets/cursor-svg/cursor-text.svg";
 import { useCustomCursor } from "@/hooks/useCustomCursor";
-import "./style.scss";
 
 export default function CustomCursor() {
   const { cursorRef, state, enabled } = useCustomCursor();

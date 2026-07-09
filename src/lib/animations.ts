@@ -98,7 +98,7 @@ function initVerticalMiddleScroll() {
   verticalMiddleContext?.revert()
 
   verticalMiddleContext = gsap.context(() => {
-    gsap.set('.manifesto__image', { clearProps: 'width' })
+    gsap.set('.about__image', { clearProps: 'width' })
 
     const prefersReducedMotion = window.matchMedia(
       '(prefers-reduced-motion: reduce)',
@@ -106,8 +106,8 @@ function initVerticalMiddleScroll() {
 
     const revealGroups = [
       {
-        trigger: '.manifesto',
-        items: '.manifesto__eyebrow, .manifesto__line',
+        trigger: '.about',
+        items: '.about__eyebrow, .about__line',
         y: 48,
         stagger: 0.08,
       },
@@ -118,14 +118,14 @@ function initVerticalMiddleScroll() {
         stagger: 0.08,
       },
       {
-        trigger: '.projects',
-        items: '.projects__intro > *, .project-card',
+        trigger: '.gallery',
+        items: '.gallery__intro > *, .card',
         y: 64,
         stagger: 0.08,
       },
       {
         trigger: '.footer',
-        items: '.footer-hero > *, .footer-grid > *, .footer-bar > *',
+        items: '.footer__intro > *, .footer__grid > *, .footer__bar > *',
         y: 48,
         stagger: 0.06,
       },
@@ -155,18 +155,18 @@ function initVerticalMiddleScroll() {
     if (prefersReducedMotion) return
 
     const parallaxItems = [
-      '.manifesto__image img',
+      '.about__image img',
       '.archive-card img',
-      '.project-card__media img',
-      '.footer-image-block img',
+      '.card__media img',
+      '.footer__image img',
     ]
 
     gsap.utils.toArray<HTMLImageElement>(parallaxItems.join(',')).forEach((img) => {
       const trigger =
         img.closest('.archive-card') ||
-        img.closest('.project-card') ||
-        img.closest('.manifesto__line') ||
-        img.closest('.footer-image-block') ||
+        img.closest('.card') ||
+        img.closest('.about__line') ||
+        img.closest('.footer__image') ||
         img
 
       gsap.fromTo(
@@ -187,7 +187,7 @@ function initVerticalMiddleScroll() {
       )
     })
 
-    gsap.utils.toArray<HTMLElement>('.archive-card, .project-card').forEach((item) => {
+    gsap.utils.toArray<HTMLElement>('.archive-card, .card').forEach((item) => {
       gsap.fromTo(
         item,
         { y: 42 },
@@ -270,10 +270,10 @@ export function initPageScroll() {
 
 function initProjectCardHover() {
   mm.add('(min-width: 769px)', () => {
-    const cleanups = gsap.utils.toArray<HTMLElement>('.project-card').map((card) => {
-      const media = card.querySelector<HTMLElement>('.project-card__media')
-      const image = card.querySelector<HTMLImageElement>('.project-card__media img')
-      const caption = card.querySelector<HTMLElement>('.project-card__label')
+    const cleanups = gsap.utils.toArray<HTMLElement>('.card').map((card) => {
+      const media = card.querySelector<HTMLElement>('.card__media')
+      const image = card.querySelector<HTMLImageElement>('.card__media img')
+      const caption = card.querySelector<HTMLElement>('.card__label')
       const xTo = gsap.quickTo(card, 'x', {
         duration: 0.45,
         ease: 'power3.out',

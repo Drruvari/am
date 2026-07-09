@@ -1,84 +1,12 @@
 import './style.scss'
 import { archiveItems, projects } from '@/data/projects'
 import { ResponsiveCardImage } from '@/lib/responsive-image'
-import { projectGalleryImages } from '@/lib/images'
-import type { Project } from '@/data/projects'
-
-function ProjectCard({ project }: { project: Project }) {
-  return (
-    <button
-      type="button"
-      className={`project-card ${project.size}`}
-      data-hover="view"
-      data-title={project.title}
-      data-loc={project.loc}
-      data-desc={project.desc}
-      data-index={project.index}
-      data-type={project.type}
-      data-status={project.status}
-      data-scale={project.scale}
-      data-year={project.year}
-      data-materials={project.materials}
-      data-note={project.note}
-      data-images={projectGalleryImages.join('|')}
-    >
-      <span className="project-card__media">
-        <ResponsiveCardImage alt={project.alt} />
-      </span>
-      <span className="project-card__label mono">{project.label}</span>
-    </button>
-  )
-}
-
-function ProjectPanel() {
-  return (
-    <div className="project-panel" id="project-panel">
-      <div className="btn btn--pill btn--panel">
-        <button
-          className="project-panel__close mono"
-          id="project-panel-close"
-          type="button"
-          data-hover="close"
-        >
-          <span className="btn__label">Close</span>
-        </button>
-      </div>
-      <div className="project-panel__visual" id="project-panel-visual" />
-      <div className="project-panel__info">
-        <p className="mono project-panel__index" id="project-panel-index">
-          A—01
-        </p>
-        <h3 id="project-panel-title">Project Title</h3>
-        <p className="project-panel__location mono" id="project-panel-location">
-          Location — Year
-        </p>
-        <p className="project-panel__description" id="project-panel-description">
-          Project description goes here.
-        </p>
-        <div className="project-panel__meta mono" id="project-panel-meta">
-          <div>
-            <span>Typology</span>Residential
-          </div>
-          <div>
-            <span>Status</span>Concept
-          </div>
-          <div>
-            <span>Scale</span>420 SQM
-          </div>
-          <div>
-            <span>Materials</span>Concrete
-          </div>
-        </div>
-        <div className="project-panel__gallery" id="project-panel-gallery" />
-      </div>
-    </div>
-  )
-}
+import ProjectCard, { ProjectPanel } from './ProjectCard'
 
 export default function Work() {
   return (
     <>
-      <section className="archive work" id="work">
+      <section className="archive" id="work">
         <div className="archive__inner">
           <div className="archive__intro">
             <div className="archive__index mono">02 — Project Archive</div>
@@ -107,8 +35,8 @@ export default function Work() {
         </div>
       </section>
 
-      <section className="projects" id="gallery">
-        <div className="projects__intro">
+      <section className="gallery" id="gallery">
+        <div className="gallery__intro">
           <p className="eyebrow mono">03 — Built Environments</p>
           <h2>
             FOUR WAYS
@@ -122,7 +50,12 @@ export default function Work() {
         </div>
         {projects.map((row) => (
           <div
-            className={`projects__row${row.rowClass ? ` ${row.rowClass}` : ''}`}
+            className={[
+              'gallery__row',
+              row.rowClass === 'reverse' && 'gallery__row--reverse',
+            ]
+              .filter(Boolean)
+              .join(' ')}
             key={row.items.map((p) => p.index).join('-')}
           >
             {row.items.map((project) => (

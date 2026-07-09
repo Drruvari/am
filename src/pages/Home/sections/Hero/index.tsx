@@ -1,4 +1,5 @@
 import './style.scss'
+import Button from '@/components/Button'
 import arrowIcon from '@/assets/arrow.svg'
 import { heroSrcsetJpg, heroSrcsetWebp, images } from '@/lib/images'
 
@@ -25,22 +26,23 @@ export default function Hero() {
               restraint, proportion, and atmosphere.
             </p>
 
-            <div className="btn btn--rect">
-              <a href="#work" className="hero__cta hero__link" data-hover="link">
-                <span className="btn__label">
-                  <span>View work</span>
-                  <img
-                    className="hero__cta-icon"
-                    src={arrowIcon}
-                    alt=""
-                    width={17}
-                    height={17}
-                    decoding="async"
-                    aria-hidden="true"
-                  />
-                </span>
-              </a>
-            </div>
+            <Button
+              variant="rect"
+              href="#work"
+              className="hero__cta"
+              data-hover="link"
+            >
+              <span>View work</span>
+              <img
+                className="hero__cta-icon"
+                src={arrowIcon}
+                alt=""
+                width={17}
+                height={17}
+                decoding="async"
+                aria-hidden="true"
+              />
+            </Button>
           </div>
         </div>
 

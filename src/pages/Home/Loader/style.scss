@@ -99,3 +99,11 @@
 .hero__title .char {
   display: inline-block;
 }
+  .loader {
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .loader__logo {
+    width: min(88vw, 28rem);
+  }

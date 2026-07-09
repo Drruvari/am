@@ -95,7 +95,7 @@ export function disposeApp() {
   document.documentElement.classList.remove('is-loading')
   resetScrollLock()
   document.body.classList.remove(
-    'is-nav-drawer-open',
+    'is-menu-open',
     'is-project-panel-open',
     'is-header-compact',
     'is-hero-pinned',

@@ -1,3 +1,4 @@
+import './style.scss'
 import Logo from '@/components/Logo/index'
 
 export default function Loader() {

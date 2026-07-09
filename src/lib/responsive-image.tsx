@@ -38,13 +38,13 @@ export function InlineImage({
 }) {
   const variantClass =
     variant === 'sm'
-      ? 'manifesto__image--sm'
+      ? 'about__image--sm'
       : variant === 'lg'
-        ? 'manifesto__image--lg'
-        : 'manifesto__image--md'
+        ? 'about__image--lg'
+        : 'about__image--md'
 
   return (
-    <span className={`manifesto__image ${variantClass} ${className ?? ''}`.trim()}>
+    <span className={`about__image ${variantClass} ${className ?? ''}`.trim()}>
       <picture>
         <source srcSet={images.webp[480]} type="image/webp" />
         <img

@@ -1,3 +1,50 @@
-.custom-cursor {
-  @apply pointer-events-none fixed top-0 left-0 z-10000;
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 37px;
+  height: 44px;
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform, opacity;
+
+  &.is-visible {
+    opacity: 1;
+  }
+
+  &__img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: auto;
+    height: auto;
+    max-width: none;
+    opacity: 0;
+    transform: scale(0.85);
+    transform-origin: top left;
+    transition:
+      opacity 0.16s ease,
+      transform 0.22s var(--ease-out-expo);
+
+    &.is-active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    &--text {
+      transform: translate(-50%, -50%) scale(0.85);
+      transform-origin: center;
+
+      &.is-active {
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+  }
+}
+
+@media (max-width: 48rem) {
+  .cursor {
+    display: none;
+  }
 }
