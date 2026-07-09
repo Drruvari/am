@@ -5,3 +5,6 @@
 # CCE-generated local MCP configs with absolute paths
 .mcp.json
 .cursor/mcp.json
+
+node_modules/
+dist/

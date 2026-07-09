@@ -1,0 +1,7 @@
+.logo {
+  @apply block h-full w-full;
+
+  :global(svg) {
+    @apply block h-full w-auto max-w-full;
+  }
+}
