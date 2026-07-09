@@ -31,7 +31,11 @@ function MobileMenu() {
           </a>
           <span className="mobile-menu__nav-item is-disabled">Studio</span>
           <span className="mobile-menu__nav-item is-disabled">Process</span>
-          <a className="mobile-menu__nav-link" href="#gallery" data-hover="link">
+          <a
+            className="mobile-menu__nav-link"
+            href="#gallery"
+            data-hover="link"
+          >
             Gallery
           </a>
           <a
@@ -69,7 +73,11 @@ export default function Header() {
           </a>
           <span className="site-header__nav-item is-disabled">Studio</span>
           <span className="site-header__nav-item is-disabled">Process</span>
-          <a className="site-header__nav-link" href="#gallery" data-hover="link">
+          <a
+            className="site-header__nav-link"
+            href="#gallery"
+            data-hover="link"
+          >
             Gallery
           </a>
         </nav>

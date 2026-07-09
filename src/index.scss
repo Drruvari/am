@@ -1,4 +1,6 @@
-@import "tailwindcss";
+@use "./styles/base";
+@use "./components/Button/style" as button;
+@use "./components/CustomCursor/style" as custom-cursor;
 
 @font-face {
   font-family: "Bricolage Grotesque";
@@ -20,7 +22,3 @@
 .loader__tagline {
   font-family: "Bricolage Grotesque", sans-serif;
 }
-
-@import "./styles/base.scss";
-@import "./components/Button/style.scss";
-@import "./components/CustomCursor/style.scss";

@@ -66,14 +66,12 @@
   }
 
   &__actions {
-    --header-contact-width: 7.25rem;
-    --header-menu-width: 4rem;
-    --header-action-gap: 0.55rem;
-    position: relative;
-    width: calc(
-      var(--header-contact-width) + var(--header-menu-width) +
-        var(--header-action-gap)
-    );
+    --header-action-gap: 0.45rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--header-action-gap);
+    flex-shrink: 0;
     min-height: 2.55rem;
     height: auto;
     overflow: visible;
@@ -90,6 +88,7 @@
     align-items: center;
     justify-content: center;
     min-height: 2.45rem;
+    width: auto;
     white-space: nowrap;
     background: transparent;
     border: 0;
@@ -100,28 +99,11 @@
 
   &__contact,
   &__menu-trigger {
-    position: absolute;
-    top: 0;
+    position: relative;
+    flex: 0 0 auto;
+    width: auto;
     overflow: visible;
-    transform-origin: 100% 50%;
-  }
-
-  &__contact {
-    right: calc(var(--header-menu-width) + var(--header-action-gap));
-  }
-
-  &__contact,
-  &__contact-link {
-    width: var(--header-contact-width);
-  }
-
-  &__menu-trigger {
-    right: 0;
-  }
-
-  &__menu-trigger,
-  &__menu-button {
-    width: var(--header-menu-width);
+    transform-origin: 50% 50%;
   }
 
   &__contact-link {
@@ -144,9 +126,7 @@
 
   @media (min-width: 480px) {
     &__actions {
-      --header-contact-width: 7.9rem;
-      --header-menu-width: 4.35rem;
-      --header-action-gap: 0.65rem;
+      --header-action-gap: 0.5rem;
     }
   }
 
@@ -198,9 +178,7 @@
     }
 
     &__actions {
-      --header-contact-width: 9.35rem;
-      --header-menu-width: 4.7rem;
-      --header-action-gap: 0.8rem;
+      --header-action-gap: 0.55rem;
       min-height: 3.05rem;
       height: auto;
     }
@@ -219,8 +197,7 @@
     }
 
     &__actions {
-      --header-contact-width: 8.25rem;
-      --header-menu-width: 4.25rem;
+      --header-action-gap: 0.5rem;
     }
   }
 
@@ -248,9 +225,7 @@
     }
 
     &__actions {
-      --header-contact-width: 7.5rem;
-      --header-menu-width: 4.2rem;
-      --header-action-gap: 0.55rem;
+      --header-action-gap: 0.45rem;
       flex: 0 0 auto;
       margin-left: auto;
       height: auto;
@@ -273,9 +248,7 @@
     }
 
     &__actions {
-      --header-contact-width: 6.75rem;
-      --header-menu-width: 3.85rem;
-      --header-action-gap: 0.45rem;
+      --header-action-gap: 0.4rem;
       height: 2.25rem;
     }
 
@@ -286,8 +259,6 @@
 
   @media (max-width: 22.5rem) {
     &__actions {
-      --header-contact-width: 6.25rem;
-      --header-menu-width: 3.5rem;
       --header-action-gap: 0.35rem;
     }
 
@@ -412,13 +383,13 @@ body.is-header-compact .site-header__nav {
 
 .btn--pill > a.site-header__contact-link,
 .btn--pill > button.site-header__menu-button {
-  padding: 0.7rem 0.85rem;
+  padding: 0.7rem 1rem;
 }
 
 @media (max-width: 768px) {
   .btn--pill > a.site-header__contact-link,
   .btn--pill > button.site-header__menu-button {
-    padding: 0.68rem 0.8rem;
+    padding: 0.68rem 0.9rem;
   }
 
   .site-header__contact-link {
@@ -430,7 +401,7 @@ body.is-header-compact .site-header__nav {
 @media (min-width: 769px) {
   .btn--pill > a.site-header__contact-link,
   .btn--pill > button.site-header__menu-button {
-    padding: 0.95rem 1.55rem;
+    padding: 0.95rem 1.2rem;
   }
 
   .site-header__contact-link {
@@ -442,6 +413,6 @@ body.is-header-compact .site-header__nav {
 @media (max-width: 480px) {
   .btn--pill > a.site-header__contact-link,
   .btn--pill > button.site-header__menu-button {
-    padding: 0.58rem 0.68rem;
+    padding: 0.58rem 0.75rem;
   }
 }
