@@ -119,7 +119,7 @@ function initVerticalMiddleScroll() {
       },
       {
         trigger: '.gallery',
-        items: '.gallery__intro > *, .card',
+        items: '.gallery__intro > *, .project-card',
         y: 64,
         stagger: 0.08,
       },
@@ -157,14 +157,14 @@ function initVerticalMiddleScroll() {
     const parallaxItems = [
       '.about__image img',
       '.archive-card img',
-      '.card__media img',
+      '.project-card__media img',
       '.footer__image img',
     ]
 
     gsap.utils.toArray<HTMLImageElement>(parallaxItems.join(',')).forEach((img) => {
       const trigger =
         img.closest('.archive-card') ||
-        img.closest('.card') ||
+        img.closest('.project-card') ||
         img.closest('.about__line') ||
         img.closest('.footer__image') ||
         img
@@ -187,7 +187,7 @@ function initVerticalMiddleScroll() {
       )
     })
 
-    gsap.utils.toArray<HTMLElement>('.archive-card, .card').forEach((item) => {
+    gsap.utils.toArray<HTMLElement>('.archive-card, .project-card').forEach((item) => {
       gsap.fromTo(
         item,
         { y: 42 },
@@ -270,10 +270,10 @@ export function initPageScroll() {
 
 function initProjectCardHover() {
   mm.add('(min-width: 769px)', () => {
-    const cleanups = gsap.utils.toArray<HTMLElement>('.card').map((card) => {
-      const media = card.querySelector<HTMLElement>('.card__media')
-      const image = card.querySelector<HTMLImageElement>('.card__media img')
-      const caption = card.querySelector<HTMLElement>('.card__label')
+    const cleanups = gsap.utils.toArray<HTMLElement>('.project-card').map((card) => {
+      const media = card.querySelector<HTMLElement>('.project-card__media')
+      const image = card.querySelector<HTMLImageElement>('.project-card__media img')
+      const caption = card.querySelector<HTMLElement>('.project-card__label')
       const xTo = gsap.quickTo(card, 'x', {
         duration: 0.45,
         ease: 'power3.out',
@@ -394,8 +394,8 @@ export function initLoader() {
   }
 
   const logoSvg =
-    loader.querySelector<SVGSVGElement>('.loader__logo-svg svg') ??
-    loader.querySelector<SVGSVGElement>('.loader__logo svg')
+    loader.querySelector<SVGSVGElement>('.loader__logo svg') ??
+    loader.querySelector<SVGSVGElement>('.loader__brand svg')
   const countValue = loader.querySelector('.loader__progress-value')
   const loaderStatus = document.getElementById('loaderStatus')
   const prefersReducedMotion = window.matchMedia(
@@ -412,7 +412,7 @@ export function initLoader() {
   lenis.stop()
 
   const heroLineSplits = gsap.utils
-    .toArray<HTMLElement>('.hero__title .line')
+    .toArray<HTMLElement>('.hero__title-line')
     .map((line) => new SplitType(line, { types: 'chars' }))
   const heroHeadlineChars = heroLineSplits.flatMap((split) => split.chars ?? [])
 
@@ -421,7 +421,7 @@ export function initLoader() {
     rotation: 10,
     transformOrigin: '0% 100%',
   })
-  gsap.set('.hero__meta span, .hero__lede, .hero__cta, .hero__media', {
+  gsap.set('.hero__meta-item, .hero__lede, .hero__cta, .hero__media', {
     y: 24,
     opacity: 0,
   })
@@ -516,7 +516,7 @@ export function initLoader() {
         '<',
       )
       .to(
-        '.loader__logo',
+        '.loader__brand',
         {
           opacity: 0,
           scale: 0.98,
@@ -543,7 +543,7 @@ export function initLoader() {
         stagger: 0.02,
       })
       .to(
-        '.hero__meta span, .hero__lede, .hero__cta, .hero__media',
+        '.hero__meta-item, .hero__lede, .hero__cta, .hero__media',
         {
           y: 0,
           opacity: 1,
@@ -562,7 +562,7 @@ export function initLoader() {
     if (!document.documentElement.classList.contains('is-loading')) return
     revealHero()
     gsap.set(heroHeadlineChars, { clearProps: 'all' })
-    gsap.set('.hero__meta span, .hero__lede, .hero__cta, .hero__media', {
+    gsap.set('.hero__meta-item, .hero__lede, .hero__cta, .hero__media', {
       clearProps: 'all',
       opacity: 1,
       y: 0,

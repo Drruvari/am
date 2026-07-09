@@ -37,15 +37,15 @@ function resetTextHoverElement(originalTarget: HTMLElement, label: string) {
 const BUTTON_TEXT_HOVER_TARGETS = [
   '.hero__cta .btn__label > span',
   '.archive-card__label',
-  '.card__label',
-  '.header__nav a',
-  '.header__contact-link .btn__label > span',
-  '.header__menu-btn .btn__label > span',
+  '.project-card__label',
+  '.site-header__nav-link',
+  '.site-header__contact-link .btn__label > span',
+  '.site-header__menu-button .btn__label > span',
   '.footer__cta .btn__label > span:first-child',
-  '.menu__close .btn__label > span',
-  '.footer__links a',
-  '.footer__bar a',
-  '.panel__close .btn__label > span',
+  '.mobile-menu__close-button .btn__label > span',
+  '.footer__nav-link',
+  '.footer__bar-link',
+  '.project-panel__close-button .btn__label > span',
 ]
 
 function prepareTextHoverElement(el: HTMLElement) {
@@ -55,7 +55,7 @@ function prepareTextHoverElement(el: HTMLElement) {
   const needsInnerWrapper =
     el.matches('a, button') ||
     el.classList.contains('archive-card__label') ||
-    el.classList.contains('card__label') ||
+    el.classList.contains('project-card__label') ||
     styles.display === 'flex' ||
     parseFloat(styles.paddingTop) > 0 ||
     parseFloat(styles.paddingBottom) > 0
@@ -224,7 +224,7 @@ function initButtons() {
       const content = btn.querySelector('.btn__label')
       const textTrack = content?.querySelector('.text-hover-track')
       const textTarget = textTrack || content
-      const isHeaderBtn = btn.closest('.header')
+      const isHeaderBtn = btn.closest('.site-header')
       const magnetStrength = isHeaderBtn ? 0.18 : MAGNET_STRENGTH
       const textStrength = isHeaderBtn ? 0.28 : TEXT_FOLLOW_STRENGTH
 

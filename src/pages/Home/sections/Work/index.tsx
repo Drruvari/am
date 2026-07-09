@@ -10,12 +10,12 @@ export default function Work() {
         <div className="archive__inner">
           <div className="archive__intro">
             <div className="archive__index mono">02 — Project Archive</div>
-            <h2>
+            <h2 className="archive__title">
               SELECTED
               <br />
               STUDIES
             </h2>
-            <p>
+            <p className="archive__lede">
               Four studies arranged by atmosphere and massing. No campaign
               language, just the image, the place, and the architectural
               problem.
@@ -37,13 +37,13 @@ export default function Work() {
 
       <section className="gallery" id="gallery">
         <div className="gallery__intro">
-          <p className="eyebrow mono">03 — Built Environments</p>
-          <h2>
+          <p className="gallery__eyebrow eyebrow mono">03 — Built Environments</p>
+          <h2 className="gallery__title">
             FOUR WAYS
             <br />
             OF BUILDING
           </h2>
-          <p>
+          <p className="gallery__lede">
             Different sites, same discipline: clear structure, useful rooms,
             controlled openings, and materials that can take wear.
           </p>

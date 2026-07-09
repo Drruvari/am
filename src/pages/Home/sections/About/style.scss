@@ -62,7 +62,7 @@
   white-space: nowrap;
 }
 
-.about__line--7 > span:not(.about__image) {
+.about__line--7 .about__line-text {
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -71,7 +71,7 @@
   flex-shrink: 0;
 }
 
-.about__line > span:not(.about__image) {
+.about__line-text {
   font-family: var(--font-heading);
   font-optical-sizing: auto;
   font-size: clamp(2rem, 4vw, 3.5rem);
@@ -154,12 +154,12 @@
     flex-wrap: wrap;
   }
 
-  .about__line--7 > span:not(.about__image) {
+  .about__line--7 .about__line-text {
     white-space: normal;
     flex-shrink: 1;
   }
 
-  .about__line > span:not(.about__image) {
+  .about__line-text {
     font-size: clamp(1.25rem, 5cqi + 0.5rem, 2.5rem);
     overflow: visible;
   }
@@ -202,14 +202,14 @@
     white-space: normal;
   }
 
-  .about__line > span:not(.about__image) {
+  .about__line-text {
     font-size: clamp(1.25rem, 6vw, 1.65rem);
     line-height: 1.2;
     letter-spacing: -0.012em;
     overflow: visible;
   }
 
-  .about__line--7 > span:not(.about__image) {
+  .about__line--7 .about__line-text {
     font-size: clamp(1.25rem, 6vw, 1.65rem);
     white-space: normal;
     flex-shrink: 1;
@@ -242,8 +242,8 @@
 }
 
 @media (max-width: 480px) {
-  .about__line > span:not(.about__image),
-  .about__line--7 > span:not(.about__image) {
+  .about__line-text,
+  .about__line--7 .about__line-text {
     font-size: clamp(1.15rem, 6.4vw, 1.4rem);
   }
 

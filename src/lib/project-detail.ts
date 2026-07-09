@@ -5,7 +5,9 @@ import { lenis } from './smooth-scroll'
 
 function createMetaItem(label: string, value: string) {
   const item = document.createElement('div')
+  item.className = 'project-panel__meta-item'
   const labelEl = document.createElement('span')
+  labelEl.className = 'project-panel__meta-label'
 
   labelEl.textContent = label
   item.append(labelEl, value)
@@ -25,7 +27,7 @@ export function initProjectDetail() {
   const isMobile = () => window.matchMedia('(max-width: 768px)').matches
 
   const populatePanel = (card: HTMLElement) => {
-    const image = card.querySelector<HTMLImageElement>('.card__media img')
+    const image = card.querySelector<HTMLImageElement>('.project-card__media img')
     const title = card.getAttribute('data-title') || 'Project Study'
     const loc = card.getAttribute('data-loc') || 'Location'
     const year = card.getAttribute('data-year') || 'Study'
@@ -92,13 +94,13 @@ export function initProjectDetail() {
     const infoDuration = isMobile() ? 0.45 : 0.68
 
     gsap.killTweensOf([
-      '.panel__info > *',
-      '.panel__visual img',
+      '.project-panel__info > *',
+      '.project-panel__visual img',
       panel,
     ])
     gsap.set(panel, { autoAlpha: 1 })
     gsap.fromTo(
-      '.panel__visual img',
+      '.project-panel__visual img',
       {
         clipPath: isMobile() ? 'inset(4% 4% 4% 4%)' : 'inset(8% 8% 8% 8%)',
         scale: 1.05,
@@ -113,7 +115,7 @@ export function initProjectDetail() {
       },
     )
     gsap.fromTo(
-      '.panel__info > *',
+      '.project-panel__info > *',
       { opacity: 0, y: isMobile() ? 16 : 26 },
       {
         opacity: 1,
@@ -130,17 +132,17 @@ export function initProjectDetail() {
     if (!isOpen) return
 
     gsap.killTweensOf([
-      '.panel__info > *',
-      '.panel__visual img',
+      '.project-panel__info > *',
+      '.project-panel__visual img',
       panel,
     ])
-    gsap.to('.panel__info > *', {
+    gsap.to('.project-panel__info > *', {
       opacity: 0,
       y: -12,
       duration: 0.22,
       ease: 'power2.in',
     })
-    gsap.to('.panel__visual img', {
+    gsap.to('.project-panel__visual img', {
       scale: 1.02,
       opacity: 0,
       duration: 0.32,
@@ -162,7 +164,7 @@ export function initProjectDetail() {
     })
   }
 
-  document.querySelectorAll<HTMLElement>('.card').forEach((card) => {
+  document.querySelectorAll<HTMLElement>('.project-card').forEach((card) => {
     const activate = () => openPanel(card)
 
     card.addEventListener('click', activate)

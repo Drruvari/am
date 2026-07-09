@@ -16,16 +16,16 @@ const TEXT_CURSOR_SELECTOR = [
   ".hero__title",
   ".hero__meta",
   ".hero__lede",
-  ".about__line > span:not(.about__image)",
-  ".archive__intro h2",
-  ".archive__intro p",
-  ".gallery__intro h2",
-  ".gallery__intro p",
+  ".about__line-text",
+  ".archive__title",
+  ".archive__lede",
+  ".gallery__title",
+  ".gallery__lede",
   ".footer__headline",
   ".footer__mark",
-  ".footer__block p",
-  ".panel__info h3",
-  ".panel__description",
+  ".footer__block-text",
+  ".project-panel__title",
+  ".project-panel__description",
 ].join(",");
 
 const DESKTOP_CURSOR_QUERY =
@@ -53,7 +53,7 @@ export function useCustomCursor() {
     document.body.classList.add("has-custom-cursor");
 
     const cursorImages = Array.from(
-      cursor.querySelectorAll<HTMLImageElement>(".cursor__img"),
+      cursor.querySelectorAll<HTMLImageElement>(".custom-cursor__img"),
     );
 
     gsap.set(cursor, { xPercent: 0, yPercent: 0 });

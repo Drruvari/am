@@ -63,7 +63,7 @@
   text-wrap: balance;
 }
 
-.hero__title .line {
+.hero__title-line {
   display: block;
   max-width: 100%;
   overflow: visible;
@@ -170,7 +170,7 @@
     letter-spacing: 0.12em;
   }
 
-  .hero__meta span {
+  .hero__meta-item {
     min-width: 0;
   }
 
@@ -184,7 +184,7 @@
     line-height: 1;
   }
 
-  .hero__title .line {
+  .hero__title-line {
     white-space: normal;
     overflow: visible;
   }

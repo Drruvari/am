@@ -9,8 +9,8 @@ export default function Loader() {
       aria-label="Loading portfolio"
       aria-busy="true"
     >
-      <div className="loader__logo" aria-hidden="true">
-        <Logo idPrefix="loader-" className="loader__logo-svg" />
+      <div className="loader__brand" aria-hidden="true">
+        <Logo idPrefix="loader-" className="loader__logo" />
       </div>
       <div className="loader__meta">
         <p className="loader__tagline">

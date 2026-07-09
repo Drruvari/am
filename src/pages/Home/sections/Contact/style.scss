@@ -75,15 +75,15 @@
   font-size: 0.68rem;
 }
 
-.footer__links {
+.footer__nav {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 0.02em;
 }
 
-.footer__links a,
-.footer__links span {
+.footer__nav-link,
+.footer__nav-item {
   font-family: var(--font-heading);
   font-size: clamp(2.4rem, 3.8vw, 4.25rem);
   font-weight: 850;
@@ -99,7 +99,7 @@
   max-width: 420px;
 }
 
-.footer__block p {
+.footer__block-text {
   color: var(--fg);
   font-size: clamp(0.88rem, 0.95vw, 0.98rem);
   font-weight: 600;
@@ -144,11 +144,11 @@
   gap: 1rem;
 }
 
-.footer__bar-col--meta a {
+.footer__bar-link {
   text-decoration: none;
 }
 
-.footer__bar-col--meta span a {
+.footer__bar-credit a {
   text-decoration: underline;
   text-underline-offset: 0.18em;
 }
@@ -219,8 +219,8 @@
     font-size: clamp(4rem, 22vw, 6.5rem);
   }
 
-  .footer__links a,
-  .footer__links span {
+  .footer__nav-link,
+  .footer__nav-item {
     font-size: clamp(2rem, 10vw, 3.2rem);
     line-height: 1;
     padding: 0.08em 0;

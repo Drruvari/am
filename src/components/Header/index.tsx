@@ -4,43 +4,47 @@ import "./style.scss";
 
 function MobileMenu() {
   return (
-    <div className="menu" id="mobileMenu" aria-hidden="true">
-      <div className="menu__backdrop" id="mobileMenuBackdrop" />
-      <div className="menu__panel" data-lenis-prevent>
+    <div className="mobile-menu" id="mobileMenu" aria-hidden="true">
+      <div className="mobile-menu__backdrop" id="mobileMenuBackdrop" />
+      <div className="mobile-menu__panel" data-lenis-prevent>
         <Button
           variant="pill"
           theme="soft"
-          className="menu__close-wrap"
-          innerClassName="menu__close mono"
+          className="mobile-menu__close"
+          innerClassName="mobile-menu__close-button mono"
           id="mobileMenuClose"
           type="button"
           aria-label="Close menu"
         >
           Close
         </Button>
-        <nav className="menu__nav" aria-label="Mobile navigation">
-          <a href="#top" data-hover="link">
+        <nav className="mobile-menu__nav" aria-label="Mobile navigation">
+          <a className="mobile-menu__nav-link" href="#top" data-hover="link">
             Home
           </a>
-          <a href="#work" data-hover="link">
+          <a className="mobile-menu__nav-link" href="#work" data-hover="link">
             Works
           </a>
-          <span>In Progress</span>
-          <a href="#work" data-hover="link">
+          <span className="mobile-menu__nav-item is-disabled">In Progress</span>
+          <a className="mobile-menu__nav-link" href="#work" data-hover="link">
             Archive
           </a>
-          <span>Studio</span>
-          <span>Process</span>
-          <a href="#gallery" data-hover="link">
+          <span className="mobile-menu__nav-item is-disabled">Studio</span>
+          <span className="mobile-menu__nav-item is-disabled">Process</span>
+          <a className="mobile-menu__nav-link" href="#gallery" data-hover="link">
             Gallery
           </a>
-          <a href="mailto:hello@arbermanga.com" data-hover="link">
+          <a
+            className="mobile-menu__nav-link"
+            href="mailto:hello@arbermanga.com"
+            data-hover="link"
+          >
             Contact Us
           </a>
         </nav>
-        <div className="menu__meta mono">
-          <p>hello@arbermanga.com</p>
-          <p>Blloku District, Tirana, AL</p>
+        <div className="mobile-menu__meta mono">
+          <p className="mobile-menu__meta-item">hello@arbermanga.com</p>
+          <p className="mobile-menu__meta-item">Blloku District, Tirana, AL</p>
         </div>
       </div>
     </div>
@@ -50,33 +54,33 @@ function MobileMenu() {
 export default function Header() {
   return (
     <>
-      <header className="header" id="site-header">
+      <header className="site-header" id="site-header">
         <a
           href="#top"
-          className="header__logo"
+          className="site-header__brand"
           aria-label="AM Architecture home"
           data-hover="link"
         >
-          <Logo className="header__logo-svg" />
+          <Logo className="site-header__logo" />
         </a>
-        <nav className="header__nav" aria-label="Primary navigation">
-          <a href="#work" data-hover="link">
+        <nav className="site-header__nav" aria-label="Primary navigation">
+          <a className="site-header__nav-link" href="#work" data-hover="link">
             Works
           </a>
-          <span>Studio</span>
-          <span>Process</span>
-          <a href="#gallery" data-hover="link">
+          <span className="site-header__nav-item is-disabled">Studio</span>
+          <span className="site-header__nav-item is-disabled">Process</span>
+          <a className="site-header__nav-link" href="#gallery" data-hover="link">
             Gallery
           </a>
         </nav>
-        <div className="header__actions">
+        <div className="site-header__actions">
           <Button
             variant="pill"
             theme="dark"
             fill
             href="mailto:hello@arbermanga.com"
-            className="header__contact"
-            innerClassName="header__contact-link"
+            className="site-header__contact"
+            innerClassName="site-header__contact-link"
             data-hover="link"
           >
             <span>Get in Touch</span>
@@ -84,8 +88,8 @@ export default function Header() {
           <Button
             variant="pill"
             theme="soft"
-            className="header__menu"
-            innerClassName="header__menu-btn"
+            className="site-header__menu-trigger"
+            innerClassName="site-header__menu-button"
             id="mobileMenuOpen"
             aria-expanded="false"
             aria-controls="mobileMenu"

@@ -45,23 +45,27 @@ export default function Contact() {
 
         <nav className="footer__col footer__col--nav" aria-label="Footer navigation">
           <span className="footer__label mono">(Navigation)</span>
-          <div className="footer__links">
-            <a href="#top" data-hover="link">
+          <div className="footer__nav">
+            <a className="footer__nav-link" href="#top" data-hover="link">
               Home
             </a>
-            <a href="#work" data-hover="link">
+            <a className="footer__nav-link" href="#work" data-hover="link">
               Works
             </a>
-            <span>In Progress</span>
-            <a href="#work" data-hover="link">
+            <span className="footer__nav-item is-disabled">In Progress</span>
+            <a className="footer__nav-link" href="#work" data-hover="link">
               Archive
             </a>
-            <span>Studio</span>
-            <span>Process</span>
-            <a href="#gallery" data-hover="link">
+            <span className="footer__nav-item is-disabled">Studio</span>
+            <span className="footer__nav-item is-disabled">Process</span>
+            <a className="footer__nav-link" href="#gallery" data-hover="link">
               Gallery
             </a>
-            <a href="mailto:hello@arbermanga.com" data-hover="link">
+            <a
+              className="footer__nav-link"
+              href="mailto:hello@arbermanga.com"
+              data-hover="link"
+            >
               Contact Us
             </a>
           </div>
@@ -70,7 +74,7 @@ export default function Contact() {
         <div className="footer__col footer__col--info">
           <div className="footer__block">
             <span className="footer__label mono">(Acknowledgement)</span>
-            <p>
+            <p className="footer__block-text">
               AM Architecture projects from Tirana and acknowledges the
               builders, craftspeople, clients, and local communities that make
               each study possible.
@@ -78,7 +82,7 @@ export default function Contact() {
           </div>
           <div className="footer__block">
             <span className="footer__label mono">(Info)</span>
-            <p>
+            <p className="footer__block-text">
               A: Blloku District, Tirana, AL
               <br />
               E: hello@arbermanga.com
@@ -99,16 +103,16 @@ export default function Contact() {
           <span id="footerStatus" className="footer__status" />
         </div>
         <div className="footer__bar-col footer__bar-col--legal">
-          <span>Privacy Policy</span>
-          <span>Terms of Service</span>
+          <span className="footer__bar-item">Privacy Policy</span>
+          <span className="footer__bar-item">Terms of Service</span>
         </div>
         <div className="footer__bar-col footer__bar-col--meta">
-          <a href="#" data-hover="link">
+          <a className="footer__bar-link" href="#" data-hover="link">
             Instagram
           </a>
-          <span>
+          <span className="footer__bar-credit">
             Site by{' '}
-            <a href="#" data-hover="link">
+            <a className="footer__bar-link" href="#" data-hover="link">
               Arbër Manga
             </a>
           </span>

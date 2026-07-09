@@ -8,16 +8,16 @@ export default function Hero() {
     <section className="hero" id="hero">
       <div className="hero__body">
         <div className="hero__meta mono">
-          <span>Arbër Manga</span>
-          <span>Architecture / Studies</span>
+          <span className="hero__meta-item">Arbër Manga</span>
+          <span className="hero__meta-item">Architecture / Studies</span>
         </div>
 
         <div className="hero__content">
           <h1 className="hero__title" id="heroTitle">
-            <span className="line">Quiet</span>
-            <span className="line">architecture</span>
-            <span className="line">shaped by light,</span>
-            <span className="line">material, and place.</span>
+            <span className="hero__title-line">Quiet</span>
+            <span className="hero__title-line">architecture</span>
+            <span className="hero__title-line">shaped by light,</span>
+            <span className="hero__title-line">material, and place.</span>
           </h1>
 
           <div className="hero__aside">

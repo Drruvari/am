@@ -102,7 +102,7 @@ export function disposeApp() {
     'has-custom-cursor',
   )
   gsap.set(
-    '.hero__meta span, .hero__lede, .hero__cta, .hero__media, .hero__title .char, .hero__img',
+    '.hero__meta-item, .hero__lede, .hero__cta, .hero__media, .hero__title .char, .hero__img',
     { clearProps: 'all' },
   )
   const loader = document.getElementById('loader')
