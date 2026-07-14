@@ -130,7 +130,7 @@ function initHeroCollectionTransition() {
       sliderObserver?.enable();
     } else {
       sliderObserver?.disable();
-      lenis.start();
+      if (!document.body.classList.contains("is-menu-open")) lenis.start();
     }
   };
 
@@ -398,6 +398,7 @@ function initHeroCollectionTransition() {
   };
 
   const softSnapToCollection = (direction: 1 | -1) => {
+    if (document.body.classList.contains("is-menu-open")) return;
     if (sliderObserver?.isEnabled || collectionLocked || isSnapping) return;
     if (direction === 1 && sectionCompleted) return;
 
@@ -432,6 +433,11 @@ function initHeroCollectionTransition() {
 
     snapSettle = gsap.delayedCall(duration + 0.06, () => {
       clearWheelBlock();
+      if (document.body.classList.contains("is-menu-open")) {
+        playAnimation = false;
+        isSnapping = false;
+        return;
+      }
       ensureFullscreen();
       sliderTrigger?.scroll(targetY);
       setCollectionLocked(true);
@@ -1036,7 +1042,9 @@ function initMagneticButtons() {
         });
 
         const onMove = (event: MouseEvent) => {
-          if (document.body.classList.contains("is-menu-open")) {
+          const menuOpen = document.body.classList.contains("is-menu-open");
+          const isMenuTrigger = button.classList.contains("header-menu-trigger");
+          if (menuOpen && !isMenuTrigger) {
             xTo(0);
             yTo(0);
             return;
