@@ -44,14 +44,53 @@ html.is-loading .header-wrapp {
     display: block;
     width: calc(0.48 * var(--u));
     max-width: 100%;
+    color: inherit;
 
     svg {
       display: block;
       width: 100%;
       height: auto;
       overflow: visible;
+      color: inherit;
+    }
+
+    path {
+      fill: currentColor;
     }
   }
+}
+
+/* Light chrome over dark collection — stays until philosophy */
+body.is-header-on-dark:not(.is-menu-open) .header {
+  color: #fff;
+}
+
+body.is-header-on-dark:not(.is-menu-open) .header-link,
+body.is-header-on-dark:not(.is-menu-open) .header-menu-trigger,
+body.is-header-on-dark:not(.is-menu-open) .header-logo {
+  color: #fff !important;
+}
+
+body.is-header-on-dark:not(.is-menu-open) .header-logo path {
+  fill: #fff !important;
+}
+
+/*
+  Force the plus white regardless of inherited color / leftover GSAP styles.
+  brightness(0) → black, invert(1) → white.
+*/
+body.is-header-on-dark:not(.is-menu-open) .header-menu-trigger__icon,
+body.is-hero-pinned:not(.is-menu-open) .header-menu-trigger__icon,
+.header-menu-trigger.is-on-dark .header-menu-trigger__icon {
+  color: #fff !important;
+  fill: #fff !important;
+  filter: brightness(0) invert(1) !important;
+}
+
+body.is-header-on-dark:not(.is-menu-open) .header-menu-trigger__icon path,
+body.is-hero-pinned:not(.is-menu-open) .header-menu-trigger__icon path,
+.header-menu-trigger.is-on-dark .header-menu-trigger__icon path {
+  fill: #fff !important;
 }
 
 .header-search {

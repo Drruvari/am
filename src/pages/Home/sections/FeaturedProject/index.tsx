@@ -75,6 +75,13 @@ export default function FeaturedProject() {
           <span>-</span>
           <span className="slider-numeric__total">02</span>
         </div>
+
+        <div className="collection-scroll-hint" aria-hidden="true">
+          <span className="collection-scroll-hint__label">Scroll</span>
+          <span className="collection-scroll-hint__mouse">
+            <span className="collection-scroll-hint__wheel" />
+          </span>
+        </div>
       </div>
     </section>
   );

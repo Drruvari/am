@@ -103,6 +103,7 @@ export function disposeApp() {
     "is-project-panel-open",
     "is-header-compact",
     "is-hero-pinned",
+    "is-header-on-dark",
     "has-custom-cursor",
   );
   gsap.set(
