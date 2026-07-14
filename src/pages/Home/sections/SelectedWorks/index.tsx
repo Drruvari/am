@@ -1,3 +1,4 @@
+import { SectionEyebrow } from "@/components/SectionHeader";
 import { projects } from "@/data/projects";
 import ProjectCard, { ProjectPanel } from "../Work/ProjectCard";
 import "../Work/style.scss";
@@ -9,9 +10,9 @@ export default function SelectedWorks() {
     <>
       <section className="selected-works" id="work">
         <div className="selected-works__intro">
-          <p className="selected-works__eyebrow eyebrow mono">
+          <SectionEyebrow className="selected-works__eyebrow">
             04 — Selected Works
-          </p>
+          </SectionEyebrow>
 
           <h2 className="selected-works__title">
             Selected

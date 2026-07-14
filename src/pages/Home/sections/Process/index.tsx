@@ -1,3 +1,8 @@
+import {
+  SectionEyebrow,
+  SectionIntro,
+} from "@/components/SectionHeader";
+
 const steps = [
   ["01", "Consultation", "Project goals, site, budget, and constraints."],
   ["02", "Concept", "Spatial direction, atmosphere, references, and massing."],
@@ -21,15 +26,14 @@ const steps = [
 export default function Process() {
   return (
     <section className="process" id="process">
-      <p className="process__eyebrow eyebrow mono">06 — Process</p>
+      <SectionEyebrow className="process__eyebrow">
+        06 — Process
+      </SectionEyebrow>
 
-      <div className="process__intro">
-        <h2>Process</h2>
-        <p>
-          A clear sequence keeps the work calm, legible, and controlled from
-          first conversation to site execution.
-        </p>
-      </div>
+      <SectionIntro className="process__intro" title="Process">
+        A clear sequence keeps the work calm, legible, and controlled from first
+        conversation to site execution.
+      </SectionIntro>
 
       <div className="process__steps">
         {steps.map(([number, title, text]) => (

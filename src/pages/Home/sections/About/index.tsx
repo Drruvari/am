@@ -1,3 +1,4 @@
+import { SectionEyebrow } from "@/components/SectionHeader";
 import { images } from "@/lib/images";
 
 export default function About() {
@@ -18,7 +19,9 @@ export default function About() {
       </div>
 
       <div className="architect-about__content">
-        <p className="architect-about__eyebrow eyebrow mono">07 — About</p>
+        <SectionEyebrow className="architect-about__eyebrow">
+          07 — About
+        </SectionEyebrow>
 
         <h2>Arbër Manga</h2>
 

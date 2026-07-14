@@ -1,3 +1,8 @@
+import {
+  SectionEyebrow,
+  SectionIntro,
+} from "@/components/SectionHeader";
+
 const services = [
   "Architecture",
   "Interior design",
@@ -10,15 +15,14 @@ const services = [
 export default function Services() {
   return (
     <section className="services" id="services">
-      <p className="services__eyebrow eyebrow mono">05 — Services</p>
+      <SectionEyebrow className="services__eyebrow">
+        05 — Services
+      </SectionEyebrow>
 
-      <div className="services__intro">
-        <h2>Scope</h2>
-        <p>
-          Focused architectural support from early spatial strategy to detailed
-          design and execution coordination.
-        </p>
-      </div>
+      <SectionIntro className="services__intro" title="Scope">
+        Focused architectural support from early spatial strategy to detailed
+        design and execution coordination.
+      </SectionIntro>
 
       <div className="services__grid">
         {services.map((service) => (

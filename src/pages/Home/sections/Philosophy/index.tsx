@@ -1,7 +1,11 @@
+import { SectionEyebrow } from "@/components/SectionHeader";
+
 export default function Philosophy() {
   return (
     <section className="philosophy" id="philosophy">
-      <p className="philosophy__eyebrow eyebrow mono">03 — Philosophy</p>
+      <SectionEyebrow className="philosophy__eyebrow">
+        03 — Philosophy
+      </SectionEyebrow>
 
       <div className="philosophy__body">
         <p>Architecture begins with what already exists.</p>

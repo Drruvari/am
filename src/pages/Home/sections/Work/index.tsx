@@ -1,3 +1,4 @@
+import { SectionEyebrow } from '@/components/SectionHeader'
 import './style.scss'
 import { archiveItems, projects } from '@/data/projects'
 import { ResponsiveCardImage } from '@/lib/responsive-image'
@@ -37,7 +38,9 @@ export default function Work() {
 
       <section className="gallery" id="gallery">
         <div className="gallery__intro">
-          <p className="gallery__eyebrow eyebrow mono">03 — Built Environments</p>
+          <SectionEyebrow className="gallery__eyebrow">
+            03 — Built Environments
+          </SectionEyebrow>
           <h2 className="gallery__title">
             FOUR WAYS
             <br />
