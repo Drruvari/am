@@ -39,6 +39,7 @@ function initHeroCollectionTransition() {
 
   const banner = document.querySelector<HTMLElement>(".banner");
   const collection = document.querySelector<HTMLElement>(".collection");
+  const philosophy = document.querySelector<HTMLElement>(".philosophy");
   const slider = document.querySelector<HTMLElement>(".slider");
   const sliderItems = gsap.utils.toArray<HTMLElement>(".slider-img");
   const sliderImages = gsap.utils.toArray<HTMLImageElement>(".slider-img img");
@@ -105,6 +106,15 @@ function initHeroCollectionTransition() {
   const collectionPad = () => `calc(0.22 * ${fluidPad()})`;
   const sliderRadius = () => `calc(0.22 * ${fluidPad()})`;
 
+  const syncHeaderColor = () => {
+    const transitionIsDark = timeline.progress() >= 0.25;
+    const philosophyIsVisible =
+      philosophy !== null &&
+      philosophy.getBoundingClientRect().top <= window.innerHeight * 0.55;
+
+    setHeaderOnDark(transitionIsDark && !philosophyIsVisible);
+  };
+
   gsap.set(collection, {
     paddingLeft: collectionPad(),
     paddingRight: collectionPad(),
@@ -130,8 +140,11 @@ function initHeroCollectionTransition() {
       end: "bottom top",
       scrub: 0.4,
       invalidateOnRefresh: true,
-      onLeave: ensureCollectionFullscreen,
-      onEnterBack: () => setHeaderOnDark(false),
+      onUpdate: syncHeaderColor,
+      onLeave: () => {
+        ensureCollectionFullscreen();
+        syncHeaderColor();
+      },
     },
   });
 
@@ -168,8 +181,7 @@ function initHeroCollectionTransition() {
         duration: 1,
       },
       0,
-    )
-    .call(() => setHeaderOnDark(true), undefined, 0.25);
+    );
 
   function ensureCollectionFullscreen() {
     gsap.set(collection, { padding: 0 });
@@ -186,9 +198,11 @@ function initHeroCollectionTransition() {
   const resetHeaderTrigger = ScrollTrigger.create({
     trigger: ".philosophy",
     start: "top 55%",
-    onEnter: () => setHeaderOnDark(false),
-    onLeaveBack: () => setHeaderOnDark(true),
+    onToggle: syncHeaderColor,
+    onUpdate: syncHeaderColor,
   });
+
+  syncHeaderColor();
 
   return {
     destroy: () => {

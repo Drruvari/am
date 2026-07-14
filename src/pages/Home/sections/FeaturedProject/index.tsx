@@ -21,6 +21,7 @@ export default function FeaturedProject() {
               height={1224}
               loading="eager"
               decoding="async"
+              draggable={false}
             />
             <div
               className="featured-project__gradient slider-gradient"

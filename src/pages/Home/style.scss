@@ -196,11 +196,25 @@ html.is-loading .slider {
     min-height: 100svh;
     height: 100svh;
     padding: 0 0.75rem;
+    overscroll-behavior: auto;
+    touch-action: pan-y;
+  }
+
+  .slider,
+  .slider-wrapp,
+  .slider-img,
+  .slider-img img {
+    touch-action: pan-y;
   }
 
   .slider {
     height: 100svh;
     border-radius: 1rem;
+  }
+
+  .slider-img img {
+    -webkit-user-drag: none;
+    user-select: none;
   }
 
   html.is-loading .slider {
