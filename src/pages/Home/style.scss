@@ -376,19 +376,83 @@ html.is-loading .slider {
 }
 
 .philosophy {
-  min-height: 80svh;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
+  gap: clamp(3rem, 7vw, 7rem);
+  background: var(--bg);
+}
+
+.philosophy__top,
+.philosophy__footer {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--content-inset);
+}
+
+.philosophy__image {
+  width: clamp(10rem, 16vw, 15rem);
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+}
+
+.philosophy__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 23% center;
+}
+
+.philosophy__intro {
+  grid-column: 4 / 5;
+  align-self: center;
+  max-width: 31rem;
+  font-size: clamp(1rem, 1.2vw, 1.375rem);
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.philosophy__eyebrow {
+  grid-column: 2 / 3;
+  align-self: start;
+  font-size: clamp(0.75rem, 0.8vw, 0.875rem);
+  font-weight: 600;
+  line-height: 1;
+  text-transform: uppercase;
 }
 
 .philosophy__body {
-  max-width: 72rem;
+  width: min(94%, 88rem);
+  margin-right: auto;
   font-family: var(--font-heading);
-  font-size: clamp(2.6rem, 7vw, 7rem);
-  font-weight: 800;
-  line-height: 0.95;
-  letter-spacing: -0.04em;
+  font-size: clamp(2.25rem, 4.25vw, 5.25rem);
+  font-weight: 750;
+  line-height: 0.88;
+  letter-spacing: -0.055em;
+  text-align: left;
+  text-indent: 12vw;
+}
+
+.philosophy__body p,
+.philosophy__body p.split {
+  font-weight: 750;
+  line-height: 0.88;
+}
+
+.philosophy__label {
+  grid-column: 1 / 2;
+  font-size: clamp(1rem, 1.15vw, 1.25rem);
+  font-weight: 600;
+  line-height: 1.05;
+}
+
+.philosophy__detail {
+  grid-column: 3 / 5;
+  max-width: 39rem;
+  font-size: clamp(1rem, 1.2vw, 1.375rem);
+  font-weight: 600;
+  line-height: 1.15;
 }
 
 .selected-works__intro,
@@ -471,6 +535,52 @@ html.is-loading .slider {
 }
 
 @media (max-width: 768px) {
+  .philosophy {
+    gap: 3.5rem;
+  }
+
+  .philosophy__top,
+  .philosophy__footer {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .philosophy__image {
+    width: min(42vw, 12rem);
+  }
+
+  .philosophy__intro {
+    grid-column: 2;
+    font-size: 0.9375rem;
+  }
+
+  .philosophy__eyebrow {
+    grid-column: 1;
+  }
+
+  .philosophy__body {
+    font-size: clamp(2.125rem, 9vw, 4rem);
+    line-height: 0.9;
+    text-align: left;
+    text-indent: 0;
+  }
+
+
+  .philosophy__body p,
+  .philosophy__body p.split {
+    line-height: 0.9;
+  }
+
+  .philosophy__label {
+    grid-column: 1;
+    font-size: 0.9375rem;
+  }
+
+  .philosophy__detail {
+    grid-column: 2;
+    font-size: 0.9375rem;
+  }
+
   .selected-works__intro,
   .services__intro,
   .process__intro,

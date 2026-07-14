@@ -19,6 +19,7 @@ type FallbackLenis = {
 
 export let lenis: LenisLike
 let savedScrollY = 0
+let lastHeaderScrollY = 0
 
 function isMobileViewport() {
   return window.matchMedia('(max-width: 768px)').matches
@@ -177,6 +178,10 @@ export function initSmoothScroll() {
   }
   document.addEventListener('click', onHashClick)
   addCleanup(() => document.removeEventListener('click', onHashClick))
+  addCleanup(() => {
+    lastHeaderScrollY = 0
+    document.body.classList.remove('is-header-compact', 'is-header-condensed')
+  })
 }
 
 export function updateScrollState() {
@@ -186,8 +191,18 @@ export function updateScrollState() {
   const currentScroll =
     typeof lenis?.scroll === 'number' ? lenis.scroll : window.scrollY
   const isCompact = currentScroll > window.innerHeight * 0.12
+  const isScrollingDown = currentScroll > lastHeaderScrollY + 1
+  const isScrollingUp = currentScroll < lastHeaderScrollY - 1
 
   document.body.classList.toggle('is-header-compact', isCompact)
+
+  if (isScrollingDown && currentScroll > 48) {
+    document.body.classList.add('is-header-condensed')
+  } else if (isScrollingUp || currentScroll <= 48) {
+    document.body.classList.remove('is-header-condensed')
+  }
+
+  lastHeaderScrollY = currentScroll
 }
 
 export { isMobileViewport }

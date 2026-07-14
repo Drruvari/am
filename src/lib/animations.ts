@@ -11,9 +11,16 @@ import {
   PLACEHOLDER_FLAG,
   PLACEHOLDER_HEX,
 } from "./loader-paths";
+import {
+  initLineReveals,
+  initParallax,
+  initScrollStory,
+  refreshScrollStory,
+} from "./scroll-story";
 import { lenis, updateScrollState } from "./smooth-scroll";
 
 let pageScrollInitialized = false;
+let homepageMotionInitialized = false;
 let heroEasesInitialized = false;
 
 function initHeroEases() {
@@ -45,7 +52,9 @@ function initHeroCollectionTransition() {
   const sliderImages = gsap.utils.toArray<HTMLImageElement>(".slider-img img");
   const header = document.querySelector<HTMLElement>(".header");
   const headerLinks = gsap.utils.toArray<HTMLElement>(".header-link");
-  const menuTrigger = document.querySelector<HTMLElement>(".header-menu-trigger");
+  const menuTrigger = document.querySelector<HTMLElement>(
+    ".header-menu-trigger",
+  );
   const menuIcon = document.querySelector<SVGSVGElement>(
     ".header-menu-trigger__icon, [data-header-menu-button-icon]",
   );
@@ -55,7 +64,10 @@ function initHeroCollectionTransition() {
   // Kill any leftover GSAP filter / fill fighting CSS
   if (menuIcon) gsap.set(menuIcon, { clearProps: "filter,color,fill" });
   if (menuIconPaths.length) {
-    gsap.set(menuIconPaths, { clearProps: "fill", attr: { fill: "currentColor" } });
+    gsap.set(menuIconPaths, {
+      clearProps: "fill",
+      attr: { fill: "currentColor" },
+    });
   }
 
   let isHeaderOnDark = false;
@@ -395,30 +407,6 @@ function initSelectedWorksMotion() {
   });
 }
 
-function initServicesMotion() {
-  gsap.utils.toArray<HTMLElement>(".services__item").forEach((item, index) => {
-    gsap.fromTo(
-      item,
-      {
-        yPercent: 35,
-        autoAlpha: 0,
-      },
-      {
-        yPercent: 0,
-        autoAlpha: 1,
-        duration: 0.8,
-        delay: index * 0.035,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: item,
-          start: "top 85%",
-          toggleActions: "play none none reverse",
-        },
-      },
-    );
-  });
-}
-
 function initProcessMotion() {
   const steps = gsap.utils.toArray<HTMLElement>(".process__step");
 
@@ -510,47 +498,37 @@ function initHomepageMotion() {
 
     initPhilosophyMotion();
     initSelectedWorksMotion();
-    initServicesMotion();
     initProcessMotion();
     initFooterMotion();
+    initLineReveals();
+    initScrollStory();
+    initParallax();
+    refreshScrollStory();
 
-    initMaskReveal(
-      [
-        ".project-card__media",
-        ".architect-about__image",
-        ".footer__image",
-      ].join(","),
-    );
-
-    initRevealGroup({
-      trigger: ".services",
-      items: ".services__eyebrow, .services__intro > *",
-    });
+    initMaskReveal(".project-card__media");
 
     initRevealGroup({
       trigger: ".process",
       items: ".process__eyebrow, .process__intro > *",
-    });
-
-    initRevealGroup({
-      trigger: ".architect-about",
-      items: ".architect-about__content > *",
-      y: 56,
-    });
-
-    initRevealGroup({
-      trigger: ".footer",
-      items: ".footer__intro > *, .footer__grid > *, .footer__bar > *",
-      y: 48,
     });
   });
 
   return () => ctx.revert();
 }
 
-function initScrollAnimations() {
+function initHomepageScrollStory() {
+  if (homepageMotionInitialized) return;
+  homepageMotionInitialized = true;
+
   const cleanupHomepageMotion = initHomepageMotion();
 
+  addCleanup(() => {
+    cleanupHomepageMotion();
+    homepageMotionInitialized = false;
+  });
+}
+
+function initScrollAnimations() {
   mm.add("(min-width: 0px)", () => {
     const heroAnimation = initHeroCollectionTransition();
 
@@ -567,7 +545,6 @@ function initScrollAnimations() {
           ".slider-img img",
           ".collection-mask",
           ".slider-title__item",
-          ".slider-numeric__item",
           ".header",
           ".header-wrapp",
           ".header-link",
@@ -575,10 +552,6 @@ function initScrollAnimations() {
         { clearProps: "all" },
       );
     };
-  });
-
-  addCleanup(() => {
-    cleanupHomepageMotion();
   });
 }
 
@@ -730,7 +703,9 @@ function initMagneticButtons() {
 
         const onMove = (event: MouseEvent) => {
           const menuOpen = document.body.classList.contains("is-menu-open");
-          const isMenuTrigger = button.classList.contains("header-menu-trigger");
+          const isMenuTrigger = button.classList.contains(
+            "header-menu-trigger",
+          );
           if (menuOpen && !isMenuTrigger) {
             xTo(0);
             yTo(0);
@@ -765,6 +740,7 @@ function initMagneticButtons() {
 }
 
 export function initAnimations() {
+  initHomepageScrollStory();
   initProjectCardHover();
   initMagneticButtons();
 }
@@ -778,47 +754,62 @@ let loaderFinished = false;
 export function initLoader() {
   const loader = document.getElementById("loader");
   const curtain = document.querySelector<HTMLElement>(".loader-curtain");
+
   if (!loader) return;
 
   gsap.registerPlugin(MorphSVGPlugin, DrawSVGPlugin);
 
   const session = ++loaderSession;
+
   const isActive = () => session === loaderSession && !loaderFinished;
 
   loaderFinished = false;
   loaderTimeline?.kill();
+
   if (loaderFailsafe !== undefined) {
     window.clearTimeout(loaderFailsafe);
     loaderFailsafe = undefined;
   }
+
   if (loaderRaf !== undefined) {
     window.cancelAnimationFrame(loaderRaf);
     loaderRaf = undefined;
   }
 
-  // Reset after StrictMode remount / prior finish()
   loader.style.display = "flex";
   loader.style.pointerEvents = "auto";
   loader.setAttribute("aria-busy", "true");
-  gsap.set(loader, { autoAlpha: 1, clearProps: "opacity,visibility" });
+
+  gsap.set(loader, {
+    autoAlpha: 1,
+    clearProps: "opacity,visibility",
+  });
 
   if (curtain) {
     curtain.style.display = "block";
-    gsap.set(curtain, { scaleY: 1, transformOrigin: "50% 100%", autoAlpha: 1 });
+
+    gsap.set(curtain, {
+      scaleY: 1,
+      transformOrigin: "50% 100%",
+      autoAlpha: 1,
+    });
   }
 
   const countValue =
-    loader.querySelector(".loader__progress-value") ??
+    loader.querySelector<HTMLElement>(".loader__progress-value") ??
     document.getElementById("loaderCount");
+
   const loaderStatus = document.getElementById("loaderStatus");
-  const pct = loader.querySelector<HTMLElement>(".loader__pct");
+  const loadingText = loader.querySelector<HTMLElement>(".loader__loading");
   const mark = loader.querySelector<SVGSVGElement>(".loader__mark");
   const shapeHex = loader.querySelector<SVGPathElement>("#shape-hex");
   const shapeFlag = loader.querySelector<SVGPathElement>("#shape-flag");
   const shapes = [shapeHex, shapeFlag].filter(Boolean) as SVGPathElement[];
 
-  // HMR / remount can leave morphęd path data — always restore placeholders
-  if (shapeHex) shapeHex.setAttribute("d", PLACEHOLDER_HEX);
+  if (shapeHex) {
+    shapeHex.setAttribute("d", PLACEHOLDER_HEX);
+  }
+
   if (shapeFlag) {
     shapeFlag.setAttribute("d", PLACEHOLDER_FLAG);
     shapeFlag.removeAttribute("fill-rule");
@@ -836,44 +827,82 @@ export function initLoader() {
   const headerWrap = document.querySelector<HTMLElement>(".header-wrapp");
   const headerWrapTargets = headerWrap ? [headerWrap] : [];
   const sliderTargets = slider ? [slider] : [];
-
-  // Pixel y — GSAP cannot reliably tween calc()/clamp() CSS vars
   const headerStartYPx = isMobile
     ? 0
     : -Math.min(100, Math.max(28, window.innerWidth * 0.069444444));
 
-  gsap.set(heroFadeElements, { yPercent: 110 });
-  gsap.set(headerWrapTargets, { y: headerStartYPx });
-  gsap.set(sliderTargets, { yPercent: isMobile ? 0 : 50 });
-  gsap.set(".slider-title__item", { y: 0 });
-  gsap.set(".slider-numeric__item", { y: 0 });
+  gsap.set(heroFadeElements, {
+    yPercent: 110,
+  });
+
+  gsap.set(headerWrapTargets, {
+    y: headerStartYPx,
+  });
+
+  gsap.set(sliderTargets, {
+    yPercent: isMobile ? 0 : 50,
+  });
+
+  gsap.set(".slider-title__item", {
+    y: 0,
+  });
+
   gsap.set(sliderImages, {
     scale: isMobile ? 1.12 : 1.7,
     transformOrigin: "50% 50%",
   });
-  if (pct) gsap.set(pct, { autoAlpha: 1 });
-  if (mark) gsap.set(mark, { scale: 1, autoAlpha: 1, transformOrigin: "50% 50%" });
-  if (countValue) countValue.textContent = "0";
-  if (loaderStatus) loaderStatus.textContent = "Loading, 0 percent";
+
+  if (loadingText) {
+    gsap.set(loadingText, {
+      autoAlpha: 1,
+    });
+  }
+
+  if (mark) {
+    gsap.set(mark, {
+      scale: 1,
+      autoAlpha: 1,
+      transformOrigin: "50% 50%",
+    });
+  }
+
+  if (countValue) {
+    countValue.textContent = "0";
+  }
+
+  if (loaderStatus) {
+    loaderStatus.textContent = "Loading, 0 percent";
+  }
 
   const hideLoader = () => {
     loader.style.pointerEvents = "none";
     loader.style.display = "none";
-    if (curtain) curtain.style.display = "none";
+
+    if (curtain) {
+      curtain.style.display = "none";
+    }
   };
 
   const finish = () => {
     if (loaderFinished) return;
+
     loaderFinished = true;
 
     if (loaderFailsafe !== undefined) {
       window.clearTimeout(loaderFailsafe);
       loaderFailsafe = undefined;
     }
+
     loader.setAttribute("aria-busy", "false");
+
     hideLoader();
-    lenis.scrollTo(0, { immediate: true });
+
+    lenis.scrollTo(0, {
+      immediate: true,
+    });
+
     lenis.start();
+
     ScrollTrigger.refresh(true);
     initPageScroll();
     updateScrollState();
@@ -881,25 +910,45 @@ export function initLoader() {
 
   const revealHero = () => {
     if (session !== loaderSession) return;
+
     document.documentElement.classList.remove("is-loading");
   };
 
   const forceShowIntroTargets = () => {
-    gsap.set(heroFadeElements, { yPercent: 0, clearProps: "transform" });
-    gsap.set(headerWrapTargets, { y: 0, clearProps: "transform" });
-    gsap.set(sliderTargets, { yPercent: 0, clearProps: "transform" });
+    gsap.set(heroFadeElements, {
+      yPercent: 0,
+      clearProps: "transform",
+    });
+
+    gsap.set(headerWrapTargets, {
+      y: 0,
+      clearProps: "transform",
+    });
+
+    gsap.set(sliderTargets, {
+      yPercent: 0,
+      clearProps: "transform",
+    });
+
     gsap.set(sliderImages, {
       scale: 1.3,
       transformOrigin: "50% 50%",
     });
   };
 
-  const progress = { val: 0 };
+  const progress = {
+    val: 0,
+  };
 
   const updateProgress = () => {
     if (!isActive()) return;
+
     const value = Math.min(100, Math.round(progress.val));
-    if (countValue) countValue.textContent = String(value);
+
+    if (countValue) {
+      countValue.textContent = String(value);
+    }
+
     if (loaderStatus) {
       loaderStatus.textContent = `Loading, ${value} percent`;
     }
@@ -907,6 +956,7 @@ export function initLoader() {
 
   const runHeroReveal = () => {
     if (session !== loaderSession) return;
+
     revealHero();
 
     const targets = {
@@ -915,7 +965,6 @@ export function initLoader() {
       descr: gsap.utils.toArray<HTMLElement>(".banner-descr .banner-reveal"),
     };
 
-    // If split failed, show raw text and move on
     if (
       !targets.meta.length &&
       !targets.title.length &&
@@ -929,10 +978,12 @@ export function initLoader() {
     const revealTL = gsap.timeline({
       onComplete: () => {
         if (session !== loaderSession) return;
+
         forceShowIntroTargets();
         finish();
       },
     });
+
     loaderTimeline = revealTL;
 
     revealTL
@@ -997,14 +1048,53 @@ export function initLoader() {
 
   const runFallbackExit = () => {
     if (session !== loaderSession) return;
+
     progress.val = 100;
     updateProgress();
-    const exitTL = gsap.timeline({ onComplete: runHeroReveal });
+
+    const exitTL = gsap.timeline({
+      onComplete: runHeroReveal,
+    });
+
     loaderTimeline = exitTL;
+
+    // Keep the blur visible even when the SVG plugins fail.
+    exitTL.to({}, { duration: 3.6 });
+
+    if (loadingText) {
+      exitTL.to(loadingText, {
+        autoAlpha: 0,
+        duration: 0.4,
+        ease: "power2.in",
+      });
+    }
+
+    if (mark) {
+      exitTL.to(
+        mark,
+        {
+          autoAlpha: 0,
+          scale: 1.05,
+          duration: 0.5,
+          ease: "power2.in",
+        },
+        loadingText ? "<" : ">",
+      );
+    }
+
+    if (curtain) {
+      exitTL.to(
+        curtain,
+        {
+          scaleY: 0,
+          duration: 0.9,
+          ease: "power4.inOut",
+        },
+        "-=0.1",
+      );
+    }
+
     exitTL
-      .to(pct, { autoAlpha: 0, duration: 0.25 }, 0)
-      .to(mark, { autoAlpha: 0, scale: 1.05, duration: 0.4, ease: "power2.in" }, 0)
-      .to(curtain, { scaleY: 0, duration: 0.7, ease: "power4.inOut" }, 0.15)
       .set(loader, { autoAlpha: 0 })
       .call(hideLoader);
   };
@@ -1018,8 +1108,8 @@ export function initLoader() {
     }
 
     try {
-      // Kill prior draw/morph state so DrawSVG can start from 0 again
       gsap.killTweensOf(shapes);
+
       gsap.set(shapes, {
         transformOrigin: "50% 50%",
         scale: 0.85,
@@ -1028,12 +1118,18 @@ export function initLoader() {
         strokeOpacity: 1,
         clearProps: "strokeDasharray,strokeDashoffset",
       });
-      gsap.set(shapes, { drawSVG: "0%" });
+
+      gsap.set(shapes, {
+        drawSVG: "0%",
+      });
 
       const loaderTL = gsap.timeline({
-        defaults: { ease: "power2.inOut" },
+        defaults: {
+          ease: "power2.inOut",
+        },
         onComplete: runHeroReveal,
       });
+
       loaderTimeline = loaderTL;
 
       loaderTL
@@ -1041,7 +1137,7 @@ export function initLoader() {
           progress,
           {
             val: 100,
-            duration: 2.6,
+            duration: 3.7,
             ease: "power1.inOut",
             onUpdate: updateProgress,
           },
@@ -1060,7 +1156,10 @@ export function initLoader() {
           shapeHex!,
           {
             duration: 1.1,
-            morphSVG: { shape: FINAL_HEX, shapeIndex: "auto" },
+            morphSVG: {
+              shape: FINAL_HEX,
+              shapeIndex: "auto",
+            },
           },
           0.5,
         )
@@ -1068,7 +1167,10 @@ export function initLoader() {
           shapeFlag!,
           {
             duration: 1.1,
-            morphSVG: { shape: FINAL_FLAG, shapeIndex: "auto" },
+            morphSVG: {
+              shape: FINAL_FLAG,
+              shapeIndex: "auto",
+            },
           },
           0.65,
         )
@@ -1098,69 +1200,100 @@ export function initLoader() {
             ease: "back.out(3)",
           },
           2.07,
-        )
-        .to(pct, { autoAlpha: 0, duration: 0.3 }, 2.6)
-        .to(
+        );
+
+      // The last letter reaches full blur at roughly 3.68 seconds.
+      if (loadingText) {
+        loaderTL.to(
+          loadingText,
+          { autoAlpha: 0, duration: 0.4, ease: "power2.in" },
+          3.7,
+        );
+      }
+
+      if (mark) {
+        loaderTL.to(
           mark,
           {
             scale: 1.08,
             autoAlpha: 0,
-            duration: 0.5,
+            duration: 0.55,
             ease: "power2.in",
           },
-          2.7,
-        )
-        .to(
+          3.8,
+        );
+      }
+
+      if (curtain) {
+        loaderTL.to(
           curtain,
           {
             scaleY: 0,
             duration: 0.9,
             ease: "power4.inOut",
           },
-          2.9,
-        )
+          4.05,
+        );
+      }
+
+      loaderTL
         .set(loader, { autoAlpha: 0 })
         .call(hideLoader);
     } catch (error) {
-      console.warn("[loader] Morph/Draw timeline failed, using fallback", error);
+      console.warn(
+        "[loader] Morph/Draw timeline failed, using fallback",
+        error,
+      );
+
       runFallbackExit();
     }
   };
 
   const startLoader = () => {
     loaderRaf = undefined;
+
     if (session !== loaderSession) return;
+
     try {
       runLoaderTimeline();
     } catch (error) {
       console.warn("[loader] start failed, using fallback", error);
+
       runFallbackExit();
     }
   };
 
   loaderFailsafe = window.setTimeout(() => {
-    if (session !== loaderSession || loaderFinished) return;
+    if (session !== loaderSession || loaderFinished) {
+      return;
+    }
+
     loaderTimeline?.kill();
+
     revealHero();
     forceShowIntroTargets();
     finish();
-  }, 8000);
+  }, 12000);
 
   loaderRaf = window.requestAnimationFrame(startLoader);
 
   addCleanup(() => {
     if (session !== loaderSession) return;
+
     loaderSession += 1;
     loaderTimeline?.kill();
     loaderTimeline = null;
+
     if (loaderRaf !== undefined) {
       window.cancelAnimationFrame(loaderRaf);
       loaderRaf = undefined;
     }
+
     if (loaderFailsafe !== undefined) {
       window.clearTimeout(loaderFailsafe);
       loaderFailsafe = undefined;
     }
+
     loaderFinished = false;
   });
 }

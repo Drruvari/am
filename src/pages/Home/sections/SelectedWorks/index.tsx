@@ -10,17 +10,20 @@ export default function SelectedWorks() {
     <>
       <section className="selected-works" id="work">
         <div className="selected-works__intro">
-          <SectionEyebrow className="selected-works__eyebrow">
+          <SectionEyebrow
+            className="selected-works__eyebrow"
+            data-reveal="fade"
+          >
             04 — Selected Works
           </SectionEyebrow>
 
-          <h2 className="selected-works__title">
+          <h2 className="selected-works__title" data-split-lines>
             Selected
             <br />
             Works
           </h2>
 
-          <p className="selected-works__lede">
+          <p className="selected-works__lede" data-reveal="up-large">
             A concise portfolio preview of residential, interior, cultural, and
             conceptual spatial studies.
           </p>

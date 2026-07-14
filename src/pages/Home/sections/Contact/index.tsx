@@ -6,7 +6,7 @@ export default function Contact() {
   return (
     <footer className="footer" id="contact">
       <div className="footer__intro">
-        <h2 className="footer__headline">
+        <h2 className="footer__headline" data-split-lines>
           Focused on quality
           <br />
           driven by restraint
@@ -17,13 +17,17 @@ export default function Contact() {
           fill
           href="mailto:hello@arbermanga.com"
           className="footer__cta"
+          data-reveal="up"
           data-hover="link"
         >
           <span>Tell us about your project</span>
         </Button>
       </div>
       <div className="footer__grid">
-        <div className="footer__col footer__col--brand">
+        <div
+          className="footer__col footer__col--brand"
+          data-reveal="mask"
+        >
           <div className="footer__image">
             <img
               src={archImage}
@@ -32,6 +36,7 @@ export default function Contact() {
               height={2692}
               loading="lazy"
               decoding="async"
+              data-parallax="6"
             />
             <span className="footer__mark" aria-hidden="true">
               AM
@@ -41,6 +46,8 @@ export default function Contact() {
 
         <nav
           className="footer__col footer__col--nav"
+          data-reveal="up"
+          data-reveal-group="footer-columns"
           aria-label="Footer navigation"
         >
           <span className="footer__label mono">(Navigation)</span>
@@ -70,7 +77,11 @@ export default function Contact() {
           </div>
         </nav>
 
-        <div className="footer__col footer__col--info">
+        <div
+          className="footer__col footer__col--info"
+          data-reveal="up"
+          data-reveal-group="footer-columns"
+        >
           <div className="footer__block">
             <span className="footer__label mono">(Acknowledgement)</span>
             <p className="footer__block-text">
@@ -93,7 +104,7 @@ export default function Contact() {
           </div>
         </div>
       </div>
-      <div className="footer__bar mono">
+      <div className="footer__bar mono" data-reveal="fade">
         <div className="footer__bar-col footer__bar-col--brand">
           <span>
             © <span id="footerYear">2026</span> AM Architecture
@@ -111,7 +122,7 @@ export default function Contact() {
           <span className="footer__bar-credit">
             Site by{" "}
             <a className="footer__bar-link" href="#" data-hover="link">
-              Arbër Manga
+              Kejdi Balla
             </a>
           </span>
         </div>
