@@ -32,7 +32,7 @@ export default function FeaturedProject() {
         </div>
 
         <p className="featured-project__eyebrow slider-descr">
-          Our considered collection of residential studies
+          Featured project
         </p>
 
         <div className="featured-project__title-track slider-title">
@@ -40,6 +40,19 @@ export default function FeaturedProject() {
             {featuredProject.title}
           </h2>
         </div>
+
+        <a className="featured-project__link" href="#work">
+          View project
+        </a>
+
+        <p className="featured-project__scroll" aria-hidden="true">
+          [Scroll down]
+        </p>
+
+        <p className="featured-project__statement">
+          AM Architecture is defined by strong, solid forms with subtle
+          elegance, natural balance and enduring appeal.
+        </p>
       </div>
     </section>
   );
