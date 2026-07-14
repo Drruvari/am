@@ -80,7 +80,6 @@ body.is-header-on-dark:not(.is-menu-open) .header-logo path {
   brightness(0) → black, invert(1) → white.
 */
 body.is-header-on-dark:not(.is-menu-open) .header-menu-trigger__icon,
-body.is-hero-pinned:not(.is-menu-open) .header-menu-trigger__icon,
 body:not(.is-menu-open) .header-menu-trigger.is-on-dark .header-menu-trigger__icon {
   color: #fff !important;
   fill: #fff !important;
@@ -88,7 +87,6 @@ body:not(.is-menu-open) .header-menu-trigger.is-on-dark .header-menu-trigger__ic
 }
 
 body.is-header-on-dark:not(.is-menu-open) .header-menu-trigger__icon path,
-body.is-hero-pinned:not(.is-menu-open) .header-menu-trigger__icon path,
 body:not(.is-menu-open) .header-menu-trigger.is-on-dark .header-menu-trigger__icon path {
   fill: #fff !important;
 }

@@ -51,16 +51,16 @@ function initHeroCollectionTransition() {
   const menuIconPaths = gsap.utils.toArray<SVGPathElement>(
     ".header-menu-trigger__icon path, [data-header-menu-button-icon] path",
   );
-  const titleItems = gsap.utils.toArray<HTMLElement>(".slider-title__item");
-  const numericItems = gsap.utils.toArray<HTMLElement>(".slider-numeric__item");
-
   // Kill any leftover GSAP filter / fill fighting CSS
   if (menuIcon) gsap.set(menuIcon, { clearProps: "filter,color,fill" });
   if (menuIconPaths.length) {
     gsap.set(menuIconPaths, { clearProps: "fill", attr: { fill: "currentColor" } });
   }
 
+  let isHeaderOnDark = false;
   const setHeaderOnDark = (onDark: boolean) => {
+    if (isHeaderOnDark === onDark) return;
+    isHeaderOnDark = onDark;
     document.body.classList.toggle("is-header-on-dark", onDark);
     menuTrigger?.classList.toggle("is-on-dark", onDark);
 
@@ -99,59 +99,6 @@ function initHeroCollectionTransition() {
     return null;
   }
 
-  const lastIndex = sliderItems.length - 1;
-  let activeIndexSlider = lastIndex;
-  let playAnimation = false;
-  let sectionCompleted = false;
-  let collectionLocked = false;
-  let allowSlide = true;
-  let sliderObserver: ReturnType<typeof ScrollTrigger.observe> | null = null;
-  let restoreScroll: (() => void) | null = null;
-  let sliderTrigger: ScrollTrigger | null = null;
-
-  let isSnapping = false;
-  let snapSettle: gsap.core.Tween | null = null;
-
-  const slideCooldown = gsap
-    .delayedCall(1.55, () => {
-      allowSlide = true;
-    })
-    .pause();
-
-  const setCollectionLocked = (locked: boolean) => {
-    if (collectionLocked === locked) return;
-
-    collectionLocked = locked;
-    document.body.classList.toggle("is-hero-pinned", locked);
-    if (locked) setHeaderOnDark(true);
-
-    if (locked) {
-      lenis.stop();
-      sliderObserver?.enable();
-    } else {
-      sliderObserver?.disable();
-      if (!document.body.classList.contains("is-menu-open")) lenis.start();
-    }
-  };
-
-  const resetSlides = () => {
-    activeIndexSlider = lastIndex;
-    playAnimation = false;
-    sectionCompleted = false;
-    allowSlide = true;
-    slideCooldown.pause();
-
-    sliderItems.forEach((item, index) => {
-      item.classList.remove("hide", "active");
-      if (index === activeIndexSlider) item.classList.add("active");
-    });
-
-    gsap.set(titleItems, { y: 0 });
-    gsap.set(numericItems, { y: 0 });
-  };
-
-  resetSlides();
-
   const fluidPad = () =>
     getComputedStyle(document.documentElement).getPropertyValue("--u").trim() ||
     "6.9444444444vw";
@@ -172,6 +119,8 @@ function initHeroCollectionTransition() {
     scale: 1.3,
     transformOrigin: "50% 50%",
   });
+  gsap.set(sliderItems, { autoAlpha: 0, transition: "none" });
+  gsap.set(sliderItems[0], { autoAlpha: 1, zIndex: 1 });
 
   const timeline = gsap.timeline({
     defaults: { ease: "none" },
@@ -179,8 +128,10 @@ function initHeroCollectionTransition() {
       trigger: banner,
       start: "top top",
       end: "bottom top",
-      scrub: 0.9,
+      scrub: 0.4,
       invalidateOnRefresh: true,
+      onLeave: ensureCollectionFullscreen,
+      onEnterBack: () => setHeaderOnDark(false),
     },
   });
 
@@ -211,279 +162,25 @@ function initHeroCollectionTransition() {
       0,
     )
     .to(
-      ".banner-mask",
+      [".banner-mask", ".collection-mask"],
       {
         opacity: 1,
         duration: 1,
       },
       0,
     )
-    .to(
-      ".collection-mask",
-      {
-        opacity: 1,
-        duration: 1,
-      },
-      0,
-    );
+    .call(() => setHeaderOnDark(true), undefined, 0.25);
 
-  if (header) {
-    timeline.to(
-      header,
-      {
-        color: "#ffffff",
-        duration: 0.35,
-        onStart: () => setHeaderOnDark(true),
-      },
-      0.25,
-    );
-  }
-
-  if (headerLinks.length) {
-    timeline.to(
-      headerLinks,
-      {
-        color: "#ffffff",
-        duration: 0.35,
-      },
-      0.25,
-    );
-  }
-
-  const ensureFullscreen = () => {
-    timeline.progress(1);
+  function ensureCollectionFullscreen() {
     gsap.set(collection, { padding: 0 });
     gsap.set(slider, {
       borderRadius: 0,
       clipPath: "inset(0 round 0px)",
     });
     gsap.set(sliderImages, { scale: 1 });
-    gsap.set(".banner-mask, .collection-mask", { opacity: 1 });
+    gsap.set([".banner-mask", ".collection-mask"], { opacity: 1 });
     setHeaderOnDark(true);
-  };
-
-  const releaseDown = () => {
-    sectionCompleted = true;
-    playAnimation = false;
-    allowSlide = false;
-    // Keep white header until philosophy section owns the viewport
-    setHeaderOnDark(true);
-    setCollectionLocked(false);
-    window.requestAnimationFrame(() => {
-      lenis.scrollTo(".philosophy", { duration: 1.25 });
-    });
-  };
-
-  const releaseUp = () => {
-    sectionCompleted = false;
-    playAnimation = false;
-    allowSlide = false;
-    setCollectionLocked(false);
-    resetSlides();
-    window.requestAnimationFrame(() => {
-      const targetY = Math.max(0, (sliderTrigger?.start ?? 0) - 48);
-      lenis.scrollTo(targetY, { duration: 1.15 });
-      gsap.delayedCall(1.2, () => setHeaderOnDark(false));
-    });
-  };
-
-  const animateChrome = (direction: 1 | -1, onComplete: () => void) => {
-    const goingDown = direction === 1;
-
-    gsap.to(numericItems, {
-      y: goingDown ? "-=100%" : "+=100%",
-      duration: 1.4,
-      ease: "titleEase",
-      overwrite: "auto",
-    });
-
-    gsap
-      .timeline({ onComplete })
-      .to(titleItems, {
-        y: goingDown ? "+=100%" : "-=100%",
-        duration: 0.7,
-        ease: "titleEaseHide",
-        overwrite: "auto",
-      })
-      .to(titleItems, {
-        y: goingDown ? "+=100%" : "-=100%",
-        duration: 0.7,
-        ease: "titleEase",
-        overwrite: "auto",
-      });
-  };
-
-  const changeSlide = (direction: 1 | -1) => {
-    if (!collectionLocked || playAnimation || !allowSlide) return;
-
-    const nextIndex = activeIndexSlider - direction;
-
-    if (nextIndex < 0) {
-      releaseDown();
-      return;
-    }
-
-    if (nextIndex > lastIndex) {
-      releaseUp();
-      return;
-    }
-
-    playAnimation = true;
-    allowSlide = false;
-    slideCooldown.restart(true);
-
-    const from = sliderItems[activeIndexSlider];
-    const to = sliderItems[nextIndex];
-
-    if (direction === 1) {
-      // Match reference: crop outgoing on top, reveal incoming underneath
-      from.classList.add("hide");
-      to.classList.add("active");
-    } else {
-      to.classList.remove("hide");
-      from.classList.remove("active");
-    }
-
-    activeIndexSlider = nextIndex;
-    animateChrome(direction, () => {
-      playAnimation = false;
-    });
-  };
-
-  sliderObserver = ScrollTrigger.observe({
-    type: "wheel,touch,pointer",
-    wheelSpeed: 1,
-    tolerance: 12,
-    preventDefault: true,
-    onDown: () => changeSlide(1),
-    onUp: () => changeSlide(-1),
-    onEnable(self) {
-      allowSlide = false;
-      slideCooldown.restart(true);
-      const savedScroll = self.scrollY();
-      restoreScroll = () => self.scrollY(savedScroll);
-      document.addEventListener("scroll", restoreScroll, { passive: false });
-    },
-    onDisable() {
-      if (restoreScroll) {
-        document.removeEventListener("scroll", restoreScroll);
-        restoreScroll = null;
-      }
-    },
-  });
-  sliderObserver.disable();
-
-  const onKeyDown = (event: KeyboardEvent) => {
-    if (!collectionLocked) return;
-
-    if (["ArrowDown", "PageDown", " "].includes(event.key)) {
-      event.preventDefault();
-      changeSlide(1);
-      return;
-    }
-
-    if (["ArrowUp", "PageUp"].includes(event.key)) {
-      event.preventDefault();
-      changeSlide(-1);
-    }
-  };
-  window.addEventListener("keydown", onKeyDown);
-
-  let blockWheel: ((event: WheelEvent) => void) | null = null;
-
-  const clearWheelBlock = () => {
-    if (!blockWheel) return;
-    window.removeEventListener("wheel", blockWheel);
-    blockWheel = null;
-  };
-
-  const softSnapToCollection = (direction: 1 | -1) => {
-    if (document.body.classList.contains("is-menu-open")) return;
-    if (sliderObserver?.isEnabled || collectionLocked || isSnapping) return;
-    if (direction === 1 && sectionCompleted) return;
-
-    isSnapping = true;
-    allowSlide = false;
-    playAnimation = true;
-    snapSettle?.kill();
-    clearWheelBlock();
-    setHeaderOnDark(true);
-
-    if (!sliderTrigger) {
-      isSnapping = false;
-      playAnimation = false;
-      return;
-    }
-
-    const targetY =
-      direction === 1 ? sliderTrigger.start + 1 : sliderTrigger.end - 1;
-    const currentY =
-      typeof lenis.scroll === "number" ? lenis.scroll : window.scrollY;
-    const distance = Math.abs(targetY - currentY);
-    // Longer when farther away so the snap always eases, never pops
-    const duration = gsap.utils.clamp(0.85, 1.55, distance / 900);
-
-    blockWheel = (event: WheelEvent) => {
-      event.preventDefault();
-    };
-    window.addEventListener("wheel", blockWheel, { passive: false });
-
-    lenis.start();
-    lenis.scrollTo(targetY, { duration });
-
-    snapSettle = gsap.delayedCall(duration + 0.06, () => {
-      clearWheelBlock();
-      if (document.body.classList.contains("is-menu-open")) {
-        playAnimation = false;
-        isSnapping = false;
-        return;
-      }
-      ensureFullscreen();
-      sliderTrigger?.scroll(targetY);
-      setCollectionLocked(true);
-      playAnimation = false;
-      isSnapping = false;
-    });
-  };
-
-  // Start easing toward the pin before the section hits the top
-  const approachTrigger = ScrollTrigger.create({
-    trigger: collection,
-    start: "top 68%",
-    end: "top top",
-    onEnter: () => softSnapToCollection(1),
-  });
-
-  sliderTrigger = ScrollTrigger.create({
-    trigger: collection,
-    pin: true,
-    anticipatePin: 1,
-    start: "top top",
-    end: () => `+=${Math.round(window.innerHeight * 0.4)}`,
-    onEnter: () => {
-      if (sectionCompleted) return;
-      // Fallback if approach trigger was skipped (fast jump / resize)
-      if (!collectionLocked && !isSnapping) softSnapToCollection(1);
-    },
-    onEnterBack: () => {
-      resetSlides();
-      softSnapToCollection(-1);
-    },
-    onLeave: () => {
-      if (isSnapping) return;
-      setCollectionLocked(false);
-      setHeaderOnDark(true);
-    },
-    onLeaveBack: () => {
-      if (isSnapping) return;
-      snapSettle?.kill();
-      clearWheelBlock();
-      isSnapping = false;
-      setCollectionLocked(false);
-      resetSlides();
-      setHeaderOnDark(false);
-    },
-  });
+  }
 
   // Only restore dark header chrome once philosophy is in view
   const resetHeaderTrigger = ScrollTrigger.create({
@@ -494,21 +191,10 @@ function initHeroCollectionTransition() {
   });
 
   return {
-    timeline,
-    resetHeaderTrigger,
-    sliderObserver,
-    sliderTrigger,
     destroy: () => {
-      window.removeEventListener("keydown", onKeyDown);
-      slideCooldown.kill();
-      snapSettle?.kill();
-      clearWheelBlock();
-      approachTrigger.kill();
-      if (restoreScroll) {
-        document.removeEventListener("scroll", restoreScroll);
-        restoreScroll = null;
-      }
-      setCollectionLocked(false);
+      timeline.scrollTrigger?.kill();
+      timeline.kill();
+      resetHeaderTrigger.kill();
       setHeaderOnDark(false);
     },
   };
@@ -613,7 +299,7 @@ function initPhilosophyMotion() {
         trigger: ".philosophy",
         start: "top 70%",
         end: "bottom 35%",
-        scrub: 0.65,
+        scrub: 0.5,
       },
     })
     .fromTo(
@@ -855,11 +541,6 @@ function initScrollAnimations() {
     const heroAnimation = initHeroCollectionTransition();
 
     return () => {
-      heroAnimation?.timeline.scrollTrigger?.kill();
-      heroAnimation?.timeline.kill();
-      heroAnimation?.resetHeaderTrigger.kill();
-      heroAnimation?.sliderObserver.kill();
-      heroAnimation?.sliderTrigger.kill();
       heroAnimation?.destroy();
 
       document.body.classList.remove("is-hero-pinned", "is-header-on-dark");
@@ -879,14 +560,6 @@ function initScrollAnimations() {
         ],
         { clearProps: "all" },
       );
-    };
-  });
-
-  mm.add("(max-width: 768px)", () => {
-    document.body.classList.remove("is-hero-pinned", "is-header-on-dark");
-
-    return () => {
-      document.body.classList.remove("is-hero-pinned", "is-header-on-dark");
     };
   });
 
@@ -1169,6 +842,12 @@ export function initLoader() {
   if (countValue) countValue.textContent = "0";
   if (loaderStatus) loaderStatus.textContent = "Loading, 0 percent";
 
+  const hideLoader = () => {
+    loader.style.pointerEvents = "none";
+    loader.style.display = "none";
+    if (curtain) curtain.style.display = "none";
+  };
+
   const finish = () => {
     if (loaderFinished) return;
     loaderFinished = true;
@@ -1178,9 +857,7 @@ export function initLoader() {
       loaderFailsafe = undefined;
     }
     loader.setAttribute("aria-busy", "false");
-    loader.style.pointerEvents = "none";
-    loader.style.display = "none";
-    if (curtain) curtain.style.display = "none";
+    hideLoader();
     lenis.scrollTo(0, { immediate: true });
     lenis.start();
     ScrollTrigger.refresh(true);
@@ -1314,7 +991,8 @@ export function initLoader() {
       .to(pct, { autoAlpha: 0, duration: 0.25 }, 0)
       .to(mark, { autoAlpha: 0, scale: 1.05, duration: 0.4, ease: "power2.in" }, 0)
       .to(curtain, { scaleY: 0, duration: 0.7, ease: "power4.inOut" }, 0.15)
-      .set(loader, { display: "none", autoAlpha: 0 });
+      .set(loader, { autoAlpha: 0 })
+      .call(hideLoader);
   };
 
   const runLoaderTimeline = () => {
@@ -1427,7 +1105,8 @@ export function initLoader() {
           },
           2.9,
         )
-        .set(loader, { display: "none", autoAlpha: 0 });
+        .set(loader, { autoAlpha: 0 })
+        .call(hideLoader);
     } catch (error) {
       console.warn("[loader] Morph/Draw timeline failed, using fallback", error);
       runFallbackExit();
@@ -1450,10 +1129,6 @@ export function initLoader() {
     loaderTimeline?.kill();
     revealHero();
     forceShowIntroTargets();
-    gsap.set(loader, { clearProps: "all", pointerEvents: "none", display: "none" });
-    if (curtain) {
-      gsap.set(curtain, { clearProps: "all", display: "none" });
-    }
     finish();
   }, 8000);
 

@@ -1,12 +1,9 @@
 import collectionImagePrimary from "@/assets/images/unsplash-collection-a.jpg";
-import collectionImageSecondary from "@/assets/images/unsplash-collection-b.jpg";
 import { projects } from "@/data/projects";
 
-const featuredProjects = projects.flatMap((row) => row.items).slice(0, 2);
+const featuredProject = projects.flatMap((row) => row.items)[0];
 
 export default function FeaturedProject() {
-  const [primary, secondary] = featuredProjects;
-
   return (
     <section className="featured-project collection" id="featured-project">
       <div
@@ -19,7 +16,7 @@ export default function FeaturedProject() {
           <div className="featured-project__slide slider-img">
             <img
               src={collectionImagePrimary}
-              alt={primary.alt}
+              alt={featuredProject.alt}
               width={1800}
               height={1224}
               loading="eager"
@@ -31,56 +28,16 @@ export default function FeaturedProject() {
             />
           </div>
 
-          <div className="featured-project__slide slider-img active">
-            <img
-              src={collectionImageSecondary}
-              alt={secondary.alt}
-              width={1800}
-              height={1200}
-              loading="eager"
-              decoding="async"
-            />
-            <div
-              className="featured-project__gradient slider-gradient"
-              aria-hidden="true"
-            />
-          </div>
         </div>
 
         <p className="featured-project__eyebrow slider-descr">
           Our considered collection of residential studies
         </p>
 
-        <div
-          className="featured-project__title-track slider-title"
-          aria-label={secondary.title}
-        >
+        <div className="featured-project__title-track slider-title">
           <h2 className="featured-project__title slider-title__item">
-            {primary.title}
+            {featuredProject.title}
           </h2>
-          <div className="featured-project__title slider-title__item" />
-          <h2 className="featured-project__title slider-title__item">
-            {secondary.title}
-          </h2>
-        </div>
-
-        <div
-          className="featured-project__numeric slider-numeric"
-          aria-label="Project 01 of 02, then project 02 of 02"
-        >
-          <div className="featured-project__numeric-active slider-numeric__active">
-            <span className="slider-numeric__item">01</span>
-            <span className="slider-numeric__item">02</span>
-          </div>
-          <span>-</span>
-          <span className="slider-numeric__total">02</span>
-        </div>
-
-        <div className="collection-scroll-hint" aria-hidden="true">
-          <span className="collection-scroll-hint__label">Scroll</span>
-          <span className="collection-scroll-hint__mouse">
-            <span className="collection-scroll-hint__wheel" />
-          </span>
         </div>
       </div>
     </section>

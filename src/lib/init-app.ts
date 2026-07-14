@@ -14,6 +14,7 @@ import {
 } from "./smooth-scroll";
 
 let appInitialized = false;
+let appInitRaf: number | undefined;
 
 function initGlobalUI() {
   const footerYear = document.getElementById("footerYear");
@@ -91,6 +92,10 @@ function initGlobalUI() {
 }
 
 export function disposeApp() {
+  if (appInitRaf !== undefined) {
+    window.cancelAnimationFrame(appInitRaf);
+    appInitRaf = undefined;
+  }
   runCleanups();
 
   ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
@@ -134,16 +139,18 @@ export function initApp() {
 
   // Wait one frame if Loader hasn't mounted yet (StrictMode / HMR)
   if (!document.getElementById("loader")) {
+    if (appInitRaf !== undefined) return;
     let tries = 0;
     const retry = () => {
+      appInitRaf = undefined;
       if (document.getElementById("loader")) {
         initApp();
         return;
       }
       tries += 1;
-      if (tries < 10) window.requestAnimationFrame(retry);
+      if (tries < 10) appInitRaf = window.requestAnimationFrame(retry);
     };
-    window.requestAnimationFrame(retry);
+    appInitRaf = window.requestAnimationFrame(retry);
     return;
   }
 
