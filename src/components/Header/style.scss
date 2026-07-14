@@ -88,6 +88,12 @@ html.is-loading .header-wrapp {
   justify-self: end;
 }
 
+body.is-menu-open .header-contact {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .header-menu-trigger {
   display: inline-flex;
   align-items: center;
@@ -95,19 +101,15 @@ html.is-loading .header-wrapp {
   color: inherit;
 
   &__copy {
-    display: flex;
-    height: 1.2em;
-    flex-direction: column;
-    align-items: flex-end;
-    overflow: hidden;
+    display: block;
     line-height: 1.2;
+    white-space: nowrap;
+    transition: transform 0.35s var(--ease-out-expo);
+  }
 
-    span {
-      display: block;
-      height: 1.2em;
-      line-height: 1.2;
-      white-space: nowrap;
-    }
+  &:hover &__copy,
+  &:focus-visible &__copy {
+    transform: translateY(-0.12em);
   }
 
   &__icon-wrap {
@@ -133,21 +135,12 @@ html.is-loading .header-wrapp {
 }
 
 /* Wipe menu */
-@font-face {
-  font-family: "PP Neue Corp Tight";
-  src: url("https://cdn.prod.website-files.com/673af51dea86ab95d124c3ee/673b0f5784f7060c0ac05534_PPNeueCorp-TightUltrabold.otf")
-    format("opentype");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
 .header-wipe-menu {
-  --menu-primary: #ff4c24;
-  --menu-dark: #111213;
-  --menu-bg: #edeeeb;
-  --menu-soft: #f5f5eb;
-  --menu-muted: #d6d6cb;
+  --menu-primary: var(--fg);
+  --menu-dark: var(--fg);
+  --menu-bg: var(--bg);
+  --menu-soft: var(--bg);
+  --menu-muted: var(--bg);
   --menu-padding: 2rem;
 
   position: fixed;
@@ -252,18 +245,23 @@ html.is-loading .header-wrapp {
       .header-wipe-menu__link-bg {
         transform: scaleY(1);
       }
+
+      .header-wipe-menu__link-number {
+        color: var(--menu-bg);
+      }
     }
   }
 
   &__link-heading {
     position: relative;
     z-index: 1;
-    font-family: "PP Neue Corp Tight", Arial, sans-serif;
-    font-size: clamp(3rem, 7.5vw, 5.625rem);
+    font-family: var(--font-heading);
+    font-size: clamp(2.75rem, 6vw, 4.75rem);
     font-weight: 700;
     line-height: 0.75;
     text-transform: uppercase;
     text-shadow: 0 1em 0 var(--menu-muted);
+    white-space: nowrap;
     transition: transform 0.55s cubic-bezier(0.65, 0.05, 0, 1);
   }
 
@@ -274,6 +272,7 @@ html.is-loading .header-wrapp {
     font-family: var(--font-mono, monospace);
     font-size: 0.875rem;
     font-weight: 700;
+    transition: color 0.3s ease;
   }
 
   &__link-bg {
@@ -414,6 +413,6 @@ html.is-loading .header-wrapp {
 
 @media (max-width: 480px) {
   .header-wipe-menu__link-heading {
-    font-size: 2.75rem;
+    font-size: clamp(2.25rem, 11vw, 2.75rem);
   }
 }

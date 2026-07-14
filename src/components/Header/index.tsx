@@ -40,9 +40,6 @@ export default function Header() {
       bgPanels: menu.querySelectorAll<HTMLElement>("[data-header-menu-bg]"),
       links: menu.querySelectorAll<HTMLElement>("[data-header-menu-link]"),
       fadeItems: menu.querySelectorAll<HTMLElement>("[data-header-menu-fade]"),
-      buttonTexts: root.querySelectorAll<HTMLElement>(
-        "[data-header-menu-button-text]",
-      ),
       buttonIcon: root.querySelector<SVGSVGElement>(
         "[data-header-menu-button-icon]",
       ),
@@ -74,12 +71,6 @@ export default function Header() {
       .set(els.links, { yPercent: 140, rotate: 10 })
       .set(els.fadeItems, { autoAlpha: 0, yPercent: 50 })
       .set(els.bgPanels, { xPercent: 101 })
-      .fromTo(
-        els.buttonTexts,
-        { yPercent: 0 },
-        { yPercent: -100, stagger: 0.18 },
-        0,
-      )
       .fromTo(els.buttonIcon, { rotate: 0 }, { rotate: 315 }, 0)
       .fromTo(els.overlay, { autoAlpha: 0 }, { autoAlpha: 1 }, 0)
       .to(els.bgPanels, { xPercent: 0, stagger: 0.12, duration: 0.575 }, 0)
@@ -107,7 +98,6 @@ export default function Header() {
     tl.clear()
       .to(els.overlay, { autoAlpha: 0, duration: 0.45 })
       .to(els.panel, { xPercent: 120, duration: 0.55 }, "<")
-      .to(els.buttonTexts, { yPercent: 0, duration: 0.45 }, "<")
       .to(els.buttonIcon, { rotate: 0, duration: 0.45 }, "<")
       .set(els.menu, { display: "none" })
       .add(() => {
@@ -129,7 +119,6 @@ export default function Header() {
     if (els) {
       gsap.set(els.menu, { display: "none" });
       gsap.set(els.overlay, { autoAlpha: 0 });
-      gsap.set(els.buttonTexts, { yPercent: 0 });
       gsap.set(els.buttonIcon, { rotate: 0 });
     }
 
@@ -196,7 +185,7 @@ export default function Header() {
             data-hover="link"
             data-magnetic
           >
-            Contact
+            Get in Touch
           </a>
 
           <button
@@ -210,10 +199,7 @@ export default function Header() {
             onClick={toggleMenu}
           >
             <span className="header-menu-trigger__copy">
-              <span data-header-menu-button-text>Menu</span>
-              <span data-header-menu-button-text aria-hidden="true">
-                Close
-              </span>
+              {isOpen ? "Close" : "Menu"}
             </span>
             <span className="header-menu-trigger__icon-wrap">
               <svg
@@ -265,6 +251,7 @@ export default function Header() {
           type="button"
           className="header-wipe-menu__overlay"
           data-header-menu-overlay
+          data-hover="link"
           aria-label="Close menu"
           onClick={closeMenu}
         />
@@ -310,6 +297,7 @@ export default function Header() {
                       href={item.href}
                       className="header-wipe-menu__link"
                       data-header-menu-link
+                      data-hover="link"
                       onClick={closeMenu}
                     >
                       <span className="header-wipe-menu__link-heading">
@@ -334,6 +322,7 @@ export default function Header() {
                   href="mailto:hello@arbermanga.com"
                   className="header-wipe-menu__meta-link"
                   data-header-menu-fade
+                  data-hover="link"
                   onClick={closeMenu}
                 >
                   hello@arbermanga.com

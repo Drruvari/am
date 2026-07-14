@@ -122,7 +122,11 @@ function initHeroCollectionTransition() {
     paddingLeft: collectionPad(),
     paddingRight: collectionPad(),
   });
-  gsap.set(slider, { borderRadius: sliderRadius(), yPercent: 0 });
+  gsap.set(slider, {
+    borderRadius: sliderRadius(),
+    clipPath: `inset(0 round ${sliderRadius()})`,
+    yPercent: 0,
+  });
   gsap.set(".banner-mask, .collection-mask", { opacity: 0 });
   gsap.set(sliderImages, {
     scale: 1.3,
@@ -155,6 +159,7 @@ function initHeroCollectionTransition() {
       slider,
       {
         borderRadius: 0,
+        clipPath: "inset(0 round 0px)",
         duration: 1,
       },
       0,
