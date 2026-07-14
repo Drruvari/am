@@ -58,17 +58,18 @@
   line-height: 1.2;
 }
 
-.fade-overflow {
-  display: block;
+.banner-text,
+.banner-title,
+.banner-descr {
   overflow: hidden;
 }
 
-.fade-el {
+.banner-reveal {
   display: block;
   will-change: transform;
 }
 
-html.is-loading .fade-el {
+html.is-loading .banner-reveal {
   transform: translateY(110%);
 }
 

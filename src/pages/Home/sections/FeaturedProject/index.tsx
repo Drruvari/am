@@ -66,7 +66,7 @@ export default function FeaturedProject() {
 
         <div
           className="featured-project__numeric slider-numeric"
-          aria-label="Project 02 of 02"
+          aria-label="Project 01 of 02, then project 02 of 02"
         >
           <div className="featured-project__numeric-active slider-numeric__active">
             <span className="slider-numeric__item">01</span>

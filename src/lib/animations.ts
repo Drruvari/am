@@ -3,7 +3,6 @@ import { CustomEase } from "gsap/CustomEase";
 import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import { MorphSVGPlugin } from "gsap/MorphSVGPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import SplitType from "split-type";
 import { addCleanup } from "./cleanup";
 import { mm } from "./globals";
 import {
@@ -26,37 +25,6 @@ function initHeroEases() {
   CustomEase.create("titleEase", "0.17,0.17,0.49,1.00");
   CustomEase.create("titleEaseHide", "0.55,0.00,0.83,0.83");
   heroEasesInitialized = true;
-}
-
-function createLineReveal(selector: string) {
-  const roots = gsap.utils.toArray<HTMLElement>(selector);
-  const splits = roots.map((root) => {
-    const split = new SplitType(root, {
-      types: "lines",
-      lineClass: "fade-overflow",
-    });
-
-    split.lines?.forEach((line) => {
-      const inner = document.createElement("span");
-      inner.className = "fade-el";
-
-      while (line.firstChild) {
-        inner.appendChild(line.firstChild);
-      }
-
-      line.appendChild(inner);
-    });
-
-    return split;
-  });
-
-  return {
-    roots,
-    splits,
-    elements: roots.flatMap((root) =>
-      gsap.utils.toArray<HTMLElement>(root.querySelectorAll(".fade-el")),
-    ),
-  };
 }
 
 function scheduleScrollRefresh() {
@@ -87,13 +55,19 @@ function initHeroCollectionTransition() {
   let activeIndexSlider = sliderItems.length - 1;
   let playAnimation = false;
   let sectionCompleted = false;
-  let observerEnabled = false;
+  let collectionLocked = false;
   let sliderObserver: ReturnType<typeof ScrollTrigger.observe> | null = null;
+  let collectionSnap: gsap.core.Tween | null = null;
 
-  const setObserverEnabled = (enabled: boolean) => {
-    observerEnabled = enabled;
-    if (enabled) sliderObserver?.enable();
-    else sliderObserver?.disable();
+  const setCollectionLocked = (locked: boolean) => {
+    collectionLocked = locked;
+    if (locked) {
+      lenis.stop();
+      sliderObserver?.enable();
+    } else {
+      sliderObserver?.disable();
+      lenis.start();
+    }
   };
 
   const resetSlides = () => {
@@ -108,6 +82,19 @@ function initHeroCollectionTransition() {
 
     gsap.set(".slider-title__item", { y: 0 });
     gsap.set(".slider-numeric__item", { y: 0 });
+  };
+
+  const snapToCollection = () => {
+    if (sectionCompleted || collectionLocked) return;
+
+    lenis.scrollTo(collection, { duration: 0.65 });
+    collectionSnap?.kill();
+    collectionSnap = gsap.delayedCall(0.65, () => {
+      const { top } = collection.getBoundingClientRect();
+      if (Math.abs(top) <= 8 && !sectionCompleted) {
+        setCollectionLocked(true);
+      }
+    });
   };
 
   resetSlides();
@@ -141,8 +128,6 @@ function initHeroCollectionTransition() {
       end: "bottom top",
       scrub: true,
       invalidateOnRefresh: true,
-      onEnter: () => setObserverEnabled(false),
-      onEnterBack: () => setObserverEnabled(false),
     },
   });
 
@@ -257,29 +242,29 @@ function initHeroCollectionTransition() {
       activeIndexSlider--;
     } else {
       sectionCompleted = true;
-      setObserverEnabled(false);
+      setCollectionLocked(false);
       playAnimation = false;
+      lenis.scrollTo(".philosophy", { duration: 1 });
     }
   };
 
   sliderObserver = ScrollTrigger.observe({
     target: collection,
-    type: "wheel,touch,scroll,pointer",
+    type: "wheel,touch,pointer",
     wheelSpeed: 1,
     onDown: () => {
       if (!playAnimation) nextSlide();
     },
-    onWheel: (self) => {
-      if (self.deltaY > 0 && !playAnimation) nextSlide();
+    onWheel: ({ deltaY }) => {
+      if (deltaY > 0 && !playAnimation) nextSlide();
     },
     tolerance: 1,
     preventDefault: true,
   });
-
-  setObserverEnabled(false);
+  sliderObserver.disable();
 
   const onKeyDown = (event: KeyboardEvent) => {
-    if (!observerEnabled) return;
+    if (!collectionLocked) return;
     if (!["ArrowDown", "PageDown", " "].includes(event.key)) return;
 
     event.preventDefault();
@@ -289,14 +274,14 @@ function initHeroCollectionTransition() {
 
   const sliderTrigger = ScrollTrigger.create({
     trigger: collection,
-    start: "top top+=2px",
-    end: "bottom bottom",
-    scrub: true,
-    onEnter: () => {
-      if (!sectionCompleted) setObserverEnabled(true);
-    },
-    onEnterBack: () => {
-      if (!sectionCompleted) setObserverEnabled(true);
+    start: "top 20%",
+    end: "bottom top",
+    onEnter: snapToCollection,
+    onEnterBack: snapToCollection,
+    onLeaveBack: () => {
+      collectionSnap?.kill();
+      setCollectionLocked(false);
+      resetSlides();
     },
   });
 
@@ -328,7 +313,11 @@ function initHeroCollectionTransition() {
     resetHeaderTrigger,
     sliderObserver,
     sliderTrigger,
-    destroy: () => window.removeEventListener("keydown", onKeyDown),
+    destroy: () => {
+      window.removeEventListener("keydown", onKeyDown);
+      collectionSnap?.kill();
+      setCollectionLocked(false);
+    },
   };
 }
 
@@ -669,14 +658,14 @@ function initHomepageMotion() {
 function initScrollAnimations() {
   const cleanupHomepageMotion = initHomepageMotion();
 
-  mm.add("(min-width: 769px)", () => {
+  mm.add("(min-width: 0px)", () => {
     const heroAnimation = initHeroCollectionTransition();
 
     return () => {
       heroAnimation?.timeline.scrollTrigger?.kill();
       heroAnimation?.timeline.kill();
       heroAnimation?.resetHeaderTrigger.kill();
-      heroAnimation?.sliderObserver?.kill();
+      heroAnimation?.sliderObserver.kill();
       heroAnimation?.sliderTrigger.kill();
       heroAnimation?.destroy();
 
@@ -961,19 +950,7 @@ export function initLoader() {
   lenis.stop();
   initHeroEases();
 
-  const metaReveal = createLineReveal(".banner-text");
-  const titleReveal = createLineReveal(".banner-title");
-  const descriptionReveal = createLineReveal(".banner-descr");
-  const heroLineSplits = [
-    ...metaReveal.splits,
-    ...titleReveal.splits,
-    ...descriptionReveal.splits,
-  ];
-  const heroFadeElements = [
-    ...metaReveal.elements,
-    ...titleReveal.elements,
-    ...descriptionReveal.elements,
-  ];
+  const heroFadeElements = gsap.utils.toArray<HTMLElement>(".banner-reveal");
   const slider = document.querySelector<HTMLElement>(".slider");
   const sliderImages = gsap.utils.toArray<HTMLImageElement>(".slider-img img");
   const headerWrap = document.querySelector<HTMLElement>(".header-wrapp");
@@ -1049,9 +1026,9 @@ export function initLoader() {
     revealHero();
 
     const targets = {
-      meta: metaReveal.elements,
-      title: titleReveal.elements,
-      descr: descriptionReveal.elements,
+      meta: gsap.utils.toArray<HTMLElement>(".banner-text .banner-reveal"),
+      title: gsap.utils.toArray<HTMLElement>(".banner-title .banner-reveal"),
+      descr: gsap.utils.toArray<HTMLElement>(".banner-descr .banner-reveal"),
     };
 
     // If split failed, show raw text and move on
@@ -1303,6 +1280,5 @@ export function initLoader() {
       loaderFailsafe = undefined;
     }
     loaderFinished = false;
-    heroLineSplits.forEach((split) => split.revert());
   });
 }

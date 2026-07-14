@@ -106,10 +106,10 @@ export function disposeApp() {
     "has-custom-cursor",
   );
   gsap.set(
-    ".fade-el, .slider, .slider-img img, .hero__img, .header, .header-wrapp, .header-link, .header-logo svg",
+    ".banner-reveal, .slider, .slider-img img, .hero__img, .header, .header-wrapp, .header-link, .header-logo svg",
     { clearProps: "all" },
   );
-  const fadeElements = gsap.utils.toArray<HTMLElement>(".fade-el");
+  const fadeElements = gsap.utils.toArray<HTMLElement>(".banner-reveal");
   if (fadeElements.length) gsap.set(fadeElements, { yPercent: 0 });
   gsap.set(".slider", { yPercent: 0 });
   gsap.set(".header-wrapp", { y: 0 });

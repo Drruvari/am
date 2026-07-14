@@ -5,15 +5,19 @@ export default function Hero() {
     <section className="banner" id="hero">
       <div className="banner-mask" aria-hidden="true" />
 
-      <div className="banner-text split">Inspired house solutions</div>
+      <div className="banner-text split">
+        <span className="banner-reveal">Inspired house solutions</span>
+      </div>
 
       <div className="banner-title split" id="heroTitle">
-        Your home, your reflect/on.
+        <span className="banner-reveal">Your home, your reflect/on.</span>
       </div>
 
       <div className="banner-descr split">
-        Independent residential, interior, and spatial studies focused on
-        restraint, proportion, and atmosphere.
+        <span className="banner-reveal">
+          Independent residential, interior, and spatial studies focused on
+          restraint, proportion, and atmosphere.
+        </span>
       </div>
     </section>
   );
