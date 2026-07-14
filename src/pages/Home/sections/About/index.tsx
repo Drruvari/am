@@ -1,21 +1,18 @@
 import { SectionEyebrow } from "@/components/SectionHeader";
-import { images } from "@/lib/images";
+import { archImage } from "@/lib/images";
 
 export default function About() {
   return (
     <section className="architect-about" id="about">
       <div className="architect-about__image">
-        <picture>
-          <source srcSet={images.webp[800]} type="image/webp" />
-          <img
-            src={images.jpg[800]}
-            alt="Architectural studio detail"
-            width={1470}
-            height={980}
-            loading="lazy"
-            decoding="async"
-          />
-        </picture>
+        <img
+          src={archImage}
+          alt="Architectural studio detail"
+          width={5413}
+          height={2692}
+          loading="lazy"
+          decoding="async"
+        />
       </div>
 
       <div className="architect-about__content">

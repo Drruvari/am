@@ -1,5 +1,5 @@
-import collectionImagePrimary from "@/assets/images/unsplash-collection-a.jpg";
 import { projects } from "@/data/projects";
+import { archImage } from "@/lib/images";
 
 const featuredProject = projects.flatMap((row) => row.items)[0];
 
@@ -15,10 +15,10 @@ export default function FeaturedProject() {
         <div className="slider-wrapp">
           <div className="featured-project__slide slider-img">
             <img
-              src={collectionImagePrimary}
+              src={archImage}
               alt={featuredProject.alt}
-              width={1800}
-              height={1224}
+              width={5413}
+              height={2692}
               loading="eager"
               decoding="async"
               draggable={false}

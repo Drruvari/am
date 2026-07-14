@@ -1,5 +1,5 @@
 import Button from "@/components/Button";
-import { images } from "@/lib/images";
+import { archImage } from "@/lib/images";
 import "./style.scss";
 
 export default function Contact() {
@@ -25,17 +25,14 @@ export default function Contact() {
       <div className="footer__grid">
         <div className="footer__col footer__col--brand">
           <div className="footer__image">
-            <picture>
-              <source srcSet={images.webp[600]} type="image/webp" />
-              <img
-                src={images.jpg[600]}
-                alt="Warm residential architecture with garden path"
-                width={1470}
-                height={980}
-                loading="lazy"
-                decoding="async"
-              />
-            </picture>
+            <img
+              src={archImage}
+              alt="Warm residential architecture with garden path"
+              width={5413}
+              height={2692}
+              loading="lazy"
+              decoding="async"
+            />
             <span className="footer__mark" aria-hidden="true">
               AM
             </span>

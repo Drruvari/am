@@ -1,9 +1,4 @@
-import {
-  cardSizes,
-  cardSrcsetJpg,
-  cardSrcsetWebp,
-  images,
-} from '@/lib/images'
+import { archImage } from '@/lib/images'
 
 export function ResponsiveCardImage({
   alt,
@@ -14,14 +9,12 @@ export function ResponsiveCardImage({
 }) {
   return (
     <picture>
-      <source type="image/webp" srcSet={cardSrcsetWebp} sizes={cardSizes} />
-      <source type="image/jpeg" srcSet={cardSrcsetJpg} sizes={cardSizes} />
       <img
         className={className}
-        src={images.jpg[600]}
+        src={archImage}
         alt={alt}
-        width={1470}
-        height={980}
+        width={5413}
+        height={2692}
         loading="lazy"
         decoding="async"
       />
@@ -45,17 +38,14 @@ export function InlineImage({
 
   return (
     <span className={`about__image ${variantClass} ${className ?? ''}`.trim()}>
-      <picture>
-        <source srcSet={images.webp[480]} type="image/webp" />
-        <img
-          src={images.jpg[480]}
-          alt=""
-          width={1470}
-          height={980}
-          loading="lazy"
-          decoding="async"
-        />
-      </picture>
+      <img
+        src={archImage}
+        alt=""
+        width={5413}
+        height={2692}
+        loading="lazy"
+        decoding="async"
+      />
     </span>
   )
 }
