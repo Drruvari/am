@@ -534,6 +534,41 @@ html.is-loading .slider {
   border-top: 1px solid var(--line);
 }
 
+@media (max-width: 1024px) {
+  .philosophy,
+  .selected-works,
+  .services,
+  .process,
+  .architect-about {
+    padding-block: clamp(4.5rem, 10vw, 7rem);
+  }
+
+  .philosophy__top,
+  .philosophy__footer {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .philosophy__intro {
+    grid-column: 3;
+  }
+
+  .philosophy__detail {
+    grid-column: 2 / 4;
+  }
+
+  .services__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .process__step {
+    grid-template-columns: 3.5rem minmax(10rem, 0.65fr) minmax(0, 1fr);
+  }
+
+  .architect-about {
+    grid-template-columns: minmax(16rem, 0.8fr) minmax(0, 1fr);
+  }
+}
+
 @media (max-width: 768px) {
   .philosophy {
     gap: 3.5rem;
@@ -547,18 +582,24 @@ html.is-loading .slider {
 
   .philosophy__image {
     width: min(42vw, 12rem);
+    grid-column: 1;
+    grid-row: 1 / span 2;
   }
 
   .philosophy__intro {
     grid-column: 2;
+    grid-row: 2;
+    align-self: end;
     font-size: 0.9375rem;
   }
 
   .philosophy__eyebrow {
-    grid-column: 1;
+    grid-column: 2;
+    grid-row: 1;
   }
 
   .philosophy__body {
+    width: 100%;
     font-size: clamp(2.125rem, 9vw, 4rem);
     line-height: 0.9;
     text-align: left;
@@ -589,7 +630,7 @@ html.is-loading .slider {
   }
 
   .featured-project__title {
-    font-size: clamp(2.35rem, 12vw, 4rem);
+    font-size: clamp(1.5rem, 7vw, 2.5rem);
   }
 
   .selected-works__grid,
@@ -598,7 +639,92 @@ html.is-loading .slider {
   }
 
   .process__step {
+    grid-template-columns: 2.75rem minmax(0, 1fr);
+    gap: 0.75rem 1rem;
+  }
+
+  .process__step p {
+    grid-column: 2;
+  }
+
+  .services__item {
+    min-height: 6.5rem;
+  }
+
+  .architect-about {
+    align-items: start;
+  }
+
+  .architect-about__image {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+  }
+
+  .architect-about__content,
+  .architect-about__content p {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .philosophy,
+  .selected-works,
+  .services,
+  .process,
+  .architect-about {
+    padding-inline: 1rem;
+  }
+
+  .philosophy__top,
+  .philosophy__footer {
     grid-template-columns: 1fr;
+  }
+
+  .philosophy__image {
+    grid-column: 1;
+    grid-row: auto;
+    width: min(70vw, 14rem);
+  }
+
+  .philosophy__eyebrow,
+  .philosophy__intro,
+  .philosophy__label,
+  .philosophy__detail {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .philosophy__body {
+    font-size: clamp(1.9rem, 10vw, 2.75rem);
+    letter-spacing: -0.045em;
+  }
+
+  .selected-works__grid {
+    gap: 2.5rem;
+  }
+
+  .services__item {
+    min-height: 5.5rem;
+    padding-inline: 1rem;
+  }
+
+  .process__step {
+    grid-template-columns: 1fr;
+  }
+
+  .process__step p {
+    grid-column: 1;
+  }
+}
+
+@media (max-height: 600px) and (min-width: 769px) {
+  .featured-project__statement {
+    font-size: 1rem;
+  }
+
+  .featured-project__scroll,
+  .featured-project__statement {
+    bottom: 1rem;
   }
 }
 

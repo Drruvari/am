@@ -644,6 +644,26 @@ p {
 }
 
 @media (max-width: 480px) {
+  .project-card__label {
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    font-size: 0.6875rem;
+  }
+
+  .project-card__media,
+  .project-card--large .project-card__media {
+    aspect-ratio: 4 / 5;
+  }
+
+  .project-panel__visual {
+    min-height: 12rem;
+    height: 32dvh;
+  }
+
+  .project-panel__info {
+    padding-inline: 1rem;
+  }
+
   .project-panel__gallery {
     grid-template-columns: 1fr;
   }

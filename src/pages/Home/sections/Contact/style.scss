@@ -268,6 +268,21 @@
 }
 
 @media (max-width: 480px) {
+  .footer__intro,
+  .footer__grid,
+  .footer__bar {
+    padding-inline: 1rem;
+  }
+
+  .footer__headline {
+    font-size: clamp(2.2rem, 12vw, 3.25rem);
+  }
+
+  .footer__nav-link,
+  .footer__nav-item {
+    font-size: clamp(1.75rem, 9vw, 2.5rem);
+  }
+
   .footer__cta .btn__label {
     flex-direction: row;
     flex-wrap: nowrap;

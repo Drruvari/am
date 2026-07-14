@@ -110,3 +110,15 @@
     }
   }
 }
+
+@media (max-width: 360px) {
+  .loader {
+    &__mark {
+      width: min(78vw, 17rem);
+    }
+
+    &__loading {
+      font-size: 1.25rem;
+    }
+  }
+}

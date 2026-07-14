@@ -121,6 +121,11 @@ html.is-loading .banner-reveal {
 }
 
 @media (max-width: 480px) {
+  .banner {
+    margin-inline: 0.75rem;
+    padding-top: calc(4.25rem + env(safe-area-inset-top, 0px));
+  }
+
   .banner-title {
     font-size: clamp(2rem, 10vw, 2.85rem);
   }
@@ -128,5 +133,16 @@ html.is-loading .banner-reveal {
   .banner-text,
   .banner-descr {
     font-size: 0.75rem;
+  }
+}
+
+@media (max-height: 600px) and (min-width: 769px) {
+  .banner {
+    padding-top: clamp(7rem, 18vh, 9rem);
+    padding-bottom: 2rem;
+  }
+
+  .banner-title {
+    font-size: clamp(3rem, 7vh, 4.5rem);
   }
 }
