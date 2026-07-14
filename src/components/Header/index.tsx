@@ -1,113 +1,354 @@
-import Button from "@/components/Button";
 import Logo from "@/components/Logo/index";
+import { lenis } from "@/lib/smooth-scroll";
+import { gsap } from "gsap";
+import { CustomEase } from "gsap/CustomEase";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useLayoutEffect, useRef, useState } from "react";
 import "./style.scss";
 
-function MobileMenu() {
-  return (
-    <div className="mobile-menu" id="mobileMenu" aria-hidden="true">
-      <div className="mobile-menu__backdrop" id="mobileMenuBackdrop" />
-      <div className="mobile-menu__panel" data-lenis-prevent>
-        <Button
-          variant="pill"
-          theme="soft"
-          className="mobile-menu__close"
-          innerClassName="mobile-menu__close-button mono"
-          id="mobileMenuClose"
-          type="button"
-          aria-label="Close menu"
-        >
-          Close
-        </Button>
-        <nav className="mobile-menu__nav" aria-label="Mobile navigation">
-          <a className="mobile-menu__nav-link" href="#top" data-hover="link">
-            Home
-          </a>
-          <a className="mobile-menu__nav-link" href="#work" data-hover="link">
-            Works
-          </a>
-          <span className="mobile-menu__nav-item is-disabled">In Progress</span>
-          <a className="mobile-menu__nav-link" href="#work" data-hover="link">
-            Archive
-          </a>
-          <span className="mobile-menu__nav-item is-disabled">Studio</span>
-          <span className="mobile-menu__nav-item is-disabled">Process</span>
-          <a
-            className="mobile-menu__nav-link"
-            href="#gallery"
-            data-hover="link"
-          >
-            Gallery
-          </a>
-          <a
-            className="mobile-menu__nav-link"
-            href="mailto:hello@arbermanga.com"
-            data-hover="link"
-          >
-            Contact Us
-          </a>
-        </nav>
-        <div className="mobile-menu__meta mono">
-          <p className="mobile-menu__meta-item">hello@arbermanga.com</p>
-          <p className="mobile-menu__meta-item">Blloku District, Tirana, AL</p>
-        </div>
-      </div>
-    </div>
-  );
-}
+type MenuItem = {
+  label: string;
+  href?: string;
+  disabled?: boolean;
+};
+
+const menuItems: MenuItem[] = [
+  { label: "Work", href: "#work" },
+  { label: "Studio", disabled: true },
+  { label: "Process", disabled: true },
+  { label: "Gallery", href: "#featured-project" },
+  { label: "Contact Us", href: "mailto:hello@arbermanga.com" },
+];
 
 export default function Header() {
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const menuRef = useRef<HTMLDivElement | null>(null);
+  const timelineRef = useRef<gsap.core.Timeline | null>(null);
+  const isOpenRef = useRef(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  function getEls() {
+    const root = rootRef.current;
+    const menu = menuRef.current;
+    if (!root || !menu) return null;
+
+    return {
+      menu,
+      trigger: root.querySelector<HTMLElement>(".header-menu-trigger"),
+      overlay: menu.querySelector<HTMLElement>("[data-header-menu-overlay]"),
+      panel: menu.querySelector<HTMLElement>("[data-header-menu-panel]"),
+      bgPanels: menu.querySelectorAll<HTMLElement>("[data-header-menu-bg]"),
+      links: menu.querySelectorAll<HTMLElement>("[data-header-menu-link]"),
+      fadeItems: menu.querySelectorAll<HTMLElement>("[data-header-menu-fade]"),
+      buttonTexts: root.querySelectorAll<HTMLElement>(
+        "[data-header-menu-button-text]",
+      ),
+      buttonIcon: root.querySelector<SVGSVGElement>(
+        "[data-header-menu-button-icon]",
+      ),
+    };
+  }
+
+  function openMenu() {
+    const els = getEls();
+    if (!els?.overlay || !els.panel || !els.buttonIcon) return;
+    if (isOpenRef.current) return;
+
+    isOpenRef.current = true;
+    setIsOpen(true);
+    els.menu.dataset.nav = "open";
+    document.body.classList.add("is-menu-open");
+    lenis.stop();
+    if (els.trigger) gsap.set(els.trigger, { x: 0, y: 0 });
+
+    const tl =
+      timelineRef.current ??
+      gsap.timeline({
+        defaults: { ease: "headerMenuEase", duration: 0.7 },
+      });
+    timelineRef.current = tl;
+
+    tl.clear()
+      .set(els.menu, { display: "block" })
+      .set(els.panel, { xPercent: 0 })
+      .set(els.links, { yPercent: 140, rotate: 10 })
+      .set(els.fadeItems, { autoAlpha: 0, yPercent: 50 })
+      .set(els.bgPanels, { xPercent: 101 })
+      .fromTo(
+        els.buttonTexts,
+        { yPercent: 0 },
+        { yPercent: -100, stagger: 0.18 },
+        0,
+      )
+      .fromTo(els.buttonIcon, { rotate: 0 }, { rotate: 315 }, 0)
+      .fromTo(els.overlay, { autoAlpha: 0 }, { autoAlpha: 1 }, 0)
+      .to(els.bgPanels, { xPercent: 0, stagger: 0.12, duration: 0.575 }, 0)
+      .to(els.links, { yPercent: 0, rotate: 0, stagger: 0.05 }, 0.35)
+      .to(els.fadeItems, { autoAlpha: 1, yPercent: 0, stagger: 0.04 }, 0.55);
+  }
+
+  function closeMenu() {
+    const els = getEls();
+    if (!els?.overlay || !els.panel || !els.buttonIcon) return;
+    if (!isOpenRef.current) return;
+
+    isOpenRef.current = false;
+    setIsOpen(false);
+    els.menu.dataset.nav = "closed";
+    document.body.classList.remove("is-menu-open");
+
+    const tl =
+      timelineRef.current ??
+      gsap.timeline({
+        defaults: { ease: "headerMenuEase", duration: 0.7 },
+      });
+    timelineRef.current = tl;
+
+    tl.clear()
+      .to(els.overlay, { autoAlpha: 0, duration: 0.45 })
+      .to(els.panel, { xPercent: 120, duration: 0.55 }, "<")
+      .to(els.buttonTexts, { yPercent: 0, duration: 0.45 }, "<")
+      .to(els.buttonIcon, { rotate: 0, duration: 0.45 }, "<")
+      .set(els.menu, { display: "none" })
+      .add(() => {
+        lenis.start();
+        ScrollTrigger.refresh(true);
+      });
+  }
+
+  function toggleMenu() {
+    if (isOpenRef.current) closeMenu();
+    else openMenu();
+  }
+
+  useLayoutEffect(() => {
+    gsap.registerPlugin(CustomEase);
+    CustomEase.create("headerMenuEase", "0.65, 0.01, 0.05, 0.99");
+
+    const els = getEls();
+    if (els) {
+      gsap.set(els.menu, { display: "none" });
+      gsap.set(els.overlay, { autoAlpha: 0 });
+      gsap.set(els.buttonTexts, { yPercent: 0 });
+      gsap.set(els.buttonIcon, { rotate: 0 });
+    }
+
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape" && isOpenRef.current) closeMenu();
+    }
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      timelineRef.current?.kill();
+      document.body.classList.remove("is-menu-open");
+      lenis.start();
+    };
+  }, []);
+
   return (
-    <>
-      <header className="site-header" id="site-header">
-        <a
-          href="#top"
-          className="site-header__brand"
-          aria-label="AM Architecture home"
-          data-hover="link"
-        >
-          <Logo className="site-header__logo" />
-        </a>
-        <nav className="site-header__nav" aria-label="Primary navigation">
-          <a className="site-header__nav-link" href="#work" data-hover="link">
-            Works
-          </a>
-          <span className="site-header__nav-item is-disabled">Studio</span>
-          <span className="site-header__nav-item is-disabled">Process</span>
+    <div ref={rootRef}>
+      <header className="header site-header" id="site-header">
+        <div className="header-wrapp">
           <a
-            className="site-header__nav-link"
-            href="#gallery"
+            href="#top"
+            className="header-logo"
+            aria-label="AM Architecture home"
             data-hover="link"
           >
-            Gallery
+            <Logo className="header-logo__mark site-header__logo" />
           </a>
-        </nav>
-        <div className="site-header__actions">
-          <Button
-            variant="pill"
-            theme="dark"
-            fill
+
+          <a
+            className="header-search header-link"
+            href="#featured-project"
+            data-hover="link"
+          >
+            View Project
+          </a>
+
+          <nav className="header-menu" aria-label="Primary">
+            <a
+              href="#work"
+              className="header-menu__item header-link"
+              data-hover="link"
+            >
+              Work
+            </a>
+            <span className="header-menu__item header-link is-disabled">
+              Studio
+            </span>
+            <span className="header-menu__item header-link is-disabled">
+              Process
+            </span>
+            <a
+              href="#featured-project"
+              className="header-menu__item header-link"
+              data-hover="link"
+            >
+              Gallery
+            </a>
+          </nav>
+
+          <a
             href="mailto:hello@arbermanga.com"
-            className="site-header__contact"
-            innerClassName="site-header__contact-link"
+            className="header-contact header-link"
             data-hover="link"
+            data-magnetic
           >
-            <span>Get in Touch</span>
-          </Button>
-          <Button
-            variant="pill"
-            theme="soft"
-            className="site-header__menu-trigger"
-            innerClassName="site-header__menu-button"
-            id="mobileMenuOpen"
-            aria-expanded="false"
-            aria-controls="mobileMenu"
+            Contact
+          </a>
+
+          <button
+            type="button"
+            className="header-cart header-link header-menu-trigger"
+            aria-label={isOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isOpen}
+            aria-controls="headerWipeMenu"
             data-hover="link"
+            data-magnetic
+            onClick={toggleMenu}
           >
-            <span>Menu</span>
-          </Button>
+            <span className="header-menu-trigger__copy">
+              <span data-header-menu-button-text>Menu</span>
+              <span data-header-menu-button-text aria-hidden="true">
+                Close
+              </span>
+            </span>
+            <span className="header-menu-trigger__icon-wrap">
+              <svg
+                data-header-menu-button-icon
+                className="header-menu-trigger__icon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 16 16"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M7.33333 16L7.33333 0L8.66667 0L8.66667 16L7.33333 16Z"
+                  fill="currentColor"
+                />
+                <path
+                  d="M16 8.66667L0 8.66667L0 7.33333L16 7.33333L16 8.66667Z"
+                  fill="currentColor"
+                />
+                <path
+                  d="M6 7.33333L7.33333 7.33333L7.33333 6C7.33333 6.73637 6.73638 7.33333 6 7.33333Z"
+                  fill="currentColor"
+                />
+                <path
+                  d="M10 7.33333L8.66667 7.33333L8.66667 6C8.66667 6.73638 9.26362 7.33333 10 7.33333Z"
+                  fill="currentColor"
+                />
+                <path
+                  d="M6 8.66667L7.33333 8.66667L7.33333 10C7.33333 9.26362 6.73638 8.66667 6 8.66667Z"
+                  fill="currentColor"
+                />
+                <path
+                  d="M10 8.66667L8.66667 8.66667L8.66667 10C8.66667 9.26362 9.26362 8.66667 10 8.66667Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </span>
+          </button>
         </div>
       </header>
-      <MobileMenu />
-    </>
+
+      <div
+        id="headerWipeMenu"
+        ref={menuRef}
+        className="header-wipe-menu"
+        data-nav="closed"
+        aria-hidden={!isOpen}
+      >
+        <button
+          type="button"
+          className="header-wipe-menu__overlay"
+          data-header-menu-overlay
+          aria-label="Close menu"
+          onClick={closeMenu}
+        />
+
+        <nav
+          className="header-wipe-menu__panel"
+          data-header-menu-panel
+          data-lenis-prevent
+          aria-label="Menu navigation"
+        >
+          <div className="header-wipe-menu__bg">
+            <div
+              className="header-wipe-menu__bg-panel header-wipe-menu__bg-panel--first"
+              data-header-menu-bg
+            />
+            <div
+              className="header-wipe-menu__bg-panel header-wipe-menu__bg-panel--second"
+              data-header-menu-bg
+            />
+            <div className="header-wipe-menu__bg-panel" data-header-menu-bg />
+          </div>
+
+          <div className="header-wipe-menu__inner">
+            <ul className="header-wipe-menu__list">
+              {menuItems.map((item, index) => (
+                <li className="header-wipe-menu__item" key={item.label}>
+                  {item.disabled ? (
+                    <span
+                      className="header-wipe-menu__link is-disabled"
+                      data-header-menu-link
+                      aria-disabled="true"
+                    >
+                      <span className="header-wipe-menu__link-heading">
+                        {item.label}
+                      </span>
+                      <span className="header-wipe-menu__link-number">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span className="header-wipe-menu__link-bg" />
+                    </span>
+                  ) : (
+                    <a
+                      href={item.href}
+                      className="header-wipe-menu__link"
+                      data-header-menu-link
+                      onClick={closeMenu}
+                    >
+                      <span className="header-wipe-menu__link-heading">
+                        {item.label}
+                      </span>
+                      <span className="header-wipe-menu__link-number">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span className="header-wipe-menu__link-bg" />
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ul>
+
+            <div className="header-wipe-menu__details">
+              <p className="header-wipe-menu__label" data-header-menu-fade>
+                Contact
+              </p>
+              <div className="header-wipe-menu__meta">
+                <a
+                  href="mailto:hello@arbermanga.com"
+                  className="header-wipe-menu__meta-link"
+                  data-header-menu-fade
+                  onClick={closeMenu}
+                >
+                  hello@arbermanga.com
+                </a>
+                <p
+                  className="header-wipe-menu__meta-text"
+                  data-header-menu-fade
+                >
+                  Blloku District, Tirana, AL
+                </p>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
   );
 }

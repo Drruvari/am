@@ -1,10 +1,10 @@
-import './style.scss'
-import Button from '@/components/Button'
-import { images } from '@/lib/images'
+import Button from "@/components/Button";
+import { images } from "@/lib/images";
+import "./style.scss";
 
 export default function Contact() {
   return (
-    <footer className="footer" id="footer">
+    <footer className="footer" id="contact">
       <div className="footer__intro">
         <h2 className="footer__headline">
           Focused on quality
@@ -22,7 +22,6 @@ export default function Contact() {
           <span>Tell us about your project</span>
         </Button>
       </div>
-
       <div className="footer__grid">
         <div className="footer__col footer__col--brand">
           <div className="footer__image">
@@ -43,7 +42,10 @@ export default function Contact() {
           </div>
         </div>
 
-        <nav className="footer__col footer__col--nav" aria-label="Footer navigation">
+        <nav
+          className="footer__col footer__col--nav"
+          aria-label="Footer navigation"
+        >
           <span className="footer__label mono">(Navigation)</span>
           <div className="footer__nav">
             <a className="footer__nav-link" href="#top" data-hover="link">
@@ -94,7 +96,6 @@ export default function Contact() {
           </div>
         </div>
       </div>
-
       <div className="footer__bar mono">
         <div className="footer__bar-col footer__bar-col--brand">
           <span>
@@ -111,7 +112,7 @@ export default function Contact() {
             Instagram
           </a>
           <span className="footer__bar-credit">
-            Site by{' '}
+            Site by{" "}
             <a className="footer__bar-link" href="#" data-hover="link">
               Arbër Manga
             </a>
@@ -119,5 +120,5 @@ export default function Contact() {
         </div>
       </div>
     </footer>
-  )
+  );
 }

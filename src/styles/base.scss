@@ -1,8 +1,13 @@
 @use "./breakpoints" as *;
 
 :root {
-  --bg: #ededeb;
-  --fg: #111213;
+  /* Fluid rem unit matching reference html { font-size: 6.944vw } */
+  --u: 6.9444444444vw;
+  --bg: #fffaf6;
+  --fg: #131313;
+  --dark: #131313;
+  --beige: #fffaf6;
+  --white: #fff;
   --accent: var(--fg);
   --hover: var(--fg);
   --panel: var(--bg);
@@ -56,6 +61,11 @@ html {
 
   &.is-loading {
     overflow: hidden;
+
+    .site-header,
+    .header {
+      visibility: hidden;
+    }
 
     .hero__body {
       visibility: hidden;

@@ -1,147 +1,176 @@
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { addCleanup, runCleanups } from './cleanup'
-import { initMediaQueries, mm } from './globals'
-import { initSmoothScroll, resetScrollLock, updateScrollState } from './smooth-scroll'
-import { initButtonSystem } from './button'
-import { initAnimations, initLoader } from './animations'
-import { initLogoHover } from './logo-hover'
-import { initMobileMenu } from './mobile-menu'
-import { initProjectDetail } from './project-detail'
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { initAnimations, initLoader } from "./animations";
+import { initButtonSystem } from "./button";
+import { addCleanup, runCleanups } from "./cleanup";
+import { initMediaQueries, mm } from "./globals";
+import { initLogoHover } from "./logo-hover";
+import { initMobileMenu } from "./mobile-menu";
+import { initProjectDetail } from "./project-detail";
+import {
+  initSmoothScroll,
+  resetScrollLock,
+  updateScrollState,
+} from "./smooth-scroll";
 
-let appInitialized = false
+let appInitialized = false;
 
 function initGlobalUI() {
-  const footerYear = document.getElementById('footerYear')
+  const footerYear = document.getElementById("footerYear");
   if (footerYear) {
-    footerYear.textContent = String(new Date().getFullYear())
+    footerYear.textContent = String(new Date().getFullYear());
   }
 
-  const footerStatus = document.getElementById('footerStatus')
+  const footerStatus = document.getElementById("footerStatus");
   const updateFooterStatus = () => {
-    if (!footerStatus) return
+    if (!footerStatus) return;
 
-    const now = new Date()
-    const time = now.toLocaleTimeString('en-AU', {
-      hour: 'numeric',
-      minute: '2-digit',
+    const now = new Date();
+    const time = now.toLocaleTimeString("en-AU", {
+      hour: "numeric",
+      minute: "2-digit",
       hour12: true,
-      timeZone: 'Europe/Tirane',
-      timeZoneName: 'short',
-    })
+      timeZone: "Europe/Tirane",
+      timeZoneName: "short",
+    });
     const hour = Number(
-      now.toLocaleString('en-AU', {
-        hour: 'numeric',
+      now.toLocaleString("en-AU", {
+        hour: "numeric",
         hour12: false,
-        timeZone: 'Europe/Tirane',
+        timeZone: "Europe/Tirane",
       }),
-    )
-    const isOpen = hour >= 8 && hour < 17
-    footerStatus.textContent = `${time}, we are ${isOpen ? 'open' : 'closed'}`
-  }
+    );
+    const isOpen = hour >= 8 && hour < 17;
+    footerStatus.textContent = `${time}, we are ${isOpen ? "open" : "closed"}`;
+  };
 
-  updateFooterStatus()
-  const footerStatusInterval = window.setInterval(updateFooterStatus, 60_000)
-  addCleanup(() => window.clearInterval(footerStatusInterval))
+  updateFooterStatus();
+  const footerStatusInterval = window.setInterval(updateFooterStatus, 60_000);
+  addCleanup(() => window.clearInterval(footerStatusInterval));
 
   const onPageShow = (event: PageTransitionEvent) => {
     if (event.persisted) {
-      ScrollTrigger.refresh()
-      updateScrollState()
+      ScrollTrigger.refresh();
+      updateScrollState();
     }
-  }
-  window.addEventListener('pageshow', onPageShow)
-  addCleanup(() => window.removeEventListener('pageshow', onPageShow))
+  };
+  window.addEventListener("pageshow", onPageShow);
+  addCleanup(() => window.removeEventListener("pageshow", onPageShow));
 
   const onLoad = () => {
-    ScrollTrigger.refresh()
-    updateScrollState()
-  }
-  window.addEventListener('load', onLoad)
-  addCleanup(() => window.removeEventListener('load', onLoad))
+    ScrollTrigger.refresh();
+    updateScrollState();
+  };
+  window.addEventListener("load", onLoad);
+  addCleanup(() => window.removeEventListener("load", onLoad));
 
   const onResize = () => {
-    updateScrollState()
-  }
-  window.addEventListener('resize', onResize)
-  addCleanup(() => window.removeEventListener('resize', onResize))
+    updateScrollState();
+  };
+  window.addEventListener("resize", onResize);
+  addCleanup(() => window.removeEventListener("resize", onResize));
 
-  let orientationTimeout: number | undefined
+  let orientationTimeout: number | undefined;
   const onOrientationChange = () => {
     if (orientationTimeout !== undefined) {
-      window.clearTimeout(orientationTimeout)
+      window.clearTimeout(orientationTimeout);
     }
     orientationTimeout = window.setTimeout(() => {
-      orientationTimeout = undefined
-      ScrollTrigger.refresh()
-      updateScrollState()
-    }, 300)
-  }
-  window.addEventListener('orientationchange', onOrientationChange)
+      orientationTimeout = undefined;
+      ScrollTrigger.refresh();
+      updateScrollState();
+    }, 300);
+  };
+  window.addEventListener("orientationchange", onOrientationChange);
   addCleanup(() => {
-    window.removeEventListener('orientationchange', onOrientationChange)
+    window.removeEventListener("orientationchange", onOrientationChange);
     if (orientationTimeout !== undefined) {
-      window.clearTimeout(orientationTimeout)
+      window.clearTimeout(orientationTimeout);
     }
-  })
+  });
 }
 
 export function disposeApp() {
-  runCleanups()
+  runCleanups();
 
-  ScrollTrigger.getAll().forEach((trigger) => trigger.kill())
-  gsap.killTweensOf('*')
-  mm?.revert()
-  document.documentElement.classList.remove('is-loading')
-  resetScrollLock()
+  ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+  gsap.killTweensOf("*");
+  mm?.revert();
+  document.documentElement.classList.remove("is-loading");
+  resetScrollLock();
   document.body.classList.remove(
-    'is-menu-open',
-    'is-project-panel-open',
-    'is-header-compact',
-    'is-hero-pinned',
-    'has-custom-cursor',
-  )
+    "is-menu-open",
+    "is-project-panel-open",
+    "is-header-compact",
+    "is-hero-pinned",
+    "has-custom-cursor",
+  );
   gsap.set(
-    '.hero__meta-item, .hero__lede, .hero__cta, .hero__media, .hero__title .char, .hero__img',
-    { clearProps: 'all' },
-  )
-  const loader = document.getElementById('loader')
+    ".fade-el, .slider, .slider-img img, .hero__img, .header, .header-wrapp, .header-link, .header-logo svg",
+    { clearProps: "all" },
+  );
+  const fadeElements = gsap.utils.toArray<HTMLElement>(".fade-el");
+  if (fadeElements.length) gsap.set(fadeElements, { yPercent: 0 });
+  gsap.set(".slider", { yPercent: 0 });
+  gsap.set(".header-wrapp", { y: 0 });
+  document.documentElement.classList.remove("is-loading");
+  const loader = document.getElementById("loader");
   if (loader) {
-    gsap.set(loader, { clearProps: 'all' })
-    loader.style.pointerEvents = 'none'
+    gsap.set(loader, { clearProps: "all" });
+    loader.style.display = "";
+    loader.style.pointerEvents = "";
   }
-  appInitialized = false
+  const curtain = document.querySelector<HTMLElement>(".loader-curtain");
+  if (curtain) {
+    gsap.set(curtain, { clearProps: "all" });
+    curtain.style.display = "";
+  }
+  appInitialized = false;
 }
 
 export function initApp() {
-  if (appInitialized) return
-  if (!document.getElementById('loader')) return
+  if (appInitialized) return;
 
-  appInitialized = true
-
-  gsap.registerPlugin(ScrollTrigger)
-
-  if ('scrollRestoration' in history) {
-    history.scrollRestoration = 'manual'
+  // Wait one frame if Loader hasn't mounted yet (StrictMode / HMR)
+  if (!document.getElementById("loader")) {
+    let tries = 0;
+    const retry = () => {
+      if (document.getElementById("loader")) {
+        initApp();
+        return;
+      }
+      tries += 1;
+      if (tries < 10) window.requestAnimationFrame(retry);
+    };
+    window.requestAnimationFrame(retry);
+    return;
   }
 
-  window.scrollTo(0, 0)
-  resetScrollLock()
-  document.documentElement.classList.add('is-loading')
+  appInitialized = true;
 
-  initMediaQueries()
+  gsap.registerPlugin(ScrollTrigger);
+
+  if ("scrollRestoration" in history) {
+    history.scrollRestoration = "manual";
+  }
+
+  window.scrollTo(0, 0);
+  resetScrollLock();
+  document.documentElement.classList.add("is-loading");
+
+  initMediaQueries();
 
   ScrollTrigger.config({
     ignoreMobileResize: true,
     limitCallbacks: true,
-  })
+  });
 
-  initSmoothScroll()
-  initButtonSystem()
-  initAnimations()
-  initLoader()
-  initLogoHover()
-  initMobileMenu()
-  initProjectDetail()
-  initGlobalUI()
+  initSmoothScroll();
+  initButtonSystem();
+  initAnimations();
+  initLoader();
+  initLogoHover();
+  initMobileMenu();
+  initProjectDetail();
+  initGlobalUI();
 }

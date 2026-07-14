@@ -1,41 +1,38 @@
-import './style.scss'
-import { InlineImage } from '@/lib/responsive-image'
+import { images } from "@/lib/images";
 
 export default function About() {
   return (
-    <section className="about" id="about">
-      <p className="about__eyebrow eyebrow mono">01 — Philosophy</p>
-      <div className="about__body">
-        <div className="about__line about__line--1">
-          <span className="about__line-text">The work starts with</span>
-          <InlineImage className="about__image--raise" />
-          <span className="about__line-text">what is</span>
-        </div>
-        <div className="about__line about__line--2">
-          <span className="about__line-text">already there:</span>
-          <InlineImage variant="lg" />
-        </div>
-        <div className="about__line about__line--3">
-          <span className="about__line-text">slope, shade, wind,</span>
-        </div>
-        <div className="about__line about__line--4">
-          <span className="about__line-text">access, budget, and the material</span>
-        </div>
-        <div className="about__line about__line--5">
-          <span className="about__line-text">close at hand.</span>
-          <InlineImage variant="sm" className="about__image--drop" />
-        </div>
-        <div className="about__line about__line--6">
-          <span className="about__line-text">Form follows those</span>
-          <InlineImage className="about__image--drop" />
-          <span className="about__line-text">constraints,</span>
-        </div>
-        <div className="about__line about__line--7">
-          <span className="about__line-text">then gets edited until</span>
-          <InlineImage className="about__image--raise" />
-          <span className="about__line-text">nothing extra remains.</span>
+    <section className="architect-about" id="about">
+      <div className="architect-about__image">
+        <picture>
+          <source srcSet={images.webp[800]} type="image/webp" />
+          <img
+            src={images.jpg[800]}
+            alt="Architectural studio detail"
+            width={1470}
+            height={980}
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+      </div>
+
+      <div className="architect-about__content">
+        <p className="architect-about__eyebrow eyebrow mono">07 — About</p>
+
+        <h2>Arbër Manga</h2>
+
+        <p>
+          Independent architect based in Tirana, working across private
+          residences, refined interiors, and cultural spatial studies.
+        </p>
+
+        <div className="architect-about__facts mono">
+          <span>Tirana, Albania</span>
+          <span>Residential / Interior / Cultural</span>
+          <span>Light, context, material, restraint</span>
         </div>
       </div>
     </section>
-  )
+  );
 }

@@ -2,6 +2,7 @@ import CustomCursor from "@/components/CustomCursor/index";
 import Header from "@/components/Header/index";
 import { disposeApp, initApp } from "@/lib/init-app";
 import Home from "@/pages/Home/index";
+import Loader from "@/pages/Home/Loader";
 import { useEffect } from "react";
 
 export default function App() {
@@ -12,6 +13,7 @@ export default function App() {
 
   return (
     <>
+      <Loader />
       <CustomCursor />
       <Header />
       <Home />

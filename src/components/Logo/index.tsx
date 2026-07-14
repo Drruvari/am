@@ -1,4 +1,4 @@
-import logoSvgInner from './logo-svg-inner.html?raw'
+import logoSvgInner from './logo.svg?raw'
 import './style.scss'
 
 type LogoProps = {
