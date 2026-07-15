@@ -627,7 +627,7 @@ function initProjectCardHover() {
 function initMagneticButtons() {
   mm.add("(min-width: 769px)", () => {
     const cleanups = gsap.utils
-      .toArray<HTMLElement>(".btn, [data-magnetic]")
+      .toArray<HTMLElement>("[data-magnetic]:not(.btn)")
       .map((button) => {
         const isHeaderControl = button.matches(".header-contact, .header-cart");
         const magneticX = isHeaderControl ? 0.3 : 0.16;
