@@ -1,18 +1,30 @@
 .process {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(0.75rem, 1.5vw, 1.75rem);
   padding: var(--section-pad) var(--content-inset);
+  border-top: 1px solid var(--line);
 
   &__intro {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(min(100%, 24rem), 0.5fr);
+    grid-column: 4 / 10;
+    grid-template-columns: 1fr;
     align-items: end;
     gap: clamp(1.5rem, 5vw, 6rem);
     margin-bottom: clamp(3rem, 6vw, 7rem);
 
     p { max-width: 32rem; margin-bottom: 2rem; color: var(--muted); }
+
+    h2 {
+      font-size: clamp(3.5rem, 7vw, 8.5rem);
+      font-weight: 500;
+      line-height: 0.84;
+      letter-spacing: -0.06em;
+    }
   }
 
-  &__eyebrow { grid-column: 1 / -1; margin-bottom: 0; }
-  &__steps { position: relative; display: grid; gap: 1px; background: var(--line); }
+  &__eyebrow { grid-column: 1 / 3; align-self: start; margin-bottom: 0; }
+  &__steps { position: relative; display: grid; grid-column: 5 / 13; gap: 1px; background: var(--line); }
   &__steps::before { content: ""; position: absolute; z-index: 2; top: 0; left: 0; width: 1px; height: var(--process-progress, 0%); background: var(--fg); pointer-events: none; }
   &__step { display: grid; grid-template-columns: 4rem minmax(0, 0.5fr) minmax(0, 1fr); gap: 1.5rem; padding: clamp(1.25rem, 3vw, 2.5rem); background: var(--bg); transition: background 0.35s ease, color 0.35s ease; }
   &__step.is-active { background: color-mix(in srgb, var(--fg) 4%, var(--bg)); }
@@ -26,7 +38,10 @@
 }
 
 @media (max-width: 768px) {
-  .process__intro { grid-template-columns: 1fr; }
+  .process { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .process__eyebrow { grid-column: 1 / 2; }
+  .process__intro { grid-column: 1 / -1; grid-template-columns: 1fr; }
+  .process__steps { grid-column: 1 / -1; }
   .process__step { grid-template-columns: 2.75rem minmax(0, 1fr); gap: 0.75rem 1rem; }
   .process__step p { grid-column: 2; }
 }

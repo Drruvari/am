@@ -287,90 +287,6 @@ function initRevealGroup({
   );
 }
 
-function initPhilosophyMotion() {
-  const lines = gsap.utils.toArray<HTMLElement>(
-    '[data-animate="philosophy-line"]',
-  );
-  if (!lines.length) return;
-
-  gsap.set(lines, {
-    transformOrigin: "0% 100%",
-  });
-
-  gsap
-    .timeline({
-      scrollTrigger: {
-        trigger: ".philosophy",
-        start: "top 70%",
-        end: "bottom 35%",
-        scrub: 0.5,
-      },
-    })
-    .fromTo(
-      lines,
-      {
-        yPercent: 80,
-        rotation: 2,
-        autoAlpha: 0,
-      },
-      {
-        yPercent: 0,
-        rotation: 0,
-        autoAlpha: 1,
-        stagger: 0.12,
-        ease: "power3.out",
-      },
-    );
-}
-
-function initProcessMotion() {
-  const steps = gsap.utils.toArray<HTMLElement>(
-    '[data-animate="process-step"]',
-  );
-
-  steps.forEach((step) => {
-    gsap.fromTo(
-      step,
-      {
-        autoAlpha: 0.35,
-        xPercent: -4,
-      },
-      {
-        autoAlpha: 1,
-        xPercent: 0,
-        ease: "none",
-        scrollTrigger: {
-          trigger: step,
-          start: "top 78%",
-          end: "bottom 55%",
-          scrub: 0.45,
-          toggleClass: {
-            targets: step,
-            className: "is-active",
-          },
-        },
-      },
-    );
-  });
-
-  gsap.fromTo(
-    '[data-animate="process-steps"]',
-    {
-      "--process-progress": "0%",
-    },
-    {
-      "--process-progress": "100%",
-      ease: "none",
-      scrollTrigger: {
-        trigger: ".process",
-        start: "top center",
-        end: "bottom center",
-        scrub: true,
-      },
-    },
-  );
-}
-
 function initFooterMotion() {
   gsap.fromTo(
     ".footer",
@@ -413,8 +329,6 @@ function initHomepageMotion() {
       return;
     }
 
-    initPhilosophyMotion();
-    initProcessMotion();
     initFooterMotion();
     initLineReveals();
     initScrollStory();
@@ -671,7 +585,12 @@ let loaderFinished = false;
 
 export function initLoader() {
   const loader = document.getElementById("loader");
-  const curtain = document.querySelector<HTMLElement>(".loader-curtain");
+  const transitionRows = gsap.utils.toArray<HTMLElement>(
+    ".loader-transition__row",
+  );
+  const transitionBlocks = gsap.utils.toArray<HTMLElement>(
+    ".loader-transition__block",
+  );
 
   if (!loader) return;
 
@@ -703,21 +622,24 @@ export function initLoader() {
     clearProps: "opacity,visibility",
   });
 
-  if (curtain) {
-    curtain.style.display = "block";
-
-    gsap.set(curtain, {
-      scaleY: 1,
-      transformOrigin: "50% 100%",
-      autoAlpha: 1,
-    });
-  }
+  transitionRows.forEach((row) => {
+    const [leftBlock, rightBlock] = Array.from(row.children);
+    gsap.set(leftBlock, { xPercent: -101, autoAlpha: 0 });
+    gsap.set(rightBlock, { xPercent: 101, autoAlpha: 0 });
+  });
 
   const countValue =
     loader.querySelector<HTMLElement>(".loader__progress-value") ??
     document.getElementById("loaderCount");
 
   const loaderStatus = document.getElementById("loaderStatus");
+  const loaderContent = loader.querySelector<HTMLElement>(".loader__content");
+  const progressBar = loader.querySelector<HTMLElement>(
+    ".loader__progress-bar",
+  );
+  const loaderChrome = gsap.utils.toArray<HTMLElement>(
+    ".loader__progress, .loader__loading",
+  );
   const loadingText = loader.querySelector<HTMLElement>(".loader__loading");
   const mark = loader.querySelector<SVGSVGElement>(".loader__mark");
   const shapeHex = loader.querySelector<SVGPathElement>("#shape-hex");
@@ -734,8 +656,9 @@ export function initLoader() {
     shapeFlag.removeAttribute("clip-rule");
   }
 
-  const isMobile = window.matchMedia("(max-width: 768px)").matches;
-  const sliderClipRadius = isMobile ? "1rem" : "calc(0.22 * var(--u))";
+  const sliderClipRadius = getComputedStyle(
+    document.documentElement,
+  ).getPropertyValue("--radius-sm");
 
   lenis.stop();
   initHeroEases();
@@ -747,9 +670,7 @@ export function initLoader() {
   const headerWrap = document.querySelector<HTMLElement>(".header-wrapp");
   const headerWrapTargets = headerWrap ? [headerWrap] : [];
   const sliderTargets = slider ? [slider] : [];
-  const headerStartYPx = isMobile
-    ? 0
-    : -Math.min(100, Math.max(28, window.innerWidth * 0.069444444));
+  const headerStartYPx = -32;
 
   gsap.set(heroFadeElements, {
     yPercent: 110,
@@ -760,8 +681,8 @@ export function initLoader() {
   });
 
   gsap.set(sliderTargets, {
-    yPercent: isMobile ? 0 : 50,
-    clipPath: `inset(18% 0% 18% 0% round ${sliderClipRadius})`,
+    yPercent: 35,
+    clipPath: `inset(12% 0% 12% 0% round ${sliderClipRadius})`,
   });
 
   gsap.set(sliderItems, { autoAlpha: 0 });
@@ -772,7 +693,7 @@ export function initLoader() {
   });
 
   gsap.set(sliderImages, {
-    scale: isMobile ? 1.12 : 1.7,
+    scale: 1.45,
     transformOrigin: "50% 50%",
   });
 
@@ -781,6 +702,16 @@ export function initLoader() {
       autoAlpha: 1,
     });
   }
+
+  if (loaderContent) {
+    gsap.set(loaderContent, {
+      y: 14,
+      autoAlpha: 0,
+    });
+  }
+
+  gsap.set(loaderChrome, { y: 10, autoAlpha: 0 });
+  gsap.set(progressBar, { scaleX: 0, transformOrigin: "0% 50%" });
 
   if (mark) {
     gsap.set(mark, {
@@ -801,10 +732,6 @@ export function initLoader() {
   const hideLoader = () => {
     loader.style.pointerEvents = "none";
     loader.style.display = "none";
-
-    if (curtain) {
-      curtain.style.display = "none";
-    }
   };
 
   const finish = () => {
@@ -820,6 +747,7 @@ export function initLoader() {
     loader.setAttribute("aria-busy", "false");
 
     hideLoader();
+    gsap.set(transitionBlocks, { autoAlpha: 0 });
 
     lenis.scrollTo(0, {
       immediate: true,
@@ -882,6 +810,10 @@ export function initLoader() {
     if (loaderStatus) {
       loaderStatus.textContent = `Loading, ${value} percent`;
     }
+
+    if (progressBar) {
+      progressBar.style.transform = `scaleX(${Math.min(1, progress.val / 100)})`;
+    }
   };
 
   const runHeroReveal = () => {
@@ -916,6 +848,30 @@ export function initLoader() {
 
     loaderTimeline = revealTL;
 
+    [...transitionRows].reverse().forEach((row, index) => {
+      const [leftBlock, rightBlock] = Array.from(row.children);
+      const position = index * 0.1;
+
+      revealTL.to(
+        leftBlock,
+        {
+          xPercent: -101,
+          duration: 0.72,
+          ease: "power3.inOut",
+        },
+        position,
+      );
+      revealTL.to(
+        rightBlock,
+        {
+          xPercent: 101,
+          duration: 0.72,
+          ease: "power3.inOut",
+        },
+        position,
+      );
+    });
+
     revealTL
       .to(
         headerWrapTargets,
@@ -924,71 +880,128 @@ export function initLoader() {
           duration: 0.85,
           ease: "headerEase",
         },
-        0,
+        0.12,
       )
       .to(
         targets.meta,
         {
           yPercent: 0,
-          duration: 0.5,
-          stagger: 0.2,
-          ease: "headerEase",
+          duration: 0.85,
+          stagger: 0.08,
+          ease: "power4.out",
         },
-        "<",
+        0.18,
       )
       .to(
         targets.title,
         {
           yPercent: 0,
-          duration: 1,
-          stagger: 0.2,
-          ease: "headerEase",
+          duration: 1.1,
+          stagger: 0.08,
+          ease: "power4.out",
         },
-        "<",
+        0.24,
       )
       .to(
         targets.descr,
         {
           yPercent: 0,
-          duration: 1,
-          stagger: 0.1,
-          ease: "headerEase",
+          duration: 0.9,
+          stagger: 0.08,
+          ease: "power3.out",
         },
-        "<",
+        0.32,
       )
       .to(
         sliderTargets,
         {
           yPercent: 0,
           clipPath: `inset(0% 0% 0% 0% round ${sliderClipRadius})`,
-          duration: 1.3,
-          ease: "revealEase",
+          duration: 1.4,
+          ease: "power3.out",
         },
-        0.18,
+        0.15,
       )
       .to(
         sliderImages,
         {
           scale: 1.3,
-          duration: 1.3,
-          ease: "revealEase",
+          duration: 1.4,
+          ease: "power3.out",
         },
         "<",
       );
   };
 
+  const addBlockCover = (
+    timeline: gsap.core.Timeline,
+    startTime: number,
+  ) => {
+    transitionRows.forEach((row, index) => {
+      const blocks = Array.from(row.children);
+      const position = startTime + index * 0.1;
+
+      timeline.set(blocks, { autoAlpha: 1 }, position);
+      timeline.to(
+        blocks,
+        {
+          xPercent: 0,
+          duration: 0.72,
+          ease: "power3.inOut",
+        },
+        position,
+      );
+    });
+  };
+
   const runFallbackExit = () => {
     if (session !== loaderSession) return;
-
-    progress.val = 100;
-    updateProgress();
 
     const exitTL = gsap.timeline();
 
     loaderTimeline = exitTL;
 
-    // Keep the blur visible even when the SVG plugins fail.
-    exitTL.to({}, { duration: 3.6 });
+    exitTL.to(
+      loader,
+      {
+        backgroundColor: "var(--color-dark)",
+        duration: 0.75,
+        ease: "power2.inOut",
+      },
+      0,
+    );
+
+    if (loaderContent) {
+      exitTL.to(
+        loaderContent,
+        {
+          y: 0,
+          autoAlpha: 1,
+          duration: 0.7,
+          ease: "power3.out",
+        },
+        0.15,
+      );
+    }
+
+    exitTL.to(
+      loaderChrome,
+      { y: 0, autoAlpha: 1, duration: 0.65, ease: "power3.out" },
+      0.22,
+    );
+
+    exitTL.to(
+      progress,
+      {
+        val: 100,
+        duration: 3.6,
+        ease: "power1.inOut",
+        onUpdate: updateProgress,
+      },
+      0,
+    );
+
+    exitTL.to({}, { duration: 3.6 }, 0);
 
     if (loadingText) {
       exitTL.to(loadingText, {
@@ -1011,22 +1024,12 @@ export function initLoader() {
       );
     }
 
-    if (curtain) {
-      exitTL.to(
-        curtain,
-        {
-          scaleY: 0,
-          duration: 0.9,
-          ease: "power4.inOut",
-        },
-        "-=0.1",
-      );
-    }
+    addBlockCover(exitTL, 3.8);
 
     exitTL
-      .call(runHeroReveal, [], "-=0.45")
-      .set(loader, { autoAlpha: 0 })
-      .call(hideLoader);
+      .set(loader, { autoAlpha: 0 }, 4.92)
+      .call(hideLoader, [], 4.92)
+      .call(runHeroReveal, [], 4.92);
   };
 
   const runLoaderTimeline = () => {
@@ -1060,6 +1063,35 @@ export function initLoader() {
       });
 
       loaderTimeline = loaderTL;
+
+      loaderTL.to(
+        loader,
+        {
+          backgroundColor: "var(--color-dark)",
+          duration: 0.75,
+          ease: "power2.inOut",
+        },
+        0,
+      );
+
+      if (loaderContent) {
+        loaderTL.to(
+          loaderContent,
+          {
+            y: 0,
+            autoAlpha: 1,
+            duration: 0.7,
+            ease: "power3.out",
+          },
+          0.15,
+        );
+      }
+
+      loaderTL.to(
+        loaderChrome,
+        { y: 0, autoAlpha: 1, duration: 0.65, ease: "power3.out" },
+        0.22,
+      );
 
       loaderTL
         .to(
@@ -1131,7 +1163,6 @@ export function initLoader() {
           2.07,
         );
 
-      // The last letter reaches full blur at roughly 3.68 seconds.
       if (loadingText) {
         loaderTL.to(
           loadingText,
@@ -1153,22 +1184,12 @@ export function initLoader() {
         );
       }
 
-      if (curtain) {
-        loaderTL.to(
-          curtain,
-          {
-            scaleY: 0,
-            duration: 0.9,
-            ease: "power4.inOut",
-          },
-          4.05,
-        );
-      }
+      addBlockCover(loaderTL, 4.05);
 
       loaderTL
-        .call(runHeroReveal, [], 4.5)
-        .set(loader, { autoAlpha: 0 }, 4.95)
-        .call(hideLoader, [], 4.95);
+        .set(loader, { autoAlpha: 0 }, 5.17)
+        .call(hideLoader, [], 5.17)
+        .call(runHeroReveal, [], 5.17);
     } catch (error) {
       console.warn(
         "[loader] Morph/Draw timeline failed, using fallback",

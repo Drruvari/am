@@ -1,9 +1,55 @@
+import { useGSAP } from "@gsap/react";
 import { archImage } from "@/lib/images";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useRef } from "react";
 import "./style.scss";
 
+gsap.registerPlugin(ScrollTrigger, useGSAP);
+
 export default function Philosophy() {
+  const rootRef = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      const media = gsap.matchMedia();
+
+      media.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.from('[data-animate="philosophy-line"]', {
+          yPercent: 45,
+          autoAlpha: 0,
+          duration: 1,
+          ease: "power4.out",
+          scrollTrigger: {
+            trigger: rootRef.current,
+            start: "top 72%",
+            once: true,
+          },
+        });
+
+        gsap.fromTo(
+          ".philosophy__image img",
+          { yPercent: -6 },
+          {
+            yPercent: 6,
+            ease: "none",
+            scrollTrigger: {
+              trigger: ".philosophy__image",
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            },
+          },
+        );
+      });
+
+      return () => media.revert();
+    },
+    { scope: rootRef },
+  );
+
   return (
-    <section className="philosophy" id="philosophy">
+    <section ref={rootRef} className="philosophy" id="philosophy">
       <div className="philosophy__top">
         <figure className="philosophy__image" data-reveal="mask">
           <img
@@ -11,7 +57,6 @@ export default function Philosophy() {
             alt="Concrete architecture detail"
             loading="lazy"
             decoding="async"
-            data-parallax="6"
           />
         </figure>
 

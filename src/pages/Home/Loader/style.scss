@@ -1,6 +1,7 @@
 .loader {
-  --loader-bg: #0b0b0c;
-  --loader-paper: #f4f2ee;
+  --loader-bg: var(--color-background);
+  --loader-ink: var(--color-dark);
+  --loader-paper: var(--color-background);
 
   position: fixed;
   inset: 0;
@@ -23,8 +24,35 @@
     align-items: center;
     justify-content: center;
 
-    gap: clamp(1.5rem, 3vw, 2.5rem);
     width: 100%;
+  }
+
+  &__progress {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 3;
+  }
+
+  &__progress-track {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 4px;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--loader-paper) 24%, transparent);
+  }
+
+  &__progress-bar {
+    position: absolute;
+    inset: 0;
+    display: block;
+    background: var(--loader-paper);
+    transform: scaleX(0);
+    transform-origin: left center;
+    backface-visibility: hidden;
+    will-change: transform;
   }
 
   &__mark {
@@ -43,14 +71,20 @@
   }
 
   &__loading {
+    position: absolute;
+    right: var(--content-inset);
+    bottom: max(1.75rem, env(safe-area-inset-bottom, 0px));
+    left: var(--content-inset);
+    z-index: 3;
     display: flex;
     align-items: center;
+    justify-content: center;
 
     padding-left: 0.1em;
 
     color: var(--loader-paper);
     font-family: var(--font-body);
-    font-size: 1.875rem;
+    font-size: clamp(2.25rem, 4vw, 4.5rem);
     font-weight: 500;
     line-height: 1;
     letter-spacing: 0.1em;
@@ -85,28 +119,50 @@
   }
 }
 
-.loader-curtain {
+.loader-transition {
   position: fixed;
   inset: 0;
   z-index: 9999;
-
-  background: #111213;
-  transform-origin: bottom;
+  overflow: hidden;
   pointer-events: none;
+
+  &__row {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: calc(20% + 2px);
+    overflow: hidden;
+
+    @for $index from 1 through 5 {
+      &:nth-child(#{$index}) {
+        top: ($index - 1) * 20%;
+      }
+    }
+  }
+
+  &__block {
+    position: absolute;
+    top: 0;
+    width: 51%;
+    height: 100%;
+    background: var(--color-dark);
+    opacity: 0;
+    visibility: hidden;
+    will-change: transform;
+  }
+
+  &__block--left { left: 0; }
+  &__block--right { right: 0; }
 }
 
 @media (max-width: 768px) {
   .loader {
-    &__content {
-      gap: 1.25rem;
-    }
-
     &__mark {
       width: min(72vw, 320px);
     }
 
     &__loading {
-      font-size: 1.5rem;
+      font-size: clamp(2rem, 10vw, 3.25rem);
     }
   }
 }
@@ -115,10 +171,6 @@
   .loader {
     &__mark {
       width: min(78vw, 17rem);
-    }
-
-    &__loading {
-      font-size: 1.25rem;
     }
   }
 }

@@ -2,7 +2,13 @@ import {
   SectionEyebrow,
   SectionIntro,
 } from "@/components/SectionHeader";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useRef } from "react";
 import "./style.scss";
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const steps = [
   ["01", "Consultation", "Project goals, site, budget, and constraints."],
@@ -25,8 +31,49 @@ const steps = [
 ];
 
 export default function Process() {
+  const rootRef = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      const media = gsap.matchMedia();
+
+      media.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.from('[data-animate="process-step"]', {
+          y: 38,
+          autoAlpha: 0,
+          duration: 0.9,
+          stagger: 0.1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: rootRef.current,
+            start: "top 72%",
+            once: true,
+          },
+        });
+
+        gsap.fromTo(
+          '[data-animate="process-steps"]',
+          { "--process-progress": "0%" },
+          {
+            "--process-progress": "100%",
+            ease: "none",
+            scrollTrigger: {
+              trigger: rootRef.current,
+              start: "top center",
+              end: "bottom center",
+              scrub: true,
+            },
+          },
+        );
+      });
+
+      return () => media.revert();
+    },
+    { scope: rootRef },
+  );
+
   return (
-    <section className="process" id="process">
+    <section ref={rootRef} className="process" id="process">
       <SectionEyebrow className="process__eyebrow">
         06 — Process
       </SectionEyebrow>
