@@ -38,7 +38,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: clamp(8rem, 14vw, 15rem);
+  width: clamp(5.5rem, 9vw, 9rem);
   aspect-ratio: 4 / 5;
   border-radius: clamp(0.4rem, 0.7vw, 0.75rem);
   object-fit: cover;
@@ -46,6 +46,12 @@
   pointer-events: none;
   visibility: hidden;
   will-change: transform, opacity;
+}
+
+@media (max-width: 768px) {
+  .phantom-trail img {
+    width: clamp(4.75rem, 22vw, 7rem);
+  }
 }
 
 .banner-text {
