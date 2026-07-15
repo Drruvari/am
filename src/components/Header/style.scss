@@ -192,6 +192,7 @@ body.is-header-condensed:not(.is-menu-open) .header-cart {
   justify-content: center;
   height: 3.25rem;
   overflow: hidden;
+  border: 1px solid var(--header-action-accent);
   border-radius: 999px;
   background: var(--header-action-accent);
   color: var(--header-action-fill) !important;
