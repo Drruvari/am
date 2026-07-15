@@ -196,9 +196,9 @@ export function updateScrollState() {
 
   document.body.classList.toggle('is-header-compact', isCompact)
 
-  if (isScrollingDown && currentScroll > 48) {
+  if (isScrollingDown && currentScroll > 96) {
     document.body.classList.add('is-header-condensed')
-  } else if (isScrollingUp || currentScroll <= 48) {
+  } else if (isScrollingUp || currentScroll <= 96) {
     document.body.classList.remove('is-header-condensed')
   }
 

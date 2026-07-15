@@ -1,4 +1,5 @@
 import Logo from "@/components/Logo/index";
+import Button from "@/components/Button";
 import { lenis } from "@/lib/smooth-scroll";
 import { gsap } from "gsap";
 import { CustomEase } from "gsap/CustomEase";
@@ -181,25 +182,37 @@ export default function Header() {
 
           <a
             href="mailto:hello@arbermanga.com"
-            className="header-contact header-link"
+            className="header-contact header-link header-action"
             data-hover="link"
             data-magnetic
           >
-            Get in Touch
+            <span className="header-text-effect">
+              <span className="header-text-effect__track">
+                <span>Get in Touch</span>
+                <span aria-hidden="true">Get in Touch</span>
+              </span>
+            </span>
+            <span className="header-action__icon" aria-hidden="true">
+              <span className="header-contact__arrow" />
+            </span>
           </a>
 
-          <button
-            type="button"
-            className="header-cart header-link header-menu-trigger"
+          <Button
+            variant="pill"
+            className="header-cart header-action header-action--menu"
+            innerClassName="header-link header-menu-trigger"
+            labelClassName="header-menu-trigger__label"
             aria-label={isOpen ? "Close menu" : "Open menu"}
             aria-expanded={isOpen}
             aria-controls="headerWipeMenu"
             data-hover="link"
-            data-magnetic
             onClick={toggleMenu}
           >
             <span className="header-menu-trigger__copy">
-              {isOpen ? "Close" : "Menu"}
+              <span className="header-text-effect__track">
+                <span>{isOpen ? "Close" : "Menu"}</span>
+                <span aria-hidden="true">{isOpen ? "Close" : "Menu"}</span>
+              </span>
             </span>
             <span className="header-menu-trigger__icon-wrap">
               <svg
@@ -207,18 +220,18 @@ export default function Header() {
                 className="header-menu-trigger__icon"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 16 16"
-                fill="currentColor"
+                fill="none"
                 aria-hidden="true"
               >
-                <path d="M7.33333 16L7.33333 0L8.66667 0L8.66667 16L7.33333 16Z" />
-                <path d="M16 8.66667L0 8.66667L0 7.33333L16 7.33333L16 8.66667Z" />
-                <path d="M6 7.33333L7.33333 7.33333L7.33333 6C7.33333 6.73637 6.73638 7.33333 6 7.33333Z" />
-                <path d="M10 7.33333L8.66667 7.33333L8.66667 6C8.66667 6.73638 9.26362 7.33333 10 7.33333Z" />
-                <path d="M6 8.66667L7.33333 8.66667L7.33333 10C7.33333 9.26362 6.73638 8.66667 6 8.66667Z" />
-                <path d="M10 8.66667L8.66667 8.66667L8.66667 10C8.66667 9.26362 9.26362 8.66667 10 8.66667Z" />
+                <path
+                  d="M8 2V14M2 8H14"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
               </svg>
             </span>
-          </button>
+          </Button>
         </div>
       </header>
 

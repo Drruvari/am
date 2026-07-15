@@ -31,6 +31,7 @@ function initHeroEases() {
   CustomEase.create("headerEase", "0.17,0.17,0.52,1.00");
   CustomEase.create("titleEase", "0.17,0.17,0.49,1.00");
   CustomEase.create("titleEaseHide", "0.55,0.00,0.83,0.83");
+  CustomEase.create("revealEase", "0.16,1,0.3,1");
   heroEasesInitialized = true;
 }
 
@@ -222,6 +223,55 @@ function initHeroCollectionTransition() {
       timeline.kill();
       resetHeaderTrigger.kill();
       setHeaderOnDark(false);
+    },
+  };
+}
+
+function initMenuTriggerReveal() {
+  const trigger = document.querySelector<HTMLElement>(".header-cart");
+  if (!trigger) return null;
+
+  if (prefersReducedMotion()) {
+    gsap.set(trigger, {
+      autoAlpha: 1,
+      y: 0,
+      scale: 1,
+      pointerEvents: "auto",
+    });
+    return null;
+  }
+
+  gsap.set(trigger, {
+    autoAlpha: 0,
+    y: -10,
+    scale: 0.92,
+    transformOrigin: "50% 50%",
+    pointerEvents: "none",
+  });
+
+  const reveal = gsap
+    .timeline({ paused: true, defaults: { ease: "power2.out" } })
+    .to(trigger, { autoAlpha: 1, y: 0, scale: 1, duration: 1 });
+
+  const scrollTrigger = ScrollTrigger.create({
+    start: 0,
+    end: 280,
+    scrub: 0.8,
+    animation: reveal,
+    onUpdate: (self) => {
+      trigger.style.pointerEvents = self.progress > 0.05 ? "auto" : "none";
+    },
+  });
+
+  reveal.progress(scrollTrigger.progress);
+  trigger.style.pointerEvents =
+    scrollTrigger.progress > 0.05 ? "auto" : "none";
+
+  return {
+    destroy: () => {
+      scrollTrigger.kill();
+      reveal.kill();
+      gsap.set(trigger, { clearProps: "all" });
     },
   };
 }
@@ -531,9 +581,11 @@ function initHomepageScrollStory() {
 function initScrollAnimations() {
   mm.add("(min-width: 0px)", () => {
     const heroAnimation = initHeroCollectionTransition();
+    const menuTriggerReveal = initMenuTriggerReveal();
 
     return () => {
       heroAnimation?.destroy();
+      menuTriggerReveal?.destroy();
 
       document.body.classList.remove("is-hero-pinned", "is-header-on-dark");
       gsap.set(
@@ -691,6 +743,9 @@ function initMagneticButtons() {
     const cleanups = gsap.utils
       .toArray<HTMLElement>(".btn, [data-magnetic]")
       .map((button) => {
+        const isHeaderControl = button.matches(".header-contact, .header-cart");
+        const magneticX = isHeaderControl ? 0.3 : 0.16;
+        const magneticY = isHeaderControl ? 0.38 : 0.22;
         const xTo = gsap.quickTo(button, "x", {
           duration: 0.45,
           ease: "power3.out",
@@ -703,9 +758,9 @@ function initMagneticButtons() {
 
         const onMove = (event: MouseEvent) => {
           const menuOpen = document.body.classList.contains("is-menu-open");
-          const isMenuTrigger = button.classList.contains(
-            "header-menu-trigger",
-          );
+          const isMenuTrigger =
+            button.classList.contains("header-menu-trigger") ||
+            button.querySelector(".header-menu-trigger") !== null;
           if (menuOpen && !isMenuTrigger) {
             xTo(0);
             yTo(0);
@@ -716,8 +771,8 @@ function initMagneticButtons() {
           const relX = event.clientX - rect.left - rect.width / 2;
           const relY = event.clientY - rect.top - rect.height / 2;
 
-          xTo(relX * 0.16);
-          yTo(relY * 0.22);
+          xTo(relX * magneticX);
+          yTo(relY * magneticY);
         };
 
         const onLeave = () => {
@@ -740,7 +795,6 @@ function initMagneticButtons() {
 }
 
 export function initAnimations() {
-  initHomepageScrollStory();
   initProjectCardHover();
   initMagneticButtons();
 }
@@ -817,12 +871,14 @@ export function initLoader() {
   }
 
   const isMobile = window.matchMedia("(max-width: 768px)").matches;
+  const sliderClipRadius = isMobile ? "1rem" : "calc(0.22 * var(--u))";
 
   lenis.stop();
   initHeroEases();
 
   const heroFadeElements = gsap.utils.toArray<HTMLElement>(".banner-reveal");
   const slider = document.querySelector<HTMLElement>(".slider");
+  const sliderItems = gsap.utils.toArray<HTMLElement>(".slider-img");
   const sliderImages = gsap.utils.toArray<HTMLImageElement>(".slider-img img");
   const headerWrap = document.querySelector<HTMLElement>(".header-wrapp");
   const headerWrapTargets = headerWrap ? [headerWrap] : [];
@@ -841,7 +897,11 @@ export function initLoader() {
 
   gsap.set(sliderTargets, {
     yPercent: isMobile ? 0 : 50,
+    clipPath: `inset(18% 0% 18% 0% round ${sliderClipRadius})`,
   });
+
+  gsap.set(sliderItems, { autoAlpha: 0 });
+  gsap.set(sliderItems[0], { autoAlpha: 1 });
 
   gsap.set(".slider-title__item", {
     y: 0,
@@ -903,9 +963,14 @@ export function initLoader() {
 
     lenis.start();
 
-    ScrollTrigger.refresh(true);
+    initHomepageScrollStory();
     initPageScroll();
-    updateScrollState();
+
+    requestAnimationFrame(() => {
+      ScrollTrigger.refresh(true);
+      refreshScrollStory();
+      updateScrollState();
+    });
   };
 
   const revealHero = () => {
@@ -927,7 +992,8 @@ export function initLoader() {
 
     gsap.set(sliderTargets, {
       yPercent: 0,
-      clearProps: "transform",
+      clipPath: `inset(0% 0% 0% 0% round ${sliderClipRadius})`,
+      clearProps: "transform,clipPath",
     });
 
     gsap.set(sliderImages, {
@@ -1030,17 +1096,18 @@ export function initLoader() {
         sliderTargets,
         {
           yPercent: 0,
-          duration: 1.05,
-          ease: "headerEase",
+          clipPath: `inset(0% 0% 0% 0% round ${sliderClipRadius})`,
+          duration: 1.3,
+          ease: "revealEase",
         },
-        "<",
+        0.18,
       )
       .to(
         sliderImages,
         {
           scale: 1.3,
-          duration: 1,
-          ease: "none",
+          duration: 1.3,
+          ease: "revealEase",
         },
         "<",
       );
@@ -1052,9 +1119,7 @@ export function initLoader() {
     progress.val = 100;
     updateProgress();
 
-    const exitTL = gsap.timeline({
-      onComplete: runHeroReveal,
-    });
+    const exitTL = gsap.timeline();
 
     loaderTimeline = exitTL;
 
@@ -1095,6 +1160,7 @@ export function initLoader() {
     }
 
     exitTL
+      .call(runHeroReveal, [], "-=0.45")
       .set(loader, { autoAlpha: 0 })
       .call(hideLoader);
   };
@@ -1127,7 +1193,6 @@ export function initLoader() {
         defaults: {
           ease: "power2.inOut",
         },
-        onComplete: runHeroReveal,
       });
 
       loaderTimeline = loaderTL;
@@ -1237,8 +1302,9 @@ export function initLoader() {
       }
 
       loaderTL
-        .set(loader, { autoAlpha: 0 })
-        .call(hideLoader);
+        .call(runHeroReveal, [], 4.5)
+        .set(loader, { autoAlpha: 0 }, 4.95)
+        .call(hideLoader, [], 4.95);
     } catch (error) {
       console.warn(
         "[loader] Morph/Draw timeline failed, using fallback",

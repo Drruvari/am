@@ -87,11 +87,7 @@ html.is-loading .slider {
   z-index: 1;
   width: 100%;
   height: 38vh;
-  background: linear-gradient(
-    180deg,
-    rgba(53, 51, 47, 0) 9.24%,
-    #3d3830 100%
-  );
+  background: linear-gradient(180deg, rgba(53, 51, 47, 0) 9.24%, #3d3830 100%);
   pointer-events: none;
 }
 
@@ -249,6 +245,20 @@ html.is-loading .slider {
     right: calc(0.28 * var(--u));
     bottom: calc(0.22 * var(--u));
     font-size: calc(0.16 * var(--u));
+  }
+
+  .featured-project__eyebrow {
+    left: var(--content-inset);
+    bottom: auto;
+    max-width: none;
+    font-size: clamp(0.8125rem, 1.05vw, 1rem);
+  }
+
+  .featured-project__title-track {
+    left: 50%;
+    bottom: auto;
+    font-size: clamp(0.8125rem, 1.05vw, 1rem);
+    transform: translate(-50%, -50%);
   }
 }
 
@@ -416,10 +426,17 @@ html.is-loading .slider {
 .philosophy__eyebrow {
   grid-column: 2 / 3;
   align-self: start;
-  font-size: clamp(0.75rem, 0.8vw, 0.875rem);
-  font-weight: 600;
+  font-size: clamp(1rem, 0.8vw, 0.875rem);
+  font-weight: 700;
   line-height: 1;
   text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.philosophy__eyebrow-number {
+  color: #cacfcb;
 }
 
 .philosophy__body {
@@ -605,7 +622,6 @@ html.is-loading .slider {
     text-align: left;
     text-indent: 0;
   }
-
 
   .philosophy__body p,
   .philosophy__body p.split {

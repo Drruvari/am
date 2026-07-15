@@ -15,7 +15,8 @@ export default function Philosophy() {
         </figure>
 
         <p className="philosophy__eyebrow" data-reveal="fade">
-          01 Philosophy
+          <span className="philosophy__eyebrow-number">01</span>
+          Philosophy
         </p>
 
         <p className="philosophy__intro" data-reveal="up-large">
@@ -38,7 +39,8 @@ export default function Philosophy() {
           data-reveal-group="philosophy-footer"
         >
           Architecture
-          <br />&amp; Interior Design
+          <br />
+          &amp; Interior Design
         </p>
 
         <p
