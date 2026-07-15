@@ -821,6 +821,9 @@ export function initLoader() {
 
     revealHero();
 
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    const textEase = isMobile ? "titleEase" : "power4.out";
+
     const targets = {
       meta: gsap.utils.toArray<HTMLElement>(".banner-text .banner-reveal"),
       title: gsap.utils.toArray<HTMLElement>(".banner-title .banner-reveal"),
@@ -886,9 +889,9 @@ export function initLoader() {
         targets.meta,
         {
           yPercent: 0,
-          duration: 0.85,
+          duration: isMobile ? 1.05 : 0.85,
           stagger: 0.08,
-          ease: "power4.out",
+          ease: textEase,
         },
         0.18,
       )
@@ -896,9 +899,9 @@ export function initLoader() {
         targets.title,
         {
           yPercent: 0,
-          duration: 1.1,
+          duration: isMobile ? 1.4 : 1.1,
           stagger: 0.08,
-          ease: "power4.out",
+          ease: textEase,
         },
         0.24,
       )
@@ -906,9 +909,9 @@ export function initLoader() {
         targets.descr,
         {
           yPercent: 0,
-          duration: 0.9,
+          duration: isMobile ? 1.15 : 0.9,
           stagger: 0.08,
-          ease: "power3.out",
+          ease: isMobile ? "titleEase" : "power3.out",
         },
         0.32,
       )
