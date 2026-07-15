@@ -3,8 +3,11 @@
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-gap: calc(0.2 * var(--u));
-  padding: calc(3.19 * var(--u)) 0 calc(0.69 * var(--u));
-  margin: 0 calc(0.2 * var(--u));
+  align-content: end;
+  align-items: start;
+  min-height: 100svh;
+  padding: var(--header-offset) 0 clamp(2.5rem, 8vh, 6.5rem);
+  margin: 0 clamp(1rem, 1.4vw, 1.75rem);
   color: var(--fg);
   background: var(--bg);
 }
@@ -34,9 +37,9 @@
 
 .banner-title {
   grid-column-start: span 3;
-  margin-top: calc(-0.16 * var(--u));
+  margin-top: clamp(-1.5rem, -1vw, -0.5rem);
   font-family: var(--font-heading);
-  font-size: calc(0.93 * var(--u));
+  font-size: clamp(3.75rem, min(6.45vw, 14vh), 9rem);
   font-weight: 500;
   line-height: 1;
   letter-spacing: 0;
@@ -77,9 +80,9 @@ html.is-loading .banner-reveal {
 @media (max-width: 1024px) {
   .banner {
     grid-template-columns: 1fr 1fr;
-    padding: calc(2.2 * var(--u)) 0 calc(0.5 * var(--u));
-    margin: 0 calc(0.16 * var(--u));
-    grid-gap: calc(0.16 * var(--u));
+    gap: clamp(0.75rem, 2vh, 1.25rem) 1.25rem;
+    padding: var(--header-offset) 0 clamp(2rem, 6vh, 4rem);
+    margin: 0 clamp(1rem, 2.5vw, 1.5rem);
   }
 
   .banner-text {
@@ -90,7 +93,7 @@ html.is-loading .banner-reveal {
   .banner-title {
     grid-column: 1 / -1;
     margin-top: 0;
-    font-size: calc(0.7 * var(--u));
+    font-size: clamp(3.25rem, min(9vw, 13vh), 6rem);
   }
 
   .banner-descr {
@@ -103,9 +106,10 @@ html.is-loading .banner-reveal {
 @media (max-width: 768px) {
   .banner {
     grid-template-columns: 1fr;
-    gap: 0.85rem;
+    gap: clamp(0.75rem, 2.2vh, 1.25rem);
     margin: 0 1rem;
-    padding: calc(4.75rem + env(safe-area-inset-top, 0px)) 0 1.25rem;
+    padding: calc(var(--header-offset) + env(safe-area-inset-top, 0px)) 0
+      clamp(1.5rem, 5vh, 3rem);
   }
 
   .banner-text,
@@ -115,19 +119,19 @@ html.is-loading .banner-reveal {
   }
 
   .banner-title {
-    font-size: clamp(2.35rem, 11vw, 3.75rem);
-    line-height: 1.05;
+    font-size: clamp(2.6rem, min(12vw, 9vh), 4.5rem);
+    line-height: 0.98;
   }
 }
 
 @media (max-width: 480px) {
   .banner {
     margin-inline: 0.75rem;
-    padding-top: calc(4.25rem + env(safe-area-inset-top, 0px));
+    padding-top: calc(var(--header-offset) + env(safe-area-inset-top, 0px));
   }
 
   .banner-title {
-    font-size: clamp(2rem, 10vw, 2.85rem);
+    font-size: clamp(2.35rem, min(11.5vw, 8.5vh), 3.5rem);
   }
 
   .banner-text,
@@ -138,11 +142,11 @@ html.is-loading .banner-reveal {
 
 @media (max-height: 600px) and (min-width: 769px) {
   .banner {
-    padding-top: clamp(7rem, 18vh, 9rem);
-    padding-bottom: 2rem;
+    padding-top: var(--header-offset);
+    padding-bottom: clamp(1.5rem, 4vh, 2.5rem);
   }
 
   .banner-title {
-    font-size: clamp(3rem, 7vh, 4.5rem);
+    font-size: clamp(3rem, 12vh, 4.5rem);
   }
 }

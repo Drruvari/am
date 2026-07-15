@@ -227,55 +227,6 @@ function initHeroCollectionTransition() {
   };
 }
 
-function initMenuTriggerReveal() {
-  const trigger = document.querySelector<HTMLElement>(".header-cart");
-  if (!trigger) return null;
-
-  if (prefersReducedMotion()) {
-    gsap.set(trigger, {
-      autoAlpha: 1,
-      y: 0,
-      scale: 1,
-      pointerEvents: "auto",
-    });
-    return null;
-  }
-
-  gsap.set(trigger, {
-    autoAlpha: 0,
-    y: -10,
-    scale: 0.92,
-    transformOrigin: "50% 50%",
-    pointerEvents: "none",
-  });
-
-  const reveal = gsap
-    .timeline({ paused: true, defaults: { ease: "power2.out" } })
-    .to(trigger, { autoAlpha: 1, y: 0, scale: 1, duration: 1 });
-
-  const scrollTrigger = ScrollTrigger.create({
-    start: 0,
-    end: 280,
-    scrub: 0.8,
-    animation: reveal,
-    onUpdate: (self) => {
-      trigger.style.pointerEvents = self.progress > 0.05 ? "auto" : "none";
-    },
-  });
-
-  reveal.progress(scrollTrigger.progress);
-  trigger.style.pointerEvents =
-    scrollTrigger.progress > 0.05 ? "auto" : "none";
-
-  return {
-    destroy: () => {
-      scrollTrigger.kill();
-      reveal.kill();
-      gsap.set(trigger, { clearProps: "all" });
-    },
-  };
-}
-
 function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
@@ -395,68 +346,6 @@ function initPhilosophyMotion() {
     );
 }
 
-function initSelectedWorksMotion() {
-  gsap.utils.toArray<HTMLElement>(".project-card").forEach((card, index) => {
-    const image = card.querySelector("img");
-    const offset = index % 2 === 0 ? -32 : 32;
-
-    gsap.fromTo(
-      card,
-      {
-        y: 96,
-        rotation: index % 2 === 0 ? -1.5 : 1.5,
-        autoAlpha: 0,
-      },
-      {
-        y: 0,
-        rotation: 0,
-        autoAlpha: 1,
-        duration: 1,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: card,
-          start: "top 82%",
-          toggleActions: "play none none reverse",
-        },
-      },
-    );
-
-    gsap.to(card, {
-      y: offset,
-      ease: "none",
-      scrollTrigger: {
-        trigger: card,
-        start: "top bottom",
-        end: "bottom top",
-        scrub: 0.5,
-        invalidateOnRefresh: true,
-      },
-    });
-
-    if (image) {
-      gsap.fromTo(
-        image,
-        {
-          scale: 1.08,
-          yPercent: -6,
-        },
-        {
-          scale: 1.08,
-          yPercent: 6,
-          ease: "none",
-          scrollTrigger: {
-            trigger: card,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 0.45,
-            invalidateOnRefresh: true,
-          },
-        },
-      );
-    }
-  });
-}
-
 function initProcessMotion() {
   const steps = gsap.utils.toArray<HTMLElement>(".process__step");
 
@@ -547,7 +436,6 @@ function initHomepageMotion() {
     }
 
     initPhilosophyMotion();
-    initSelectedWorksMotion();
     initProcessMotion();
     initFooterMotion();
     initLineReveals();
@@ -581,11 +469,9 @@ function initHomepageScrollStory() {
 function initScrollAnimations() {
   mm.add("(min-width: 0px)", () => {
     const heroAnimation = initHeroCollectionTransition();
-    const menuTriggerReveal = initMenuTriggerReveal();
 
     return () => {
       heroAnimation?.destroy();
-      menuTriggerReveal?.destroy();
 
       document.body.classList.remove("is-hero-pinned", "is-header-on-dark");
       gsap.set(
