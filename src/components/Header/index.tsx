@@ -151,10 +151,10 @@ export default function Header() {
 
           <a
             className="header-search header-link"
-            href="#featured-project"
+            href="#about"
             data-hover="link"
           >
-            View Project
+            About Studio
           </a>
 
           <nav className="header-menu" aria-label="Primary">

@@ -33,44 +33,41 @@ export default function Services() {
       ).matches;
       const split = SplitText.create(textElement, { type: "chars,words" });
 
+      const exitMask = section.previousElementSibling?.querySelector(
+        ".selected-works__exit-mask",
+      );
+      const sticky = section.querySelector(".services__sticky");
       const rootStyles = getComputedStyle(document.documentElement);
       const lightBackground = rootStyles.getPropertyValue("--bg").trim();
       const darkBackground = rootStyles.getPropertyValue("--dark").trim();
       const darkText = rootStyles.getPropertyValue("--fg").trim();
       const lightText = rootStyles.getPropertyValue("--white").trim();
-      const sticky = section.querySelector<HTMLElement>(".services__sticky");
-      const outgoingSection = section.previousElementSibling as HTMLElement | null;
 
-      const transition = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: "top bottom",
-          end: "top 35%",
-          scrub: true,
-        },
-      });
-
-      transition.fromTo(
-        sticky,
-        { backgroundColor: lightBackground, color: darkText },
-        { backgroundColor: darkBackground, color: lightText, ease: "none" },
-        0,
-      );
-
-      if (outgoingSection) {
-        transition.fromTo(
-          outgoingSection,
-          {
-            backgroundColor: lightBackground,
-            color: darkText,
-            "--bg": lightBackground,
-            "--fg": darkText,
+      if (exitMask && sticky) {
+        const transition = gsap.timeline({
+          scrollTrigger: {
+            trigger: section,
+            start: "top bottom",
+            end: "top 20%",
+            scrub: 0.4,
           },
+        });
+
+        transition.fromTo(
+          exitMask,
+          { opacity: 0 },
+          {
+            opacity: 1,
+            ease: "none",
+          },
+          0,
+        );
+        transition.fromTo(
+          sticky,
+          { backgroundColor: lightBackground, color: darkText },
           {
             backgroundColor: darkBackground,
             color: lightText,
-            "--bg": darkBackground,
-            "--fg": lightText,
             ease: "none",
           },
           0,
@@ -138,8 +135,6 @@ export default function Services() {
             <p className="services__kicker mono">03</p>
             <h2>Expertise</h2>
           </div>
-          <span className="services__credit mono">gsap · splittext</span>
-          <span className="services__bottom-rule" />
         </div>
       </div>
     </section>

@@ -241,9 +241,6 @@ function initButtons() {
       const labelXTo = textTarget
         ? gsap.quickTo(textTarget, 'x', { duration: 0.34, ease: 'power3.out' })
         : null
-      const labelYTo = textTarget
-        ? gsap.quickTo(textTarget, 'y', { duration: 0.34, ease: 'power3.out' })
-        : null
 
       const onMove = (e: MouseEvent) => {
         const rect = btn.getBoundingClientRect()
@@ -259,10 +256,6 @@ function initButtons() {
             : textStrength
 
           labelXTo(x * textOffset)
-
-          if (!textTrack && labelYTo) {
-            labelYTo(y * textOffset)
-          }
         }
       }
 
@@ -270,9 +263,6 @@ function initButtons() {
         btnXTo(0)
         btnYTo(0)
         labelXTo?.(0)
-        if (!textTrack) {
-          labelYTo?.(0)
-        }
       }
 
       btn.addEventListener('mousemove', onMove)

@@ -52,7 +52,6 @@ function initHeroCollectionTransition() {
   const sliderItems = gsap.utils.toArray<HTMLElement>(".slider-img");
   const sliderImages = gsap.utils.toArray<HTMLImageElement>(".slider-img img");
   const header = document.querySelector<HTMLElement>(".header");
-  const headerLinks = gsap.utils.toArray<HTMLElement>(".header-link");
   const menuTrigger = document.querySelector<HTMLElement>(
     ".header-menu-trigger",
   );
@@ -78,35 +77,6 @@ function initHeroCollectionTransition() {
     document.body.classList.toggle("is-header-on-dark", onDark);
     menuTrigger?.classList.toggle("is-on-dark", onDark);
 
-    if (onDark) {
-      if (header) gsap.set(header, { color: "#ffffff" });
-      if (headerLinks.length) gsap.set(headerLinks, { color: "#ffffff" });
-      if (menuTrigger) gsap.set(menuTrigger, { color: "#ffffff" });
-      if (menuIcon) {
-        gsap.set(menuIcon, {
-          color: "#ffffff",
-          clearProps: "filter",
-        });
-      }
-      if (menuIconPaths.length) {
-        menuIconPaths.forEach((path) => {
-          path.setAttribute("fill", "#ffffff");
-          path.style.fill = "#ffffff";
-        });
-      }
-      return;
-    }
-
-    if (header) gsap.set(header, { clearProps: "color" });
-    if (headerLinks.length) gsap.set(headerLinks, { clearProps: "color" });
-    if (menuTrigger) gsap.set(menuTrigger, { clearProps: "color" });
-    if (menuIcon) gsap.set(menuIcon, { clearProps: "color,filter" });
-    if (menuIconPaths.length) {
-      menuIconPaths.forEach((path) => {
-        path.setAttribute("fill", "currentColor");
-        path.style.removeProperty("fill");
-      });
-    }
   };
 
   if (!banner || !collection || !slider || sliderItems.length === 0) {
@@ -120,12 +90,17 @@ function initHeroCollectionTransition() {
   const sliderRadius = () => `calc(0.22 * ${fluidPad()})`;
 
   const syncHeaderColor = () => {
-    const transitionIsDark = timeline.progress() >= 0.25;
-    const philosophyIsVisible =
-      philosophy !== null &&
-      philosophy.getBoundingClientRect().top <= window.innerHeight * 0.55;
+    const headerLine = (header?.getBoundingClientRect().height ?? 72) * 0.5;
+    const collectionRect = collection.getBoundingClientRect();
+    const philosophyRect = philosophy?.getBoundingClientRect();
+    const collectionIsBehindHeader =
+      collectionRect.top <= headerLine && collectionRect.bottom > headerLine;
+    const philosophyIsBehindHeader =
+      philosophyRect !== undefined &&
+      philosophyRect.top <= headerLine &&
+      philosophyRect.bottom > headerLine;
 
-    setHeaderOnDark(transitionIsDark && !philosophyIsVisible);
+    setHeaderOnDark(collectionIsBehindHeader && !philosophyIsBehindHeader);
   };
 
   gsap.set(collection, {
@@ -210,7 +185,7 @@ function initHeroCollectionTransition() {
   // Only restore dark header chrome once philosophy is in view
   const resetHeaderTrigger = ScrollTrigger.create({
     trigger: ".philosophy",
-    start: "top 55%",
+    start: "top top",
     onToggle: syncHeaderColor,
     onUpdate: syncHeaderColor,
   });

@@ -8,14 +8,14 @@ export default function SelectedWorks() {
   return (
     <section
       id="work"
-      className="selected-works min-h-screen bg-(--bg) text-(--fg)"
+      className="selected-works relative min-h-screen bg-(--bg) text-(--fg)"
     >
       <div
         ref={wrapperRef}
         className="relative"
         style={{ height: `${sections.length * 100}svh` }}
       >
-        <div className="sticky top-0 z-20 flex h-svh w-full translate-y-[clamp(1rem,5svh,4rem)] items-center justify-center overflow-hidden max-sm:translate-y-[2svh]">
+        <div className="sticky top-0 z-20 flex h-svh w-full translate-y-[clamp(1rem,5svh,4rem)] items-center justify-center overflow-hidden max-sm:translate-y-0">
           <SplitCanvasComp wrapperRef={wrapperRef} />
         </div>
 
@@ -47,6 +47,7 @@ export default function SelectedWorks() {
           ))}
         </div>
       </div>
+      <div className="selected-works__exit-mask" aria-hidden="true" />
     </section>
   );
 }
