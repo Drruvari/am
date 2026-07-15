@@ -271,7 +271,7 @@
   .footer__intro,
   .footer__grid,
   .footer__bar {
-    padding-inline: 1rem;
+    padding-inline: var(--content-inset);
   }
 
   .footer__headline {

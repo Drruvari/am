@@ -5,9 +5,9 @@
   grid-gap: calc(0.2 * var(--u));
   align-content: end;
   align-items: start;
-  min-height: 100svh;
+  min-height: 60svh;
   padding: var(--header-offset) 0 clamp(2.5rem, 8vh, 6.5rem);
-  margin: 0 clamp(1rem, 1.4vw, 1.75rem);
+  margin-inline: var(--content-inset);
   color: var(--fg);
   background: var(--bg);
 }
@@ -126,7 +126,7 @@ html.is-loading .banner-reveal {
 
 @media (max-width: 480px) {
   .banner {
-    margin-inline: 0.75rem;
+    margin-inline: var(--content-inset);
     padding-top: calc(var(--header-offset) + env(safe-area-inset-top, 0px));
   }
 

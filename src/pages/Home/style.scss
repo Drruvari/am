@@ -4,11 +4,14 @@
 }
 
 .philosophy,
-.selected-works,
 .services,
 .process,
 .architect-about {
   padding: var(--section-pad) var(--content-inset);
+}
+
+.selected-works {
+  padding-inline: var(--content-inset);
 }
 
 .collection {
@@ -17,7 +20,7 @@
   max-width: 100%;
   min-height: 100svh;
   height: 100svh;
-  padding: 0 calc(0.22 * var(--u));
+  padding-inline: var(--content-inset);
   overflow: hidden;
   z-index: 1;
   background: var(--bg);
@@ -266,7 +269,6 @@ html.is-loading .slider {
   .collection {
     min-height: 100svh;
     height: 100svh;
-    padding: 0 0.75rem;
     overscroll-behavior: auto;
     touch-action: pan-y;
   }
@@ -347,10 +349,6 @@ html.is-loading .slider {
 }
 
 @media (max-width: 480px) {
-  .collection {
-    padding: 0 0.5rem;
-  }
-
   .slider {
     border-radius: 0.75rem;
   }
@@ -372,11 +370,6 @@ html.is-loading .slider {
   object-fit: cover;
 }
 
-.selected-works__title {
-  margin-bottom: 1.5rem;
-}
-
-.selected-works__lede,
 .services__intro p,
 .process__intro p,
 .architect-about__content p {
@@ -472,7 +465,6 @@ html.is-loading .slider {
   line-height: 1.15;
 }
 
-.selected-works__intro,
 .services__intro,
 .process__intro {
   display: grid;
@@ -482,17 +474,10 @@ html.is-loading .slider {
   margin-bottom: clamp(3rem, 6vw, 7rem);
 }
 
-.selected-works__eyebrow,
 .services__eyebrow,
 .process__eyebrow {
   grid-column: 1 / -1;
   margin-bottom: 0;
-}
-
-.selected-works__grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(1.5rem, 4vw, 5rem);
 }
 
 .services__grid {
@@ -553,7 +538,6 @@ html.is-loading .slider {
 
 @media (max-width: 1024px) {
   .philosophy,
-  .selected-works,
   .services,
   .process,
   .architect-about {
@@ -638,7 +622,6 @@ html.is-loading .slider {
     font-size: 0.9375rem;
   }
 
-  .selected-works__intro,
   .services__intro,
   .process__intro,
   .architect-about {
@@ -649,7 +632,6 @@ html.is-loading .slider {
     font-size: clamp(1.5rem, 7vw, 2.5rem);
   }
 
-  .selected-works__grid,
   .services__grid {
     grid-template-columns: 1fr;
   }
@@ -683,14 +665,6 @@ html.is-loading .slider {
 }
 
 @media (max-width: 480px) {
-  .philosophy,
-  .selected-works,
-  .services,
-  .process,
-  .architect-about {
-    padding-inline: 1rem;
-  }
-
   .philosophy__top,
   .philosophy__footer {
     grid-template-columns: 1fr;
@@ -713,10 +687,6 @@ html.is-loading .slider {
   .philosophy__body {
     font-size: clamp(1.9rem, 10vw, 2.75rem);
     letter-spacing: -0.045em;
-  }
-
-  .selected-works__grid {
-    gap: 2.5rem;
   }
 
   .services__item {

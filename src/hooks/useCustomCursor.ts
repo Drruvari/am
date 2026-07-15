@@ -12,21 +12,26 @@ const HOVER_TO_STATE: Record<string, CursorState> = {
 };
 
 const TEXT_CURSOR_SELECTOR = [
-  ".loader__tagline span",
-  ".hero__title",
-  ".hero__meta",
-  ".hero__lede",
-  ".about__line-text",
-  ".archive__title",
-  ".archive__lede",
-  ".gallery__title",
-  ".gallery__lede",
-  ".footer__headline",
-  ".footer__mark",
-  ".footer__block-text",
-  ".project-panel__title",
-  ".project-panel__description",
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6",
+  "p",
+  "span",
+  "li",
+  "dt",
+  "dd",
+  "blockquote",
+  "figcaption",
+  "label",
+  ".eyebrow",
+  ".mono",
 ].join(",");
+
+const INTERACTIVE_CURSOR_SELECTOR =
+  "a, button, input, select, textarea, summary, [role='button'], [contenteditable='true']";
 
 const DESKTOP_CURSOR_QUERY =
   "(min-width: 769px) and (hover: hover) and (pointer: fine)";
@@ -111,6 +116,11 @@ export function useCustomCursor() {
           hoverTarget.getAttribute("data-hover") ||
           "link";
         applyCursorState(HOVER_TO_STATE[key] ?? "pointer");
+        return;
+      }
+
+      if (pointerTarget.closest(INTERACTIVE_CURSOR_SELECTOR)) {
+        applyCursorState("pointer");
         return;
       }
 

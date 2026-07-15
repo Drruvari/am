@@ -6,7 +6,10 @@ export default function SelectedWorks() {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   return (
-    <section id="work" className="min-h-screen bg-(--bg) text-(--fg)">
+    <section
+      id="work"
+      className="selected-works min-h-screen bg-(--bg) text-(--fg)"
+    >
       <div
         ref={wrapperRef}
         className="relative"
@@ -16,11 +19,11 @@ export default function SelectedWorks() {
           <SplitCanvasComp wrapperRef={wrapperRef} />
         </div>
 
-        <div className="pointer-events-none absolute inset-0 z-30 px-(--content-inset)">
+        <div className="pointer-events-none absolute inset-0 z-30">
           {sections.map((section) => (
             <div
               key={section.number}
-              className="relative mx-auto h-svh w-full max-w-[120rem] pt-[clamp(5.75rem,12svh,10rem)] pb-[clamp(2rem,5svh,4rem)] max-sm:pt-[clamp(5.25rem,11svh,6.5rem)] max-sm:pb-5"
+              className="relative h-svh w-full pt-[clamp(5.75rem,12svh,10rem)] pb-[clamp(2rem,5svh,4rem)] max-sm:pt-[clamp(5.25rem,11svh,6.5rem)] max-sm:pb-5"
             >
               <div className="grid grid-cols-3 items-center border-b border-(--fg) pb-[clamp(.65rem,.8vw,.9rem)] text-[clamp(.82rem,1.35vw,1.35rem)] leading-none font-bold tracking-tight uppercase max-sm:text-[.7rem]">
                 <span>Selected Work</span>
