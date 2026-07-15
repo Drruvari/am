@@ -2,6 +2,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { useLayoutEffect, useMemo, useRef } from "react";
+import "./style.scss";
 
 const services = [
   "Architecture",

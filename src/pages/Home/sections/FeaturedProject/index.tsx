@@ -1,5 +1,6 @@
 import { projects } from "@/data/projects";
 import { archImage } from "@/lib/images";
+import "./style.scss";
 
 const featuredProject = projects.flatMap((row) => row.items)[0];
 

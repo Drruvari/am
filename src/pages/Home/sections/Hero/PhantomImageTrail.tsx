@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
-const TRIGGER_DISTANCE = 56;
-const SMOOTHING = 0.18;
+const TRIGGER_DISTANCE = 46;
+const SMOOTHING = 0.14;
 const TRAIL_IMAGES = [
   "https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=700&q=80",
   "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=700&q=80",
@@ -69,25 +69,26 @@ export default function PhantomImageTrail() {
           scale: 0.35,
           rotation: gsap.utils.random(-20, 20),
           zIndex,
+          force3D: true,
         })
         .to(image, {
           scale: 1,
           rotation: 0,
           x: endX,
           y: endY,
-          duration: 0.9,
+          duration: 1.2,
           ease: "expo.out",
         })
         .to(
           image,
           {
             autoAlpha: 0,
-            scale: 0,
-            rotation: gsap.utils.random(-12, 12),
-            duration: 0.8,
-            ease: "power4.inOut",
+            scale: 0.15,
+            rotation: gsap.utils.random(-8, 8),
+            duration: 1.35,
+            ease: "power2.inOut",
           },
-          0.35,
+          0.55,
         );
 
       lastX = event.clientX;

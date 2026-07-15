@@ -223,7 +223,7 @@ export default function SplitCanvasComp({ wrapperRef }: SplitCanvasCompProps) {
   return (
     <div
       ref={containerRef}
-      className="h-[min(52vh,660px)] w-[min(36vw,680px)] overflow-hidden max-lg:h-[min(46vh,520px)] max-lg:w-[min(46vw,470px)] max-sm:h-[min(38vh,390px)] max-sm:w-[min(calc(100vw-3rem),340px)]"
+      className="selected-works__canvas"
     />
   );
 }

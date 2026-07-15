@@ -3,6 +3,7 @@ import type {
   ButtonHTMLAttributes,
   ReactNode,
 } from 'react'
+import './style.scss'
 
 type ButtonVariant = 'pill' | 'rect' | 'circle'
 type ButtonTheme = 'default' | 'dark' | 'soft'

@@ -2,6 +2,7 @@ import {
   SectionEyebrow,
   SectionIntro,
 } from "@/components/SectionHeader";
+import "./style.scss";
 
 const steps = [
   ["01", "Consultation", "Project goals, site, budget, and constraints."],
@@ -35,9 +36,13 @@ export default function Process() {
         conversation to site execution.
       </SectionIntro>
 
-      <div className="process__steps">
+      <div className="process__steps" data-animate="process-steps">
         {steps.map(([number, title, text]) => (
-          <article className="process__step" key={number}>
+          <article
+            className="process__step"
+            data-animate="process-step"
+            key={number}
+          >
             <span className="process__number mono">{number}</span>
             <h3>{title}</h3>
             <p>{text}</p>

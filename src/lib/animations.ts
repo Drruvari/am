@@ -288,7 +288,9 @@ function initRevealGroup({
 }
 
 function initPhilosophyMotion() {
-  const lines = gsap.utils.toArray<HTMLElement>(".philosophy__body p");
+  const lines = gsap.utils.toArray<HTMLElement>(
+    '[data-animate="philosophy-line"]',
+  );
   if (!lines.length) return;
 
   gsap.set(lines, {
@@ -322,7 +324,9 @@ function initPhilosophyMotion() {
 }
 
 function initProcessMotion() {
-  const steps = gsap.utils.toArray<HTMLElement>(".process__step");
+  const steps = gsap.utils.toArray<HTMLElement>(
+    '[data-animate="process-step"]',
+  );
 
   steps.forEach((step) => {
     gsap.fromTo(
@@ -350,7 +354,7 @@ function initProcessMotion() {
   });
 
   gsap.fromTo(
-    ".process__steps",
+    '[data-animate="process-steps"]',
     {
       "--process-progress": "0%",
     },
@@ -393,10 +397,9 @@ function initHomepageMotion() {
         [
           ".featured-project__media",
           ".featured-project__content > *",
-          ".philosophy__body p",
+          '[data-animate="philosophy-line"]',
           ".project-card",
-          ".services__item",
-          ".process__step",
+          '[data-animate="process-step"]',
           ".architect-about__image",
           ".architect-about__content > *",
           ".footer",

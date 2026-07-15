@@ -1,4 +1,5 @@
 import { archImage } from "@/lib/images";
+import "./style.scss";
 
 export default function Philosophy() {
   return (
@@ -26,7 +27,7 @@ export default function Philosophy() {
       </div>
 
       <div className="philosophy__body">
-        <p>
+        <p data-animate="philosophy-line">
           AM is a Tirana-based architecture studio shaping grounded spaces
           through strong form, natural balance, and lasting material character.
         </p>

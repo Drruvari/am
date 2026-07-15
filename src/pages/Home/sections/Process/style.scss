@@ -1,0 +1,37 @@
+.process {
+  padding: var(--section-pad) var(--content-inset);
+
+  &__intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(min(100%, 24rem), 0.5fr);
+    align-items: end;
+    gap: clamp(1.5rem, 5vw, 6rem);
+    margin-bottom: clamp(3rem, 6vw, 7rem);
+
+    p { max-width: 32rem; margin-bottom: 2rem; color: var(--muted); }
+  }
+
+  &__eyebrow { grid-column: 1 / -1; margin-bottom: 0; }
+  &__steps { position: relative; display: grid; gap: 1px; background: var(--line); }
+  &__steps::before { content: ""; position: absolute; z-index: 2; top: 0; left: 0; width: 1px; height: var(--process-progress, 0%); background: var(--fg); pointer-events: none; }
+  &__step { display: grid; grid-template-columns: 4rem minmax(0, 0.5fr) minmax(0, 1fr); gap: 1.5rem; padding: clamp(1.25rem, 3vw, 2.5rem); background: var(--bg); transition: background 0.35s ease, color 0.35s ease; }
+  &__step.is-active { background: color-mix(in srgb, var(--fg) 4%, var(--bg)); }
+  &__step h3 { font-size: clamp(1.6rem, 3vw, 3rem); line-height: 1; }
+  &__step p { max-width: 28rem; color: var(--muted); }
+}
+
+@media (max-width: 1024px) {
+  .process { padding-block: clamp(4.5rem, 10vw, 7rem); }
+  .process__step { grid-template-columns: 3.5rem minmax(10rem, 0.65fr) minmax(0, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .process__intro { grid-template-columns: 1fr; }
+  .process__step { grid-template-columns: 2.75rem minmax(0, 1fr); gap: 0.75rem 1rem; }
+  .process__step p { grid-column: 2; }
+}
+
+@media (max-width: 480px) {
+  .process__step { grid-template-columns: 1fr; }
+  .process__step p { grid-column: 1; }
+}

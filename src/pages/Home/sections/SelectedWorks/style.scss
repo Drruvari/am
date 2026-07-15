@@ -1,0 +1,185 @@
+.selected-works {
+  position: relative;
+  min-height: 100svh;
+  padding-inline: var(--content-inset);
+  background: var(--bg);
+  color: var(--fg);
+
+  &__track {
+    position: relative;
+  }
+
+  &__sticky {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    width: 100%;
+    height: 100svh;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transform: translateY(clamp(1rem, 5svh, 4rem));
+  }
+
+  &__canvas {
+    width: min(36vw, 680px);
+    height: min(52vh, 660px);
+    overflow: hidden;
+  }
+
+  &__content {
+    position: absolute;
+    z-index: 30;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  &__panel {
+    position: relative;
+    width: 100%;
+    height: 100svh;
+    padding-block: clamp(5.75rem, 12svh, 10rem)
+      clamp(2rem, 5svh, 4rem);
+  }
+
+  &__meta {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: center;
+    padding-bottom: clamp(0.65rem, 0.8vw, 0.9rem);
+    border-bottom: 1px solid var(--fg);
+    font-size: clamp(0.82rem, 1.35vw, 1.35rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.025em;
+    text-transform: uppercase;
+  }
+
+  &__number {
+    text-align: center;
+    opacity: 0.15;
+  }
+
+  &__period {
+    text-align: right;
+  }
+
+  &__title {
+    position: absolute;
+    top: clamp(9.5rem, 23svh, 15rem);
+    left: clamp(0rem, 6vw, 7rem);
+    width: min(24vw, 24rem);
+    font-family: var(--font-body);
+    font-size: clamp(1.35rem, 1.6vw, 1.9rem);
+    font-weight: inherit;
+    line-height: 1.12;
+    letter-spacing: -0.045em;
+    text-transform: none;
+  }
+
+  &__summary {
+    position: absolute;
+    right: clamp(0rem, 2vw, 2.5rem);
+    bottom: clamp(2rem, 6svh, 5rem);
+    width: min(19vw, 20rem);
+  }
+
+  &__description {
+    color: var(--fg);
+    font-family: var(--font-body);
+    font-size: clamp(1rem, 1.3vw, 1.3rem);
+    line-height: 1.4;
+    opacity: 0.55;
+  }
+
+  &__year {
+    display: block;
+    margin-top: 0.75rem;
+    font-family: var(--font-body);
+    font-size: clamp(0.7rem, 0.75vw, 0.8rem);
+    letter-spacing: 0.08em;
+    opacity: 0.35;
+  }
+
+  &__exit-mask {
+    position: absolute;
+    z-index: 40;
+    inset: 0;
+    background: var(--dark);
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+@media (max-width: 1024px) {
+  .selected-works {
+    &__canvas {
+      width: min(46vw, 470px);
+      height: min(46vh, 520px);
+    }
+
+    &__title {
+      left: 0;
+      width: 26%;
+      font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+    }
+
+    &__summary {
+      right: 0;
+      width: 25%;
+    }
+
+    &__description {
+      font-size: clamp(0.9rem, 1.7vw, 1.05rem);
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .selected-works {
+    &__sticky {
+      transform: none;
+    }
+
+    &__canvas {
+      width: min(calc(100vw - 3rem), 340px);
+      height: min(38vh, 390px);
+    }
+
+    &__panel {
+      padding-top: clamp(5.25rem, 11svh, 6.5rem);
+      padding-bottom: 1.25rem;
+    }
+
+    &__meta {
+      font-size: 0.7rem;
+    }
+
+    &__title {
+      top: clamp(8rem, 17svh, 9.5rem);
+      width: 100%;
+      padding-inline: 1.25rem;
+      font-size: clamp(1rem, 4.8vw, 1.2rem);
+      line-height: 1.1;
+      text-align: center;
+    }
+
+    &__summary {
+      right: 0;
+      bottom: clamp(1.25rem, 3svh, 2rem);
+      width: 100%;
+      padding-inline: 1.5rem;
+      text-align: center;
+    }
+
+    &__description {
+      font-size: 0.88rem;
+      line-height: 1.35;
+    }
+
+    &__year {
+      margin-top: 0.5rem;
+    }
+  }
+}

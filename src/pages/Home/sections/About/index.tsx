@@ -1,5 +1,6 @@
 import { SectionEyebrow } from "@/components/SectionHeader";
 import { archImage } from "@/lib/images";
+import "./style.scss";
 
 export default function About() {
   return (

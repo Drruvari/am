@@ -1,0 +1,44 @@
+@use "./breakpoints" as *;
+
+:root {
+  --fluid-unit: 6.9444444444vw;
+  --color-background: #fffaf6;
+  --color-foreground: #131313;
+  --color-dark: #131313;
+  --color-white: #fff;
+  --page-inset: 1.25rem;
+  --section-space: clamp(4rem, 6vw + 2rem, 12rem);
+
+  --u: var(--fluid-unit);
+  --bg: var(--color-background);
+  --fg: var(--color-foreground);
+  --dark: var(--color-dark);
+  --beige: var(--color-background);
+  --white: var(--color-white);
+  --accent: var(--color-foreground);
+  --hover: var(--color-foreground);
+  --panel: var(--color-background);
+  --muted: var(--color-foreground);
+  --line: var(--color-foreground);
+  --page-margin: var(--page-inset);
+  --page-gutter: var(--page-inset);
+  --page-max: 90rem;
+  --content-inset: var(--page-inset);
+  --section-pad: var(--section-space);
+  --header-offset: clamp(4.75rem, 5vw + 3rem, 6.5rem);
+  --radius-sm: clamp(0.75rem, 1.5vw, 1.25rem);
+  --radius-lg: clamp(1.25rem, 3vw, 4rem);
+  --font-display: "Bricolage Grotesque", sans-serif;
+  --font-heading: "Bricolage Grotesque", sans-serif;
+  --font-body: "Manrope", sans-serif;
+  --font-mono: "Manrope", sans-serif;
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  color-scheme: light;
+}
+
+@include below($bp-md) {
+  :root {
+    --section-space: clamp(3.5rem, 10vw + 1rem, 5rem);
+    --header-offset: calc(4.75rem + env(safe-area-inset-top, 0px));
+  }
+}
