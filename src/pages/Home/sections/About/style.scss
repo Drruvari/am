@@ -4,6 +4,8 @@
   align-items: center;
   gap: clamp(1.5rem, 5vw, 6rem);
   padding: var(--section-pad) var(--content-inset);
+  color: var(--white);
+  background: var(--dark);
 
   &__image {
     grid-column: 1 / 6;
@@ -25,8 +27,9 @@
     }
   }
 
-  &__content p { max-width: 32rem; margin-bottom: 2rem; color: var(--muted); }
-  &__facts { display: grid; gap: 0.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+  &__content p { max-width: 32rem; margin-bottom: 2rem; color: color-mix(in srgb, var(--white) 62%, transparent); }
+  &__facts { display: grid; gap: 0.5rem; padding-top: 1.5rem; border-top: 1px solid color-mix(in srgb, var(--white) 20%, transparent); }
+  &__eyebrow { color: var(--white); }
 }
 
 @media (max-width: 1024px) {

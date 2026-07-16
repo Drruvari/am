@@ -23,7 +23,7 @@ export default function About() {
           data-reveal="fade"
           data-reveal-group="about-copy"
         >
-          07 — About
+          05 — About
         </SectionEyebrow>
 
         <h2 data-split-lines>Arbër Manga</h2>
