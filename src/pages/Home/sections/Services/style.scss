@@ -23,20 +23,79 @@
     flex: none;
     gap: 4vw;
     color: currentcolor;
-    font: 750 clamp(3.5rem, 8vw, 9rem)/1.1 var(--font-heading);
-    letter-spacing: -0.055em;
+    font: 750 var(--display-1)/1.1 var(--font-heading);
+    letter-spacing: var(--tracking-display);
     white-space: nowrap;
   }
 
-  &__cover { position: absolute; z-index: 2; inset: 0; pointer-events: none; }
-  &__glow { position: absolute; inset: 0; background: radial-gradient(ellipse 70% 55% at 50% 52%, currentcolor, transparent 70%); opacity: 0.06; }
-  &__intro { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(1.5rem, 2.4vw, 2.4rem); text-align: center; }
-  &__kicker { color: currentcolor; font-size: 0.6875rem; letter-spacing: 0.3em; text-transform: uppercase; opacity: 0.48; }
-  &__intro h2 { max-width: 14ch; color: currentcolor; font: 500 clamp(3.5rem, 8vw, 9rem)/0.85 var(--font-heading); letter-spacing: -0.05em; }
-  &__credit { position: absolute; bottom: 2.2rem; left: 2.4rem; color: currentcolor; font-size: 0.625rem; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.4; }
-  &__bottom-rule { position: absolute; right: 10%; bottom: 0; left: 10%; height: 1px; background: linear-gradient(to right, transparent, currentcolor, transparent); opacity: 0.12; }
+  &__cover {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    pointer-events: none;
+  }
+  &__glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      ellipse 70% 55% at 50% 52%,
+      currentcolor,
+      transparent 70%
+    );
+    opacity: 0.06;
+  }
+  &__intro {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(1.5rem, 2.4vw, 2.4rem);
+    text-align: center;
+  }
+  &__kicker {
+    color: currentcolor;
+    font-size: 0.6875rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    opacity: 0.48;
+  }
+  &__intro h2 {
+    max-width: 14ch;
+    color: currentcolor;
+    font: 500 var(--display-1)/var(--lh-display-tight) var(--font-heading);
+    letter-spacing: var(--tracking-display);
+  }
+  &__credit {
+    position: absolute;
+    bottom: 2.2rem;
+    left: 2.4rem;
+    color: currentcolor;
+    font-size: 0.625rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.4;
+  }
+  &__bottom-rule {
+    position: absolute;
+    right: 10%;
+    bottom: 0;
+    left: 10%;
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      currentcolor,
+      transparent
+    );
+    opacity: 0.12;
+  }
 }
 
 @media (max-width: 480px) {
-  .services__credit { bottom: 1.25rem; left: 1.25rem; }
+  .services__credit {
+    bottom: 1.25rem;
+    left: 1.25rem;
+  }
 }

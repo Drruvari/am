@@ -1,13 +1,21 @@
 @use "./breakpoints" as *;
 
 html {
-  scroll-padding-top: calc(var(--header-offset) + env(safe-area-inset-top, 0px));
+  scroll-padding-top: calc(
+    var(--header-offset) + env(safe-area-inset-top, 0px)
+  );
 
-  &.lenis { height: auto; }
-  &.is-loading { overflow: hidden; }
+  &.lenis {
+    height: auto;
+  }
+  &.is-loading {
+    overflow: hidden;
+  }
   &.is-loading .site-header,
   &.is-loading .header,
-  &.is-loading .hero__body { visibility: hidden; }
+  &.is-loading .hero__body {
+    visibility: hidden;
+  }
 }
 
 body {
@@ -30,29 +38,53 @@ body {
       linear-gradient(90deg, var(--line) 1px, transparent 1px);
     background-size: 72px 72px;
     opacity: 0.12;
-    mask-image: linear-gradient(to bottom, transparent, var(--fg) 12%, var(--fg) 88%, transparent);
+    mask-image: linear-gradient(
+      to bottom,
+      transparent,
+      var(--fg) 12%,
+      var(--fg) 88%,
+      transparent
+    );
     pointer-events: none;
   }
 
   &.is-project-panel-open,
   &.is-menu-open,
-  &.is-scroll-locked { overflow: hidden; }
+  &.is-scroll-locked {
+    overflow: hidden;
+  }
 
-  &.is-scroll-locked { position: fixed; inset: 0 auto auto 0; width: 100%; }
+  &.is-scroll-locked {
+    position: fixed;
+    inset: 0 auto auto 0;
+    width: 100%;
+  }
   &.has-custom-cursor,
-  &.has-custom-cursor * { cursor: none !important; }
+  &.has-custom-cursor * {
+    cursor: none !important;
+  }
   &:not(.has-custom-cursor) button,
-  &:not(.has-custom-cursor) a { cursor: pointer; }
-  &::-webkit-scrollbar { display: none; }
+  &:not(.has-custom-cursor) a {
+    cursor: pointer;
+  }
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .lenis.lenis-smooth {
   scroll-behavior: auto;
-  [data-lenis-prevent] { overscroll-behavior: contain; }
+  [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
 }
 
-.lenis.lenis-stopped { overflow: hidden; }
-.lenis.lenis-scrolling iframe { pointer-events: none; }
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
 
 main {
   position: relative;
@@ -73,12 +105,15 @@ h3 {
   font-family: var(--font-heading);
   font-weight: 800;
   font-optical-sizing: auto;
-  line-height: 0.9;
-  letter-spacing: 0;
+  line-height: var(--lh-display-tight);
+  letter-spacing: var(--tracking-display);
   text-wrap: balance;
 }
 
-h2 { font-size: clamp(3rem, 6vw, 5.5rem); text-transform: uppercase; }
+h2 {
+  font-size: var(--display-2);
+  text-transform: uppercase;
+}
 
 p,
 .hero__lede,
@@ -93,12 +128,21 @@ p,
 }
 
 @include below($bp-md) {
-  body { touch-action: pan-y; -webkit-overflow-scrolling: touch; }
-  main { margin-bottom: 0; }
+  body {
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
+  }
+  main {
+    margin-bottom: 0;
+  }
   body.has-custom-cursor,
-  body.has-custom-cursor * { cursor: auto !important; }
+  body.has-custom-cursor * {
+    cursor: auto !important;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
+  html {
+    scroll-behavior: auto;
+  }
 }

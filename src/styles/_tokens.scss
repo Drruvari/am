@@ -33,6 +33,36 @@
   --font-body: "Manrope", sans-serif;
   --font-mono: "Manrope", sans-serif;
   --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+
+  /*
+   * Shared display type scale.
+   * Every "big statement" headline (hero title, philosophy line, services
+   * kinetic text, footer headline, archive title, base h2) should pull from
+   * one of these two sizes instead of hand-rolling its own clamp(). This is
+   * what keeps the jump between sections feeling like one type system.
+   */
+  --display-1: clamp(
+    3.75rem,
+    4vw + 2.5rem,
+    10rem
+  ); /* hero / largest single statement */
+  --display-2: clamp(3rem, 3vw + 2rem, 6.5rem); /* section headlines */
+  --tracking-display: -0.03em;
+  --lh-display-tight: 0.86;
+  --lh-display-normal: 1.05;
+
+  /* Shared grid rhythm — one gap value for every column grid on the page. */
+  --grid-columns: 12;
+  --grid-gap: clamp(0.75rem, 1.5vw, 1.75rem);
+
+  /*
+   * Dark / inverse sections (About, Services, Gallery) should read off this
+   * one palette instead of each section redefining --bg/--fg locally.
+   */
+  --muted-on-dark: color-mix(in srgb, var(--color-white) 62%, transparent);
+  --line-on-dark: color-mix(in srgb, var(--color-white) 20%, transparent);
+  --panel-on-dark: color-mix(in srgb, var(--color-white) 8%, var(--color-dark));
+
   color-scheme: light;
 }
 

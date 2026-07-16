@@ -25,9 +25,9 @@
 
 .footer__headline {
   color: var(--fg);
-  font-size: clamp(3.3rem, 7.4vw, 7.6rem);
-  line-height: 0.88;
-  letter-spacing: 0;
+  font-size: var(--display-2);
+  line-height: var(--lh-display-tight);
+  letter-spacing: var(--tracking-display);
   text-transform: uppercase;
 }
 
@@ -229,8 +229,7 @@
   .footer__bar {
     grid-template-columns: 1fr;
     gap: 0.65rem;
-    padding:
-      1.15rem var(--content-inset)
+    padding: 1.15rem var(--content-inset)
       calc(var(--page-margin) + env(safe-area-inset-bottom, 0px));
   }
 
@@ -293,11 +292,5 @@
   .footer__cta .btn__label > span:first-child {
     max-width: none;
     line-height: 1.2;
-  }
-}
-
-@media (min-width: 90rem) {
-  .footer__headline {
-    font-size: min(7.6rem, 6vw);
   }
 }
