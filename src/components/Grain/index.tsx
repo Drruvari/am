@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
 
-const GRAIN_WIDTH = 1440;
-const GRAIN_HEIGHT = 810;
-const GRAIN_FRAME_COUNT = 8;
-const FRAME_INTERVAL = 1000 / 10;
+const GRAIN_WIDTH = 960;
+const GRAIN_HEIGHT = 540;
+const GRAIN_FRAME_COUNT = 6;
+const FRAME_INTERVAL = 1000 / 16;
 
 export default function Grain() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);

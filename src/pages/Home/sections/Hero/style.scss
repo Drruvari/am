@@ -1,10 +1,12 @@
 .banner {
   position: relative;
   display: grid;
-  grid-template-rows: 1fr auto auto;
-  place-items: center;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: minmax(0, 1fr) auto;
+  column-gap: var(--grid-gap);
   width: 100%;
   height: 100svh;
+  padding: var(--header-offset) var(--content-inset) 0;
   overflow: hidden;
   color: #eeeee9;
   background: #171817;
@@ -24,7 +26,7 @@
 .banner-media {
   z-index: -3;
   object-fit: cover;
-  object-position: center;
+  object-position: center 46%;
 }
 
 .banner-canvas {
@@ -40,7 +42,9 @@
 
 .banner-shade {
   z-index: -1;
-  background: linear-gradient(180deg, transparent 45%, rgb(9 10 9 / 0.62) 100%);
+  background:
+    linear-gradient(90deg, rgb(9 10 9 / 0.28), transparent 48%),
+    linear-gradient(180deg, transparent 38%, rgb(9 10 9 / 0.78) 100%);
   pointer-events: none;
 }
 
@@ -52,7 +56,6 @@
   user-select: none;
 }
 
-.banner-text,
 .banner-descr,
 .banner-title {
   position: relative;
@@ -61,46 +64,48 @@
   pointer-events: none;
 }
 
-.banner-text {
-  align-self: end;
-  justify-self: start;
-  margin-left: var(--content-inset);
-  margin-bottom: clamp(1.5rem, 3vh, 2.75rem);
-}
-
-.banner-orbit {
-  display: block;
-  width: clamp(3.75rem, 4.5vw, 5.5rem);
-  color: currentColor;
-
-  ellipse,
-  path {
-    stroke: currentColor;
-    stroke-width: 1;
-    vector-effect: non-scaling-stroke;
-  }
-}
-
 .banner-descr {
-  justify-self: start;
-  width: min(30rem, calc(100% - 2rem));
-  margin-left: var(--content-inset);
+  grid-column: 1 / -1;
+  align-self: center;
+  width: 100%;
+  margin-bottom: 0;
   text-align: left;
-  font: 600 clamp(1rem, 1.15vw, 1.375rem)/1.12 var(--font-body);
-  letter-spacing: -0.035em;
+  font: 600 clamp(0.875rem, 0.8vw, 1rem)/1.25 var(--font-body);
+  letter-spacing: -0.025em;
 }
 
-.banner-descr__break {
+.banner-descr .banner-reveal {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--grid-gap);
+  align-items: center;
+}
+
+.banner-descr__lead {
   display: block;
-  margin-top: 1.25em;
+  grid-column: 1 / span 4;
+  max-width: 30rem;
+  font-size: clamp(1.125rem, 1.35vw, 1.5rem);
+  line-height: 1.08;
+  pointer-events: auto;
+}
+
+.banner-descr__aside {
+  display: block;
+  grid-column: 10 / -1;
+  justify-self: end;
+  max-width: 15rem;
+  color: rgb(238 238 233 / 0.72);
+  pointer-events: auto;
 }
 
 .banner-title {
+  grid-column: 1 / -1;
   align-self: end;
-  width: calc(100% - (2 * var(--content-inset)));
+  width: 100%;
   height: 0.94em;
-  margin: clamp(2.5rem, 7vh, 6rem) var(--content-inset) 0;
-  color: rgb(216 216 210 / 0.82);
+  margin-top: 0;
+  color: rgb(238 238 233 / 0.9);
   font: 500 clamp(5rem, 14vw, 17rem)/0.84 var(--font-heading);
   font-stretch: 100%;
   font-variation-settings: "wdth" 100;
@@ -129,6 +134,7 @@
   display: inline-block;
   transform: scaleX(var(--banner-title-scale, 1));
   transform-origin: center;
+  pointer-events: auto;
 }
 
 .split {
@@ -148,7 +154,9 @@ html.is-loading .banner-reveal {
 
 @media (max-width: 768px) {
   .banner {
-    grid-template-rows: minmax(10rem, 1fr) auto auto;
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) auto;
+    padding-inline: var(--content-inset);
     touch-action: pan-y;
   }
 
@@ -156,32 +164,47 @@ html.is-loading .banner-reveal {
     object-position: 52% center;
   }
 
-  .banner-text {
-    margin-bottom: 1.5rem;
+  .banner-descr {
+    grid-column: 1;
+    align-self: end;
+    width: min(25rem, 100%);
+    margin-bottom: clamp(2rem, 5vh, 3.5rem);
   }
 
-  .banner-descr {
-    width: min(23rem, calc(100% - (2 * var(--content-inset))));
-    margin-right: var(--content-inset);
-    font-size: clamp(0.9375rem, 4vw, 1.125rem);
+  .banner-descr .banner-reveal {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .banner-descr__lead {
+    grid-column: auto;
+    font-size: clamp(1rem, 4.5vw, 1.25rem);
+  }
+
+  .banner-descr__aside {
+    grid-column: auto;
+    justify-self: start;
+    max-width: 19rem;
+    font-size: 0.8125rem;
   }
 
   .banner-title {
-    width: calc(100% - (2 * var(--content-inset)));
+    grid-column: 1;
+    width: 100%;
     height: 0.98em;
-    margin: clamp(3rem, 7vh, 5rem) var(--content-inset) 0;
+    margin-top: 0;
     font-size: clamp(3.25rem, 15.5vw, 7rem);
     line-height: 0.88;
   }
 }
 
 @media (max-height: 650px) {
-  .banner-text {
-    margin-bottom: 1rem;
+  .banner-descr {
+    margin-bottom: 1.5rem;
   }
 
-  .banner-descr__break {
-    margin-top: 0.75em;
+  .banner-descr .banner-reveal {
+    gap: 0.75rem;
   }
 
   .banner-title {

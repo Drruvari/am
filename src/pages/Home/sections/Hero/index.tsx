@@ -16,7 +16,10 @@ export default function Hero() {
       const naturalWidth = text.offsetWidth;
       if (naturalWidth > 0) {
         const safeWidth = Math.max(0, title.clientWidth - 32);
-        text.style.setProperty("--banner-title-scale", `${safeWidth / naturalWidth}`);
+        text.style.setProperty(
+          "--banner-title-scale",
+          `${safeWidth / naturalWidth}`,
+        );
       }
     };
     const observer = new ResizeObserver(fitTitle);
@@ -44,22 +47,13 @@ export default function Hero() {
       <div className="banner-shade" aria-hidden="true" />
       <div className="banner-mask" aria-hidden="true" />
 
-      <div className="banner-text split">
-        <span className="banner-reveal" aria-hidden="true">
-          <svg className="banner-orbit" viewBox="0 0 88 40" fill="none">
-            <ellipse cx="44" cy="20" rx="42" ry="18" />
-            <ellipse cx="44" cy="20" rx="25" ry="18" />
-            <ellipse cx="44" cy="20" rx="9" ry="18" />
-            <path d="M4 14h80M2 20h84M4 26h80" />
-          </svg>
-        </span>
-      </div>
-
       <div className="banner-descr split">
         <span className="banner-reveal">
-          Architecture shaped through light, proportion, and the particular
-          character of each site.
-          <span className="banner-descr__break">
+          <span className="banner-descr__lead">
+            Architecture shaped through light, proportion, and the particular
+            character of each site.
+          </span>
+          <span className="banner-descr__aside">
             Direct collaboration from first sketch to built detail.
           </span>
         </span>
