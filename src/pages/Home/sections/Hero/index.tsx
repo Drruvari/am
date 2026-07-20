@@ -1,24 +1,79 @@
+import { heroImage } from "@/lib/images";
+import { useLayoutEffect, useRef } from "react";
+import HeroCanvas from "./HeroCanvas";
 import "./style.scss";
 
 export default function Hero() {
+  const titleRef = useRef<HTMLHeadingElement | null>(null);
+  const titleTextRef = useRef<HTMLSpanElement | null>(null);
+
+  useLayoutEffect(() => {
+    const title = titleRef.current;
+    const text = titleTextRef.current;
+    if (!title || !text) return;
+
+    const fitTitle = () => {
+      const naturalWidth = text.offsetWidth;
+      if (naturalWidth > 0) {
+        const safeWidth = Math.max(0, title.clientWidth - 32);
+        text.style.setProperty("--banner-title-scale", `${safeWidth / naturalWidth}`);
+      }
+    };
+    const observer = new ResizeObserver(fitTitle);
+
+    observer.observe(title);
+    document.fonts?.ready.then(fitTitle);
+    fitTitle();
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section className="banner" id="hero">
+      <img
+        className="banner-media"
+        src={heroImage}
+        alt=""
+        width={6446}
+        height={3635}
+        loading="eager"
+        decoding="async"
+        draggable={false}
+      />
+      <HeroCanvas image={heroImage} />
+      <div className="banner-shade" aria-hidden="true" />
       <div className="banner-mask" aria-hidden="true" />
 
       <div className="banner-text split">
-        <span className="banner-reveal">Inspired house solutions</span>
-      </div>
-
-      <div className="banner-title split" id="heroTitle">
-        <span className="banner-reveal">Your home, your reflect/on.</span>
+        <span className="banner-reveal" aria-hidden="true">
+          <svg className="banner-orbit" viewBox="0 0 88 40" fill="none">
+            <ellipse cx="44" cy="20" rx="42" ry="18" />
+            <ellipse cx="44" cy="20" rx="25" ry="18" />
+            <ellipse cx="44" cy="20" rx="9" ry="18" />
+            <path d="M4 14h80M2 20h84M4 26h80" />
+          </svg>
+        </span>
       </div>
 
       <div className="banner-descr split">
         <span className="banner-reveal">
-          Independent residential, interior, and spatial studies focused on
-          restraint, proportion, and atmosphere.
+          We design considered spaces that bring clarity, atmosphere, and
+          lasting value to everyday life.
+          <span className="banner-descr__break">
+            For people whose ambitions have outgrown the spaces around them.
+          </span>
         </span>
       </div>
+
+      <h1 ref={titleRef} className="banner-title split" id="heroTitle">
+        <span className="banner-title__mask">
+          <span className="banner-reveal">
+            <span ref={titleTextRef} className="banner-title__text">
+              ARBËR MANGA
+            </span>
+          </span>
+        </span>
+      </h1>
     </section>
   );
 }

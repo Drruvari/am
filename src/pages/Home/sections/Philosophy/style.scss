@@ -1,176 +1,194 @@
 .philosophy {
-  display: block;
-  min-height: 100svh;
-  padding: var(--section-pad) var(--content-inset);
-  background: var(--bg);
+  position: relative;
+  z-index: 5;
+  height: 280svh;
+  margin-top: 0;
+  background: transparent;
+  color: #f2f2ed;
 
-  &__top,
-  &__footer {
+  &__stage {
+    position: sticky;
+    top: 0;
+    z-index: 1;
     display: grid;
-    grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
-    column-gap: var(--grid-gap);
+    width: 100%;
+    height: 100svh;
+    place-items: center;
+    overflow: hidden;
+    padding: var(--content-inset);
+    border-radius: 22px 22px 0 0;
+    background: #0b0b0b;
+  }
+
+  &__composition {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(8.5rem, 12vw, 13.5rem) minmax(0, 1fr);
+    align-items: center;
+    width: min(100%, 92rem);
+    column-gap: clamp(0.75rem, 1.4vw, 1.75rem);
+  }
+
+  &__headline {
+    position: relative;
+    z-index: 3;
+    margin: 0;
+    font: 700 clamp(3.25rem, 6.8vw, 8.5rem) / 0.82 var(--font-heading);
+    letter-spacing: -0.075em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    will-change: transform;
+
+    &--left {
+      justify-self: end;
+      text-align: right;
+    }
+
+    &--right {
+      justify-self: start;
+      text-align: left;
+    }
+  }
+
+  &__char {
+    display: inline-block;
+    opacity: 0;
+    will-change: opacity;
   }
 
   &__image {
-    grid-column: 1 / 4;
-    width: clamp(10rem, 16vw, 15rem);
-    aspect-ratio: 4 / 5;
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    aspect-ratio: 3 / 4;
     overflow: hidden;
+    border-radius: 8px;
+    transform-origin: 50% 50%;
+    will-change: transform;
 
     img {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: 23% center;
+      object-position: center;
+      transform-origin: 50% 50%;
+      will-change: opacity;
+    }
+
+    img:not(:first-child) {
+      opacity: 0;
+      visibility: hidden;
     }
   }
 
-  &__intro {
-    grid-column: 9 / 13;
-    align-self: center;
-    max-width: 31rem;
-    font-size: clamp(1rem, 1.2vw, 1.375rem);
-    font-weight: 600;
-    line-height: 1.15;
-  }
-
-  &__eyebrow {
-    display: flex;
-    grid-column: 4 / 6;
-    align-items: center;
-    align-self: start;
-    gap: 0.5rem;
-    font-size: clamp(1rem, 0.8vw, 0.875rem);
-    font-weight: 700;
-    line-height: 1;
-    text-transform: uppercase;
-  }
-
-  &__eyebrow-number {
-    color: #cacfcb;
-  }
-
-  &__body {
-    width: min(96%, 100rem);
-    margin: clamp(7rem, 14vw, 15rem) auto;
-    font: 750 var(--display-1)/var(--lh-display-tight) var(--font-heading);
-    letter-spacing: var(--tracking-display);
-    text-align: left;
-    text-indent: 16.5vw;
-
-    p,
-    p.split {
-      font-weight: 750;
-      line-height: var(--lh-display-tight);
-    }
-  }
-
-  &__label {
-    grid-column: 1 / 4;
-    font-size: clamp(1rem, 1.15vw, 1.25rem);
-    font-weight: 600;
-    line-height: 1.05;
-  }
-
-  &__detail {
-    grid-column: 7 / 11;
-    max-width: 39rem;
-    font-size: clamp(1rem, 1.2vw, 1.375rem);
-    font-weight: 600;
-    line-height: 1.15;
-  }
-}
-
-@media (max-width: 1024px) {
-  .philosophy {
-    padding-block: clamp(4.5rem, 10vw, 7rem);
-    &__top,
-    &__footer {
-      grid-template-columns: repeat(8, minmax(0, 1fr));
-    }
-    &__image {
-      grid-column: 1 / 3;
-    }
-    &__eyebrow {
-      grid-column: 3 / 5;
-    }
-    &__intro {
-      grid-column: 6 / 9;
-    }
-    &__label {
-      grid-column: 1 / 3;
-    }
-    &__detail {
-      grid-column: 5 / 9;
-    }
+  &__copy {
+    position: absolute;
+    bottom: clamp(2rem, 5.5vh, 4rem);
+    left: 0;
+    right: 0;
+    width: min(31rem, calc(100% - 2 * var(--content-inset)));
+    margin-inline: auto;
+    color: rgb(255 255 255 / 0.72);
+    font: 550 clamp(0.9rem, 1.05vw, 1.1rem) / 1.35 var(--font-body);
+    letter-spacing: -0.025em;
+    text-align: center;
+    opacity: 0;
   }
 }
 
 @media (max-width: 768px) {
   .philosophy {
-    gap: 3.5rem;
-    &__top,
-    &__footer {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 1.5rem;
+    height: auto;
+    z-index: 1;
+
+    &__stage {
+      position: relative;
+      display: flex;
+      height: auto;
+      min-height: 100svh;
+      flex-direction: column;
+      justify-content: center;
+      padding-block: 6rem 3rem;
+      border-radius: 0;
     }
-    &__image {
-      grid-column: 1 / 3;
-      grid-row: 1 / span 2;
-      width: min(42vw, 12rem);
-    }
-    &__intro {
-      grid-column: 3 / 5;
-      grid-row: 2;
-      align-self: end;
-      font-size: 0.9375rem;
-    }
-    &__eyebrow {
-      grid-column: 3 / 5;
-      grid-row: 1;
-    }
-    &__body {
+
+    &__composition {
+      grid-template-columns: 1fr;
+      row-gap: 1.15rem;
       width: 100%;
-      font-size: clamp(2.125rem, 9vw, 4rem);
-      line-height: 0.9;
-      text-indent: 0;
     }
-    &__body p,
-    &__body p.split {
-      line-height: 0.9;
+
+    &__headline {
+      z-index: 3;
+      font-size: clamp(2.75rem, 13vw, 5rem);
+      white-space: normal;
+      will-change: auto;
+
+      &--left,
+      &--right {
+        justify-self: center;
+        text-align: center;
+      }
     }
-    &__label {
-      grid-column: 1 / 3;
-      font-size: 0.9375rem;
+
+    &__char {
+      opacity: 1;
     }
-    &__detail {
-      grid-column: 3 / 5;
-      font-size: 0.9375rem;
+
+    &__image {
+      grid-row: 2;
+      width: min(52vw, 14rem);
+      justify-self: center;
+      will-change: auto;
+
+      img:first-child {
+        position: relative;
+      }
+    }
+
+    &__copy {
+      position: relative;
+      bottom: auto;
+      left: auto;
+      right: auto;
+      margin-top: 2.75rem;
+      opacity: 1;
     }
   }
 }
 
-@media (max-width: 480px) {
+@media (min-width: 769px) and (prefers-reduced-motion: no-preference) {
+  .philosophy:not(.is-motion-ready) {
+    .philosophy__headline,
+    .philosophy__copy {
+      visibility: hidden;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
   .philosophy {
-    &__top,
-    &__footer {
-      grid-template-columns: 1fr;
+    height: auto;
+
+    &__stage {
+      position: relative;
+      border-radius: 0;
     }
-    &__image {
-      grid-column: 1;
-      grid-row: auto;
-      width: min(70vw, 14rem);
+
+    &__headline,
+    &__image,
+    &__char {
+      will-change: auto;
     }
-    &__eyebrow,
-    &__intro,
-    &__label,
-    &__detail {
-      grid-column: 1;
-      grid-row: auto;
+
+    &__char {
+      opacity: 1;
     }
-    &__body {
-      font-size: clamp(1.9rem, 10vw, 2.75rem);
-      letter-spacing: -0.045em;
+
+    &__copy {
+      opacity: 1;
     }
   }
 }

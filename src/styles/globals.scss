@@ -20,6 +20,15 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf")
+    format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
 .loader__tagline {
   font-family: "Bricolage Grotesque", sans-serif;
 }

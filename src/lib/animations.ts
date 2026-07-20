@@ -1,16 +1,9 @@
 import { gsap } from "gsap";
 import { CustomEase } from "gsap/CustomEase";
-import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
-import { MorphSVGPlugin } from "gsap/MorphSVGPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText } from "gsap/SplitText";
 import { addCleanup } from "./cleanup";
 import { mm } from "./globals";
-import {
-  FINAL_FLAG,
-  FINAL_HEX,
-  PLACEHOLDER_FLAG,
-  PLACEHOLDER_HEX,
-} from "./loader-paths";
 import {
   initLineReveals,
   initParallax,
@@ -83,40 +76,40 @@ function initHeroCollectionTransition() {
     return null;
   }
 
-  const fluidPad = () =>
-    getComputedStyle(document.documentElement).getPropertyValue("--u").trim() ||
-    "6.9444444444vw";
-  const collectionPad = () => `calc(0.22 * ${fluidPad()})`;
-  const sliderRadius = () => `calc(0.22 * ${fluidPad()})`;
-
   const syncHeaderColor = () => {
     const headerLine = (header?.getBoundingClientRect().height ?? 72) * 0.5;
+    const bannerRect = banner.getBoundingClientRect();
     const collectionRect = collection.getBoundingClientRect();
     const philosophyRect = philosophy?.getBoundingClientRect();
     const collectionIsBehindHeader =
       collectionRect.top <= headerLine && collectionRect.bottom > headerLine;
+    const bannerIsBehindHeader =
+      bannerRect.top <= headerLine && bannerRect.bottom > headerLine;
     const philosophyIsBehindHeader =
       philosophyRect !== undefined &&
       philosophyRect.top <= headerLine &&
       philosophyRect.bottom > headerLine;
 
-    setHeaderOnDark(collectionIsBehindHeader && !philosophyIsBehindHeader);
+    setHeaderOnDark(
+      bannerIsBehindHeader || collectionIsBehindHeader || philosophyIsBehindHeader,
+    );
   };
 
   gsap.set(collection, {
-    paddingLeft: collectionPad(),
-    paddingRight: collectionPad(),
+    padding: 0,
   });
   gsap.set(slider, {
-    borderRadius: sliderRadius(),
-    clipPath: `inset(0 round ${sliderRadius()})`,
+    borderRadius: 0,
+    clipPath: "inset(0)",
     yPercent: 0,
   });
   gsap.set(".banner-mask, .collection-mask", { opacity: 0 });
-  gsap.set(sliderImages, {
-    scale: 1.3,
-    transformOrigin: "50% 50%",
-  });
+  if (sliderImages.length) {
+    gsap.set(sliderImages, {
+      scale: 1.3,
+      transformOrigin: "50% 50%",
+    });
+  }
   gsap.set(sliderItems, { autoAlpha: 0, transition: "none" });
   gsap.set(sliderItems[0], { autoAlpha: 1, zIndex: 1 });
 
@@ -136,40 +129,25 @@ function initHeroCollectionTransition() {
     },
   });
 
-  timeline
-    .to(
-      collection,
-      {
-        padding: 0,
-        duration: 1,
-      },
-      0,
-    )
-    .to(
-      slider,
-      {
-        borderRadius: 0,
-        clipPath: "inset(0 round 0px)",
-        duration: 1,
-      },
-      0,
-    )
-    .to(
+  if (sliderImages.length) {
+    timeline.to(
       sliderImages,
       {
         scale: 1,
         duration: 1,
       },
       0,
-    )
-    .to(
-      [".banner-mask", ".collection-mask"],
-      {
-        opacity: 1,
-        duration: 1,
-      },
-      0,
     );
+  }
+
+  timeline.to(
+    [".banner-mask", ".collection-mask"],
+    {
+      opacity: 1,
+      duration: 1,
+    },
+    0,
+  );
 
   function ensureCollectionFullscreen() {
     gsap.set(collection, { padding: 0 });
@@ -177,7 +155,7 @@ function initHeroCollectionTransition() {
       borderRadius: 0,
       clipPath: "inset(0 round 0px)",
     });
-    gsap.set(sliderImages, { scale: 1 });
+    if (sliderImages.length) gsap.set(sliderImages, { scale: 1 });
     gsap.set([".banner-mask", ".collection-mask"], { opacity: 1 });
     setHeaderOnDark(true);
   }
@@ -585,20 +563,30 @@ let loaderFinished = false;
 
 export function initLoader() {
   const loader = document.getElementById("loader");
-  const transitionRows = gsap.utils.toArray<HTMLElement>(
-    ".loader-transition__row",
-  );
-  const transitionBlocks = gsap.utils.toArray<HTMLElement>(
-    ".loader-transition__block",
-  );
-
   if (!loader) return;
 
-  gsap.registerPlugin(MorphSVGPlugin, DrawSVGPlugin);
-
   const session = ++loaderSession;
+  const isCurrent = () => session === loaderSession && !loaderFinished;
+  const imageWrapper = loader.querySelector<HTMLElement>(
+    "[data-loader-images]",
+  );
+  const imageElements = gsap.utils.toArray<HTMLElement>(
+    ".stack-loader__image",
+    loader,
+  );
+  const headingElements = gsap.utils.toArray<HTMLElement>(
+    "[data-loader-heading]",
+    loader,
+  );
+  const description = loader.querySelector<HTMLElement>(
+    "[data-loader-description]",
+  );
+  const loaderStatus = document.getElementById("loaderStatus");
+  const heroFadeElements = gsap.utils.toArray<HTMLElement>(".banner-reveal");
+  const headerWrap = document.querySelector<HTMLElement>(".header-wrapp");
+  const headerTargets = headerWrap ? [headerWrap] : [];
 
-  const isActive = () => session === loaderSession && !loaderFinished;
+  if (!imageWrapper || headingElements.length !== 2 || !description) return;
 
   loaderFinished = false;
   loaderTimeline?.kill();
@@ -607,7 +595,6 @@ export function initLoader() {
     window.clearTimeout(loaderFailsafe);
     loaderFailsafe = undefined;
   }
-
   if (loaderRaf !== undefined) {
     window.cancelAnimationFrame(loaderRaf);
     loaderRaf = undefined;
@@ -616,619 +603,208 @@ export function initLoader() {
   loader.style.display = "flex";
   loader.style.pointerEvents = "auto";
   loader.setAttribute("aria-busy", "true");
-
-  gsap.set(loader, {
-    autoAlpha: 1,
-    clearProps: "opacity,visibility",
-  });
-
-  transitionRows.forEach((row) => {
-    const [leftBlock, rightBlock] = Array.from(row.children);
-    gsap.set(leftBlock, { xPercent: -101, autoAlpha: 0 });
-    gsap.set(rightBlock, { xPercent: 101, autoAlpha: 0 });
-  });
-
-  const countValue =
-    loader.querySelector<HTMLElement>(".loader__progress-value") ??
-    document.getElementById("loaderCount");
-
-  const loaderStatus = document.getElementById("loaderStatus");
-  const loaderContent = loader.querySelector<HTMLElement>(".loader__content");
-  const progressBar = loader.querySelector<HTMLElement>(
-    ".loader__progress-bar",
-  );
-  const loaderChrome = gsap.utils.toArray<HTMLElement>(
-    ".loader__progress, .loader__loading",
-  );
-  const loadingText = loader.querySelector<HTMLElement>(".loader__loading");
-  const mark = loader.querySelector<SVGSVGElement>(".loader__mark");
-  const shapeHex = loader.querySelector<SVGPathElement>("#shape-hex");
-  const shapeFlag = loader.querySelector<SVGPathElement>("#shape-flag");
-  const shapes = [shapeHex, shapeFlag].filter(Boolean) as SVGPathElement[];
-
-  if (shapeHex) {
-    shapeHex.setAttribute("d", PLACEHOLDER_HEX);
-  }
-
-  if (shapeFlag) {
-    shapeFlag.setAttribute("d", PLACEHOLDER_FLAG);
-    shapeFlag.removeAttribute("fill-rule");
-    shapeFlag.removeAttribute("clip-rule");
-  }
-
-  const sliderClipRadius = getComputedStyle(
-    document.documentElement,
-  ).getPropertyValue("--radius-sm");
+  if (loaderStatus) loaderStatus.textContent = "Loading portfolio";
 
   lenis.stop();
   initHeroEases();
 
-  const heroFadeElements = gsap.utils.toArray<HTMLElement>(".banner-reveal");
-  const slider = document.querySelector<HTMLElement>(".slider");
-  const sliderItems = gsap.utils.toArray<HTMLElement>(".slider-img");
-  const sliderImages = gsap.utils.toArray<HTMLImageElement>(".slider-img img");
-  const headerWrap = document.querySelector<HTMLElement>(".header-wrapp");
-  const headerWrapTargets = headerWrap ? [headerWrap] : [];
-  const sliderTargets = slider ? [slider] : [];
-  const headerStartYPx = -32;
+  gsap.set(heroFadeElements, { yPercent: 110 });
+  gsap.set(headerTargets, { y: -32 });
+  gsap.set(loader, { display: "flex", autoAlpha: 1 });
+  gsap.set(imageWrapper, { yPercent: 500, autoAlpha: 0 });
+  gsap.set(imageElements, { autoAlpha: 0 });
+  gsap.set(headingElements, { autoAlpha: 0 });
+  gsap.set(description, { autoAlpha: 1 });
 
-  gsap.set(heroFadeElements, {
-    yPercent: 110,
+  const headingSplits = headingElements.map((element) =>
+    SplitText.create(element, { type: "words" }),
+  );
+  const descriptionSplit = SplitText.create(description, {
+    type: "words,lines",
   });
+  const headingWords = headingSplits.flatMap((split) => split.words);
+  const animatedTextTargets = [
+    ...headingWords,
+    ...descriptionSplit.lines,
+  ];
 
-  gsap.set(headerWrapTargets, {
-    y: headerStartYPx,
+  gsap.set(animatedTextTargets, {
+    rotateX: 90,
+    autoAlpha: 0,
+    transformPerspective: 1000,
+    transformOrigin: "50% 100%",
+    willChange: "transform,opacity",
   });
-
-  gsap.set(sliderTargets, {
-    yPercent: 35,
-    clipPath: `inset(12% 0% 12% 0% round ${sliderClipRadius})`,
-  });
-
-  gsap.set(sliderItems, { autoAlpha: 0 });
-  gsap.set(sliderItems[0], { autoAlpha: 1 });
-
-  gsap.set(".slider-title__item", {
-    y: 0,
-  });
-
-  gsap.set(sliderImages, {
-    scale: 1.45,
-    transformOrigin: "50% 50%",
-  });
-
-  if (loadingText) {
-    gsap.set(loadingText, {
-      autoAlpha: 1,
-    });
-  }
-
-  if (loaderContent) {
-    gsap.set(loaderContent, {
-      y: 14,
-      autoAlpha: 0,
-    });
-  }
-
-  gsap.set(loaderChrome, { y: 10, autoAlpha: 0 });
-  gsap.set(progressBar, { scaleX: 0, transformOrigin: "0% 50%" });
-
-  if (mark) {
-    gsap.set(mark, {
-      scale: 1,
-      autoAlpha: 1,
-      transformOrigin: "50% 50%",
-    });
-  }
-
-  if (countValue) {
-    countValue.textContent = "0";
-  }
-
-  if (loaderStatus) {
-    loaderStatus.textContent = "Loading, 0 percent";
-  }
-
-  const hideLoader = () => {
-    loader.style.pointerEvents = "none";
-    loader.style.display = "none";
-  };
+  gsap.set(
+    imageElements,
+    {
+      zIndex: (index: number) => index,
+    },
+  );
 
   const finish = () => {
-    if (loaderFinished) return;
+    if (!isCurrent()) return;
 
     loaderFinished = true;
-
     if (loaderFailsafe !== undefined) {
       window.clearTimeout(loaderFailsafe);
       loaderFailsafe = undefined;
     }
 
     loader.setAttribute("aria-busy", "false");
-
-    hideLoader();
-    gsap.set(transitionBlocks, { autoAlpha: 0 });
-
-    lenis.scrollTo(0, {
-      immediate: true,
-    });
-
-    lenis.start();
-
-    initHomepageScrollStory();
-    initPageScroll();
-
-    requestAnimationFrame(() => {
-      ScrollTrigger.refresh(true);
-      refreshScrollStory();
-      updateScrollState();
-    });
-  };
-
-  const revealHero = () => {
-    if (session !== loaderSession) return;
-
+    loader.style.pointerEvents = "none";
+    loader.style.display = "none";
     document.documentElement.classList.remove("is-loading");
-  };
 
-  const forceShowIntroTargets = () => {
-    gsap.set(heroFadeElements, {
-      yPercent: 0,
-      clearProps: "transform",
-    });
-
-    gsap.set(headerWrapTargets, {
-      y: 0,
-      clearProps: "transform",
-    });
-
-    gsap.set(sliderTargets, {
-      yPercent: 0,
-      clipPath: `inset(0% 0% 0% 0% round ${sliderClipRadius})`,
-      clearProps: "transform,clipPath",
-    });
-
-    gsap.set(sliderImages, {
-      scale: 1.3,
-      transformOrigin: "50% 50%",
-    });
-  };
-
-  const progress = {
-    val: 0,
-  };
-
-  const updateProgress = () => {
-    if (!isActive()) return;
-
-    const value = Math.min(100, Math.round(progress.val));
-
-    if (countValue) {
-      countValue.textContent = String(value);
-    }
-
-    if (loaderStatus) {
-      loaderStatus.textContent = `Loading, ${value} percent`;
-    }
-
-    if (progressBar) {
-      progressBar.style.transform = `scaleX(${Math.min(1, progress.val / 100)})`;
-    }
-  };
-
-  const runHeroReveal = () => {
-    if (session !== loaderSession) return;
-
-    revealHero();
-
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
-    const textEase = isMobile ? "titleEase" : "power4.out";
-
-    const targets = {
-      meta: gsap.utils.toArray<HTMLElement>(".banner-text .banner-reveal"),
-      title: gsap.utils.toArray<HTMLElement>(".banner-title .banner-reveal"),
-      descr: gsap.utils.toArray<HTMLElement>(".banner-descr .banner-reveal"),
-    };
-
-    if (
-      !targets.meta.length &&
-      !targets.title.length &&
-      !targets.descr.length
-    ) {
-      forceShowIntroTargets();
-      finish();
-      return;
-    }
-
-    const revealTL = gsap.timeline({
+    const revealTimeline = gsap.timeline({
       onComplete: () => {
         if (session !== loaderSession) return;
 
-        forceShowIntroTargets();
-        finish();
+        gsap.set(heroFadeElements, {
+          yPercent: 0,
+          clearProps: "transform",
+        });
+        gsap.set(headerTargets, { y: 0, clearProps: "transform" });
+
+        lenis.scrollTo(0, { immediate: true });
+        lenis.start();
+        initHomepageScrollStory();
+        initPageScroll();
+
+        requestAnimationFrame(() => {
+          ScrollTrigger.refresh(true);
+          refreshScrollStory();
+          updateScrollState();
+        });
       },
     });
 
-    loaderTimeline = revealTL;
-
-    [...transitionRows].reverse().forEach((row, index) => {
-      const [leftBlock, rightBlock] = Array.from(row.children);
-      const position = index * 0.1;
-
-      revealTL.to(
-        leftBlock,
-        {
-          xPercent: -101,
-          duration: 0.72,
-          ease: "power3.inOut",
-        },
-        position,
-      );
-      revealTL.to(
-        rightBlock,
-        {
-          xPercent: 101,
-          duration: 0.72,
-          ease: "power3.inOut",
-        },
-        position,
-      );
-    });
-
-    revealTL
+    loaderTimeline = revealTimeline;
+    revealTimeline
+      .to(headerTargets, {
+        y: 0,
+        duration: 0.8,
+        ease: "headerEase",
+      })
       .to(
-        headerWrapTargets,
-        {
-          y: 0,
-          duration: 0.85,
-          ease: "headerEase",
-        },
-        0.12,
-      )
-      .to(
-        targets.meta,
+        heroFadeElements,
         {
           yPercent: 0,
-          duration: isMobile ? 1.05 : 0.85,
+          duration: 1,
           stagger: 0.08,
-          ease: textEase,
+          ease: "power4.out",
         },
-        0.18,
-      )
-      .to(
-        targets.title,
-        {
-          yPercent: 0,
-          duration: isMobile ? 1.4 : 1.1,
-          stagger: 0.08,
-          ease: textEase,
-        },
-        0.24,
-      )
-      .to(
-        targets.descr,
-        {
-          yPercent: 0,
-          duration: isMobile ? 1.15 : 0.9,
-          stagger: 0.08,
-          ease: isMobile ? "titleEase" : "power3.out",
-        },
-        0.32,
-      )
-      .to(
-        sliderTargets,
-        {
-          yPercent: 0,
-          clipPath: `inset(0% 0% 0% 0% round ${sliderClipRadius})`,
-          duration: 1.4,
-          ease: "power3.out",
-        },
-        0.15,
-      )
-      .to(
-        sliderImages,
-        {
-          scale: 1.3,
-          duration: 1.4,
-          ease: "power3.out",
-        },
-        "<",
+        0.08,
       );
   };
 
-  const addBlockCover = (
-    timeline: gsap.core.Timeline,
-    startTime: number,
-  ) => {
-    transitionRows.forEach((row, index) => {
-      const blocks = Array.from(row.children);
-      const position = startTime + index * 0.1;
-
-      timeline.set(blocks, { autoAlpha: 1 }, position);
-      timeline.to(
-        blocks,
-        {
-          xPercent: 0,
-          duration: 0.72,
-          ease: "power3.inOut",
-        },
-        position,
-      );
-    });
-  };
-
-  const runFallbackExit = () => {
-    if (session !== loaderSession) return;
-
-    const exitTL = gsap.timeline();
-
-    loaderTimeline = exitTL;
-
-    exitTL.to(
-      loader,
-      {
-        backgroundColor: "var(--color-dark)",
-        duration: 0.75,
-        ease: "power2.inOut",
-      },
-      0,
-    );
-
-    if (loaderContent) {
-      exitTL.to(
-        loaderContent,
-        {
-          y: 0,
-          autoAlpha: 1,
-          duration: 0.7,
-          ease: "power3.out",
-        },
-        0.15,
-      );
-    }
-
-    exitTL.to(
-      loaderChrome,
-      { y: 0, autoAlpha: 1, duration: 0.65, ease: "power3.out" },
-      0.22,
-    );
-
-    exitTL.to(
-      progress,
-      {
-        val: 100,
-        duration: 3.6,
-        ease: "power1.inOut",
-        onUpdate: updateProgress,
-      },
-      0,
-    );
-
-    exitTL.to({}, { duration: 3.6 }, 0);
-
-    if (loadingText) {
-      exitTL.to(loadingText, {
-        autoAlpha: 0,
-        duration: 0.4,
-        ease: "power2.in",
-      });
-    }
-
-    if (mark) {
-      exitTL.to(
-        mark,
-        {
-          autoAlpha: 0,
-          scale: 1.05,
-          duration: 0.5,
-          ease: "power2.in",
-        },
-        loadingText ? "<" : ">",
-      );
-    }
-
-    addBlockCover(exitTL, 3.8);
-
-    exitTL
-      .set(loader, { autoAlpha: 0 }, 4.92)
-      .call(hideLoader, [], 4.92)
-      .call(runHeroReveal, [], 4.92);
-  };
-
-  const runLoaderTimeline = () => {
-    if (session !== loaderSession) return;
-
-    if (shapes.length < 2) {
-      runFallbackExit();
-      return;
-    }
-
-    try {
-      gsap.killTweensOf(shapes);
-
-      gsap.set(shapes, {
-        transformOrigin: "50% 50%",
-        scale: 0.85,
-        autoAlpha: 1,
-        fillOpacity: 0,
-        strokeOpacity: 1,
-        clearProps: "strokeDasharray,strokeDashoffset",
-      });
-
-      gsap.set(shapes, {
-        drawSVG: "0%",
-      });
-
-      const loaderTL = gsap.timeline({
-        defaults: {
-          ease: "power2.inOut",
-        },
-      });
-
-      loaderTimeline = loaderTL;
-
-      loaderTL.to(
-        loader,
-        {
-          backgroundColor: "var(--color-dark)",
-          duration: 0.75,
-          ease: "power2.inOut",
-        },
-        0,
-      );
-
-      if (loaderContent) {
-        loaderTL.to(
-          loaderContent,
-          {
-            y: 0,
-            autoAlpha: 1,
-            duration: 0.7,
-            ease: "power3.out",
-          },
-          0.15,
-        );
-      }
-
-      loaderTL.to(
-        loaderChrome,
-        { y: 0, autoAlpha: 1, duration: 0.65, ease: "power3.out" },
-        0.22,
-      );
-
-      loaderTL
-        .to(
-          progress,
-          {
-            val: 100,
-            duration: 3.7,
-            ease: "power1.inOut",
-            onUpdate: updateProgress,
-          },
-          0,
-        )
-        .to(
-          shapes,
-          {
-            drawSVG: "100%",
-            duration: 0.9,
-            stagger: 0.15,
-          },
-          0,
-        )
-        .to(
-          shapeHex!,
-          {
-            duration: 1.1,
-            morphSVG: {
-              shape: FINAL_HEX,
-              shapeIndex: "auto",
-            },
-          },
-          0.5,
-        )
-        .to(
-          shapeFlag!,
-          {
-            duration: 1.1,
-            morphSVG: {
-              shape: FINAL_FLAG,
-              shapeIndex: "auto",
-            },
-          },
-          0.65,
-        )
-        .to(
-          shapes,
-          {
-            fillOpacity: 1,
-            strokeOpacity: 0,
-            duration: 0.5,
-          },
-          1.5,
-        )
-        .to(
-          shapes,
-          {
-            scale: 1.06,
-            duration: 0.22,
-            ease: "power1.out",
-          },
-          1.85,
-        )
-        .to(
-          shapes,
-          {
-            scale: 1,
-            duration: 0.4,
-            ease: "back.out(3)",
-          },
-          2.07,
-        );
-
-      if (loadingText) {
-        loaderTL.to(
-          loadingText,
-          { autoAlpha: 0, duration: 0.4, ease: "power2.in" },
-          3.7,
-        );
-      }
-
-      if (mark) {
-        loaderTL.to(
-          mark,
-          {
-            scale: 1.08,
-            autoAlpha: 0,
-            duration: 0.55,
-            ease: "power2.in",
-          },
-          3.8,
-        );
-      }
-
-      addBlockCover(loaderTL, 4.05);
-
-      loaderTL
-        .set(loader, { autoAlpha: 0 }, 5.17)
-        .call(hideLoader, [], 5.17)
-        .call(runHeroReveal, [], 5.17);
-    } catch (error) {
-      console.warn(
-        "[loader] Morph/Draw timeline failed, using fallback",
-        error,
-      );
-
-      runFallbackExit();
-    }
+  const forceFinish = () => {
+    loaderTimeline?.kill();
+    gsap.set(heroFadeElements, { yPercent: 0, clearProps: "transform" });
+    gsap.set(headerTargets, { y: 0, clearProps: "transform" });
+    finish();
   };
 
   const startLoader = () => {
     loaderRaf = undefined;
+    if (!isCurrent()) return;
 
-    if (session !== loaderSession) return;
+    const timeline = gsap.timeline({
+      onComplete: finish,
+    });
+    loaderTimeline = timeline;
 
-    try {
-      runLoaderTimeline();
-    } catch (error) {
-      console.warn("[loader] start failed, using fallback", error);
-
-      runFallbackExit();
-    }
+    timeline
+      .to(imageWrapper, {
+        yPercent: 0,
+        autoAlpha: 1,
+        duration: 0.5,
+        ease: "power4.out",
+      })
+      .set(headingElements, { autoAlpha: 1 }, "<")
+      .to(
+        imageElements,
+        {
+          autoAlpha: 1,
+          duration: 0.5,
+          ease: "power4.out",
+        },
+        "<",
+      )
+      .to(
+        animatedTextTargets,
+        {
+          rotateX: 0,
+          autoAlpha: 1,
+          stagger: 0.08,
+          duration: 0.7,
+          ease: "power4.out",
+        },
+        "<+0.5",
+      )
+      .to(
+        imageElements,
+        {
+          scale: (index: number) => 1 + index * 0.15,
+          yPercent: (index: number) => -(index * 20),
+          duration: 1,
+          stagger: { each: 0.01, from: "end" },
+          ease: "power3.inOut",
+        },
+        "<",
+      )
+      .to(
+        imageElements,
+        {
+          scale: 1,
+          yPercent: (index: number, _target: Element, elements: Element[]) => {
+            if (elements.length === 1) return 0;
+            const totalSpread = 110 * (elements.length - 1);
+            return -totalSpread / 2 + index * 110;
+          },
+          duration: 1,
+          stagger: { each: 0.01, from: "end" },
+          ease: "power3.inOut",
+        },
+        "+=0.2",
+      )
+      .to(
+        descriptionSplit.lines,
+        {
+          rotateX: 90,
+          transformOrigin: "top center",
+          autoAlpha: 0,
+          duration: 0.8,
+          stagger: 0.08,
+          ease: "power3.in",
+        },
+        "<-0.1",
+      )
+      .to(headingWords, {
+        rotateX: 90,
+        transformOrigin: "top center",
+        autoAlpha: 0,
+        duration: 0.5,
+        stagger: 0.08,
+        ease: "power3.in",
+      })
+      .to(
+        imageElements,
+        {
+          autoAlpha: 0,
+          duration: 0.8,
+          stagger: { each: 0.08, from: "end" },
+        },
+        "<+0.2",
+      )
+      .to(loader, {
+        autoAlpha: 0,
+        duration: 0.45,
+        ease: "power2.inOut",
+      });
   };
 
-  loaderFailsafe = window.setTimeout(() => {
-    if (session !== loaderSession || loaderFinished) {
-      return;
-    }
-
-    loaderTimeline?.kill();
-
-    revealHero();
-    forceShowIntroTargets();
-    finish();
-  }, 12000);
-
+  loaderFailsafe = window.setTimeout(forceFinish, 9000);
   loaderRaf = window.requestAnimationFrame(startLoader);
 
   addCleanup(() => {
@@ -1242,12 +818,13 @@ export function initLoader() {
       window.cancelAnimationFrame(loaderRaf);
       loaderRaf = undefined;
     }
-
     if (loaderFailsafe !== undefined) {
       window.clearTimeout(loaderFailsafe);
       loaderFailsafe = undefined;
     }
 
+    headingSplits.forEach((split) => split.revert());
+    descriptionSplit.revert();
     loaderFinished = false;
   });
 }

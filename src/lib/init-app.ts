@@ -126,11 +126,6 @@ export function disposeApp() {
     loader.style.display = "";
     loader.style.pointerEvents = "";
   }
-  const curtain = document.querySelector<HTMLElement>(".loader-curtain");
-  if (curtain) {
-    gsap.set(curtain, { clearProps: "all" });
-    curtain.style.display = "";
-  }
   appInitialized = false;
 }
 

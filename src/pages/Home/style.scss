@@ -2,3 +2,12 @@
   min-height: 100svh;
   overflow-x: clip;
 }
+
+/* Philosophy stacks above FeaturedProject during cover-parallax pin */
+.home-page .collection {
+  z-index: 1;
+}
+
+.home-page .philosophy {
+  z-index: 5;
+}

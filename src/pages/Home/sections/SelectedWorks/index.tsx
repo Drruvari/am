@@ -7,10 +7,7 @@ export default function SelectedWorks() {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   return (
-    <section
-      id="work"
-      className="selected-works"
-    >
+    <section id="work" className="selected-works">
       <div
         ref={wrapperRef}
         className="selected-works__track"
@@ -22,27 +19,20 @@ export default function SelectedWorks() {
 
         <div className="selected-works__content">
           {sections.map((section) => (
-            <div
-              key={section.number}
-              className="selected-works__panel"
-            >
+            <div key={section.number} className="selected-works__panel">
               <div className="selected-works__meta">
                 <span>Selected Work</span>
                 <span className="selected-works__number">{section.number}</span>
                 <span className="selected-works__period">22–26’</span>
               </div>
 
-              <h2 className="selected-works__title">
-                {section.title}
-              </h2>
+              <h2 className="selected-works__title">{section.title}</h2>
 
               <div className="selected-works__summary">
                 <p className="selected-works__description">
                   {section.description}
                 </p>
-                <span className="selected-works__year">
-                  {section.year}
-                </span>
+                <span className="selected-works__year">{section.year}</span>
               </div>
             </div>
           ))}

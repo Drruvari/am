@@ -1,4 +1,5 @@
 import CustomCursor from "@/components/CustomCursor/index";
+import Grain from "@/components/Grain";
 import Header from "@/components/Header/index";
 import { disposeApp, initApp } from "@/lib/init-app";
 import Home from "@/pages/Home/index";
@@ -14,6 +15,7 @@ export default function App() {
   return (
     <>
       <Loader />
+      <Grain />
       <CustomCursor />
       <Header />
       <Home />

@@ -1,64 +1,57 @@
-import { PLACEHOLDER_FLAG, PLACEHOLDER_HEX } from "@/lib/loader-paths";
 import "./style.scss";
 
-const letters = ["L", "O", "A", "D", "I", "N", "G"];
-const transitionRows = Array.from({ length: 5 });
+const images = [
+  "https://pub-8abee449136941f5b0a1cd2c014534e9.r2.dev/vault-listing-images/assets-images/v-01.jpg",
+  "https://pub-8abee449136941f5b0a1cd2c014534e9.r2.dev/vault-listing-images/assets-images/v-02.jpg",
+  "https://pub-8abee449136941f5b0a1cd2c014534e9.r2.dev/vault-listing-images/assets-images/v-03.jpg",
+  "https://pub-8abee449136941f5b0a1cd2c014534e9.r2.dev/vault-listing-images/assets-images/v-04.jpg",
+  "https://pub-8abee449136941f5b0a1cd2c014534e9.r2.dev/vault-listing-images/assets-images/v-05.jpg",
+  "https://pub-8abee449136941f5b0a1cd2c014534e9.r2.dev/vault-listing-images/assets-images/v-06.jpg",
+  "https://pub-8abee449136941f5b0a1cd2c014534e9.r2.dev/vault-listing-images/assets-images/v-07.jpg",
+] as const;
 
 export default function Loader() {
   return (
-    <>
-      <div
-        className="loader"
-        id="loader"
-        role="status"
-        aria-label="Loading portfolio"
-        aria-busy="true"
-      >
-        <div className="loader__progress" aria-hidden="true">
-          <span className="loader__progress-track">
-            <span className="loader__progress-bar" />
-          </span>
-        </div>
+    <section
+      className="stack-loader"
+      id="loader"
+      role="status"
+      aria-label="Loading portfolio"
+      aria-busy="true"
+    >
+      <div className="stack-loader__layout">
+        <p className="stack-loader__heading" data-loader-heading>
+          HUMAN SPACES
+        </p>
 
-        <div className="loader__content">
-          <svg
-            className="loader__mark"
-            viewBox="0 0 962 421"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <path id="shape-hex" d={PLACEHOLDER_HEX} />
-            <path id="shape-flag" d={PLACEHOLDER_FLAG} />
-          </svg>
-        </div>
-
-        <div className="loader__loading" aria-hidden="true">
-          {letters.map((letter, index) => (
-            <span
-              key={`${letter}-${index}`}
-              style={{
-                animationDelay: `${index * 0.2}s`,
-              }}
-            >
-              {letter}
-            </span>
+        <div className="stack-loader__images" data-loader-images>
+          {images.map((src, index) => (
+            <div className="stack-loader__image" key={src}>
+              <img
+                src={src}
+                alt=""
+                width={1000}
+                height={1000}
+                loading="eager"
+                decoding="async"
+                fetchPriority={index === 0 ? "high" : "auto"}
+              />
+            </div>
           ))}
         </div>
 
-        <p className="visually-hidden" id="loaderStatus" aria-live="polite">
-          Loading portfolio
+        <p className="stack-loader__heading" data-loader-heading>
+          ENDURING FORM
         </p>
       </div>
 
-      <div className="loader-transition" aria-hidden="true">
-        {transitionRows.map((_, index) => (
-          <div className="loader-transition__row" key={index}>
-            <span className="loader-transition__block loader-transition__block--left" />
-            <span className="loader-transition__block loader-transition__block--right" />
-          </div>
-        ))}
-      </div>
-    </>
+      <p className="stack-loader__description" data-loader-description>
+        ARBËR MANGA
+      </p>
+
+      <span className="visually-hidden" id="loaderStatus" aria-live="polite">
+        Loading portfolio
+      </span>
+    </section>
   );
 }

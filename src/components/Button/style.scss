@@ -47,7 +47,7 @@
   --btn-bg: var(--bg);
   --btn-text: var(--fg);
   --btn-border: var(--line);
-  --btn-radius: 999px;
+  --btn-radius: 2px;
 
   position: relative;
   display: inline-flex;
@@ -93,6 +93,7 @@
     justify-content: center;
     gap: 0.85rem;
     color: var(--btn-text);
+    font-weight: 600;
     transition:
       color 0.28s ease,
       transform 0.28s ease;
@@ -127,8 +128,8 @@
 
   &--pill > a,
   &--pill > button {
-    padding: 0.95rem 1.55rem;
-    min-height: 3.05rem;
+    padding: 0.75rem 1.25rem;
+    min-height: 2.75rem;
   }
 
   &--rect {
@@ -136,8 +137,8 @@
 
     > a,
     > button {
-      padding: 1.05rem 1.85rem;
-      min-height: 3.05rem;
+      padding: 0.85rem 1.5rem;
+      min-height: 2.75rem;
     }
   }
 
@@ -145,7 +146,6 @@
     width: clamp(220px, 30vw, 380px);
     aspect-ratio: 1;
     margin: 5rem 0;
-    --btn-radius: 50%;
   }
 
   &--panel {

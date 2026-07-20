@@ -68,7 +68,7 @@ export function scrollToTarget(
   ) {
     if (typeof target === 'number') {
       lenis.scrollTo(target, {
-        duration: options.immediate ? 0 : 1.2,
+        duration: options.immediate ? 0 : 0.85,
         immediate: options.immediate,
       })
       return
@@ -77,7 +77,7 @@ export function scrollToTarget(
     if (el) {
       lenis.scrollTo(el as HTMLElement, {
         offset: -offset,
-        duration: options.immediate ? 0 : 1.2,
+        duration: options.immediate ? 0 : 0.85,
         immediate: options.immediate,
       })
     }
@@ -102,11 +102,12 @@ export function initSmoothScroll() {
   if (useSmoothScroll) {
     document.documentElement.classList.add('lenis', 'lenis-smooth')
     const smoothLenis = new Lenis({
-      duration: 1.45,
-      easing: (t: number) => Math.min(1, 1.001 - 2 ** (-10 * t)),
+      duration: 0.85,
+      easing: (t: number) => 1 - (1 - t) ** 4,
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
+      wheelMultiplier: 1.12,
       syncTouch: false,
     })
     lenis = smoothLenis
