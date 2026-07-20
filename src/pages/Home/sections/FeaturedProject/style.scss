@@ -59,10 +59,9 @@ html.is-loading .slider {
 
   &__frame {
     display: grid;
-    grid-template-columns: minmax(16rem, 37%) minmax(0, 1fr);
-    gap: clamp(3rem, 8vw, 10rem);
-    padding: clamp(3.25rem, 4vw, 4.5rem) var(--content-inset)
-      clamp(2.25rem, 3vw, 3.25rem);
+    grid-template-columns: minmax(0, 1.25fr) minmax(16rem, 0.75fr);
+    gap: clamp(3rem, 10vw, 12rem);
+    padding: var(--section-pad) var(--content-inset);
   }
 
   &__rail {
@@ -71,6 +70,8 @@ html.is-loading .slider {
     display: flex;
     min-width: 0;
     flex-direction: column;
+    grid-column: 2;
+    grid-row: 1;
   }
 
   &__progress {
@@ -175,10 +176,13 @@ html.is-loading .slider {
     display: flex;
     min-width: 0;
     flex-direction: column;
+    grid-column: 1;
+    grid-row: 1;
+    justify-content: center;
   }
 
   &__statement {
-    max-width: 56rem;
+    max-width: 48rem;
     color: #f2f2ed;
     font: 600 clamp(2rem, 2.85vw, 3.75rem)/1.04 var(--font-body);
     letter-spacing: -0.055em;
@@ -225,8 +229,8 @@ html.is-loading .slider {
     position: relative;
     z-index: 2;
     display: grid;
-    grid-template-columns: minmax(16rem, 37%) minmax(0, 1fr);
-    gap: clamp(3rem, 8vw, 10rem);
+    grid-template-columns: minmax(0, 1.25fr) minmax(16rem, 0.75fr);
+    gap: clamp(3rem, 10vw, 12rem);
     padding: clamp(2.5rem, 4vw, 4rem) var(--content-inset)
       clamp(3rem, 5vw, 5rem);
     border-top: 1px solid rgb(255 255 255 / 0.18);
@@ -238,6 +242,8 @@ html.is-loading .slider {
     display: flex;
     align-items: flex-start;
     gap: 1rem;
+    grid-column: 2;
+    grid-row: 1;
 
     > span {
       width: 0.85rem;
@@ -257,6 +263,8 @@ html.is-loading .slider {
   &__typologies {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-column: 1;
+    grid-row: 1;
   }
 
   &__typology {
@@ -307,6 +315,18 @@ html.is-loading .slider {
       grid-template-columns: 1fr;
       gap: 3.5rem;
       padding: 5rem var(--content-inset) 2.75rem;
+    }
+
+    &__rail,
+    &__copy,
+    &__partners-label,
+    &__typologies {
+      grid-column: 1;
+      grid-row: auto;
+    }
+
+    &__copy {
+      order: -1;
     }
 
     &__proof {

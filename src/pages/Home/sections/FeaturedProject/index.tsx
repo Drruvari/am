@@ -9,14 +9,14 @@ gsap.registerPlugin(ScrollTrigger, SplitText, useGSAP);
 
 const slides = [
   {
-    stat: "15+",
+    stat: "01:01",
     proof:
-      "Homes, interiors, and cultural studies across Albania and the Mediterranean",
+      "Every commission stays in my hands from the first conversation onward",
   },
   {
-    stat: "30+",
+    stat: "Tirana",
     proof:
-      "Projects shaped across architecture, interiors, and spatial studies",
+      "Independent practice rooted in Albania and open to projects beyond it",
   },
 ] as const;
 
@@ -97,7 +97,7 @@ export default function FeaturedProject() {
                 trigger: paragraphs[index],
                 start: "top 82%",
                 end: "bottom 48%",
-                scrub: 0.45,
+                scrub: 1,
               },
             },
           );
@@ -148,14 +148,14 @@ export default function FeaturedProject() {
               <button
                 type="button"
                 onClick={showPrevious}
-                aria-label="Previous studio fact"
+                aria-label="Previous practice note"
               >
                 ←
               </button>
               <button
                 type="button"
                 onClick={showNext}
-                aria-label="Next studio fact"
+                aria-label="Next practice note"
               >
                 →
               </button>
@@ -182,14 +182,14 @@ export default function FeaturedProject() {
 
           <div className="featured-project__copy">
             <p className="featured-project__statement">
-              Thoughtful architecture begins by listening—to the land, the
-              light, and the way people want to live. We turn those conditions
-              into spaces with clarity, atmosphere, and lasting purpose.
+              Each project starts with close attention: how the site changes
+              through the day, how life moves through it, and what deserves to
+              remain untouched.
             </p>
 
             <p className="featured-project__statement featured-project__statement--secondary">
-              The result is not a style imposed on a place. It is a precise
-              response that feels inevitable once it is there.
+              Architecture follows from those observations—quiet in gesture,
+              exact in proportion, and grounded in material reality.
             </p>
 
             <div className="featured-project__signature">
@@ -207,7 +207,7 @@ export default function FeaturedProject() {
         <div className="featured-project__partners">
           <div className="featured-project__partners-label">
             <span aria-hidden="true" />
-            <h3>Typologies we shape</h3>
+            <h3>Fields of practice</h3>
           </div>
 
           <div className="featured-project__typologies">

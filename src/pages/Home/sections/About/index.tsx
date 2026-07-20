@@ -8,7 +8,7 @@ export default function About() {
       <div className="architect-about__image" data-reveal="mask">
         <img
           src={archImage}
-          alt="Architectural studio detail"
+          alt="Material and light study by Arbër Manga"
           width={5413}
           height={2692}
           loading="lazy"
@@ -23,14 +23,15 @@ export default function About() {
           data-reveal="fade"
           data-reveal-group="about-copy"
         >
-          05 — About
+          05 — About Me
         </SectionEyebrow>
 
         <h2 data-split-lines>Arbër Manga</h2>
 
         <p data-reveal="up" data-reveal-group="about-copy">
-          Independent architect based in Tirana, working across private
-          residences, refined interiors, and cultural spatial studies.
+          I am an independent architect based in Tirana. My work moves between
+          houses, interiors, adaptive reuse, and small cultural commissions,
+          with direct involvement at every stage.
         </p>
 
         <div
@@ -38,9 +39,9 @@ export default function About() {
           data-reveal="up"
           data-reveal-group="about-copy"
         >
-          <span>Tirana, Albania</span>
-          <span>Residential / Interior / Cultural</span>
-          <span>Light, context, material, restraint</span>
+          <span>Based in Tirana, Albania</span>
+          <span>Architecture / Interiors / Reuse</span>
+          <span>My direction, close collaboration</span>
         </div>
       </div>
     </section>

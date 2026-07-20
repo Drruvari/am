@@ -119,7 +119,7 @@ function initHeroCollectionTransition() {
       trigger: banner,
       start: "top top",
       end: "bottom top",
-      scrub: 0.4,
+      scrub: 1,
       invalidateOnRefresh: true,
       onUpdate: syncHeaderColor,
       onLeave: () => {
@@ -278,7 +278,7 @@ function initFooterMotion() {
         trigger: ".footer",
         start: "top bottom",
         end: "top center",
-        scrub: 0.45,
+        scrub: 1,
       },
     },
   );

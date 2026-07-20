@@ -5,12 +5,12 @@ import { useLayoutEffect, useMemo, useRef } from "react";
 import "./style.scss";
 
 const services = [
-  "Architecture",
-  "Interior design",
-  "Renovation",
-  "Concept design",
-  "Planning and permits",
-  "3D visualization",
+  "Residential architecture",
+  "Spatial interiors",
+  "Adaptive reuse",
+  "Early-stage strategy",
+  "Approvals and coordination",
+  "Visual studies",
 ];
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
@@ -50,7 +50,7 @@ export default function Services() {
             trigger: section,
             start: "top bottom",
             end: "top 20%",
-            scrub: 0.4,
+            scrub: 1,
           },
         });
 
@@ -88,7 +88,7 @@ export default function Services() {
           trigger: section,
           start: "top top",
           end: "bottom 70%",
-          scrub: true,
+          scrub: 1,
           invalidateOnRefresh: true,
         },
       });
@@ -100,7 +100,7 @@ export default function Services() {
           trigger: section,
           start: "top top",
           end: "+=120",
-          scrub: true,
+          scrub: 1,
         },
       });
 
@@ -114,7 +114,7 @@ export default function Services() {
             containerAnimation: scrollTween,
             start: "left 100%",
             end: "left 30%",
-            scrub: 0.4,
+            scrub: 1,
           },
         });
       });
@@ -133,8 +133,8 @@ export default function Services() {
         <div ref={introRef} className="services__cover">
           <div className="services__glow" />
           <div className="services__intro">
-            <p className="services__kicker mono">03</p>
-            <h2>Expertise</h2>
+            <p className="services__kicker mono">03 — Practice</p>
+            <h2>What takes shape</h2>
           </div>
         </div>
       </div>

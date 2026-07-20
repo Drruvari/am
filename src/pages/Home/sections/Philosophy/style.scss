@@ -1,14 +1,11 @@
 .philosophy {
   position: relative;
   z-index: 5;
-  height: 280svh;
-  margin-top: 0;
   background: transparent;
   color: #f2f2ed;
 
   &__stage {
-    position: sticky;
-    top: 0;
+    position: relative;
     z-index: 1;
     display: grid;
     width: 100%;
@@ -22,30 +19,30 @@
 
   &__composition {
     position: relative;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) clamp(8.5rem, 12vw, 13.5rem) minmax(0, 1fr);
+    display: flex;
+    justify-content: center;
     align-items: center;
-    width: min(100%, 92rem);
-    column-gap: clamp(0.75rem, 1.4vw, 1.75rem);
+    width: min(100%, 88rem);
+    // Tight seam — image sits in the gap and grows from center
+    gap: clamp(0.2rem, 0.55vw, 0.55rem);
   }
 
   &__headline {
     position: relative;
     z-index: 3;
     margin: 0;
-    font: 700 clamp(3.25rem, 6.8vw, 8.5rem) / 0.82 var(--font-heading);
-    letter-spacing: -0.075em;
+    overflow: hidden;
+    font: 700 clamp(3rem, 5.9vw, 7.25rem) / 0.88 var(--font-heading);
+    letter-spacing: -0.065em;
     text-transform: uppercase;
     white-space: nowrap;
     will-change: transform;
 
     &--left {
-      justify-self: end;
       text-align: right;
     }
 
     &--right {
-      justify-self: start;
       text-align: left;
     }
   }
@@ -53,18 +50,24 @@
   &__char {
     display: inline-block;
     opacity: 0;
-    will-change: opacity;
+    visibility: hidden;
+    will-change: opacity, transform;
   }
 
   &__image {
-    position: relative;
+    position: absolute;
+    top: 50%;
+    left: 50%;
     z-index: 2;
-    width: 100%;
+    width: clamp(11rem, 18vw, 19rem);
     aspect-ratio: 3 / 4;
     overflow: hidden;
     border-radius: 8px;
+    // Independent of GSAP transform (scale) — stays centered while zooming
+    translate: -50% -50%;
     transform-origin: 50% 50%;
     will-change: transform;
+    pointer-events: none;
 
     img {
       position: absolute;
@@ -85,7 +88,7 @@
 
   &__copy {
     position: absolute;
-    bottom: clamp(2rem, 5.5vh, 4rem);
+    bottom: clamp(2.5rem, 8vh, 5.5rem);
     left: 0;
     right: 0;
     width: min(31rem, calc(100% - 2 * var(--content-inset)));
@@ -100,11 +103,9 @@
 
 @media (max-width: 768px) {
   .philosophy {
-    height: auto;
     z-index: 1;
 
     &__stage {
-      position: relative;
       display: flex;
       height: auto;
       min-height: 100svh;
@@ -115,7 +116,7 @@
     }
 
     &__composition {
-      grid-template-columns: 1fr;
+      flex-direction: column;
       row-gap: 1.15rem;
       width: 100%;
     }
@@ -128,24 +129,35 @@
 
       &--left,
       &--right {
-        justify-self: center;
         text-align: center;
       }
     }
 
     &__char {
       opacity: 1;
+      visibility: visible;
     }
 
     &__image {
-      grid-row: 2;
+      position: relative;
+      top: auto;
+      left: auto;
+      order: 0;
       width: min(52vw, 14rem);
-      justify-self: center;
+      translate: none;
       will-change: auto;
 
       img:first-child {
         position: relative;
       }
+    }
+
+    &__headline--left {
+      order: -1;
+    }
+
+    &__headline--right {
+      order: 1;
     }
 
     &__copy {
@@ -170,10 +182,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .philosophy {
-    height: auto;
-
     &__stage {
-      position: relative;
       border-radius: 0;
     }
 
@@ -185,6 +194,14 @@
 
     &__char {
       opacity: 1;
+      visibility: visible;
+    }
+
+    &__image {
+      position: relative;
+      top: auto;
+      left: auto;
+      translate: none;
     }
 
     &__copy {

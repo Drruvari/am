@@ -13,10 +13,10 @@ type MenuItem = {
 
 const menuItems: MenuItem[] = [
   { label: "Work", href: "#work" },
-  { label: "Studio", disabled: true },
-  { label: "Process", disabled: true },
-  { label: "Gallery", href: "#featured-project" },
-  { label: "Contact Us", href: "mailto:hello@arbermanga.com" },
+  { label: "About Me", href: "#about" },
+  { label: "Approach", href: "#process" },
+  { label: "Practice", href: "#featured-project" },
+  { label: "Contact Me", href: "mailto:hello@arbermanga.com" },
 ];
 
 export default function Header() {
@@ -150,7 +150,7 @@ export default function Header() {
             href="#about"
             data-hover="link"
           >
-            About Studio
+            About Me
           </a>
 
           <nav className="header-menu" aria-label="Primary">
@@ -161,18 +161,18 @@ export default function Header() {
             >
               Work
             </a>
-            <span className="header-menu__item header-link is-disabled">
-              Studio
-            </span>
-            <span className="header-menu__item header-link is-disabled">
-              Process
-            </span>
+            <a href="#about" className="header-menu__item header-link" data-hover="link">
+              About Me
+            </a>
+            <a href="#process" className="header-menu__item header-link" data-hover="link">
+              Approach
+            </a>
             <a
               href="#featured-project"
               className="header-menu__item header-link"
               data-hover="link"
             >
-              Gallery
+              Practice
             </a>
           </nav>
 
@@ -184,8 +184,8 @@ export default function Header() {
           >
             <span className="header-text-effect">
               <span className="header-text-effect__track">
-                <span>Get in Touch</span>
-                <span aria-hidden="true">Get in Touch</span>
+                <span>Contact Me</span>
+                <span aria-hidden="true">Contact Me</span>
               </span>
             </span>
             <span className="header-action__icon" aria-hidden="true">

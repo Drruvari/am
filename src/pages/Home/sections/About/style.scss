@@ -8,7 +8,7 @@
   background: var(--dark);
 
   &__image {
-    grid-column: 1 / 6;
+    grid-column: 8 / 13;
     aspect-ratio: 4 / 5;
     overflow: hidden;
     will-change: clip-path;
@@ -22,7 +22,7 @@
   }
 
   &__content {
-    grid-column: 7 / 13;
+    grid-column: 1 / 7;
 
     h2 {
       font-size: var(--display-1);
@@ -54,10 +54,10 @@
     padding-block: clamp(4.5rem, 10vw, 7rem);
   }
   .architect-about__image {
-    grid-column: 1 / 4;
+    grid-column: 6 / 9;
   }
   .architect-about__content {
-    grid-column: 5 / 9;
+    grid-column: 1 / 5;
   }
 }
 
@@ -74,6 +74,8 @@
   .architect-about__content {
     grid-column: 1 / -1;
   }
+  .architect-about__image { order: 2; }
+  .architect-about__content { order: 1; }
   .architect-about__content,
   .architect-about__content p {
     max-width: 100%;

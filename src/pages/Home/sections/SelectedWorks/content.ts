@@ -1,38 +1,38 @@
 export const sections = [
   {
     number: "01",
-    title: "The Cliff House",
+    title: "House Above the Adriatic",
     year: "2026",
     description:
-      "A coastal house set into limestone terrain, opening only where shade and sea views matter.",
+      "Limestone walls anchor a coastal home while deep openings frame shade, wind, and distant water.",
   },
   {
     number: "02",
-    title: "Industrial Loft",
+    title: "Textile Floor Reuse",
     year: "2025",
     description:
-      "A former textile floor shaped into a compact live-work interior of brick, steel, and pale oak.",
+      "An old production floor becomes a compact live-work setting through brick, steel, and pale oak.",
   },
   {
     number: "03",
-    title: "Botanical Spine",
+    title: "Garden Research Room",
     year: "2026",
     description:
-      "A research pavilion built around a glulam rhythm and a light-filtering passive skin.",
+      "A timber rhythm organizes research, gathering, and filtered daylight beneath one light roof.",
   },
   {
     number: "04",
-    title: "Monolith Sanctuary",
+    title: "Stone Room in the Mountains",
     year: "2025",
     description:
-      "A mountain retreat reduced to a mineral shell, a roof aperture, and the atmosphere of its site.",
+      "A compact retreat pairs a mineral shell with one roof opening and the changing mountain sky.",
   },
   {
     number: "05",
-    title: "Courtyard Residence",
+    title: "Courtyard House, Tirana",
     year: "2024",
     description:
-      "A quiet residence organized around protected outdoor rooms, soft daylight, and local stone.",
+      "Protected gardens divide family life into intimate rooms linked by soft daylight and local stone.",
   },
 ];
 

@@ -88,7 +88,7 @@ export function initParallax(root: ParentNode = document) {
             element.closest("figure, .project-card__media") ?? element,
           start: "top bottom",
           end: "bottom top",
-          scrub: 0.6,
+          scrub: 1,
           invalidateOnRefresh: true,
         },
       },

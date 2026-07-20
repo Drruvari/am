@@ -150,7 +150,7 @@ export default function SplitCanvasComp({ wrapperRef }: SplitCanvasCompProps) {
           trigger: wrapper,
           start: "top top",
           end: "bottom bottom",
-          scrub: true,
+          scrub: 1,
           onUpdate: (self) => {
             if (!material) return;
 

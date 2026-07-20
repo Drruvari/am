@@ -7,9 +7,9 @@ export default function Contact() {
     <footer className="footer" id="contact">
       <div className="footer__intro">
         <h2 className="footer__headline" data-split-lines>
-          Focused on quality
+          Bring a place
           <br />
-          driven by restraint
+          into focus
         </h2>
         <Button
           variant="pill"
@@ -20,7 +20,7 @@ export default function Contact() {
           data-reveal="up"
           data-hover="link"
         >
-          <span>Tell us about your project</span>
+          <span>Discuss your project with me</span>
         </Button>
       </div>
       <div className="footer__grid">
@@ -50,29 +50,33 @@ export default function Contact() {
           data-reveal-group="footer-columns"
           aria-label="Footer navigation"
         >
-          <span className="footer__label mono">(Navigation)</span>
+          <span className="footer__label mono">(Explore)</span>
           <div className="footer__nav">
             <a className="footer__nav-link" href="#top" data-hover="link">
               Home
             </a>
             <a className="footer__nav-link" href="#work" data-hover="link">
-              Works
+              Selected projects
             </a>
-            <span className="footer__nav-item is-disabled">In Progress</span>
+            <span className="footer__nav-item is-disabled">Current work</span>
             <a className="footer__nav-link" href="#work" data-hover="link">
-              Archive
+              Project archive
             </a>
-            <span className="footer__nav-item is-disabled">Studio</span>
-            <span className="footer__nav-item is-disabled">Process</span>
-            <a className="footer__nav-link" href="#gallery" data-hover="link">
-              Gallery
+            <a className="footer__nav-link" href="#about" data-hover="link">
+              About me
+            </a>
+            <a className="footer__nav-link" href="#process" data-hover="link">
+              Approach
+            </a>
+            <a className="footer__nav-link" href="#featured-project" data-hover="link">
+              Practice
             </a>
             <a
               className="footer__nav-link"
               href="mailto:hello@arbermanga.com"
               data-hover="link"
             >
-              Contact Us
+              Start a conversation
             </a>
           </div>
         </nav>
@@ -83,15 +87,15 @@ export default function Contact() {
           data-reveal-group="footer-columns"
         >
           <div className="footer__block">
-            <span className="footer__label mono">(Acknowledgement)</span>
+            <span className="footer__label mono">(Practice)</span>
             <p className="footer__block-text">
-              AM Architecture projects from Tirana and acknowledges the
-              builders, craftspeople, clients, and local communities that make
-              each study possible.
+              I lead every commission directly. Each project develops through
+              close exchange with clients, engineers, builders, and
+              craftspeople.
             </p>
           </div>
           <div className="footer__block">
-            <span className="footer__label mono">(Info)</span>
+            <span className="footer__label mono">(Contact)</span>
             <p className="footer__block-text">
               A: Blloku District, Tirana, AL
               <br />
@@ -99,7 +103,7 @@ export default function Contact() {
               <br />
               P: +355 69 000 0000
               <br />
-              H: Monday to Friday, 8:30am – 5:00pm
+              H: Monday—Friday, 08:30—17:00
             </p>
           </div>
         </div>

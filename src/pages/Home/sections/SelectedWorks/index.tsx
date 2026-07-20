@@ -21,9 +21,9 @@ export default function SelectedWorks() {
           {sections.map((section) => (
             <div key={section.number} className="selected-works__panel">
               <div className="selected-works__meta">
-                <span>Selected Work</span>
+                <span>Project Study</span>
                 <span className="selected-works__number">{section.number}</span>
-                <span className="selected-works__period">22–26’</span>
+                <span className="selected-works__period">2024—26</span>
               </div>
 
               <h2 className="selected-works__title">{section.title}</h2>

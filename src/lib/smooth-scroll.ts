@@ -19,6 +19,8 @@ type FallbackLenis = {
 
 export let lenis: LenisLike
 let savedScrollY = 0
+const SMOOTH_SCROLL_DURATION = 1.1
+const expoOut = (t: number) => 1 - 2 ** (-10 * t)
 
 function isMobileViewport() {
   return window.matchMedia('(max-width: 768px)').matches
@@ -68,7 +70,7 @@ export function scrollToTarget(
   ) {
     if (typeof target === 'number') {
       lenis.scrollTo(target, {
-        duration: options.immediate ? 0 : 0.85,
+        duration: options.immediate ? 0 : SMOOTH_SCROLL_DURATION,
         immediate: options.immediate,
       })
       return
@@ -77,7 +79,7 @@ export function scrollToTarget(
     if (el) {
       lenis.scrollTo(el as HTMLElement, {
         offset: -offset,
-        duration: options.immediate ? 0 : 0.85,
+        duration: options.immediate ? 0 : SMOOTH_SCROLL_DURATION,
         immediate: options.immediate,
       })
     }
@@ -97,17 +99,22 @@ export function scrollToTarget(
 
 export function initSmoothScroll() {
   const isTouchOnly = navigator.maxTouchPoints > 0 && !finePointerQuery.matches
-  const useSmoothScroll = desktopQuery.matches && !isTouchOnly
+  const prefersReducedMotion = window.matchMedia(
+    '(prefers-reduced-motion: reduce)',
+  ).matches
+  const useSmoothScroll =
+    desktopQuery.matches && !isTouchOnly && !prefersReducedMotion
 
   if (useSmoothScroll) {
     document.documentElement.classList.add('lenis', 'lenis-smooth')
     const smoothLenis = new Lenis({
-      duration: 0.85,
-      easing: (t: number) => 1 - (1 - t) ** 4,
+      autoRaf: false,
+      duration: SMOOTH_SCROLL_DURATION,
+      easing: expoOut,
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1.12,
+      wheelMultiplier: 1,
       syncTouch: false,
     })
     lenis = smoothLenis

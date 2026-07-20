@@ -52,25 +52,6 @@ export default function Philosophy() {
       const media = gsap.matchMedia();
 
       const setupDesktop = () => {
-        // Hide type immediately so nothing flashes before scroll
-        gsap.set([leftHeadline, rightHeadline], { autoAlpha: 1 });
-        gsap.set(copy, { y: 24, autoAlpha: 0 });
-        gsap.set(image, {
-          scale: 1,
-          x: 0,
-          y: 0,
-          xPercent: 0,
-          yPercent: 0,
-          transformOrigin: "50% 50%",
-        });
-        gsap.set(imageItems, {
-          scale: 1,
-          xPercent: 0,
-          yPercent: 0,
-          autoAlpha: 0,
-        });
-        gsap.set(imageItems[0], { autoAlpha: 1 });
-
         const leftSplit = SplitText.create(leftHeadline, {
           type: "chars",
           charsClass: "philosophy__char",
@@ -81,11 +62,17 @@ export default function Philosophy() {
         });
         const leftChars = leftSplit.chars;
         const rightChars = rightSplit.chars;
-        const chars = [...leftChars, ...rightChars];
 
-        gsap.set(chars, { opacity: 0 });
-        gsap.set(leftHeadline, { xPercent: -40 });
-        gsap.set(rightHeadline, { xPercent: 40 });
+        gsap.set([leftHeadline, rightHeadline], { autoAlpha: 1 });
+        gsap.set(leftChars, { autoAlpha: 0, yPercent: 115 });
+        gsap.set(rightChars, { autoAlpha: 0, yPercent: 115 });
+        gsap.set(copy, { y: 28, autoAlpha: 0 });
+        gsap.set(image, {
+          scale: 0.36,
+          transformOrigin: "50% 50%",
+        });
+        gsap.set(imageItems, { autoAlpha: 0 });
+        gsap.set(imageItems[0], { autoAlpha: 1 });
 
         root.classList.add("is-motion-ready");
 
@@ -158,13 +145,12 @@ export default function Philosophy() {
             pinSpacing: false,
             anticipatePin: 1,
             invalidateOnRefresh: true,
-            refreshPriority: -1,
+            refreshPriority: 2,
             onRefresh: stackCover,
             onEnter: stackCover,
             onEnterBack: stackCover,
           });
 
-          // Featured Project (top): rises, zooms out, fades as Philosophy covers it
           gsap.fromTo(
             previousSurface,
             {
@@ -182,7 +168,7 @@ export default function Philosophy() {
                 trigger: root,
                 start: "top bottom",
                 end: "top top",
-                scrub: 0.55,
+                scrub: 1,
                 invalidateOnRefresh: true,
               },
             },
@@ -199,48 +185,56 @@ export default function Philosophy() {
               trigger: root,
               start: "top bottom",
               end: "top top",
-              scrub: 0.45,
+              scrub: 1,
             },
           },
         );
 
+        // Pin section so scrub distance is explicit and reliable.
         const timeline = gsap.timeline({
           defaults: { ease: "none" },
           scrollTrigger: {
             trigger: root,
             start: "top top",
-            end: "bottom bottom",
-            scrub: 0.6,
+            end: "+=175%",
+            pin: true,
+            scrub: 1,
+            anticipatePin: 1,
             invalidateOnRefresh: true,
+            refreshPriority: 1,
           },
         });
 
-        // Letter-by-letter reveal (left then right), driven only by scroll
         timeline
-          .to(
+          .fromTo(
             leftChars,
+            { autoAlpha: 0, yPercent: 115 },
             {
-              opacity: 1,
-              stagger: 0.05,
-              duration: 0.42,
+              autoAlpha: 1,
+              yPercent: 0,
+              stagger: 0.055,
+              duration: 0.85,
             },
             0.02,
           )
-          .to(
+          .fromTo(
             rightChars,
+            { autoAlpha: 0, yPercent: 115 },
             {
-              opacity: 1,
-              stagger: 0.05,
-              duration: 0.42,
+              autoAlpha: 1,
+              yPercent: 0,
+              stagger: 0.055,
+              duration: 0.85,
             },
-            0.08,
+            0.12,
           )
-          // Headlines ease toward the image while letters appear
-          .to(leftHeadline, { xPercent: 0, duration: 0.4 }, 0)
-          .to(rightHeadline, { xPercent: 0, duration: 0.4 }, 0)
-          .to(copy, { y: 0, autoAlpha: 1, duration: 0.16 }, 0.34)
-          .to(leftHeadline, { xPercent: 5, duration: 0.28 }, 0.58)
-          .to(rightHeadline, { xPercent: -5, duration: 0.28 }, 0.58);
+          .fromTo(
+            image,
+            { scale: 0.36 },
+            { scale: 1.12, duration: 1.35 },
+            0,
+          )
+          .to(copy, { y: 0, autoAlpha: 1, duration: 0.35 }, 0.72);
 
         return () => {
           stopCycle();
@@ -253,14 +247,9 @@ export default function Philosophy() {
       media.add(
         "(min-width: 769px) and (prefers-reduced-motion: no-preference)",
         () => {
-          // Pre-hide before fonts so type never shows early
           gsap.set([leftHeadline, rightHeadline, copy], { autoAlpha: 0 });
           gsap.set(image, {
-            scale: 1,
-            x: 0,
-            y: 0,
-            xPercent: 0,
-            yPercent: 0,
+            scale: 0.36,
             transformOrigin: "50% 50%",
           });
 
@@ -301,7 +290,7 @@ export default function Philosophy() {
       <div className="philosophy__stage">
         <div className="philosophy__composition">
           <h2 className="philosophy__headline philosophy__headline--left">
-            We shape
+            Site leads
           </h2>
 
           <figure className="philosophy__image">
@@ -324,14 +313,13 @@ export default function Philosophy() {
           </figure>
 
           <h2 className="philosophy__headline philosophy__headline--right">
-            lasting space
+            form lasts
           </h2>
         </div>
 
         <p className="philosophy__copy">
-          We begin with land, light, and the rhythms of everyday life—then
-          refine structure, material, and proportion until each place feels
-          clear, calm, and inevitable.
+          Context sets the direction. Structure, material, and daylight are
+          refined until the place feels calm, useful, and entirely its own.
         </p>
       </div>
     </section>

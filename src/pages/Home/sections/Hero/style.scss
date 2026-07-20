@@ -63,6 +63,8 @@
 
 .banner-text {
   align-self: end;
+  justify-self: start;
+  margin-left: var(--content-inset);
   margin-bottom: clamp(1.5rem, 3vh, 2.75rem);
 }
 
@@ -80,8 +82,10 @@
 }
 
 .banner-descr {
+  justify-self: start;
   width: min(30rem, calc(100% - 2rem));
-  text-align: center;
+  margin-left: var(--content-inset);
+  text-align: left;
   font: 600 clamp(1rem, 1.15vw, 1.375rem)/1.12 var(--font-body);
   letter-spacing: -0.035em;
 }
@@ -157,7 +161,8 @@ html.is-loading .banner-reveal {
   }
 
   .banner-descr {
-    width: min(23rem, calc(100% - 2rem));
+    width: min(23rem, calc(100% - (2 * var(--content-inset))));
+    margin-right: var(--content-inset);
     font-size: clamp(0.9375rem, 4vw, 1.125rem);
   }
 

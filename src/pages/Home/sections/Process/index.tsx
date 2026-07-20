@@ -12,36 +12,36 @@ type ProcessItem = {
 const items: ProcessItem[] = [
   {
     stage: "01",
-    title: "Consultation",
-    services: "Goals, site, budget, and constraints",
+    title: "Listen",
+    services: "Brief, site, budget, and daily rituals",
     image:
       "https://pub-8abee449136941f5b0a1cd2c014534e9.r2.dev/vault-listing-images/assets-images/v-01.jpg",
   },
   {
     stage: "02",
-    title: "Concept",
-    services: "Atmosphere, references, and spatial direction",
+    title: "Read the place",
+    services: "Climate, orientation, context, and opportunity",
     image:
       "https://pub-8abee449136941f5b0a1cd2c014534e9.r2.dev/vault-listing-images/assets-images/v-02.jpg",
   },
   {
     stage: "03",
-    title: "Design development",
-    services: "Plans, materials, lighting, and refinement",
+    title: "Develop",
+    services: "Plans, proportions, materials, and daylight",
     image:
       "https://pub-8abee449136941f5b0a1cd2c014534e9.r2.dev/vault-listing-images/assets-images/v-03.jpg",
   },
   {
     stage: "04",
-    title: "Technical drawings",
-    services: "Coordination, pricing, and permit documents",
+    title: "Resolve",
+    services: "Details, consultants, costs, and approvals",
     image:
       "https://pub-8abee449136941f5b0a1cd2c014534e9.r2.dev/vault-listing-images/assets-images/v-04.jpg",
   },
   {
     stage: "05",
-    title: "Execution support",
-    services: "Site review, coordination, and detail guidance",
+    title: "Make",
+    services: "Site review, craft coordination, and final detail",
     image:
       "https://pub-8abee449136941f5b0a1cd2c014534e9.r2.dev/vault-listing-images/assets-images/v-05.jpg",
   },
@@ -169,10 +169,10 @@ export default function Process() {
     <section className="process" id="process">
       <header className="process__header">
         <span className="process__eyebrow mono">04 — Process</span>
-        <h2>How we shape space</h2>
+        <h2>From idea to place</h2>
         <p>
-          Hover each stage to follow an idea from first conversation to finished
-          place.
+          Five connected stages carry a commission from first questions to a
+          finished place.
         </p>
       </header>
 

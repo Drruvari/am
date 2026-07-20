@@ -57,10 +57,10 @@ export default function Hero() {
 
       <div className="banner-descr split">
         <span className="banner-reveal">
-          We design considered spaces that bring clarity, atmosphere, and
-          lasting value to everyday life.
+          Architecture shaped through light, proportion, and the particular
+          character of each site.
           <span className="banner-descr__break">
-            For people whose ambitions have outgrown the spaces around them.
+            Direct collaboration from first sketch to built detail.
           </span>
         </span>
       </div>
