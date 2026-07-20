@@ -31,6 +31,17 @@
     gap: clamp(0.15rem, 0.5vw, var(--grid-gap));
   }
 
+  &__services-text {
+    width: max-content;
+    margin: 0;
+    padding-left: 100vw;
+    color: currentcolor;
+    font: 750 var(--display-1) / 1.1 var(--font-heading);
+    letter-spacing: var(--tracking-display);
+    white-space: nowrap;
+    will-change: transform;
+  }
+
   &__headline {
     position: relative;
     z-index: 3;
@@ -53,8 +64,6 @@
 
   &__char {
     display: inline-block;
-    opacity: 0;
-    visibility: hidden;
     will-change: opacity, transform;
   }
 
@@ -149,6 +158,7 @@
 @media (prefers-reduced-motion: no-preference) {
   .philosophy:not(.is-motion-ready) {
     .philosophy__headline,
+    .philosophy__services-text,
     .philosophy__copy {
       visibility: hidden;
     }
@@ -178,6 +188,14 @@
 
     &__copy {
       opacity: 1;
+    }
+
+    &__services-text {
+      width: auto;
+      padding-inline: var(--content-inset);
+      font-size: clamp(2.75rem, 9vw, 6rem);
+      text-align: center;
+      white-space: normal;
     }
   }
 }

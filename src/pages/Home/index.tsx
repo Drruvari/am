@@ -5,7 +5,6 @@ import Hero from "./sections/Hero";
 import Philosophy from "./sections/Philosophy";
 import Process from "./sections/Process";
 import SelectedWorks from "./sections/SelectedWorks";
-import Services from "./sections/Services";
 import "./style.scss";
 
 export default function Home() {
@@ -16,7 +15,6 @@ export default function Home() {
         <FeaturedProject />
         <Philosophy />
         <SelectedWorks />
-        <Services />
         <Process />
         <About />
       </main>
