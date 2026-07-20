@@ -1,8 +1,10 @@
+@use "@/styles/breakpoints" as *;
+
 .philosophy {
   position: relative;
   z-index: 5;
   background: transparent;
-  color: #f2f2ed;
+  color: var(--color-white);
 
   &__stage {
     position: relative;
@@ -10,10 +12,12 @@
     display: grid;
     width: 100%;
     height: 100svh;
+    min-height: 100svh;
     place-items: center;
     overflow: hidden;
     padding: var(--content-inset);
-    border-radius: 22px 22px 0 0;
+    padding-bottom: calc(var(--content-inset) + env(safe-area-inset-bottom, 0px));
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
     background: #0b0b0b;
   }
 
@@ -22,9 +26,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: min(100%, 88rem);
-    // Tight seam — image sits in the gap and grows from center
-    gap: clamp(0.2rem, 0.55vw, 0.55rem);
+    width: min(100%, var(--page-max));
+    // Shared seam — image grows in the gap without pushing type apart
+    gap: clamp(0.15rem, 0.5vw, var(--grid-gap));
   }
 
   &__headline {
@@ -32,8 +36,8 @@
     z-index: 3;
     margin: 0;
     overflow: hidden;
-    font: 700 clamp(3rem, 5.9vw, 7.25rem) / 0.88 var(--font-heading);
-    letter-spacing: -0.065em;
+    font: 700 var(--display-2) / var(--lh-display-tight) var(--font-heading);
+    letter-spacing: var(--tracking-display);
     text-transform: uppercase;
     white-space: nowrap;
     will-change: transform;
@@ -59,10 +63,10 @@
     top: 50%;
     left: 50%;
     z-index: 2;
-    width: clamp(11rem, 18vw, 19rem);
+    width: clamp(7.5rem, 16vw, 19rem);
     aspect-ratio: 3 / 4;
     overflow: hidden;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     // Independent of GSAP transform (scale) — stays centered while zooming
     translate: -50% -50%;
     transform-origin: 50% 50%;
@@ -88,90 +92,61 @@
 
   &__copy {
     position: absolute;
-    bottom: clamp(2.5rem, 8vh, 5.5rem);
-    left: 0;
-    right: 0;
-    width: min(31rem, calc(100% - 2 * var(--content-inset)));
+    bottom: clamp(1.75rem, 6vh, 5.5rem);
+    left: var(--content-inset);
+    right: var(--content-inset);
+    width: min(31rem, 100%);
     margin-inline: auto;
-    color: rgb(255 255 255 / 0.72);
-    font: 550 clamp(0.9rem, 1.05vw, 1.1rem) / 1.35 var(--font-body);
+    color: var(--muted-on-dark);
+    font: 550 clamp(0.875rem, 0.35vw + 0.8rem, 1.1rem) / 1.35 var(--font-body);
     letter-spacing: -0.025em;
     text-align: center;
     opacity: 0;
   }
 }
 
-@media (max-width: 768px) {
+// Narrow screens keep the same composition — only scale type/image denser.
+@include below($bp-md) {
   .philosophy {
-    z-index: 1;
-
     &__stage {
-      display: flex;
-      height: auto;
-      min-height: 100svh;
-      flex-direction: column;
-      justify-content: center;
-      padding-block: 6rem 3rem;
-      border-radius: 0;
-    }
-
-    &__composition {
-      flex-direction: column;
-      row-gap: 1.15rem;
-      width: 100%;
+      padding-block: max(var(--content-inset), env(safe-area-inset-top, 0px))
+        calc(var(--content-inset) + env(safe-area-inset-bottom, 0px));
     }
 
     &__headline {
-      z-index: 3;
-      font-size: clamp(2.75rem, 13vw, 5rem);
-      white-space: normal;
-      will-change: auto;
-
-      &--left,
-      &--right {
-        text-align: center;
-      }
-    }
-
-    &__char {
-      opacity: 1;
-      visibility: visible;
+      font-size: clamp(1.85rem, 9.5vw, 3.25rem);
+      letter-spacing: -0.05em;
     }
 
     &__image {
-      position: relative;
-      top: auto;
-      left: auto;
-      order: 0;
-      width: min(52vw, 14rem);
-      translate: none;
-      will-change: auto;
-
-      img:first-child {
-        position: relative;
-      }
-    }
-
-    &__headline--left {
-      order: -1;
-    }
-
-    &__headline--right {
-      order: 1;
+      width: clamp(5.75rem, 28vw, 9.5rem);
+      border-radius: clamp(0.4rem, 1.5vw, 0.65rem);
     }
 
     &__copy {
-      position: relative;
-      bottom: auto;
-      left: auto;
-      right: auto;
-      margin-top: 2.75rem;
-      opacity: 1;
+      bottom: max(1.5rem, env(safe-area-inset-bottom, 0px) + 1rem);
+      font-size: clamp(0.85rem, 3.4vw, 1rem);
     }
   }
 }
 
-@media (min-width: 769px) and (prefers-reduced-motion: no-preference) {
+@include below($bp-sm) {
+  .philosophy {
+    &__composition {
+      gap: 0.12rem;
+    }
+
+    &__headline {
+      font-size: clamp(1.55rem, 8.8vw, 2.35rem);
+    }
+
+    &__image {
+      width: clamp(4.75rem, 26vw, 7.25rem);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
   .philosophy:not(.is-motion-ready) {
     .philosophy__headline,
     .philosophy__copy {
@@ -198,10 +173,7 @@
     }
 
     &__image {
-      position: relative;
-      top: auto;
-      left: auto;
-      translate: none;
+      scale: 1;
     }
 
     &__copy {

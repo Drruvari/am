@@ -1,6 +1,10 @@
+import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { useEffect, useRef } from "react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useRef } from "react";
 import "./style.scss";
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 type ProcessItem = {
   stage: string;
@@ -48,125 +52,232 @@ const items: ProcessItem[] = [
 ];
 
 export default function Process() {
+  const rootRef = useRef<HTMLElement>(null);
   const tableRef = useRef<HTMLDivElement>(null);
   const highlightRef = useRef<HTMLDivElement>(null);
   const imageRefs = useRef<Array<HTMLDivElement | null>>([]);
-  const rowRefs = useRef<Record<number, HTMLTableRowElement | null>>({});
-  const activeIndexRef = useRef<number | null>(null);
-  const pendingLeaveRef = useRef<Record<number, boolean>>({});
-  const generationRef = useRef<Record<number, number>>({});
-  const zIndexRef = useRef(10);
+  const rowRefs = useRef<Array<HTMLTableRowElement | null>>([]);
 
-  useEffect(() => {
-    imageRefs.current.forEach((image) => {
-      if (image)
-        gsap.set(image, { clipPath: "inset(50%)", visibility: "hidden" });
-    });
-    gsap.set(highlightRef.current, { opacity: 0, y: 0, height: 0 });
-  }, []);
+  useGSAP(
+    () => {
+      const root = rootRef.current;
+      const table = tableRef.current;
+      const highlight = highlightRef.current;
+      if (!root || !table || !highlight) return;
 
-  const nextGeneration = (index: number) => {
-    generationRef.current[index] = (generationRef.current[index] ?? 0) + 1;
-    return generationRef.current[index];
-  };
+      const images = imageRefs.current.filter(Boolean) as HTMLDivElement[];
+      const rows = rowRefs.current.filter(Boolean) as HTMLTableRowElement[];
+      if (!images.length || rows.length !== images.length) return;
 
-  const setRowColor = (index: number, color: string) => {
-    const row = rowRefs.current[index];
-    if (!row) return;
-    gsap.to(row.querySelectorAll("td"), {
-      color,
-      duration: 0.3,
-      ease: "power2.out",
-      overwrite: "auto",
-    });
-  };
+      const reducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
 
-  const hideImage = (index: number) => {
-    const image = imageRefs.current[index];
-    if (!image) return;
-    const generation = nextGeneration(index);
-    gsap.killTweensOf(image);
-    gsap.to(image, {
-      clipPath: "inset(50%)",
-      opacity: 0,
-      duration: 1,
-      ease: "power3.inOut",
-      onComplete: () => {
-        if (generationRef.current[index] === generation)
-          gsap.set(image, { visibility: "hidden" });
-      },
-    });
-  };
+      if (reducedMotion) {
+        gsap.set(images, { clearProps: "all", visibility: "hidden" });
+        gsap.set(highlight, { autoAlpha: 0 });
+        return;
+      }
 
-  const showItem = (index: number) => {
-    const image = imageRefs.current[index];
-    const row = rowRefs.current[index];
-    const table = tableRef.current;
-    const highlight = highlightRef.current;
-    if (!image || !row || !table || !highlight) return;
+      gsap.set(images, { clipPath: "inset(50%)", autoAlpha: 0 });
+      gsap.set(highlight, { autoAlpha: 0, y: 0, height: 0 });
 
-    pendingLeaveRef.current[index] = false;
-    zIndexRef.current += 1;
-    const generation = nextGeneration(index);
-    const tableBounds = table.getBoundingClientRect();
-    const rowBounds = row.getBoundingClientRect();
+      let activeIndex: number | null = null;
+      let zIndex = 10;
+      const pendingLeave: Record<number, boolean> = {};
+      const generation: Record<number, number> = {};
 
-    gsap.killTweensOf(image);
-    gsap.set(image, {
-      zIndex: zIndexRef.current,
-      visibility: "visible",
-      clipPath: "inset(50%)",
-      opacity: 1,
-    });
-    gsap.to(image, {
-      clipPath: "inset(0%)",
-      duration: 0.6,
-      ease: "power2.inOut",
-      onComplete: () => {
-        if (
-          generationRef.current[index] === generation &&
-          pendingLeaveRef.current[index]
-        )
-          hideImage(index);
-      },
-    });
+      const nextGeneration = (index: number) => {
+        generation[index] = (generation[index] ?? 0) + 1;
+        return generation[index];
+      };
 
-    if (activeIndexRef.current !== null && activeIndexRef.current !== index) {
-      setRowColor(activeIndexRef.current, "var(--fg)");
-    }
-    activeIndexRef.current = index;
-    setRowColor(index, "var(--bg)");
-    gsap.to(highlight, {
-      y: rowBounds.top - tableBounds.top,
-      height: rowBounds.height,
-      autoAlpha: 1,
-      duration: 0.4,
-      ease: "power3.out",
-      overwrite: "auto",
-    });
-  };
+      const setRowColor = (index: number, color: string) => {
+        gsap.to(rows[index].querySelectorAll("td"), {
+          color,
+          duration: 0.3,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+      };
 
-  const leaveItem = (index: number) => {
-    const image = imageRefs.current[index];
-    if (!image) return;
-    if (gsap.isTweening(image)) pendingLeaveRef.current[index] = true;
-    else hideImage(index);
-  };
+      const hideImage = (index: number) => {
+        const image = images[index];
+        const gen = nextGeneration(index);
+        gsap.killTweensOf(image);
+        gsap.to(image, {
+          clipPath: "inset(50%)",
+          autoAlpha: 0,
+          duration: 0.85,
+          ease: "power3.inOut",
+          onComplete: () => {
+            if (generation[index] === gen) {
+              gsap.set(image, { visibility: "hidden" });
+            }
+          },
+        });
+      };
 
-  const leaveList = () => {
-    if (activeIndexRef.current !== null)
-      setRowColor(activeIndexRef.current, "var(--fg)");
-    activeIndexRef.current = null;
-    gsap.to(highlightRef.current, {
-      autoAlpha: 0,
-      duration: 0.3,
-      ease: "power2.out",
-      overwrite: "auto",
-    });
-  };
+      const showItem = (index: number) => {
+        const image = images[index];
+        const row = rows[index];
+        pendingLeave[index] = false;
+        zIndex += 1;
+        const gen = nextGeneration(index);
+        const tableBounds = table.getBoundingClientRect();
+        const rowBounds = row.getBoundingClientRect();
+
+        gsap.killTweensOf(image);
+        gsap.set(image, {
+          zIndex,
+          visibility: "visible",
+          clipPath: "inset(50%)",
+          autoAlpha: 1,
+        });
+        gsap.to(image, {
+          clipPath: "inset(0%)",
+          duration: 0.6,
+          ease: "power2.inOut",
+          onComplete: () => {
+            if (generation[index] === gen && pendingLeave[index]) {
+              hideImage(index);
+            }
+          },
+        });
+
+        if (activeIndex !== null && activeIndex !== index) {
+          setRowColor(activeIndex, "var(--fg)");
+          hideImage(activeIndex);
+        }
+        activeIndex = index;
+        setRowColor(index, "var(--bg)");
+        gsap.to(highlight, {
+          y: rowBounds.top - tableBounds.top,
+          height: rowBounds.height,
+          autoAlpha: 1,
+          duration: 0.4,
+          ease: "power3.out",
+          overwrite: "auto",
+        });
+      };
+
+      const leaveItem = (index: number) => {
+        if (gsap.isTweening(images[index])) pendingLeave[index] = true;
+        else hideImage(index);
+      };
+
+      const leaveList = () => {
+        if (activeIndex !== null) setRowColor(activeIndex, "var(--fg)");
+        activeIndex = null;
+        gsap.to(highlight, {
+          autoAlpha: 0,
+          duration: 0.3,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+      };
+
+      const media = gsap.matchMedia();
+
+      // Desktop / fine pointer: hover + focus (same as before)
+      media.add("(hover: hover) and (pointer: fine)", () => {
+        const onLeaveList = () => {
+          images.forEach((_, index) => leaveItem(index));
+          leaveList();
+        };
+
+        table.addEventListener("mouseleave", onLeaveList);
+
+        const cleanups = rows.map((row, index) => {
+          const onEnter = () => showItem(index);
+          const onLeave = () => leaveItem(index);
+          const onFocus = () => showItem(index);
+          const onBlur = () => leaveList();
+
+          row.addEventListener("mouseenter", onEnter);
+          row.addEventListener("mouseleave", onLeave);
+          row.addEventListener("focus", onFocus);
+          row.addEventListener("blur", onBlur);
+
+          return () => {
+            row.removeEventListener("mouseenter", onEnter);
+            row.removeEventListener("mouseleave", onLeave);
+            row.removeEventListener("focus", onFocus);
+            row.removeEventListener("blur", onBlur);
+          };
+        });
+
+        return () => {
+          table.removeEventListener("mouseleave", onLeaveList);
+          cleanups.forEach((cleanup) => cleanup());
+          leaveList();
+          images.forEach((_, index) => {
+            gsap.killTweensOf(images[index]);
+            gsap.set(images[index], {
+              clipPath: "inset(50%)",
+              autoAlpha: 0,
+              visibility: "hidden",
+            });
+          });
+        };
+      });
+
+      // Touch / coarse pointer: same clip + highlight, driven by scroll
+      media.add("(hover: none), (pointer: coarse)", () => {
+        const activateClosest = () => {
+          const mid = window.innerHeight * 0.5;
+          let closest = -1;
+          let closestDist = Number.POSITIVE_INFINITY;
+          rows.forEach((row, index) => {
+            const rect = row.getBoundingClientRect();
+            if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+            const center = rect.top + rect.height / 2;
+            const dist = Math.abs(center - mid);
+            if (dist < closestDist) {
+              closestDist = dist;
+              closest = index;
+            }
+          });
+          if (closest >= 0) showItem(closest);
+        };
+
+        const triggers = rows.map((row, index) =>
+          ScrollTrigger.create({
+            trigger: row,
+            start: "top 65%",
+            end: "bottom 35%",
+            onToggle: (self) => {
+              if (self.isActive) showItem(index);
+            },
+          }),
+        );
+
+        const onRefresh = () => activateClosest();
+        ScrollTrigger.addEventListener("refresh", onRefresh);
+        activateClosest();
+
+        return () => {
+          ScrollTrigger.removeEventListener("refresh", onRefresh);
+          triggers.forEach((trigger) => trigger.kill());
+          leaveList();
+          images.forEach((image) => {
+            gsap.killTweensOf(image);
+            gsap.set(image, {
+              clipPath: "inset(50%)",
+              autoAlpha: 0,
+              visibility: "hidden",
+            });
+          });
+        };
+      });
+
+      return () => media.revert();
+    },
+    { scope: rootRef },
+  );
 
   return (
-    <section className="process" id="process">
+    <section ref={rootRef} className="process" id="process">
       <header className="process__header">
         <span className="process__eyebrow mono">04 — Process</span>
         <h2>From idea to place</h2>
@@ -176,7 +287,7 @@ export default function Process() {
         </p>
       </header>
 
-      <div className="process__desktop">
+      <div className="process__stage">
         <div
           ref={highlightRef}
           className="process__highlight"
@@ -196,13 +307,13 @@ export default function Process() {
           ))}
         </div>
 
-        <div ref={tableRef} className="process__table" onMouseLeave={leaveList}>
+        <div ref={tableRef} className="process__table">
           <table>
             <colgroup>
-              <col style={{ width: "20%" }} />
-              <col style={{ width: "20%" }} />
-              <col style={{ width: "20%" }} />
-              <col style={{ width: "40%" }} />
+              <col className="process__col--stage" />
+              <col className="process__col--title" />
+              <col className="process__col--gap" />
+              <col className="process__col--services" />
             </colgroup>
             <tbody>
               {items.map((item, index) => (
@@ -212,10 +323,6 @@ export default function Process() {
                   }}
                   key={item.stage}
                   tabIndex={0}
-                  onMouseEnter={() => showItem(index)}
-                  onMouseLeave={() => leaveItem(index)}
-                  onFocus={() => showItem(index)}
-                  onBlur={leaveList}
                 >
                   <td className="mono">{item.stage}</td>
                   <td>{item.title}</td>
@@ -226,19 +333,6 @@ export default function Process() {
             </tbody>
           </table>
         </div>
-      </div>
-
-      <div className="process__mobile">
-        {items.map((item) => (
-          <article className="process__card" key={item.stage}>
-            <div className="process__card-copy">
-              <span className="mono">{item.stage}</span>
-              <h3>{item.title}</h3>
-              <p>{item.services}</p>
-            </div>
-            <img src={item.image} alt="" />
-          </article>
-        ))}
       </div>
     </section>
   );

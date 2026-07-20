@@ -102,20 +102,24 @@ export function initSmoothScroll() {
   const prefersReducedMotion = window.matchMedia(
     '(prefers-reduced-motion: reduce)',
   ).matches
-  const useSmoothScroll =
-    desktopQuery.matches && !isTouchOnly && !prefersReducedMotion
+  // Same Lenis-driven scroll on mobile + desktop (native only for reduced-motion)
+  const useSmoothScroll = !prefersReducedMotion
 
   if (useSmoothScroll) {
     document.documentElement.classList.add('lenis', 'lenis-smooth')
     const smoothLenis = new Lenis({
       autoRaf: false,
-      duration: SMOOTH_SCROLL_DURATION,
+      duration: isTouchOnly ? 0.85 : SMOOTH_SCROLL_DURATION,
       easing: expoOut,
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
       wheelMultiplier: 1,
-      syncTouch: false,
+      // Touch devices: sync touch so scrub/pin match desktop feel
+      syncTouch: isTouchOnly || !desktopQuery.matches,
+      syncTouchLerp: 0.075,
+      touchInertiaExponent: 1.45,
+      touchMultiplier: 1.15,
     })
     lenis = smoothLenis
 

@@ -51,7 +51,14 @@ export default function Philosophy() {
 
       const media = gsap.matchMedia();
 
-      const setupDesktop = () => {
+      const setupMotion = (context: gsap.Context) => {
+        const isNarrow = context.conditions?.narrow ?? false;
+        const pinType = ScrollTrigger.isTouch === 1 ? "transform" : "fixed";
+        const scrollEnd = isNarrow ? "+=140%" : "+=175%";
+        const imageFrom = isNarrow ? 0.42 : 0.36;
+        const imageTo = isNarrow ? 1.06 : 1.12;
+        const radiusFrom = isNarrow ? "16px 16px 0 0" : "22px 22px 0 0";
+
         const leftSplit = SplitText.create(leftHeadline, {
           type: "chars",
           charsClass: "philosophy__char",
@@ -66,9 +73,9 @@ export default function Philosophy() {
         gsap.set([leftHeadline, rightHeadline], { autoAlpha: 1 });
         gsap.set(leftChars, { autoAlpha: 0, yPercent: 115 });
         gsap.set(rightChars, { autoAlpha: 0, yPercent: 115 });
-        gsap.set(copy, { y: 28, autoAlpha: 0 });
+        gsap.set(copy, { y: 24, autoAlpha: 0 });
         gsap.set(image, {
-          scale: 0.36,
+          scale: imageFrom,
           transformOrigin: "50% 50%",
         });
         gsap.set(imageItems, { autoAlpha: 0 });
@@ -143,6 +150,7 @@ export default function Philosophy() {
             end: "top top",
             pin: previous,
             pinSpacing: false,
+            pinType,
             anticipatePin: 1,
             invalidateOnRefresh: true,
             refreshPriority: 2,
@@ -160,7 +168,7 @@ export default function Philosophy() {
               transformOrigin: "50% 50%",
             },
             {
-              yPercent: -10,
+              yPercent: isNarrow ? -6 : -10,
               scale: 0.97,
               opacity: 0.35,
               ease: "none",
@@ -177,7 +185,7 @@ export default function Philosophy() {
 
         gsap.fromTo(
           stage,
-          { borderRadius: "22px 22px 0 0" },
+          { borderRadius: radiusFrom },
           {
             borderRadius: "0px 0px 0 0",
             ease: "none",
@@ -190,14 +198,14 @@ export default function Philosophy() {
           },
         );
 
-        // Pin section so scrub distance is explicit and reliable.
         const timeline = gsap.timeline({
           defaults: { ease: "none" },
           scrollTrigger: {
             trigger: root,
             start: "top top",
-            end: "+=175%",
+            end: scrollEnd,
             pin: true,
+            pinType,
             scrub: 1,
             anticipatePin: 1,
             invalidateOnRefresh: true,
@@ -230,8 +238,8 @@ export default function Philosophy() {
           )
           .fromTo(
             image,
-            { scale: 0.36 },
-            { scale: 1.12, duration: 1.35 },
+            { scale: imageFrom },
+            { scale: imageTo, duration: 1.35 },
             0,
           )
           .to(copy, { y: 0, autoAlpha: 1, duration: 0.35 }, 0.72);
@@ -244,33 +252,40 @@ export default function Philosophy() {
         };
       };
 
+      // Same motion on all viewports — only reduced-motion opts out.
       media.add(
-        "(min-width: 769px) and (prefers-reduced-motion: no-preference)",
-        () => {
+        {
+          motion: "(prefers-reduced-motion: no-preference)",
+          narrow: "(max-width: 768px)",
+          wide: "(min-width: 769px)",
+        },
+        (context) => {
+          if (!context.conditions?.motion) return;
+
           gsap.set([leftHeadline, rightHeadline, copy], { autoAlpha: 0 });
           gsap.set(image, {
-            scale: 0.36,
+            scale: context.conditions.narrow ? 0.42 : 0.36,
             transformOrigin: "50% 50%",
           });
 
           let disposed = false;
-          let cleanupDesktop: (() => void) | undefined;
+          let cleanupMotion: (() => void) | undefined;
           const fontsReady = document.fonts?.ready ?? Promise.resolve();
 
           fontsReady.then(() => {
             if (disposed) return;
-            cleanupDesktop = setupDesktop();
+            cleanupMotion = setupMotion(context);
             ScrollTrigger.refresh();
           });
 
           return () => {
             disposed = true;
-            cleanupDesktop?.();
+            cleanupMotion?.();
           };
         },
       );
 
-      media.add("(max-width: 768px), (prefers-reduced-motion: reduce)", () => {
+      media.add("(prefers-reduced-motion: reduce)", () => {
         root.classList.add("is-motion-ready");
         gsap.set([leftHeadline, rightHeadline, image, imageItems, copy], {
           clearProps: "all",

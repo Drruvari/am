@@ -93,6 +93,24 @@
   }
 }
 
+@media (max-width: 768px) {
+  .services {
+    height: 480vh;
+
+    &__kinetic-text {
+      font-size: clamp(2.75rem, 14vw, 4.5rem);
+      gap: 6vw;
+      padding-left: 100vw;
+    }
+
+    &__intro h2 {
+      max-width: 12ch;
+      font-size: clamp(2.75rem, 12vw, 4rem);
+      padding-inline: var(--content-inset);
+    }
+  }
+}
+
 @media (max-width: 480px) {
   .services__credit {
     bottom: 1.25rem;
