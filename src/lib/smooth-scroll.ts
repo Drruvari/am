@@ -2,7 +2,6 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 import { addCleanup } from './cleanup'
-import { finePointerQuery, desktopQuery } from './globals'
 
 export type LenisLike = Lenis | FallbackLenis
 
@@ -19,7 +18,7 @@ type FallbackLenis = {
 
 export let lenis: LenisLike
 let savedScrollY = 0
-const SMOOTH_SCROLL_DURATION = 1.1
+const SMOOTH_SCROLL_DURATION = 0.8
 const expoOut = (t: number) => 1 - 2 ** (-10 * t)
 
 function isMobileViewport() {
@@ -98,7 +97,6 @@ export function scrollToTarget(
 }
 
 export function initSmoothScroll() {
-  const isTouchOnly = navigator.maxTouchPoints > 0 && !finePointerQuery.matches
   const prefersReducedMotion = window.matchMedia(
     '(prefers-reduced-motion: reduce)',
   ).matches
@@ -109,17 +107,13 @@ export function initSmoothScroll() {
     document.documentElement.classList.add('lenis', 'lenis-smooth')
     const smoothLenis = new Lenis({
       autoRaf: false,
-      duration: isTouchOnly ? 0.85 : SMOOTH_SCROLL_DURATION,
+      duration: SMOOTH_SCROLL_DURATION,
       easing: expoOut,
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1,
-      // Touch devices: sync touch so scrub/pin match desktop feel
-      syncTouch: isTouchOnly || !desktopQuery.matches,
-      syncTouchLerp: 0.075,
-      touchInertiaExponent: 1.45,
-      touchMultiplier: 1.15,
+      wheelMultiplier: 0.9,
+      syncTouch: false,
     })
     lenis = smoothLenis
 
