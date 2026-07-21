@@ -165,6 +165,10 @@ html.is-loading .banner-reveal {
     object-position: 52% center;
   }
 
+  .banner-canvas {
+    pointer-events: none;
+  }
+
   .banner-descr {
     grid-column: 1;
     align-self: end;

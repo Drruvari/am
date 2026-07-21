@@ -35,7 +35,7 @@ function scheduleScrollRefresh() {
   });
 }
 
-function initHeroCollectionTransition() {
+function initHeroCollectionTransition(isMobile = false) {
   initHeroEases();
 
   const banner = document.querySelector<HTMLElement>(".banner");
@@ -119,7 +119,7 @@ function initHeroCollectionTransition() {
       trigger: banner,
       start: "top top",
       end: "bottom top",
-      scrub: 1,
+      scrub: isMobile ? true : 1,
       invalidateOnRefresh: true,
       onUpdate: syncHeaderColor,
       onLeave: () => {
@@ -337,30 +337,38 @@ function initHomepageScrollStory() {
 }
 
 function initScrollAnimations() {
-  mm.add("(min-width: 0px)", () => {
-    const heroAnimation = initHeroCollectionTransition();
-
-    return () => {
-      heroAnimation?.destroy();
-
-      document.body.classList.remove("is-hero-pinned", "is-header-on-dark");
-      gsap.set(
-        [
-          ".banner-mask",
-          ".collection",
-          ".slider",
-          ".slider-img",
-          ".slider-img img",
-          ".collection-mask",
-          ".slider-title__item",
-          ".header",
-          ".header-wrapp",
-          ".header-link",
-        ],
-        { clearProps: "all" },
+  mm.add(
+    {
+      mobile: "(max-width: 768px)",
+      desktop: "(min-width: 769px)",
+    },
+    (context) => {
+      const heroAnimation = initHeroCollectionTransition(
+        context.conditions?.mobile ?? false,
       );
-    };
-  });
+
+      return () => {
+        heroAnimation?.destroy();
+
+        document.body.classList.remove("is-hero-pinned", "is-header-on-dark");
+        gsap.set(
+          [
+            ".banner-mask",
+            ".collection",
+            ".slider",
+            ".slider-img",
+            ".slider-img img",
+            ".collection-mask",
+            ".slider-title__item",
+            ".header",
+            ".header-wrapp",
+            ".header-link",
+          ],
+          { clearProps: "all" },
+        );
+      };
+    },
+  );
 }
 
 export function initPageScroll() {

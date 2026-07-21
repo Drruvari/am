@@ -74,8 +74,13 @@ export function initScrollStory(root: ParentNode = document) {
 export function initParallax(root: ParentNode = document) {
   if (prefersReducedMotion()) return;
 
+  const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
   root.querySelectorAll<HTMLElement>("[data-parallax]").forEach((element) => {
-    const strength = Number.parseFloat(element.dataset.parallax || "20");
+    const configuredStrength = Number.parseFloat(
+      element.dataset.parallax || "20",
+    );
+    const strength = isMobile ? configuredStrength * 0.55 : configuredStrength;
 
     gsap.fromTo(
       element,
@@ -88,7 +93,7 @@ export function initParallax(root: ParentNode = document) {
             element.closest("figure, .project-card__media") ?? element,
           start: "top bottom",
           end: "bottom top",
-          scrub: 1,
+          scrub: isMobile ? true : 1,
           invalidateOnRefresh: true,
         },
       },

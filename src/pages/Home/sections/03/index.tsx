@@ -50,6 +50,46 @@ export default function Philosophy() {
 
         root.classList.add("is-motion-ready");
 
+        if (isNarrow) {
+          gsap.set(serviceText, { clearProps: "transform" });
+          gsap.fromTo(
+            characters,
+            { yPercent: 45, autoAlpha: 0 },
+            {
+              yPercent: 0,
+              autoAlpha: 1,
+              duration: 0.8,
+              stagger: 0.012,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: root,
+                start: "top 72%",
+                once: true,
+              },
+            },
+          );
+
+          gsap.fromTo(
+            stage,
+            { borderRadius: radiusFrom },
+            {
+              borderRadius: "0px",
+              ease: "none",
+              scrollTrigger: {
+                trigger: root,
+                start: "top bottom",
+                end: "top 35%",
+                scrub: true,
+              },
+            },
+          );
+
+          return () => {
+            root.classList.remove("is-motion-ready");
+            textSplit.revert();
+          };
+        }
+
         const previous = root.previousElementSibling;
         if (previous instanceof HTMLElement) {
           const previousSurface =

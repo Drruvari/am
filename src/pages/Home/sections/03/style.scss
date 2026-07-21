@@ -118,8 +118,20 @@
 @include below($bp-md) {
   .philosophy {
     &__stage {
+      height: auto;
+      min-height: 82svh;
       padding-block: max(var(--content-inset), env(safe-area-inset-top, 0px))
         calc(var(--content-inset) + env(safe-area-inset-bottom, 0px));
+    }
+
+    &__services-text {
+      width: auto;
+      padding-left: 0;
+      font-size: clamp(2.5rem, 12vw, 5rem);
+      line-height: 0.98;
+      text-align: center;
+      white-space: normal;
+      will-change: auto;
     }
 
     &__headline {

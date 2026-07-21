@@ -85,7 +85,6 @@ export default function SplitCanvasComp({ wrapperRef }: SplitCanvasCompProps) {
     let renderer: THREE.WebGLRenderer | undefined;
     let material: THREE.ShaderMaterial | undefined;
     let textures: THREE.CanvasTexture[] = [];
-    let animationId = 0;
     let scrollTrigger: ScrollTrigger | undefined;
     let mounted = true;
 
@@ -120,7 +119,7 @@ export default function SplitCanvasComp({ wrapperRef }: SplitCanvasCompProps) {
 
         renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
         renderer.setSize(canvasWidth, canvasHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 2));
         renderer.setClearColor(0x000000, 0);
         container.replaceChildren(renderer.domElement);
 
@@ -191,15 +190,12 @@ export default function SplitCanvasComp({ wrapperRef }: SplitCanvasCompProps) {
               material.uniforms.u_texture2.value = textures[next];
               material.uniforms.u_progress.value = progress;
             }
+
+            renderer?.render(scene, camera);
           },
         });
 
-        const render = () => {
-          if (!mounted || !renderer) return;
-          renderer.render(scene, camera);
-          animationId = window.requestAnimationFrame(render);
-        };
-        render();
+        renderer.render(scene, camera);
         ScrollTrigger.refresh();
       } catch (error) {
         console.error("Selected works canvas failed to initialize", error);
@@ -210,7 +206,6 @@ export default function SplitCanvasComp({ wrapperRef }: SplitCanvasCompProps) {
 
     return () => {
       mounted = false;
-      window.cancelAnimationFrame(animationId);
       scrollTrigger?.kill();
       material?.dispose();
       textures.forEach((texture) => texture.dispose());
