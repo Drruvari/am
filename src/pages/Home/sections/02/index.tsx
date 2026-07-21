@@ -25,10 +25,6 @@ const typologies = [
   { mark: "IN", label: "Interiors" },
   { mark: "HO", label: "Hospitality" },
   { mark: "CU", label: "Cultural spaces" },
-  { mark: "RE", label: "Renovation" },
-  { mark: "RT", label: "Retail" },
-  { mark: "WK", label: "Workplace" },
-  { mark: "LS", label: "Landscape studies" },
 ] as const;
 
 export default function PracticeOverview() {

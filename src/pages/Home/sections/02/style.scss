@@ -59,9 +59,11 @@ html.is-loading .slider {
 
   &__frame {
     display: grid;
-    grid-template-columns: minmax(0, 1.25fr) minmax(16rem, 0.75fr);
-    gap: clamp(3rem, 10vw, 12rem);
-    padding: var(--section-pad) var(--content-inset);
+    min-height: 68svh;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--grid-gap);
+    padding: clamp(1rem, 1.5vw, 1.5rem) var(--content-inset)
+      clamp(3rem, 6vw, 6rem);
   }
 
   &__rail {
@@ -70,7 +72,7 @@ html.is-loading .slider {
     display: flex;
     min-width: 0;
     flex-direction: column;
-    grid-column: 2;
+    grid-column: 1 / span 3;
     grid-row: 1;
   }
 
@@ -135,8 +137,8 @@ html.is-loading .slider {
 
   &__proof {
     position: relative;
-    min-height: 12rem;
-    margin-top: clamp(2.5rem, 5vh, 4rem);
+    min-height: 11rem;
+    margin-top: clamp(1.5rem, 3vh, 2.5rem);
   }
 
   &__proof-slide {
@@ -158,13 +160,13 @@ html.is-loading .slider {
 
     strong {
       display: block;
-      font: 650 clamp(3.25rem, 5vw, 5rem)/0.9 var(--font-heading);
+      font: 650 clamp(3.75rem, 5vw, 6rem)/0.86 var(--font-heading);
       letter-spacing: -0.05em;
     }
 
     p {
-      max-width: 23rem;
-      margin-top: 1rem;
+      max-width: 17rem;
+      margin-top: 0.75rem;
       color: rgb(255 255 255 / 0.54);
       font: 550 clamp(0.9rem, 1.15vw, 1.2rem)/1.35 var(--font-body);
     }
@@ -176,13 +178,13 @@ html.is-loading .slider {
     display: flex;
     min-width: 0;
     flex-direction: column;
-    grid-column: 1;
+    grid-column: 6 / span 5;
     grid-row: 1;
-    justify-content: center;
+    justify-content: flex-start;
   }
 
   &__statement {
-    max-width: 48rem;
+    max-width: 46rem;
     color: #f2f2ed;
     font: 600 clamp(2rem, 2.85vw, 3.75rem)/1.04 var(--font-body);
     letter-spacing: -0.055em;
@@ -229,10 +231,12 @@ html.is-loading .slider {
     position: relative;
     z-index: 2;
     display: grid;
-    grid-template-columns: minmax(0, 1.25fr) minmax(16rem, 0.75fr);
-    gap: clamp(3rem, 10vw, 12rem);
-    padding: clamp(2.5rem, 4vw, 4rem) var(--content-inset)
-      clamp(3rem, 5vw, 5rem);
+    min-height: 32svh;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-rows: auto 1fr;
+    gap: var(--grid-gap);
+    padding: clamp(1.25rem, 2vw, 2rem) var(--content-inset)
+      clamp(2rem, 4vw, 4rem);
     border-top: 1px solid rgb(255 255 255 / 0.18);
     background: #0b0b0b;
     color: #f2f2ed;
@@ -240,22 +244,21 @@ html.is-loading .slider {
 
   &__partners-label {
     display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-    grid-column: 2;
+    align-items: center;
+    gap: 0.85rem;
+    grid-column: 1 / -1;
     grid-row: 1;
 
     > span {
-      width: 0.85rem;
+      width: 0.8rem;
       aspect-ratio: 1;
-      margin-top: 0.25rem;
       border-radius: 50%;
       background: currentColor;
       opacity: 0.7;
     }
 
     h3 {
-      font: 600 clamp(1rem, 1.35vw, 1.35rem)/1.1 var(--font-body);
+      font: 600 clamp(1.05rem, 1.2vw, 1.3rem)/1.1 var(--font-body);
       letter-spacing: -0.025em;
     }
   }
@@ -263,26 +266,26 @@ html.is-loading .slider {
   &__typologies {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-column: 1;
-    grid-row: 1;
+    grid-column: 3 / -3;
+    grid-row: 2;
   }
 
   &__typology {
     display: flex;
-    min-height: clamp(9rem, 13vw, 13rem);
+    min-height: clamp(8rem, 14vw, 14rem);
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    padding: clamp(1.5rem, 2vw, 2.5rem) 0 1rem;
-    border-bottom: 1px solid rgb(255 255 255 / 0.14);
+    justify-content: flex-start;
+    gap: 1rem;
+    padding: clamp(1.5rem, 2vw, 2.5rem) 0 0;
 
     strong {
-      font: 650 clamp(2.75rem, 5vw, 5.5rem)/1 var(--font-heading);
+      font: 650 clamp(3.5rem, 6vw, 7rem)/0.8 var(--font-heading);
       letter-spacing: -0.08em;
     }
 
     p {
-      color: rgb(255 255 255 / 0.42);
+      color: rgb(255 255 255 / 0.5);
       font: 500 clamp(0.62rem, 0.72vw, 0.75rem)/1.2 var(--font-body);
       letter-spacing: 0.08em;
       text-align: center;
@@ -314,6 +317,7 @@ html.is-loading .slider {
     &__frame {
       grid-template-columns: 1fr;
       gap: 3.5rem;
+      min-height: 0;
       padding: 5rem var(--content-inset) 2.75rem;
     }
 
@@ -342,6 +346,7 @@ html.is-loading .slider {
     }
 
     &__partners {
+      min-height: 0;
       grid-template-columns: 1fr;
       gap: 2.5rem;
     }
