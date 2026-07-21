@@ -1,10 +1,10 @@
-import About from "./sections/About";
-import Contact from "./sections/Contact";
-import FeaturedProject from "./sections/FeaturedProject";
-import Hero from "./sections/Hero";
-import Philosophy from "./sections/Philosophy";
-import Process from "./sections/Process";
-import SelectedWorks from "./sections/SelectedWorks";
+import Hero from "./sections/01";
+import PracticeOverview from "./sections/02";
+import Philosophy from "./sections/03";
+import SelectedWorks from "./sections/04";
+import Process from "./sections/05";
+import About from "./sections/06";
+import Contact from "./sections/07";
 import "./style.scss";
 
 export default function Home() {
@@ -12,7 +12,7 @@ export default function Home() {
     <>
       <main id="top" className="home-page">
         <Hero />
-        <FeaturedProject />
+        <PracticeOverview />
         <Philosophy />
         <SelectedWorks />
         <Process />

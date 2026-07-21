@@ -43,8 +43,9 @@
 .banner-shade {
   z-index: -1;
   background:
-    linear-gradient(90deg, rgb(9 10 9 / 0.28), transparent 48%),
-    linear-gradient(180deg, transparent 38%, rgb(9 10 9 / 0.78) 100%);
+    linear-gradient(rgb(9 10 9 / 0.48), rgb(9 10 9 / 0.48)),
+    linear-gradient(90deg, rgb(9 10 9 / 0.52), transparent 54%),
+    linear-gradient(180deg, transparent 24%, rgb(9 10 9 / 0.94) 100%);
   pointer-events: none;
 }
 

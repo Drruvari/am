@@ -31,7 +31,7 @@ const typologies = [
   { mark: "LS", label: "Landscape studies" },
 ] as const;
 
-export default function FeaturedProject() {
+export default function PracticeOverview() {
   const sectionRef = useRef<HTMLElement>(null);
   const progressRef = useRef<HTMLSpanElement>(null);
   const [activeSlide, setActiveSlide] = useState(0);
