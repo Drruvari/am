@@ -20,13 +20,6 @@ const slides = [
   },
 ] as const;
 
-const typologies = [
-  { mark: "PH", label: "Private homes" },
-  { mark: "IN", label: "Interiors" },
-  { mark: "HO", label: "Hospitality" },
-  { mark: "CU", label: "Cultural spaces" },
-] as const;
-
 export default function PracticeOverview() {
   const sectionRef = useRef<HTMLElement>(null);
   const progressRef = useRef<HTMLSpanElement>(null);
@@ -79,7 +72,6 @@ export default function PracticeOverview() {
           splits.flatMap((split) => split.words),
           { opacity: 1 },
         );
-        gsap.set(".featured-project__typology", { autoAlpha: 1, y: 0 });
       } else {
         splits.forEach((split, index) => {
           gsap.fromTo(
@@ -97,18 +89,6 @@ export default function PracticeOverview() {
               },
             },
           );
-        });
-
-        gsap.from(".featured-project__typology", {
-          y: 28,
-          autoAlpha: 0,
-          stagger: 0.07,
-          duration: 0.75,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: ".featured-project__partners",
-            start: "top 82%",
-          },
         });
       }
 
@@ -197,25 +177,6 @@ export default function PracticeOverview() {
                 <span>Architect, AM Architecture</span>
               </p>
             </div>
-          </div>
-        </div>
-
-        <div className="featured-project__partners">
-          <div className="featured-project__partners-label">
-            <span aria-hidden="true" />
-            <h3>Fields of practice</h3>
-          </div>
-
-          <div className="featured-project__typologies">
-            {typologies.map((typology) => (
-              <article
-                className="featured-project__typology"
-                key={typology.label}
-              >
-                <strong aria-hidden="true">{typology.mark}</strong>
-                <p>{typology.label}</p>
-              </article>
-            ))}
           </div>
         </div>
       </div>

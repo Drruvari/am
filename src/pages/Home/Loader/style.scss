@@ -9,8 +9,8 @@
   height: 100svh;
   overflow: hidden;
   padding-inline: 2.5vw;
-  background: #0b0b0b;
-  color: #f2f2ed;
+  background: var(--dark);
+  color: var(--color-on-dark);
   font: 600 clamp(0.8rem, 1vw, 1rem)/1 var(--font-body);
   letter-spacing: 0.04em;
   text-transform: uppercase;

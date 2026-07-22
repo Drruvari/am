@@ -8,8 +8,8 @@
   height: 100svh;
   padding: var(--header-offset) var(--content-inset) 0;
   overflow: hidden;
-  color: #eeeee9;
-  background: #171817;
+  color: var(--color-on-dark);
+  background: var(--dark);
   isolation: isolate;
 }
 
@@ -96,7 +96,7 @@
   grid-column: 10 / -1;
   justify-self: end;
   max-width: 15rem;
-  color: rgb(238 238 233 / 0.72);
+  color: color-mix(in srgb, var(--color-on-dark) 72%, transparent);
   pointer-events: auto;
 }
 
@@ -106,7 +106,7 @@
   width: 100%;
   height: 0.94em;
   margin-top: 0;
-  color: rgb(238 238 233 / 0.9);
+  color: color-mix(in srgb, var(--color-on-dark) 90%, transparent);
   font: 500 clamp(5rem, 14vw, 17rem)/0.84 var(--font-heading);
   font-stretch: 100%;
   font-variation-settings: "wdth" 100;

@@ -2,10 +2,13 @@
 
 :root {
   --fluid-unit: 6.9444444444vw;
-  --color-background: #fffaf6;
-  --color-foreground: #131313;
-  --color-dark: #131313;
-  --color-white: #fff;
+  --color-background: #e8e8e3;
+  --color-foreground: #080807;
+  --color-dark: #080807;
+  --color-white: #fcfcfc;
+  --color-on-dark: #d1d1c7;
+  --color-muted: #6b645c;
+  --color-accent: #1e83ff;
   --page-inset: 1.75rem;
   --section-space: clamp(4rem, 6vw + 2rem, 12rem);
 
@@ -15,11 +18,11 @@
   --dark: var(--color-dark);
   --beige: var(--color-background);
   --white: var(--color-white);
-  --accent: var(--color-foreground);
+  --accent: var(--color-accent);
   --hover: var(--color-foreground);
   --panel: var(--color-background);
-  --muted: var(--color-foreground);
-  --line: var(--color-foreground);
+  --muted: var(--color-muted);
+  --line: #938f8a;
   --page-margin: var(--page-inset);
   --page-gutter: var(--page-inset);
   --page-max: 90rem;

@@ -16,6 +16,12 @@ const services = [
   "Visual studies",
 ];
 
+const serviceImages = [
+  "/assets/images/arch.jpg",
+  "/assets/images/hero.avif",
+  "/assets/images/arch.jpg",
+];
+
 export default function Philosophy() {
   const rootRef = useRef<HTMLElement>(null);
 
@@ -37,13 +43,15 @@ export default function Philosophy() {
         const isNarrow = context.conditions?.narrow ?? false;
         const pinType = ScrollTrigger.isTouch === 1 ? "transform" : "fixed";
         const scrollEnd = isNarrow ? "+=140%" : "+=175%";
-        const radiusFrom = isNarrow ? "16px 16px 0 0" : "22px 22px 0 0";
-
         const textSplit = SplitText.create(serviceText, {
           type: "chars",
           charsClass: "philosophy__char",
         });
         const characters = textSplit.chars;
+        const imageTiles = gsap.utils.toArray<HTMLElement>(
+          ".philosophy__service-image",
+          serviceText,
+        );
 
         gsap.set(serviceText, { autoAlpha: 1, xPercent: 0 });
         gsap.set(characters, { autoAlpha: 1 });
@@ -53,7 +61,7 @@ export default function Philosophy() {
         if (isNarrow) {
           gsap.set(serviceText, { clearProps: "transform" });
           gsap.fromTo(
-            characters,
+            [...characters, ...imageTiles],
             { yPercent: 45, autoAlpha: 0 },
             {
               yPercent: 0,
@@ -65,21 +73,6 @@ export default function Philosophy() {
                 trigger: root,
                 start: "top 72%",
                 once: true,
-              },
-            },
-          );
-
-          gsap.fromTo(
-            stage,
-            { borderRadius: radiusFrom },
-            {
-              borderRadius: "0px",
-              ease: "none",
-              scrollTrigger: {
-                trigger: root,
-                start: "top bottom",
-                end: "top 35%",
-                scrub: true,
               },
             },
           );
@@ -102,7 +95,8 @@ export default function Philosophy() {
 
           ScrollTrigger.create({
             trigger: root,
-            start: "top bottom",
+            start: () =>
+              `top ${Math.min(previous.offsetHeight, window.innerHeight)}px`,
             end: "top top",
             pin: previous,
             pinSpacing: false,
@@ -139,21 +133,6 @@ export default function Philosophy() {
           );
         }
 
-        gsap.fromTo(
-          stage,
-          { borderRadius: radiusFrom },
-          {
-            borderRadius: "0px 0px 0 0",
-            ease: "none",
-            scrollTrigger: {
-              trigger: root,
-              start: "top bottom",
-              end: "top top",
-              scrub: 1,
-            },
-          },
-        );
-
         ScrollTrigger.create({
           trigger: root,
           start: "top top",
@@ -187,6 +166,21 @@ export default function Philosophy() {
               containerAnimation: scrollTween,
               start: "left 100%",
               end: "left 30%",
+              scrub: 1,
+            },
+          });
+        });
+
+        imageTiles.forEach((tile) => {
+          gsap.from(tile, {
+            clipPath: "inset(45% 0 45% 0)",
+            scale: 0.82,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: tile,
+              containerAnimation: scrollTween,
+              start: "left 95%",
+              end: "left 55%",
               scrub: 1,
             },
           });
@@ -240,7 +234,28 @@ export default function Philosophy() {
   return (
     <section ref={rootRef} className="philosophy" id="services">
       <div className="philosophy__stage">
-        <h2 className="philosophy__services-text">{services.join(". ")}</h2>
+        <h2 className="philosophy__services-text">
+          {services.map((service, index) => (
+            <span className="philosophy__service" key={service}>
+              {service}
+              {index < services.length - 1 ? ". " : ""}
+              {index % 2 === 0 && index < services.length - 1 ? (
+                <span className="philosophy__service-image" aria-hidden="true">
+                  <img
+                    src={serviceImages[Math.floor(index / 2)]}
+                    alt=""
+                    draggable={false}
+                  />
+                </span>
+              ) : null}
+            </span>
+          ))}
+        </h2>
+        <p className="philosophy__copy">
+          From first sketch to final detail, every decision is shaped by
+          context, material, and the way a space will be lived in. One clear
+          process keeps the original idea intact through completion.
+        </p>
       </div>
     </section>
   );
