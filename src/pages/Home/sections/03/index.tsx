@@ -42,7 +42,7 @@ export default function Philosophy() {
       const setupMotion = (context: gsap.Context) => {
         const isNarrow = context.conditions?.narrow ?? false;
         const pinType = ScrollTrigger.isTouch === 1 ? "transform" : "fixed";
-        const scrollEnd = isNarrow ? "+=140%" : "+=175%";
+        const scrollEnd = isNarrow ? "+=140%" : "+=300%";
         const textSplit = SplitText.create(serviceText, {
           type: "chars",
           charsClass: "philosophy__char",
@@ -151,7 +151,7 @@ export default function Philosophy() {
             trigger: root,
             start: "top top",
             end: scrollEnd,
-            scrub: 1,
+            scrub: 1.5,
             invalidateOnRefresh: true,
           },
         });

@@ -16,7 +16,7 @@ const menuItems: MenuItem[] = [
   { label: "About Me", href: "#about" },
   { label: "Approach", href: "#process" },
   { label: "Practice", href: "#featured-project" },
-  { label: "Contact Me", href: "mailto:hello@arbermanga.com" },
+  { label: "Start a Project", href: "mailto:hello@arbermanga.com" },
 ];
 
 export default function Header() {
@@ -184,8 +184,8 @@ export default function Header() {
           >
             <span className="header-text-effect">
               <span className="header-text-effect__track">
-                <span>Contact Me</span>
-                <span aria-hidden="true">Contact Me</span>
+                <span>Start a Project</span>
+                <span aria-hidden="true">Start a Project</span>
               </span>
             </span>
             <span className="header-action__icon" aria-hidden="true">
