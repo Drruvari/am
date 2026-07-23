@@ -5,6 +5,8 @@ export const sections = [
     year: "2026",
     description:
       "Limestone walls anchor a coastal home while deep openings frame shade, wind, and distant water.",
+    metric: "420 SQM",
+    detail: "Coastal residence shaped around shade, wind, and long Adriatic views",
   },
   {
     number: "02",
@@ -12,6 +14,8 @@ export const sections = [
     year: "2025",
     description:
       "An old production floor becomes a compact live-work setting through brick, steel, and pale oak.",
+    metric: "280 SQM",
+    detail: "Adaptive reuse retaining the existing brick and structural rhythm",
   },
   {
     number: "03",
@@ -19,6 +23,8 @@ export const sections = [
     year: "2026",
     description:
       "A timber rhythm organizes research, gathering, and filtered daylight beneath one light roof.",
+    metric: "190 SQM",
+    detail: "Research pavilion organized by a lightweight glulam frame",
   },
   {
     number: "04",
@@ -26,6 +32,8 @@ export const sections = [
     year: "2025",
     description:
       "A compact retreat pairs a mineral shell with one roof opening and the changing mountain sky.",
+    metric: "310 SQM",
+    detail: "Mountain retreat built around mass, silence, and a single roof aperture",
   },
   {
     number: "05",
@@ -33,6 +41,8 @@ export const sections = [
     year: "2024",
     description:
       "Protected gardens divide family life into intimate rooms linked by soft daylight and local stone.",
+    metric: "360 SQM",
+    detail: "Courtyard home balancing privacy with shared family rooms",
   },
 ];
 

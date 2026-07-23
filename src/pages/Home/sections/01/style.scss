@@ -27,11 +27,15 @@
   z-index: -3;
   object-fit: cover;
   object-position: center 46%;
+  filter: blur(5px);
+  transform: scale(1.015);
 }
 
 .banner-canvas {
   z-index: -2;
   pointer-events: auto;
+  filter: blur(5px);
+  transform: scale(1.015);
 
   canvas {
     display: block;
@@ -43,9 +47,9 @@
 .banner-shade {
   z-index: -1;
   background:
-    linear-gradient(rgb(9 10 9 / 0.48), rgb(9 10 9 / 0.48)),
-    linear-gradient(90deg, rgb(9 10 9 / 0.52), transparent 54%),
-    linear-gradient(180deg, transparent 24%, rgb(9 10 9 / 0.94) 100%);
+    linear-gradient(rgb(9 10 9 / 0.16), rgb(9 10 9 / 0.1)),
+    linear-gradient(90deg, rgb(9 10 9 / 0.22), transparent 54%),
+    linear-gradient(180deg, transparent 30%, rgb(9 10 9 / 0.24) 100%);
   pointer-events: none;
 }
 

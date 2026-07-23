@@ -39,12 +39,12 @@ const fragmentShader = `
   void main() {
     vec2 uv = coverUv(vUv);
     vec2 pointerOffset = (uPointer - 0.5) * 0.012;
-    float flowA = sin(vUv.y * 18.0 + vUv.x * 5.0 + uTime * 0.65);
-    float flowB = cos(vUv.x * 14.0 - vUv.y * 7.0 - uTime * 0.48);
-    float flowC = sin((vUv.x + vUv.y) * 28.0 + uTime * 0.32);
+    float flowA = sin(vUv.y * 11.0 + uTime * 0.72);
+    float flowB = sin(vUv.y * 27.0 - uTime * 0.46);
+    float flowC = cos(vUv.x * 9.0 - vUv.y * 4.0 + uTime * 0.38);
     vec2 distortion = vec2(
-      flowA * 0.0045 + flowC * 0.0015,
-      flowB * 0.0035 + flowC * 0.0012
+      flowA * 0.007 + flowB * 0.0025,
+      flowC * 0.0028 + flowB * 0.001
     );
     vec2 displacedUv = uv + distortion + pointerOffset;
     vec4 color = texture2D(uTexture, displacedUv);

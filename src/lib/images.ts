@@ -1,7 +1,5 @@
-import heroImage from "../../hero.jpg"
-
+export const heroImage = `${import.meta.env.BASE_URL}assets/images/hero.png`
 export const archImage = `${import.meta.env.BASE_URL}assets/images/arch.jpg`
-export { heroImage }
 
 export const projectGalleryImages = [
   archImage,

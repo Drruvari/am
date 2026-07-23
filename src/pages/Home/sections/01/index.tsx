@@ -37,8 +37,8 @@ export default function Hero() {
         className="banner-media"
         src={heroImage}
         alt=""
-        width={6446}
-        height={3635}
+        width={5760}
+        height={4096}
         loading="eager"
         decoding="async"
         draggable={false}
