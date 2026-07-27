@@ -17,7 +17,9 @@
     place-items: center;
     overflow: hidden;
     padding: var(--content-inset);
-    padding-bottom: calc(var(--content-inset) + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(
+      var(--content-inset) + env(safe-area-inset-bottom, 0px)
+    );
     border-radius: 0;
     background: var(--dark);
   }
@@ -128,7 +130,8 @@
     width: min(31rem, 100%);
     margin-inline: auto;
     color: var(--color-white);
-    font: 600 clamp(1rem, 0.45vw + 0.9rem, 1.25rem) / 1.35 var(--font-body);
+    font: 450 clamp(0.9rem, 0.35vw + 0.82rem, 1.05rem) / 1.45
+      var(--font-body);
     letter-spacing: -0.025em;
     text-align: center;
     opacity: 1;
@@ -181,7 +184,7 @@
       flex: none;
       width: min(100%, 30rem);
       margin-inline: auto;
-      font-size: clamp(0.85rem, 3.4vw, 1rem);
+      font-size: clamp(0.78rem, 3vw, 0.9rem);
     }
   }
 }
