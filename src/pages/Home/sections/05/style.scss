@@ -147,6 +147,32 @@
   }
 }
 
+@media (min-width: 48.0625rem) and (max-width: $bp-lg) {
+  .process {
+    &__topline {
+      > p {
+        grid-column: 4 / span 5;
+      }
+
+      > a {
+        grid-column: 10 / -1;
+      }
+    }
+
+    &__preview {
+      grid-column: 1 / span 4;
+    }
+
+    &__services {
+      grid-column: 6 / -1;
+    }
+
+    &__services ul li button {
+      font-size: clamp(2.75rem, 5.2vw, 4rem);
+    }
+  }
+}
+
 @include below($bp-md) {
   .process {
     &__intro {
@@ -191,7 +217,19 @@
     &__intro-media {
       width: min(100%, 25rem);
     }
+  }
+}
 
+@include below($bp-sm) {
+  .process {
+    &__intro-grid {
+      gap: 2rem;
+      padding-block: 3rem;
+    }
+
+    &__services ul li button {
+      font-size: clamp(2rem, 10.5vw, 3rem);
+    }
   }
 }
 

@@ -71,7 +71,15 @@
 
 @include below($bp-md) {
   :root {
+    --page-inset: clamp(1rem, 4vw, 1.5rem);
     --section-space: clamp(3.5rem, 10vw + 1rem, 5rem);
     --header-offset: calc(4.75rem + env(safe-area-inset-top, 0px));
+  }
+}
+
+@media (min-width: 48.0625rem) and (max-width: $bp-lg) {
+  :root {
+    --page-inset: 1.5rem;
+    --section-space: clamp(4.5rem, 8vw, 7rem);
   }
 }

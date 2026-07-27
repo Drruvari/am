@@ -241,6 +241,44 @@ html.is-entering {
   }
 }
 
+@media (min-width: 769px) and (max-width: 1024px) {
+  .banner {
+    --hero-title-size: clamp(5rem, 11.5vw, 7.5rem);
+  }
+
+  .banner-descr {
+    top: 50%;
+    font-size: clamp(1.05rem, 2vw, 1.35rem);
+  }
+
+  .banner-descr__lead {
+    grid-column: 1 / span 6;
+  }
+
+  .banner-descr__aside {
+    grid-column: 7 / -1;
+    max-width: 24ch;
+  }
+}
+
+@media (max-width: 480px) {
+  .banner {
+    min-height: 36rem;
+  }
+
+  .banner-descr {
+    top: 47%;
+  }
+
+  .banner-title {
+    font-size: clamp(2.8rem, 12.5vw, 4rem);
+  }
+
+  .banner-scroll {
+    bottom: clamp(4.75rem, 16vw, 5.75rem);
+  }
+}
+
 @media (max-height: 650px) and (min-width: 769px) {
   .banner-descr {
     margin-bottom: 5rem;
