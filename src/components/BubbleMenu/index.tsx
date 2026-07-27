@@ -159,7 +159,6 @@ export default function BubbleMenu({
           aria-label={menuAriaLabel}
           aria-expanded={isMenuOpen}
           aria-controls="mobile-bubble-menu"
-          style={{ background: menuBg }}
         >
           <span className="menu-line" style={{ background: menuContentColor }} />
           <span
