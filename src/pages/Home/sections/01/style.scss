@@ -2,7 +2,7 @@
   --hero-copy-offset: 0;
   --hero-media-blur: 2px;
   --hero-media-scale: 1;
-  --hero-title-size: clamp(6.5rem, 11.75vw, 13.5rem);
+  --hero-title-size: clamp(7.5rem, 13.6vw, 16.5rem);
 
   position: relative;
   display: grid;
@@ -101,41 +101,40 @@
 }
 
 .banner-descr {
-  grid-column: 1 / -1;
+  grid-column: 5 / span 4;
   align-self: center;
-  width: 100%;
+  justify-self: center;
+  width: min(18rem, 100%);
   margin-bottom: 0;
-  text-align: left;
+  transform: translateY(-7vh);
+  text-align: center;
   font: 600 clamp(0.875rem, 0.8vw, 1rem)/1.25 var(--font-body);
   letter-spacing: -0.025em;
   translate: 0 var(--hero-copy-offset);
 }
 
 .banner-descr .banner-reveal {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: var(--grid-gap);
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  gap: 1rem;
 }
 
 .banner-descr__lead {
   display: block;
-  grid-column: 1 / span 5;
-  max-width: 34ch;
-  font-size: clamp(1.125rem, 1.35vw, 1.5rem);
-  line-height: 1.08;
+  max-width: 26ch;
+  font-size: clamp(0.85rem, 0.82vw, 1rem);
+  line-height: 1.12;
   pointer-events: auto;
 }
 
 .banner-descr__aside {
   display: flex;
   flex-direction: column;
-  grid-column: 9 / -1;
-  justify-self: end;
-  max-width: 31ch;
+  max-width: 24ch;
   color: color-mix(in srgb, var(--color-on-dark) 72%, transparent);
-  font-size: clamp(1.1rem, 0.9vw, 1.25rem);
-  text-align: right;
+  font-size: clamp(0.82rem, 0.78vw, 0.95rem);
+  text-align: center;
   pointer-events: auto;
   font-weight: 500;
 }
@@ -161,7 +160,7 @@
   height: auto;
   margin: 0;
   color: color-mix(in srgb, var(--color-on-dark) 90%, transparent);
-  font: 500 var(--hero-title-size)/0.86 var(--font-heading);
+  font: 500 var(--hero-title-size)/0.76 var(--font-heading);
   font-stretch: 100%;
   font-variation-settings: "wdth" 100;
   letter-spacing: var(--tracking-display);
@@ -171,25 +170,23 @@
   overflow: visible;
 }
 
-.banner-title__mask {
-  display: block;
-  width: 100%;
-  height: auto;
-  margin: -0.16em 0 0;
-  padding: 0.16em 0.04em 0 0;
-  overflow: hidden;
-}
-
-.banner-title .banner-reveal {
-  display: block;
-  width: 100%;
-}
-
 .banner-title__text {
   display: block;
   width: 100%;
+  padding-top: 0.12em;
   text-align: right;
   pointer-events: auto;
+}
+
+.banner-title__char-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.banner-title__char {
+  display: inline-block;
+  will-change: transform;
 }
 
 .split {
@@ -204,12 +201,8 @@
 }
 
 html.is-entering {
-  .banner-title__mask {
-    clip-path: inset(0 0 100% 0);
-  }
-
   .banner-title__text {
-    transform: translateY(115%);
+    visibility: hidden;
   }
 
   .banner-descr__lead,
@@ -224,7 +217,7 @@ html.is-entering {
 @media (max-width: 768px) {
   .banner {
     --hero-copy-offset: 0;
-    --hero-title-size: clamp(3.75rem, 17vw, 7.5rem);
+    --hero-title-size: clamp(4.25rem, 18vw, 8rem);
 
     grid-template-columns: 1fr;
     grid-template-rows: minmax(0, 1fr) auto;
@@ -238,27 +231,24 @@ html.is-entering {
 
   .banner-descr {
     grid-column: 1;
-    align-self: end;
-    width: min(25rem, 100%);
-    margin-bottom: clamp(2rem, 5vh, 3.5rem);
+    align-self: center;
+    width: min(18rem, 100%);
+    margin-bottom: clamp(5rem, 12vh, 8rem);
+    transform: translateY(-4vh);
     translate: 0 var(--hero-copy-offset);
   }
 
   .banner-descr .banner-reveal {
-    grid-template-columns: 1fr;
     gap: 1rem;
   }
 
   .banner-descr__lead {
-    grid-column: auto;
-    font-size: clamp(1rem, 4.5vw, 1.25rem);
+    font-size: clamp(0.85rem, 3.5vw, 1rem);
   }
 
   .banner-descr__aside {
-    grid-column: auto;
-    justify-self: start;
-    max-width: 19rem;
-    font-size: 0.9rem;
+    max-width: 18rem;
+    font-size: 0.82rem;
   }
 
   .banner-title {

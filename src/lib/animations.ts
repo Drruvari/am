@@ -569,9 +569,11 @@ function initMagneticButtons() {
 
 function initEntranceAnimation() {
   const root = document.documentElement;
-  const titleMask = ".banner-title__mask";
   const titleText = ".banner-title__text";
-  const heroCopy = [".banner-descr__lead", ".banner-descr__aside"];
+  const heroCopy = [
+    ".banner-descr__lead",
+    ".banner-descr__aside",
+  ];
   const scrollCue = ".banner-scroll";
   const headerItems = [
     ".header-logo",
@@ -602,12 +604,11 @@ function initEntranceAnimation() {
   let cancelled = false;
   let frame: number | undefined;
   let timeline: gsap.core.Timeline | undefined;
+  let titleSplit: SplitText | undefined;
 
   gsap.set(headerItems, { y: -16, autoAlpha: 0 });
   gsap.set(heroCopy, { y: 28, autoAlpha: 0 });
   gsap.set(scrollCue, { y: 28, autoAlpha: 0 });
-  gsap.set(titleMask, { clipPath: "inset(0 0 100% 0)" });
-  gsap.set(titleText, { yPercent: 115 });
 
   Promise.race([Promise.all([fontsReady, mediaReady]), readinessTimeout]).then(
     () => {
@@ -616,14 +617,27 @@ function initEntranceAnimation() {
       frame = window.requestAnimationFrame(() => {
         if (cancelled) return;
 
+        titleSplit = SplitText.create(titleText, {
+          type: "chars",
+          charsClass: "banner-title__char",
+          mask: "chars",
+        });
+        titleSplit.masks.forEach((mask) =>
+          mask.classList.add("banner-title__char-mask"),
+        );
+        gsap.set(titleText, { autoAlpha: 1 });
+        gsap.set(titleSplit.chars, { yPercent: 115 });
+
         timeline = gsap.timeline({
           defaults: { ease: "power4.out" },
           onComplete: () => {
             root.classList.remove("is-entering");
-            gsap.set([...headerItems, ...heroCopy, scrollCue, titleText], {
+            gsap.set([...headerItems, ...heroCopy, scrollCue], {
               clearProps: "transform,opacity,visibility",
             });
-            gsap.set(titleMask, { clearProps: "clip-path" });
+            titleSplit?.revert();
+            gsap.set(titleText, { clearProps: "opacity,visibility" });
+            titleSplit = undefined;
           },
         });
 
@@ -635,22 +649,14 @@ function initEntranceAnimation() {
             duration: 1.1,
           })
           .to(
-            titleMask,
-            {
-              clipPath: "inset(0 0 0% 0)",
-              duration: 1.8,
-              ease: "power4.inOut",
-            },
-            0.45,
-          )
-          .to(
-            titleText,
+            titleSplit.chars,
             {
               yPercent: 0,
-              duration: 1.9,
-              ease: "expo.out",
+              duration: 1.35,
+              stagger: 0.055,
+              ease: "power4.out",
             },
-            0.52,
+            0.45,
           )
           .to(
             heroCopy,
@@ -675,6 +681,7 @@ function initEntranceAnimation() {
     cancelled = true;
     if (frame !== undefined) window.cancelAnimationFrame(frame);
     timeline?.kill();
+    titleSplit?.revert();
   });
 }
 

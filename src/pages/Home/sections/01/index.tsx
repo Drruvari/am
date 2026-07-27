@@ -20,11 +20,11 @@ export default function Hero() {
       <div className="banner-descr split">
         <span className="banner-reveal">
           <span className="banner-descr__lead">
-            Architecture shaped through light, proportion, and the particular
+            I shape architecture through light, proportion, and the particular
             character of each site.
           </span>
           <span className="banner-descr__aside">
-            <span>Direct collaboration from first sketch to built detail.</span>
+            <span>From first sketch to built detail.</span>
           </span>
         </span>
       </div>
@@ -34,13 +34,7 @@ export default function Hero() {
       </a>
 
       <h1 className="banner-title split" id="heroTitle">
-        <span className="banner-title__mask">
-          <span className="banner-reveal">
-            <span className="banner-title__text">
-              SHAPING SPACE
-            </span>
-          </span>
-        </span>
+        <span className="banner-title__text">ARBËR MANGA</span>
       </h1>
     </section>
   );
