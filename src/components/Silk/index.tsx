@@ -71,7 +71,7 @@ void main() {
 export default function Silk({
   speed = 5,
   scale = 1,
-  color = "#7B7481",
+  color = "#d1d1c7",
   noiseIntensity = 1.5,
   rotation = 0,
 }: SilkProps) {

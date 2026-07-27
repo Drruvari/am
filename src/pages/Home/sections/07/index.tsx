@@ -1,3 +1,4 @@
+import Dither from "@/components/Dither";
 import "./style.scss";
 
 export default function Contact() {
@@ -67,28 +68,27 @@ export default function Contact() {
           data-reveal-group="footer-columns"
         >
           <span className="footer__label mono">(Socials)</span>
-          <a className="footer__text-link" href="#" data-hover="link">
-            Instagram ↗
+          <a
+            className="footer__text-link footer__text-link--social"
+            href="#"
+            data-hover="link"
+          >
+            Instagram
           </a>
-          <a className="footer__text-link" href="#" data-hover="link">
-            LinkedIn ↗
+          <a
+            className="footer__text-link footer__text-link--social"
+            href="#"
+            data-hover="link"
+          >
+            LinkedIn
           </a>
-          <a className="footer__text-link" href="#" data-hover="link">
-            Pinterest ↗
+          <a
+            className="footer__text-link footer__text-link--social"
+            href="#"
+            data-hover="link"
+          >
+            Pinterest
           </a>
-        </div>
-
-        <div
-          className="footer__col footer__col--tools"
-          aria-label="Practice links"
-        >
-          <span className="footer__label mono">(Links)</span>
-          <div className="footer__tools" aria-hidden="true">
-            <span>AM</span>
-            <span>✦</span>
-            <span>◇</span>
-            <span>↗</span>
-          </div>
         </div>
       </div>
       <div className="footer__bar mono" data-reveal="fade">
@@ -98,13 +98,25 @@ export default function Contact() {
         </div>
         <div className="footer__bar-col">
           <a className="footer__bar-link" href="#top" data-hover="link">
-            Back to top ↑
+            Back to top
           </a>
           <span>Direct commissions · 2026</span>
         </div>
         <div className="footer__bar-col footer__bar-col--copyright">
           © <span id="footerYear">2026</span> Arbër Manga
         </div>
+      </div>
+      <div className="footer__image" aria-hidden="true">
+        <Dither
+          waveColor={[0.5, 0.5, 0.5]}
+          disableAnimation={false}
+          enableMouseInteraction
+          mouseRadius={0.3}
+          colorNum={4}
+          waveAmplitude={0.3}
+          waveFrequency={3}
+          waveSpeed={0.05}
+        />
       </div>
     </footer>
   );

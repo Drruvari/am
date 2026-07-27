@@ -81,11 +81,11 @@ html.is-loading .header-wrapp {
 
   &__wordmark {
     color: inherit;
-    font-family: var(--font-body);
-    font-size: clamp(0.75rem, 0.9vw, 0.9rem);
-    font-weight: 600;
-    line-height: 1;
-    letter-spacing: 0.12em;
+    font-family: "Notable", sans-serif;
+    font-size: clamp(0.78rem, 0.95vw, 0.95rem);
+    font-weight: 400;
+    line-height: 0.9;
+    letter-spacing: 0.035em;
     white-space: nowrap;
   }
 
@@ -93,13 +93,13 @@ html.is-loading .header-wrapp {
 
 /* Light chrome over dark collection — stays until philosophy */
 body.is-header-on-dark:not(.is-menu-open) .header {
-  color: #fff;
+  color: var(--color-on-dark);
 }
 
 body.is-header-on-dark:not(.is-menu-open)
   .header-link:not(.header-action):not(.header-menu-trigger),
 body.is-header-on-dark:not(.is-menu-open) .header-logo {
-  color: #fff !important;
+  color: var(--color-on-dark) !important;
 }
 
 .header-primary {

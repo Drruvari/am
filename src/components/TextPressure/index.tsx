@@ -65,6 +65,7 @@ export default function TextPressure({
   const spansRef = useRef<Array<HTMLSpanElement | null>>([]);
   const pointerRef = useRef<Point>({ x: 0, y: 0 });
   const cursorRef = useRef<Point>({ x: 0, y: 0 });
+  const isHoveringRef = useRef(false);
   const [fontSize, setFontSize] = useState(minFontSize);
   const [scaleY, setScaleY] = useState(1);
   const [lineHeight, setLineHeight] = useState(1);
@@ -75,11 +76,7 @@ export default function TextPressure({
     if (!bounds?.width || !bounds.height) return;
 
     const widthBasedSize = bounds.width / (characters.length / 2);
-    const heightBasedSize = bounds.height * 0.9;
-
-    setFontSize(
-      Math.max(Math.min(widthBasedSize, heightBasedSize), minFontSize),
-    );
+    setFontSize(Math.max(widthBasedSize, minFontSize));
     setScaleY(1);
     setLineHeight(1);
 
@@ -109,23 +106,41 @@ export default function TextPressure({
     pointerRef.current = center;
     cursorRef.current = center;
 
+    const handlePointerEnter = (event: PointerEvent) => {
+      isHoveringRef.current = true;
+      pointerRef.current = { x: event.clientX, y: event.clientY };
+      cursorRef.current = { x: event.clientX, y: event.clientY };
+    };
     const handlePointerMove = (event: PointerEvent) => {
       cursorRef.current.x = event.clientX;
       cursorRef.current.y = event.clientY;
     };
+    const handlePointerLeave = () => {
+      isHoveringRef.current = false;
+      spansRef.current.forEach((span) => {
+        if (!span) return;
+        span.style.fontVariationSettings =
+          "'wght' 400, 'wdth' 100, 'ital' 0";
+        if (alpha) span.style.opacity = "1";
+      });
+    };
     const observer = new ResizeObserver(setSize);
 
     observer.observe(container);
-    window.addEventListener("pointermove", handlePointerMove, {
+    container.addEventListener("pointerenter", handlePointerEnter);
+    container.addEventListener("pointermove", handlePointerMove, {
       passive: true,
     });
+    container.addEventListener("pointerleave", handlePointerLeave);
     setSize();
 
     return () => {
       observer.disconnect();
-      window.removeEventListener("pointermove", handlePointerMove);
+      container.removeEventListener("pointerenter", handlePointerEnter);
+      container.removeEventListener("pointermove", handlePointerMove);
+      container.removeEventListener("pointerleave", handlePointerLeave);
     };
-  }, [setSize]);
+  }, [alpha, setSize]);
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -133,6 +148,11 @@ export default function TextPressure({
     let frame = 0;
 
     const animate = () => {
+      if (!isHoveringRef.current) {
+        frame = window.requestAnimationFrame(animate);
+        return;
+      }
+
       pointerRef.current.x +=
         (cursorRef.current.x - pointerRef.current.x) / 15;
       pointerRef.current.y +=

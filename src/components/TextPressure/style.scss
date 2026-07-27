@@ -26,6 +26,7 @@
 
 .text-pressure__char {
   display: inline-block;
+  font-variation-settings: "wght" 400, "wdth" 100, "ital" 0;
   will-change: transform, font-variation-settings;
 }
 

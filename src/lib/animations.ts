@@ -16,6 +16,36 @@ let pageScrollInitialized = false;
 let homepageMotionInitialized = false;
 let heroEasesInitialized = false;
 
+const darkHeaderSections = ".banner, .collection, .philosophy, .footer";
+
+function initHeaderTheme() {
+  const header = document.querySelector<HTMLElement>(".header");
+  if (!header) return;
+
+  const syncHeaderTheme = () => {
+    const headerLine = header.getBoundingClientRect().height * 0.5;
+    const section = document
+      .elementsFromPoint(window.innerWidth * 0.5, headerLine)
+      .map((element) => element.closest<HTMLElement>("section, footer"))
+      .find(Boolean);
+    const onDark = section?.matches(darkHeaderSections) ?? false;
+
+    document.body.classList.toggle("is-header-on-dark", onDark);
+  };
+
+  const trigger = ScrollTrigger.create({
+    trigger: document.documentElement,
+    start: 0,
+    end: "max",
+    onUpdate: syncHeaderTheme,
+    onRefresh: syncHeaderTheme,
+  });
+
+  syncHeaderTheme();
+
+  return () => trigger.kill();
+}
+
 function initHeroEases() {
   if (heroEasesInitialized) return;
 
@@ -40,14 +70,9 @@ function initHeroCollectionTransition(isMobile = false) {
 
   const banner = document.querySelector<HTMLElement>(".banner");
   const collection = document.querySelector<HTMLElement>(".collection");
-  const philosophy = document.querySelector<HTMLElement>(".philosophy");
   const slider = document.querySelector<HTMLElement>(".slider");
   const sliderItems = gsap.utils.toArray<HTMLElement>(".slider-img");
   const sliderImages = gsap.utils.toArray<HTMLImageElement>(".slider-img img");
-  const header = document.querySelector<HTMLElement>(".header");
-  const menuTrigger = document.querySelector<HTMLElement>(
-    ".header-menu-trigger",
-  );
   const menuIcon = document.querySelector<SVGSVGElement>(
     ".header-menu-trigger__icon, [data-header-menu-button-icon]",
   );
@@ -63,37 +88,9 @@ function initHeroCollectionTransition(isMobile = false) {
     });
   }
 
-  let isHeaderOnDark = false;
-  const setHeaderOnDark = (onDark: boolean) => {
-    if (isHeaderOnDark === onDark) return;
-    isHeaderOnDark = onDark;
-    document.body.classList.toggle("is-header-on-dark", onDark);
-    menuTrigger?.classList.toggle("is-on-dark", onDark);
-
-  };
-
   if (!banner || !collection || !slider || sliderItems.length === 0) {
     return null;
   }
-
-  const syncHeaderColor = () => {
-    const headerLine = (header?.getBoundingClientRect().height ?? 72) * 0.5;
-    const bannerRect = banner.getBoundingClientRect();
-    const collectionRect = collection.getBoundingClientRect();
-    const philosophyRect = philosophy?.getBoundingClientRect();
-    const collectionIsBehindHeader =
-      collectionRect.top <= headerLine && collectionRect.bottom > headerLine;
-    const bannerIsBehindHeader =
-      bannerRect.top <= headerLine && bannerRect.bottom > headerLine;
-    const philosophyIsBehindHeader =
-      philosophyRect !== undefined &&
-      philosophyRect.top <= headerLine &&
-      philosophyRect.bottom > headerLine;
-
-    setHeaderOnDark(
-      bannerIsBehindHeader || collectionIsBehindHeader || philosophyIsBehindHeader,
-    );
-  };
 
   gsap.set(collection, {
     padding: 0,
@@ -121,10 +118,8 @@ function initHeroCollectionTransition(isMobile = false) {
       end: "bottom top",
       scrub: isMobile ? true : 1,
       invalidateOnRefresh: true,
-      onUpdate: syncHeaderColor,
       onLeave: () => {
         ensureCollectionFullscreen();
-        syncHeaderColor();
       },
     },
   });
@@ -157,25 +152,12 @@ function initHeroCollectionTransition(isMobile = false) {
     });
     if (sliderImages.length) gsap.set(sliderImages, { scale: 1 });
     gsap.set([".banner-mask", ".collection-mask"], { opacity: 1 });
-    setHeaderOnDark(true);
   }
-
-  // Only restore dark header chrome once philosophy is in view
-  const resetHeaderTrigger = ScrollTrigger.create({
-    trigger: ".philosophy",
-    start: "top top",
-    onToggle: syncHeaderColor,
-    onUpdate: syncHeaderColor,
-  });
-
-  syncHeaderColor();
 
   return {
     destroy: () => {
       timeline.scrollTrigger?.kill();
       timeline.kill();
-      resetHeaderTrigger.kill();
-      setHeaderOnDark(false);
     },
   };
 }
@@ -297,6 +279,8 @@ function initFooterMotion() {
 
 function initHomepageMotion() {
   const ctx = gsap.context(() => {
+    initHeaderTheme();
+
     if (prefersReducedMotion()) {
       gsap.set(
         [

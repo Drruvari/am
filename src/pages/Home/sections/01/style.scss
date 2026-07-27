@@ -29,7 +29,7 @@
 
 .banner-media {
   z-index: -3;
-  background: #8f857a;
+  background: var(--color-on-dark);
   filter: blur(var(--hero-media-blur));
   transform: scale(var(--hero-media-scale));
 
@@ -45,11 +45,11 @@
   background:
     linear-gradient(
       90deg,
-      rgb(0 0 0 / 0.56),
-      rgb(0 0 0 / 0.28) 58%,
-      rgb(0 0 0 / 0.48)
+      rgb(0 0 0 / 0.28),
+      rgb(0 0 0 / 0.12) 58%,
+      rgb(0 0 0 / 0.24)
     ),
-    linear-gradient(180deg, rgb(0 0 0 / 0.18), rgb(0 0 0 / 0.42));
+    linear-gradient(180deg, rgb(0 0 0 / 0.08), rgb(0 0 0 / 0.24));
   pointer-events: none;
 }
 
@@ -111,7 +111,7 @@
 .banner-title {
   grid-column: 1 / -1;
   align-self: end;
-  justify-self: end;
+  justify-self: center;
   width: 100%;
   height: auto;
   margin: 0;
