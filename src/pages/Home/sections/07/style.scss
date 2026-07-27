@@ -22,8 +22,14 @@
 }
 
 .footer__image {
+  --footer-tooltip-x: 50%;
+  --footer-tooltip-y: 50%;
+
   min-height: 0;
   overflow: hidden;
+  cursor: crosshair;
+  touch-action: none;
+  user-select: none;
 }
 
 .footer__grid {
@@ -132,17 +138,20 @@
   gap: 0.35em;
 
   &::after {
-    width: 0.72em;
-    height: 0.72em;
+    width: 0.82em;
+    height: 0.82em;
     background: currentColor;
     content: "";
+    filter: drop-shadow(0.4px 0 0 currentColor)
+      drop-shadow(0 0.4px 0 currentColor);
     mask: url("@/assets/arrow.svg") center / contain no-repeat;
+    transform: rotate(-90deg);
     transition: transform 0.35s var(--ease-out-expo);
   }
 
   &:hover::after,
   &:focus-visible::after {
-    transform: translate(0.15rem, 0.15rem);
+    transform: translate(0.12rem, -0.12rem) rotate(-90deg);
   }
 }
 
@@ -154,14 +163,15 @@
   line-height: 1.45;
 }
 
-.footer__bar {
+.footer__bar,
+.footer__bar.mono {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--grid-gap);
   align-items: end;
   padding: 0.8rem var(--content-inset) 1rem;
-  font-size: clamp(0.78rem, 0.9vw, 0.94rem);
-  font-weight: 600;
+  font-size: clamp(0.84rem, 0.92vw, 0.96rem);
+  font-weight: 500;
 }
 
 .footer__bar-col {
@@ -190,12 +200,14 @@
     transform 0.35s var(--ease-out-expo);
 
   &::after {
-    width: 0.95em;
-    height: 0.95em;
+    width: 1.05em;
+    height: 1.05em;
     background: currentColor;
     content: "";
+    filter: drop-shadow(0.45px 0 0 currentColor)
+      drop-shadow(0 0.45px 0 currentColor);
     mask: url("@/assets/arrow.svg") center / contain no-repeat;
-    transform: rotate(-90deg);
+    transform: rotate(-135deg);
     transition: transform 0.35s var(--ease-out-expo);
   }
 
@@ -205,9 +217,69 @@
     transform: translateY(-0.15rem);
 
     &::after {
-      transform: translate(0.12rem, -0.12rem) rotate(-90deg);
+      transform: translateY(-0.15rem) rotate(-135deg);
     }
   }
+}
+
+.footer__image-meta,
+.footer__image-meta.mono {
+  position: absolute;
+  top: 50%;
+  right: var(--content-inset);
+  left: var(--content-inset);
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  color: var(--color-white);
+  font-size: clamp(0.7rem, 0.82vw, 0.84rem);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+  transform: translateY(-50%);
+
+  span {
+    padding: 0.42rem 0.58rem;
+    border-radius: 0.45rem;
+    corner-shape: squircle;
+    background: rgb(8 8 7 / 0.36);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.1),
+      0 0.35rem 1rem rgb(0 0 0 / 0.16);
+    text-shadow: 0 1px 0.5rem rgb(0 0 0 / 0.72);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+}
+
+.footer__dither-tooltip {
+  position: absolute;
+  top: var(--footer-tooltip-y);
+  left: var(--footer-tooltip-x);
+  z-index: 3;
+  padding: 0.45rem 0.7rem;
+  border-radius: 0.5rem;
+  corner-shape: squircle;
+  background: var(--color-on-dark);
+  box-shadow: 0 0.45rem 1.4rem rgb(0 0 0 / 0.24);
+  color: var(--dark);
+  font-size: 0.78rem;
+  font-weight: 650;
+  line-height: 1;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, calc(-100% - 0.75rem)) scale(0.9);
+  transition:
+    opacity 0.2s ease,
+    transform 0.35s var(--ease-out-expo);
+  white-space: nowrap;
+}
+
+.footer__image.is-tooltip-visible .footer__dither-tooltip,
+.footer__image.is-holding .footer__dither-tooltip {
+  opacity: 1;
+  transform: translate(-50%, calc(-100% - 0.75rem)) scale(1);
 }
 
 .footer__status {
@@ -296,11 +368,13 @@
     font-size: 0.9rem;
   }
 
-  .footer__bar {
+  .footer__bar,
+  .footer__bar.mono {
     grid-template-columns: 1fr auto;
     gap: 1.5rem 1rem;
     padding-block: 1.5rem;
     border-top: 1px solid rgb(209 209 199 / 0.18);
+    font-size: clamp(0.82rem, 3.5vw, 0.92rem);
   }
 
   .footer__bar-col:nth-child(2) {
@@ -312,6 +386,15 @@
     grid-column: 1 / -1;
     justify-self: start;
     text-align: left;
+  }
+
+  .footer__image-meta,
+  .footer__image-meta.mono {
+    top: auto;
+    bottom: 1.25rem;
+    align-items: flex-end;
+    font-size: clamp(0.66rem, 2.75vw, 0.76rem);
+    transform: none;
   }
 }
 

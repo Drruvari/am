@@ -209,6 +209,8 @@ export default function Dither({
     const postMesh = new Mesh(geometry, postMaterial);
     const timer = new Timer();
     let frame = 0;
+    let interactionStrength = 1;
+    let targetInteractionStrength = 1;
 
     camera.position.z = 1;
     scene.add(mesh);
@@ -234,8 +236,21 @@ export default function Dither({
       );
     };
 
+    const handlePointerDown = () => {
+      targetInteractionStrength = 2;
+    };
+
+    const handlePointerUp = () => {
+      targetInteractionStrength = 1;
+    };
+
     const render = (time?: number) => {
       timer.update(time);
+      interactionStrength +=
+        (targetInteractionStrength - interactionStrength) * 0.06;
+      material.uniforms.mouseRadius.value = mouseRadius * interactionStrength;
+      material.uniforms.waveAmplitude.value =
+        waveAmplitude * (1 + (interactionStrength - 1) * 0.35);
       if (!disableAnimation && !reducedMotion) {
         material.uniforms.time.value += timer.getDelta();
       }
@@ -251,6 +266,10 @@ export default function Dither({
     const observer = new ResizeObserver(resize);
     observer.observe(container);
     renderer.domElement.addEventListener("pointermove", handlePointerMove);
+    renderer.domElement.addEventListener("pointerdown", handlePointerDown);
+    window.addEventListener("pointerup", handlePointerUp);
+    window.addEventListener("pointercancel", handlePointerUp);
+    window.addEventListener("blur", handlePointerUp);
     resize();
     render();
 
@@ -258,6 +277,10 @@ export default function Dither({
       window.cancelAnimationFrame(frame);
       observer.disconnect();
       renderer.domElement.removeEventListener("pointermove", handlePointerMove);
+      renderer.domElement.removeEventListener("pointerdown", handlePointerDown);
+      window.removeEventListener("pointerup", handlePointerUp);
+      window.removeEventListener("pointercancel", handlePointerUp);
+      window.removeEventListener("blur", handlePointerUp);
       timer.dispose();
       geometry.dispose();
       material.dispose();

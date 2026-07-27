@@ -1,7 +1,25 @@
 import Dither from "@/components/Dither";
+import { useState } from "react";
 import "./style.scss";
 
+const footerWaveColor: [number, number, number] = [0.5, 0.5, 0.5];
+
 export default function Contact() {
+  const [isHoldingDither, setIsHoldingDither] = useState(false);
+  const [isHoveringDither, setIsHoveringDither] = useState(false);
+
+  const updateTooltipPosition = (event: React.PointerEvent<HTMLDivElement>) => {
+    const bounds = event.currentTarget.getBoundingClientRect();
+    event.currentTarget.style.setProperty(
+      "--footer-tooltip-x",
+      `${event.clientX - bounds.left}px`,
+    );
+    event.currentTarget.style.setProperty(
+      "--footer-tooltip-y",
+      `${event.clientY - bounds.top}px`,
+    );
+  };
+
   return (
     <footer className="footer" id="contact">
       <div className="footer__grid">
@@ -106,9 +124,29 @@ export default function Contact() {
           © <span id="footerYear">2026</span> Arbër Manga
         </div>
       </div>
-      <div className="footer__image" aria-hidden="true">
+      <div
+        className={`footer__image ${
+          isHoldingDither ? "is-holding" : ""
+        } ${isHoveringDither ? "is-tooltip-visible" : ""}`}
+        onPointerEnter={(event) => {
+          updateTooltipPosition(event);
+          setIsHoveringDither(true);
+        }}
+        onPointerLeave={() => setIsHoveringDither(false)}
+        onPointerDown={(event) => {
+          updateTooltipPosition(event);
+          event.currentTarget.setPointerCapture(event.pointerId);
+          setIsHoldingDither(true);
+        }}
+        onPointerMove={updateTooltipPosition}
+        onPointerUp={(event) => {
+          event.currentTarget.releasePointerCapture(event.pointerId);
+          setIsHoldingDither(false);
+        }}
+        onPointerCancel={() => setIsHoldingDither(false)}
+      >
         <Dither
-          waveColor={[0.5, 0.5, 0.5]}
+          waveColor={footerWaveColor}
           disableAnimation={false}
           enableMouseInteraction
           mouseRadius={0.3}
@@ -117,6 +155,13 @@ export default function Contact() {
           waveFrequency={3}
           waveSpeed={0.05}
         />
+        <div className="footer__image-meta mono" aria-hidden="true">
+          <span>ARBËR MANGA</span>
+          <span>ARCHITECTURE STUDIO</span>
+        </div>
+        <span className="footer__dither-tooltip" aria-hidden="true">
+          Move to shape · Hold to intensify
+        </span>
       </div>
     </footer>
   );
