@@ -130,29 +130,34 @@
     img {
       position: absolute;
       inset: 0;
+      z-index: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
       opacity: 0;
-      clip-path: inset(6% 0 6%);
-      transform: scale(1.035);
+      clip-path: inset(22% 0 0 0 round clamp(2px, 0.3vw, 6px));
+      filter: blur(8px) saturate(0.82);
+      transform: translateY(28%) scale(0.8);
+      transform-origin: 50% 100%;
       transition:
-        clip-path 0.95s cubic-bezier(0.22, 1, 0.36, 1),
-        opacity 0.55s ease,
-        transform 1.15s cubic-bezier(0.22, 1, 0.36, 1);
-      will-change: clip-path, opacity, transform;
+        clip-path 1.15s cubic-bezier(0.16, 1, 0.3, 1),
+        filter 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 0.7s ease,
+        transform 1.35s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: clip-path, filter, opacity, transform;
 
       &.is-active {
         z-index: 1;
         clip-path: inset(0);
+        filter: blur(0) saturate(1);
         opacity: 1;
-        transform: scale(1);
+        transform: translateY(0) scale(1);
       }
     }
   }
 
   &__preview-copy {
-    animation: service-copy-in 0.45s ease-out both;
+    animation: service-copy-in 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 }
 
@@ -254,5 +259,13 @@
 @keyframes service-copy-in {
   from {
     opacity: 0;
+    filter: blur(4px);
+    transform: translateY(0.5rem);
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
   }
 }
