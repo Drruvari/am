@@ -16,7 +16,8 @@ let pageScrollInitialized = false;
 let homepageMotionInitialized = false;
 let heroEasesInitialized = false;
 
-const darkHeaderSections = ".banner, .collection, .philosophy, .footer";
+const darkHeaderSections =
+  ".banner, .collection, .philosophy, .project-invitation, .footer";
 
 function initHeaderTheme() {
   const header = document.querySelector<HTMLElement>(".header");
