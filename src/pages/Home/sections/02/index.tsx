@@ -39,17 +39,19 @@ export default function PracticeOverview() {
           gsap.fromTo(
             block,
             {
-              rotate: 3,
+              yPercent: 12,
+              rotate: 2,
               transformOrigin: "0% 50%",
             },
             {
+              yPercent: 0,
               rotate: 0,
-              ease: "none",
+              ease: "power2.out",
               scrollTrigger: {
                 trigger: block,
-                start: "top bottom",
-                end: "bottom bottom",
-                scrub: true,
+                start: "top 92%",
+                end: "bottom 38%",
+                scrub: 1.4,
               },
             },
           );
@@ -57,24 +59,46 @@ export default function PracticeOverview() {
           gsap.fromTo(
             split.words,
             {
-              filter: "blur(4px)",
-              opacity: 0.1,
+              filter: "blur(7px)",
+              opacity: 0.06,
+              yPercent: 24,
               willChange: "filter, opacity",
             },
             {
               filter: "blur(0px)",
               opacity: 1,
-              stagger: 0.05,
-              ease: "none",
+              yPercent: 0,
+              stagger: 0.09,
+              ease: "power2.out",
               scrollTrigger: {
                 trigger: block,
-                start: "top 80%",
-                end: "bottom bottom",
-                scrub: true,
+                start: "top 88%",
+                end: "bottom 32%",
+                scrub: 1.6,
               },
             },
           );
         });
+
+        gsap.from(
+          [
+            ".featured-project__marker",
+            ".featured-project__label",
+            ".featured-project__details",
+          ],
+          {
+            y: 40,
+            autoAlpha: 0,
+            duration: 1.5,
+            stagger: 0.2,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: ".featured-project__details",
+              start: "top 88%",
+              toggleActions: "play none none reverse",
+            },
+          },
+        );
       }
 
       return () => splits.forEach((split) => split.revert());

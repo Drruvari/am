@@ -117,7 +117,7 @@ export default function Silk({
     const resize = () => {
       const { width, height } = container.getBoundingClientRect();
       renderer.setSize(width, height, false);
-      mesh.scale.set(width / Math.max(height, 1), 1, 1);
+      mesh.scale.set(1, 1, 1);
     };
 
     const render = (time?: number) => {

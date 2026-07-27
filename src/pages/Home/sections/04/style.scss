@@ -83,7 +83,8 @@
       object-fit: cover;
     }
 
-    &:hover {
+    &:hover,
+    &.is-scroll-active {
       .selected-works__media-parallax img {
         filter: blur(12px) saturate(0.72);
         transform: scale(1);
@@ -268,8 +269,11 @@
 }
 
 @media (hover: none) {
-  .selected-works__video-frame {
-    display: none;
+  .selected-works__media:not(.is-scroll-active) {
+    .selected-works__media-parallax img {
+      filter: none;
+      transform: scale(1.08);
+    }
   }
 }
 
@@ -309,7 +313,10 @@
       }
 
       h2 {
-        font-size: clamp(3.5rem, 17vw, 6rem);
+        max-width: 100%;
+        font-size: clamp(3rem, 14vw, 5.25rem);
+        line-height: 0.88;
+        white-space: normal;
       }
 
       > span {

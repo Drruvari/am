@@ -196,8 +196,16 @@ html.is-entering {
 
     grid-template-columns: 1fr;
     grid-template-rows: minmax(0, 1fr) auto;
+    height: 100dvh;
+    min-height: 100svh;
     padding-inline: var(--content-inset);
     touch-action: pan-y;
+  }
+
+  .banner-media {
+    width: 100vw;
+    height: 100dvh;
+    min-height: 100svh;
   }
 
   .banner-descr {
@@ -232,8 +240,10 @@ html.is-entering {
     width: auto;
     height: auto;
     margin: 0;
-    font-size: clamp(3.25rem, 13vw, 5.5rem);
+    max-width: calc(100% - (2 * var(--content-inset)));
+    font-size: clamp(2.85rem, 11.5vw, 4.75rem);
     line-height: 0.84;
+    white-space: normal;
   }
 
   .banner-scroll {

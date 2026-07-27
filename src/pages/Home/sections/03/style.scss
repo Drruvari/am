@@ -139,10 +139,14 @@
 @include below($bp-md) {
   .philosophy {
     &__stage {
+      display: flex;
       height: auto;
-      min-height: 82svh;
-      padding-block: max(var(--content-inset), env(safe-area-inset-top, 0px))
-        calc(var(--content-inset) + env(safe-area-inset-bottom, 0px));
+      min-height: 100svh;
+      flex-direction: column;
+      justify-content: center;
+      gap: clamp(2rem, 8vw, 3.5rem);
+      padding-block: max(5rem, env(safe-area-inset-top, 0px) + 3rem)
+        max(4rem, env(safe-area-inset-bottom, 0px) + 3rem);
     }
 
     &__services-text {
@@ -172,7 +176,11 @@
     }
 
     &__copy {
-      bottom: max(1.5rem, env(safe-area-inset-bottom, 0px) + 1rem);
+      position: relative;
+      inset: auto;
+      flex: none;
+      width: min(100%, 30rem);
+      margin-inline: auto;
       font-size: clamp(0.85rem, 3.4vw, 1rem);
     }
   }
@@ -185,7 +193,7 @@
     }
 
     &__headline {
-      font-size: clamp(1.55rem, 8.8vw, 2.35rem);
+      font-size: clamp(1.45rem, 7.8vw, 2.15rem);
     }
 
     &__image {

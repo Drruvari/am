@@ -1,6 +1,6 @@
 import arrow from "@/assets/arrow.svg";
 import { projects } from "@/data/projects";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { imageSources, sections } from "./content";
 import "./style.scss";
 
@@ -19,6 +19,7 @@ type ProjectMediaProps = {
 function ProjectMedia({ index, title }: ProjectMediaProps) {
   const image = imageSources[index];
   const video = videoSources[index % videoSources.length];
+  const mediaRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const playPreview = () => {
@@ -32,8 +33,44 @@ function ProjectMedia({ index, title }: ProjectMediaProps) {
     element.currentTime = 0;
   };
 
+  useEffect(() => {
+    const media = mediaRef.current;
+    if (!media) return;
+
+    const touchQuery = window.matchMedia(
+      "(max-width: 768px), (hover: none), (pointer: coarse)",
+    );
+    if (!touchQuery.matches) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const active = entry.isIntersecting;
+        media.classList.toggle("is-scroll-active", active);
+
+        if (active) {
+          playPreview();
+        } else {
+          stopPreview();
+        }
+      },
+      {
+        rootMargin: "-28% 0px -28%",
+        threshold: 0.2,
+      },
+    );
+
+    observer.observe(media);
+
+    return () => {
+      observer.disconnect();
+      media.classList.remove("is-scroll-active");
+      stopPreview();
+    };
+  }, []);
+
   return (
     <figure
+      ref={mediaRef}
       className="selected-works__media"
       data-hover="link"
       onMouseEnter={playPreview}

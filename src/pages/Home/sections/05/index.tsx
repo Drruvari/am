@@ -128,6 +128,7 @@ export default function Process() {
                     type="button"
                     onMouseEnter={() => selectService(index)}
                     onFocus={() => selectService(index)}
+                    onClick={() => selectService(index)}
                     aria-pressed={index === activeService}
                   >
                     {service.title}
