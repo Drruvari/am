@@ -78,7 +78,10 @@ export default function Contact() {
           </a>
         </div>
 
-        <div className="footer__col footer__col--tools" aria-label="Practice links">
+        <div
+          className="footer__col footer__col--tools"
+          aria-label="Practice links"
+        >
           <span className="footer__label mono">(Links)</span>
           <div className="footer__tools" aria-hidden="true">
             <span>AM</span>
@@ -102,10 +105,6 @@ export default function Contact() {
         <div className="footer__bar-col footer__bar-col--copyright">
           © <span id="footerYear">2026</span> Arbër Manga
         </div>
-      </div>
-      <div className="footer__visual" aria-hidden="true">
-        <span className="footer__visual-mark">ARBËR MANGA</span>
-        <span className="footer__visual-note">Places made to last.</span>
       </div>
     </footer>
   );

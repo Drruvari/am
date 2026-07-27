@@ -574,7 +574,6 @@ function initEntranceAnimation() {
     ".banner-descr__lead",
     ".banner-descr__aside",
   ];
-  const scrollCue = ".banner-scroll";
   const headerItems = [
     ".header-logo",
     ".header-primary",
@@ -584,18 +583,13 @@ function initEntranceAnimation() {
   if (prefersReducedMotion()) {
     root.classList.remove("is-entering");
     gsap.fromTo(
-      [titleText, ...headerItems, ...heroCopy, scrollCue],
+      [titleText, ...headerItems, ...heroCopy],
       { autoAlpha: 0 },
       { autoAlpha: 1, duration: 0.3, clearProps: "opacity,visibility" },
     );
     return;
   }
 
-  const heroMedia = document.querySelector<HTMLImageElement>(".banner-media");
-  const mediaReady =
-    heroMedia && !heroMedia.complete
-      ? heroMedia.decode().catch(() => undefined)
-      : Promise.resolve();
   const fontsReady = document.fonts?.ready ?? Promise.resolve();
   const readinessTimeout = new Promise<void>((resolve) => {
     window.setTimeout(resolve, 1200);
@@ -604,40 +598,32 @@ function initEntranceAnimation() {
   let cancelled = false;
   let frame: number | undefined;
   let timeline: gsap.core.Timeline | undefined;
-  let titleSplit: SplitText | undefined;
 
   gsap.set(headerItems, { y: -16, autoAlpha: 0 });
   gsap.set(heroCopy, { y: 28, autoAlpha: 0 });
-  gsap.set(scrollCue, { y: 28, autoAlpha: 0 });
 
-  Promise.race([Promise.all([fontsReady, mediaReady]), readinessTimeout]).then(
+  Promise.race([fontsReady, readinessTimeout]).then(
     () => {
       if (cancelled) return;
 
       frame = window.requestAnimationFrame(() => {
         if (cancelled) return;
 
-        titleSplit = SplitText.create(titleText, {
-          type: "chars",
-          charsClass: "banner-title__char",
-          mask: "chars",
-        });
-        titleSplit.masks.forEach((mask) =>
-          mask.classList.add("banner-title__char-mask"),
+        const titleChars = gsap.utils.toArray<HTMLElement>(
+          ".banner-title__char",
         );
         gsap.set(titleText, { autoAlpha: 1 });
-        gsap.set(titleSplit.chars, { yPercent: 115 });
+        gsap.set(titleChars, { yPercent: 115 });
 
         timeline = gsap.timeline({
           defaults: { ease: "power4.out" },
           onComplete: () => {
             root.classList.remove("is-entering");
-            gsap.set([...headerItems, ...heroCopy, scrollCue], {
+            gsap.set([...headerItems, ...heroCopy], {
               clearProps: "transform,opacity,visibility",
             });
-            titleSplit?.revert();
+            gsap.set(titleChars, { clearProps: "transform" });
             gsap.set(titleText, { clearProps: "opacity,visibility" });
-            titleSplit = undefined;
           },
         });
 
@@ -649,7 +635,7 @@ function initEntranceAnimation() {
             duration: 1.1,
           })
           .to(
-            titleSplit.chars,
+            titleChars,
             {
               yPercent: 0,
               duration: 1.35,
@@ -667,11 +653,6 @@ function initEntranceAnimation() {
               duration: 1.2,
             },
             0.42,
-          )
-          .to(
-            scrollCue,
-            { y: 0, autoAlpha: 1, duration: 0.9 },
-            0.78,
           );
       });
     },
@@ -681,7 +662,6 @@ function initEntranceAnimation() {
     cancelled = true;
     if (frame !== undefined) window.cancelAnimationFrame(frame);
     timeline?.kill();
-    titleSplit?.revert();
   });
 }
 

@@ -1,19 +1,13 @@
-import { heroImage } from "@/lib/images";
+import Silk from "@/components/Silk";
+import TextPressure from "@/components/TextPressure";
 import "./style.scss";
 
 export default function Hero() {
   return (
     <section className="banner" id="hero">
-      <img
-        className="banner-media"
-        src={heroImage}
-        alt=""
-        width={1132}
-        height={750}
-        loading="eager"
-        decoding="async"
-        draggable={false}
-      />
+      <div className="banner-media" aria-hidden="true">
+        <Silk noiseIntensity={0.35} />
+      </div>
       <div className="banner-shade" aria-hidden="true" />
       <div className="banner-mask" aria-hidden="true" />
 
@@ -29,13 +23,14 @@ export default function Hero() {
         </span>
       </div>
 
-      <a className="banner-scroll" href="#featured-project" data-hover="link">
-        [Scroll down]
-      </a>
-
-      <h1 className="banner-title split" id="heroTitle">
-        <span className="banner-title__text">ARBËR MANGA</span>
-      </h1>
+      <div className="banner-title split" id="heroTitle">
+        <TextPressure
+          characterClassName="banner-title__char"
+          className="banner-title__text"
+          text="ARBËR MANGA"
+          textColor="var(--color-on-dark)"
+        />
+      </div>
     </section>
   );
 }

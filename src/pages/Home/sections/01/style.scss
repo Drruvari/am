@@ -1,6 +1,6 @@
 .banner {
   --hero-copy-offset: 0;
-  --hero-media-blur: 2px;
+  --hero-media-blur: 0;
   --hero-media-scale: 1;
   --hero-title-size: clamp(7.5rem, 13.6vw, 16.5rem);
 
@@ -18,38 +18,6 @@
   isolation: isolate;
 }
 
-.banner::after {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background-image:
-    radial-gradient(
-      circle at 0 0,
-      rgb(255 255 255 / 0.5) 0 0.45px,
-      transparent 0.7px
-    ),
-    radial-gradient(
-      circle at 2px 2px,
-      rgb(255 255 255 / 0.32) 0 0.45px,
-      transparent 0.7px
-    ),
-    radial-gradient(
-      circle at 0 2px,
-      rgb(0 0 0 / 0.45) 0 0.45px,
-      transparent 0.7px
-    ),
-    radial-gradient(
-      circle at 2px 0,
-      rgb(0 0 0 / 0.28) 0 0.45px,
-      transparent 0.7px
-    );
-  background-size: 4px 4px;
-  content: "";
-  mix-blend-mode: soft-light;
-  opacity: 0.42;
-  pointer-events: none;
-}
-
 .banner-media,
 .banner-shade,
 .banner-mask {
@@ -62,13 +30,14 @@
 .banner-media {
   z-index: -3;
   background: #8f857a;
-  object-fit: cover;
-  object-position: center;
-}
-
-.banner-media {
   filter: blur(var(--hero-media-blur));
   transform: scale(var(--hero-media-scale));
+
+  canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+  }
 }
 
 .banner-shade {
@@ -139,19 +108,6 @@
   font-weight: 500;
 }
 
-.banner-scroll {
-  position: absolute;
-  bottom: var(--content-inset);
-  left: var(--content-inset);
-  z-index: 3;
-  color: var(--color-on-dark);
-  font-size: 0.85rem;
-  font-weight: 650;
-  letter-spacing: 0.04em;
-  text-decoration: none;
-  text-transform: uppercase;
-}
-
 .banner-title {
   grid-column: 1 / -1;
   align-self: end;
@@ -178,15 +134,8 @@
   pointer-events: auto;
 }
 
-.banner-title__char-mask {
-  display: inline-block;
-  overflow: hidden;
-  vertical-align: bottom;
-}
-
-.banner-title__char {
-  display: inline-block;
-  will-change: transform;
+.text-pressure {
+  height: 1em;
 }
 
 .split {
@@ -206,8 +155,7 @@ html.is-entering {
   }
 
   .banner-descr__lead,
-  .banner-descr__aside,
-  .banner-scroll {
+  .banner-descr__aside {
     visibility: hidden;
     opacity: 0;
     transform: translateY(1.75rem);
@@ -223,10 +171,6 @@ html.is-entering {
     grid-template-rows: minmax(0, 1fr) auto;
     padding-inline: var(--content-inset);
     touch-action: pan-y;
-  }
-
-  .banner-media {
-    object-position: 52% center;
   }
 
   .banner-descr {
@@ -255,15 +199,11 @@ html.is-entering {
     grid-column: 1;
     width: 100%;
     height: auto;
-    margin: 0 0 0.5rem;
+    margin: 0;
     font-size: var(--hero-title-size);
     line-height: 0.88;
   }
 
-  .banner-scroll {
-    bottom: clamp(5.5rem, 18vw, 7.5rem);
-    left: var(--content-inset);
-  }
 }
 
 @media (max-height: 650px) {

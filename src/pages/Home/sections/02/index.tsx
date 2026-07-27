@@ -17,32 +17,60 @@ export default function PracticeOverview() {
       const reducedMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
       ).matches;
-      const paragraphs = gsap.utils.toArray<HTMLElement>(
-        ".featured-project__statement",
+      const textBlocks = gsap.utils.toArray<HTMLElement>(
+        "[data-scroll-reveal]",
       );
-      const splits = paragraphs.map((paragraph) =>
-        SplitText.create(paragraph, { type: "words" }),
+      const splits = textBlocks.map((block) =>
+        SplitText.create(block, {
+          type: "words",
+          wordsClass: "featured-project__word",
+        }),
       );
 
       if (reducedMotion) {
-        gsap.set(
-          splits.flatMap((split) => split.words),
-          { opacity: 1 },
-        );
+        gsap.set(textBlocks, { clearProps: "transform" });
+        gsap.set(splits.flatMap((split) => split.words), {
+          clearProps: "filter,opacity,willChange",
+        });
       } else {
         splits.forEach((split, index) => {
+          const block = textBlocks[index];
+
           gsap.fromTo(
-            split.words,
-            { opacity: 0.16 },
+            block,
             {
-              opacity: 1,
-              stagger: 0.08,
+              rotate: 3,
+              transformOrigin: "0% 50%",
+            },
+            {
+              rotate: 0,
               ease: "none",
               scrollTrigger: {
-                trigger: paragraphs[index],
-                start: "top 82%",
-                end: "bottom 48%",
-                scrub: 1,
+                trigger: block,
+                start: "top bottom",
+                end: "bottom bottom",
+                scrub: true,
+              },
+            },
+          );
+
+          gsap.fromTo(
+            split.words,
+            {
+              filter: "blur(4px)",
+              opacity: 0.1,
+              willChange: "filter, opacity",
+            },
+            {
+              filter: "blur(0px)",
+              opacity: 1,
+              stagger: 0.05,
+              ease: "none",
+              scrollTrigger: {
+                trigger: block,
+                start: "top 80%",
+                end: "bottom bottom",
+                scrub: true,
               },
             },
           );
@@ -76,16 +104,17 @@ export default function PracticeOverview() {
             <img src={arrow} alt="" />
           </div>
 
-          <p className="featured-project__statement">
-            I shape architecture around the rhythms of a site—light, movement,
-            material, and the lives held within it.
+          <p className="featured-project__statement" data-scroll-reveal>
+            Each project begins with close observation—reading the ground,
+            tracing daily rituals, and turning constraints into spaces that
+            belong.
           </p>
 
           <p className="featured-project__label mono">(Practice)</p>
 
           <div className="featured-project__details">
             <p className="featured-project__intro">
-              Every project begins by understanding what is already there.
+              What is already there becomes the first design material.
             </p>
 
             <div className="featured-project__body">
