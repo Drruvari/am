@@ -31,10 +31,10 @@
   --header-offset: clamp(4.75rem, 5vw + 3rem, 6.5rem);
   --radius-sm: clamp(0.75rem, 1.5vw, 1.25rem);
   --radius-lg: clamp(1.25rem, 3vw, 4rem);
-  --font-display: "Bricolage Grotesque", sans-serif;
-  --font-heading: "Bricolage Grotesque", sans-serif;
-  --font-body: "Manrope", sans-serif;
-  --font-mono: "Manrope", sans-serif;
+  --font-display: "Special Gothic Condensed One", "Arial Narrow", sans-serif;
+  --font-heading: var(--font-display);
+  --font-body: "Geist", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
 
   /*
@@ -50,7 +50,7 @@
     10rem
   ); /* hero / largest single statement */
   --display-2: clamp(3rem, 3vw + 2rem, 6.5rem); /* section headlines */
-  --tracking-display: -0.03em;
+  --tracking-display: 0.01em;
   --lh-display-tight: 0.86;
   --lh-display-normal: 1.05;
 

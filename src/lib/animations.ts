@@ -282,6 +282,17 @@ function initFooterMotion() {
       },
     },
   );
+
+  ScrollTrigger.create({
+    trigger: "main",
+    start: "bottom top+=36",
+    onEnter: () => {
+      document.body.classList.add("is-header-on-dark", "is-footer-visible");
+    },
+    onLeaveBack: () => {
+      document.body.classList.remove("is-header-on-dark", "is-footer-visible");
+    },
+  });
 }
 
 function initHomepageMotion() {
@@ -294,8 +305,6 @@ function initHomepageMotion() {
           '[data-animate="philosophy-line"]',
           ".project-card",
           '[data-animate="process-step"]',
-          ".architect-about__image",
-          ".architect-about__content > *",
           ".footer",
         ],
         {
@@ -558,9 +567,123 @@ function initMagneticButtons() {
   });
 }
 
+function initEntranceAnimation() {
+  const root = document.documentElement;
+  const titleMask = ".banner-title__mask";
+  const titleText = ".banner-title__text";
+  const heroCopy = [".banner-descr__lead", ".banner-descr__aside"];
+  const scrollCue = ".banner-scroll";
+  const headerItems = [
+    ".header-logo",
+    ".header-primary",
+    ".header-contact",
+  ];
+
+  if (prefersReducedMotion()) {
+    root.classList.remove("is-entering");
+    gsap.fromTo(
+      [titleText, ...headerItems, ...heroCopy, scrollCue],
+      { autoAlpha: 0 },
+      { autoAlpha: 1, duration: 0.3, clearProps: "opacity,visibility" },
+    );
+    return;
+  }
+
+  const heroMedia = document.querySelector<HTMLImageElement>(".banner-media");
+  const mediaReady =
+    heroMedia && !heroMedia.complete
+      ? heroMedia.decode().catch(() => undefined)
+      : Promise.resolve();
+  const fontsReady = document.fonts?.ready ?? Promise.resolve();
+  const readinessTimeout = new Promise<void>((resolve) => {
+    window.setTimeout(resolve, 1200);
+  });
+
+  let cancelled = false;
+  let frame: number | undefined;
+  let timeline: gsap.core.Timeline | undefined;
+
+  gsap.set(headerItems, { y: -16, autoAlpha: 0 });
+  gsap.set(heroCopy, { y: 28, autoAlpha: 0 });
+  gsap.set(scrollCue, { y: 28, autoAlpha: 0 });
+  gsap.set(titleMask, { clipPath: "inset(0 0 100% 0)" });
+  gsap.set(titleText, { yPercent: 115 });
+
+  Promise.race([Promise.all([fontsReady, mediaReady]), readinessTimeout]).then(
+    () => {
+      if (cancelled) return;
+
+      frame = window.requestAnimationFrame(() => {
+        if (cancelled) return;
+
+        timeline = gsap.timeline({
+          defaults: { ease: "power4.out" },
+          onComplete: () => {
+            root.classList.remove("is-entering");
+            gsap.set([...headerItems, ...heroCopy, scrollCue, titleText], {
+              clearProps: "transform,opacity,visibility",
+            });
+            gsap.set(titleMask, { clearProps: "clip-path" });
+          },
+        });
+
+        timeline
+          .to(headerItems, {
+            y: 0,
+            autoAlpha: 1,
+            stagger: 0.08,
+            duration: 1.1,
+          })
+          .to(
+            titleMask,
+            {
+              clipPath: "inset(0 0 0% 0)",
+              duration: 1.8,
+              ease: "power4.inOut",
+            },
+            0.45,
+          )
+          .to(
+            titleText,
+            {
+              yPercent: 0,
+              duration: 1.9,
+              ease: "expo.out",
+            },
+            0.52,
+          )
+          .to(
+            heroCopy,
+            {
+              y: 0,
+              autoAlpha: 1,
+              stagger: 0.12,
+              duration: 1.2,
+            },
+            0.42,
+          )
+          .to(
+            scrollCue,
+            { y: 0, autoAlpha: 1, duration: 0.9 },
+            0.78,
+          );
+      });
+    },
+  );
+
+  addCleanup(() => {
+    cancelled = true;
+    if (frame !== undefined) window.cancelAnimationFrame(frame);
+    timeline?.kill();
+  });
+}
+
 export function initAnimations() {
   initProjectCardHover();
   initMagneticButtons();
+  initEntranceAnimation();
+  initHomepageScrollStory();
+  initPageScroll();
 }
 
 let loaderTimeline: gsap.core.Timeline | null = null;

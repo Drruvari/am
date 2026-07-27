@@ -1,135 +1,111 @@
-import Button from "@/components/Button";
-import { archImage } from "@/lib/images";
 import "./style.scss";
 
 export default function Contact() {
   return (
     <footer className="footer" id="contact">
-      <div className="footer__intro">
-        <h2 className="footer__headline" data-split-lines>
-          Bring a place
-          <br />
-          into focus
-        </h2>
-        <Button
-          variant="pill"
-          theme="dark"
-          fill
-          href="mailto:hello@arbermanga.com"
-          className="footer__cta"
-          data-reveal="up"
-          data-hover="link"
-        >
-          <span>Discuss your project with me</span>
-        </Button>
-      </div>
       <div className="footer__grid">
-        <div
-          className="footer__col footer__col--brand"
-          data-reveal="mask"
-        >
-          <div className="footer__image">
-            <img
-              src={archImage}
-              alt="Warm residential architecture with garden path"
-              width={5413}
-              height={2692}
-              loading="lazy"
-              decoding="async"
-              data-parallax="6"
-            />
-            <span className="footer__mark" aria-hidden="true">
-              AM
-            </span>
-          </div>
-        </div>
-
         <nav
           className="footer__col footer__col--nav"
           data-reveal="up"
           data-reveal-group="footer-columns"
           aria-label="Footer navigation"
         >
-          <span className="footer__label mono">(Explore)</span>
+          <span className="footer__label mono">(Navigation)</span>
           <div className="footer__nav">
             <a className="footer__nav-link" href="#top" data-hover="link">
               Home
             </a>
             <a className="footer__nav-link" href="#work" data-hover="link">
-              Selected projects
+              Work
             </a>
-            <span className="footer__nav-item is-disabled">Current work</span>
-            <a className="footer__nav-link" href="#work" data-hover="link">
-              Project archive
-            </a>
-            <a className="footer__nav-link" href="#about" data-hover="link">
-              About me
+            <a
+              className="footer__nav-link"
+              href="#featured-project"
+              data-hover="link"
+            >
+              Studio
             </a>
             <a className="footer__nav-link" href="#process" data-hover="link">
-              Approach
+              Services
             </a>
-            <a className="footer__nav-link" href="#featured-project" data-hover="link">
-              Practice
+            <a className="footer__nav-link" href="#work" data-hover="link">
+              Archive
             </a>
             <a
               className="footer__nav-link"
               href="mailto:hello@arbermanga.com"
               data-hover="link"
             >
-              Start a conversation
+              Contact
             </a>
           </div>
         </nav>
 
         <div
-          className="footer__col footer__col--info"
+          className="footer__col footer__col--details"
           data-reveal="up"
           data-reveal-group="footer-columns"
         >
-          <div className="footer__block">
-            <span className="footer__label mono">(Practice)</span>
-            <p className="footer__block-text">
-              I lead every commission directly. Each project develops through
-              close exchange with clients, engineers, builders, and
-              craftspeople.
-            </p>
-          </div>
-          <div className="footer__block">
-            <span className="footer__label mono">(Contact)</span>
-            <p className="footer__block-text">
-              A: Blloku District, Tirana, AL
-              <br />
-              E: hello@arbermanga.com
-              <br />
-              P: +355 69 000 0000
-              <br />
-              H: Monday—Friday, 08:30—17:00
-            </p>
+          <span className="footer__label mono">(Practice details)</span>
+          <a
+            className="footer__text-link"
+            href="mailto:hello@arbermanga.com"
+            data-hover="link"
+          >
+            hello@arbermanga.com
+          </a>
+          <p className="footer__block-text">
+            Based in Tirana, Albania.
+            <br />
+            Working across the region.
+          </p>
+        </div>
+
+        <div
+          className="footer__col footer__col--social"
+          data-reveal="up"
+          data-reveal-group="footer-columns"
+        >
+          <span className="footer__label mono">(Socials)</span>
+          <a className="footer__text-link" href="#" data-hover="link">
+            Instagram ↗
+          </a>
+          <a className="footer__text-link" href="#" data-hover="link">
+            LinkedIn ↗
+          </a>
+          <a className="footer__text-link" href="#" data-hover="link">
+            Pinterest ↗
+          </a>
+        </div>
+
+        <div className="footer__col footer__col--tools" aria-label="Practice links">
+          <span className="footer__label mono">(Links)</span>
+          <div className="footer__tools" aria-hidden="true">
+            <span>AM</span>
+            <span>✦</span>
+            <span>◇</span>
+            <span>↗</span>
           </div>
         </div>
       </div>
       <div className="footer__bar mono" data-reveal="fade">
-        <div className="footer__bar-col footer__bar-col--brand">
-          <span>
-            © <span id="footerYear">2026</span> AM Architecture
-          </span>
+        <div className="footer__bar-col">
+          <span>Tirana, Albania</span>
           <span id="footerStatus" className="footer__status" />
         </div>
-        <div className="footer__bar-col footer__bar-col--legal">
-          <span className="footer__bar-item">Privacy Policy</span>
-          <span className="footer__bar-item">Terms of Service</span>
-        </div>
-        <div className="footer__bar-col footer__bar-col--meta">
-          <a className="footer__bar-link" href="#" data-hover="link">
-            Instagram
+        <div className="footer__bar-col">
+          <a className="footer__bar-link" href="#top" data-hover="link">
+            Back to top ↑
           </a>
-          <span className="footer__bar-credit">
-            Site by{" "}
-            <a className="footer__bar-link" href="#" data-hover="link">
-              Kejdi Balla
-            </a>
-          </span>
+          <span>Direct commissions · 2026</span>
         </div>
+        <div className="footer__bar-col footer__bar-col--copyright">
+          © <span id="footerYear">2026</span> Arbër Manga
+        </div>
+      </div>
+      <div className="footer__visual" aria-hidden="true">
+        <span className="footer__visual-mark">ARBËR MANGA</span>
+        <span className="footer__visual-note">Places made to last.</span>
       </div>
     </footer>
   );

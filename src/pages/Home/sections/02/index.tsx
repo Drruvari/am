@@ -1,59 +1,16 @@
+import arrow from "@/assets/arrow.svg";
+import { archImage } from "@/lib/images";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import "./style.scss";
 
 gsap.registerPlugin(ScrollTrigger, SplitText, useGSAP);
 
-const slides = [
-  {
-    stat: "01:01",
-    proof:
-      "Every commission stays in my hands from the first conversation onward",
-  },
-  {
-    stat: "Tirana",
-    proof:
-      "Independent practice rooted in Albania and open to projects beyond it",
-  },
-] as const;
-
 export default function PracticeOverview() {
   const sectionRef = useRef<HTMLElement>(null);
-  const progressRef = useRef<HTMLSpanElement>(null);
-  const [activeSlide, setActiveSlide] = useState(0);
-
-  useEffect(() => {
-    const progress = progressRef.current;
-    if (!progress) return;
-
-    const tween = gsap.fromTo(
-      progress,
-      { scaleX: 0 },
-      {
-        scaleX: 1,
-        duration: 6,
-        ease: "none",
-        onComplete: () => {
-          setActiveSlide((current) => (current + 1) % slides.length);
-        },
-      },
-    );
-
-    return () => {
-      tween.kill();
-    };
-  }, [activeSlide]);
-
-  const showPrevious = () => {
-    setActiveSlide((current) => (current - 1 + slides.length) % slides.length);
-  };
-
-  const showNext = () => {
-    setActiveSlide((current) => (current + 1) % slides.length);
-  };
 
   useGSAP(
     () => {
@@ -115,63 +72,45 @@ export default function PracticeOverview() {
             aria-hidden="true"
           />
 
-          <aside className="featured-project__rail">
-            <div className="featured-project__progress" aria-hidden="true">
-              <span ref={progressRef} />
-            </div>
+          <div className="featured-project__marker" aria-hidden="true">
+            <img src={arrow} alt="" />
+          </div>
 
-            <div className="featured-project__controls">
-              <button
-                type="button"
-                onClick={showPrevious}
-                aria-label="Previous practice note"
-              >
-                ←
-              </button>
-              <button
-                type="button"
-                onClick={showNext}
-                aria-label="Next practice note"
-              >
-                →
-              </button>
-              <span className="featured-project__count mono" aria-live="polite">
-                {String(activeSlide + 1).padStart(2, "0")}/
-                {String(slides.length).padStart(2, "0")}
-              </span>
-            </div>
+          <p className="featured-project__statement">
+            I shape architecture around the rhythms of a site—light, movement,
+            material, and the lives held within it.
+          </p>
 
-            <div className="featured-project__proof" aria-live="polite">
-              {slides.map((slide, index) => (
-                <div
-                  key={slide.stat}
-                  className="featured-project__proof-slide"
-                  data-active={index === activeSlide}
-                  aria-hidden={index !== activeSlide}
-                >
-                  <strong>{slide.stat}</strong>
-                  <p>{slide.proof}</p>
-                </div>
-              ))}
-            </div>
-          </aside>
+          <p className="featured-project__label mono">(Practice)</p>
 
-          <div className="featured-project__copy">
-            <p className="featured-project__statement">
-              Each project starts with close attention: how the site changes
-              through the day, how life moves through it, and what deserves to
-              remain untouched.
+          <div className="featured-project__details">
+            <p className="featured-project__intro">
+              Every project begins by understanding what is already there.
             </p>
 
-            <p className="featured-project__statement featured-project__statement--secondary">
-              Architecture follows from those observations—quiet in gesture,
-              exact in proportion, and grounded in material reality.
-            </p>
+            <div className="featured-project__body">
+              <p>
+                I study orientation, climate, existing structures, and patterns
+                of daily life before drawing a line. Those observations become
+                the foundation for spaces that feel specific rather than
+                imposed.
+              </p>
+              <p>
+                From the first sketch through site review, each decision is
+                tested for clarity, proportion, and material purpose.
+              </p>
+            </div>
 
             <div className="featured-project__signature">
-              <span className="featured-project__avatar" aria-hidden="true">
-                AM
-              </span>
+              <img
+                className="featured-project__avatar"
+                src={archImage}
+                alt=""
+                width={96}
+                height={96}
+                loading="lazy"
+                decoding="async"
+              />
               <p>
                 <strong>Arbër Manga</strong>
                 <span>Architect, AM Architecture</span>

@@ -1,4 +1,9 @@
 .banner {
+  --hero-copy-offset: 0;
+  --hero-media-blur: 2px;
+  --hero-media-scale: 1;
+  --hero-title-size: clamp(6.5rem, 11.75vw, 13.5rem);
+
   position: relative;
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -6,15 +11,46 @@
   column-gap: var(--grid-gap);
   width: 100%;
   height: 100svh;
-  padding: var(--header-offset) var(--content-inset) 0;
+  padding: var(--header-offset) var(--content-inset) var(--content-inset);
   overflow: hidden;
   color: var(--color-on-dark);
   background: var(--dark);
   isolation: isolate;
 }
 
+.banner::after {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image:
+    radial-gradient(
+      circle at 0 0,
+      rgb(255 255 255 / 0.5) 0 0.45px,
+      transparent 0.7px
+    ),
+    radial-gradient(
+      circle at 2px 2px,
+      rgb(255 255 255 / 0.32) 0 0.45px,
+      transparent 0.7px
+    ),
+    radial-gradient(
+      circle at 0 2px,
+      rgb(0 0 0 / 0.45) 0 0.45px,
+      transparent 0.7px
+    ),
+    radial-gradient(
+      circle at 2px 0,
+      rgb(0 0 0 / 0.28) 0 0.45px,
+      transparent 0.7px
+    );
+  background-size: 4px 4px;
+  content: "";
+  mix-blend-mode: soft-light;
+  opacity: 0.42;
+  pointer-events: none;
+}
+
 .banner-media,
-.banner-canvas,
 .banner-shade,
 .banner-mask {
   position: absolute;
@@ -25,31 +61,26 @@
 
 .banner-media {
   z-index: -3;
+  background: #8f857a;
   object-fit: cover;
-  object-position: center 46%;
-  filter: blur(5px);
-  transform: scale(1.015);
+  object-position: center;
 }
 
-.banner-canvas {
-  z-index: -2;
-  pointer-events: auto;
-  filter: blur(5px);
-  transform: scale(1.015);
-
-  canvas {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
+.banner-media {
+  filter: blur(var(--hero-media-blur));
+  transform: scale(var(--hero-media-scale));
 }
 
 .banner-shade {
   z-index: -1;
   background:
-    linear-gradient(rgb(9 10 9 / 0.16), rgb(9 10 9 / 0.1)),
-    linear-gradient(90deg, rgb(9 10 9 / 0.22), transparent 54%),
-    linear-gradient(180deg, transparent 30%, rgb(9 10 9 / 0.24) 100%);
+    linear-gradient(
+      90deg,
+      rgb(0 0 0 / 0.56),
+      rgb(0 0 0 / 0.28) 58%,
+      rgb(0 0 0 / 0.48)
+    ),
+    linear-gradient(180deg, rgb(0 0 0 / 0.18), rgb(0 0 0 / 0.42));
   pointer-events: none;
 }
 
@@ -77,6 +108,7 @@
   text-align: left;
   font: 600 clamp(0.875rem, 0.8vw, 1rem)/1.25 var(--font-body);
   letter-spacing: -0.025em;
+  translate: 0 var(--hero-copy-offset);
 }
 
 .banner-descr .banner-reveal {
@@ -88,34 +120,52 @@
 
 .banner-descr__lead {
   display: block;
-  grid-column: 1 / span 4;
-  max-width: 30rem;
+  grid-column: 1 / span 5;
+  max-width: 34ch;
   font-size: clamp(1.125rem, 1.35vw, 1.5rem);
   line-height: 1.08;
   pointer-events: auto;
 }
 
 .banner-descr__aside {
-  display: block;
-  grid-column: 10 / -1;
+  display: flex;
+  flex-direction: column;
+  grid-column: 9 / -1;
   justify-self: end;
-  max-width: 15rem;
+  max-width: 31ch;
   color: color-mix(in srgb, var(--color-on-dark) 72%, transparent);
+  font-size: clamp(1.1rem, 0.9vw, 1.25rem);
+  text-align: right;
   pointer-events: auto;
+  font-weight: 500;
+}
+
+.banner-scroll {
+  position: absolute;
+  bottom: var(--content-inset);
+  left: var(--content-inset);
+  z-index: 3;
+  color: var(--color-on-dark);
+  font-size: 0.85rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  text-transform: uppercase;
 }
 
 .banner-title {
   grid-column: 1 / -1;
   align-self: end;
+  justify-self: end;
   width: 100%;
-  height: 0.94em;
-  margin-top: 0;
+  height: auto;
+  margin: 0;
   color: color-mix(in srgb, var(--color-on-dark) 90%, transparent);
-  font: 500 clamp(5rem, 14vw, 17rem)/0.84 var(--font-heading);
+  font: 500 var(--hero-title-size)/0.86 var(--font-heading);
   font-stretch: 100%;
   font-variation-settings: "wdth" 100;
-  letter-spacing: -0.035em;
-  text-align: center;
+  letter-spacing: var(--tracking-display);
+  text-align: right;
   text-transform: uppercase;
   white-space: nowrap;
   overflow: visible;
@@ -124,9 +174,9 @@
 .banner-title__mask {
   display: block;
   width: 100%;
-  height: calc(100% + 0.14em);
-  margin-top: -0.14em;
-  padding-top: 0.14em;
+  height: auto;
+  margin: -0.16em 0 0;
+  padding: 0.16em 0.04em 0 0;
   overflow: hidden;
 }
 
@@ -136,9 +186,9 @@
 }
 
 .banner-title__text {
-  display: inline-block;
-  transform: scaleX(var(--banner-title-scale, 1));
-  transform-origin: center;
+  display: block;
+  width: 100%;
+  text-align: right;
   pointer-events: auto;
 }
 
@@ -153,12 +203,29 @@
   will-change: transform;
 }
 
-html.is-loading .banner-reveal {
-  transform: translateY(110%);
+html.is-entering {
+  .banner-title__mask {
+    clip-path: inset(0 0 100% 0);
+  }
+
+  .banner-title__text {
+    transform: translateY(115%);
+  }
+
+  .banner-descr__lead,
+  .banner-descr__aside,
+  .banner-scroll {
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(1.75rem);
+  }
 }
 
 @media (max-width: 768px) {
   .banner {
+    --hero-copy-offset: 0;
+    --hero-title-size: clamp(3.75rem, 17vw, 7.5rem);
+
     grid-template-columns: 1fr;
     grid-template-rows: minmax(0, 1fr) auto;
     padding-inline: var(--content-inset);
@@ -169,15 +236,12 @@ html.is-loading .banner-reveal {
     object-position: 52% center;
   }
 
-  .banner-canvas {
-    pointer-events: none;
-  }
-
   .banner-descr {
     grid-column: 1;
     align-self: end;
     width: min(25rem, 100%);
     margin-bottom: clamp(2rem, 5vh, 3.5rem);
+    translate: 0 var(--hero-copy-offset);
   }
 
   .banner-descr .banner-reveal {
@@ -194,16 +258,21 @@ html.is-loading .banner-reveal {
     grid-column: auto;
     justify-self: start;
     max-width: 19rem;
-    font-size: 0.8125rem;
+    font-size: 0.9rem;
   }
 
   .banner-title {
     grid-column: 1;
     width: 100%;
-    height: 0.98em;
-    margin-top: 0;
-    font-size: clamp(3.25rem, 15.5vw, 7rem);
+    height: auto;
+    margin: 0 0 0.5rem;
+    font-size: var(--hero-title-size);
     line-height: 0.88;
+  }
+
+  .banner-scroll {
+    bottom: clamp(5.5rem, 18vw, 7.5rem);
+    left: var(--content-inset);
   }
 }
 
@@ -217,7 +286,7 @@ html.is-loading .banner-reveal {
   }
 
   .banner-title {
-    height: 0.95em;
-    margin-top: 2rem;
+    height: 1.02em;
+    margin-top: 1.5rem;
   }
 }

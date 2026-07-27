@@ -183,21 +183,10 @@ export function initSmoothScroll() {
   }
   document.addEventListener('click', onHashClick)
   addCleanup(() => document.removeEventListener('click', onHashClick))
-  addCleanup(() => {
-    document.body.classList.remove('is-header-compact', 'is-header-condensed')
-  })
 }
 
 export function updateScrollState() {
-  const header = document.getElementById('site-header')
-  if (!header) return
-
-  const currentScroll =
-    typeof lenis?.scroll === 'number' ? lenis.scroll : window.scrollY
-  const isCompact = currentScroll > 24
-
-  document.body.classList.toggle('is-header-compact', isCompact)
-  document.body.classList.toggle('is-header-condensed', isCompact)
+  return
 }
 
 export { isMobileViewport }

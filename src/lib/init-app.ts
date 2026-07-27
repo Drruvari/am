@@ -1,11 +1,10 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { initAnimations, initLoader } from "./animations";
+import { initAnimations } from "./animations";
 import { initButtonSystem } from "./button";
 import { addCleanup, runCleanups } from "./cleanup";
 import { initMediaQueries, mm } from "./globals";
 import { initLogoHover } from "./logo-hover";
-import { initMobileMenu } from "./mobile-menu";
 import { initProjectDetail } from "./project-detail";
 import {
   initSmoothScroll,
@@ -14,7 +13,6 @@ import {
 } from "./smooth-scroll";
 
 let appInitialized = false;
-let appInitRaf: number | undefined;
 
 function initGlobalUI() {
   const footerYear = document.getElementById("footerYear");
@@ -42,7 +40,7 @@ function initGlobalUI() {
       }),
     );
     const isOpen = hour >= 8 && hour < 17;
-    footerStatus.textContent = `${time}, we are ${isOpen ? "open" : "closed"}`;
+    footerStatus.textContent = `${time} · studio ${isOpen ? "open" : "closed"}`;
   };
 
   updateFooterStatus();
@@ -92,10 +90,6 @@ function initGlobalUI() {
 }
 
 export function disposeApp() {
-  if (appInitRaf !== undefined) {
-    window.cancelAnimationFrame(appInitRaf);
-    appInitRaf = undefined;
-  }
   runCleanups();
 
   ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
@@ -106,9 +100,9 @@ export function disposeApp() {
   document.body.classList.remove(
     "is-menu-open",
     "is-project-panel-open",
-    "is-header-compact",
     "is-hero-pinned",
     "is-header-on-dark",
+    "is-footer-visible",
     "has-custom-cursor",
   );
   gsap.set(
@@ -120,34 +114,11 @@ export function disposeApp() {
   gsap.set(".slider", { yPercent: 0 });
   gsap.set(".header-wrapp", { y: 0 });
   document.documentElement.classList.remove("is-loading");
-  const loader = document.getElementById("loader");
-  if (loader) {
-    gsap.set(loader, { clearProps: "all" });
-    loader.style.display = "";
-    loader.style.pointerEvents = "";
-  }
   appInitialized = false;
 }
 
 export function initApp() {
   if (appInitialized) return;
-
-  // Wait one frame if Loader hasn't mounted yet (StrictMode / HMR)
-  if (!document.getElementById("loader")) {
-    if (appInitRaf !== undefined) return;
-    let tries = 0;
-    const retry = () => {
-      appInitRaf = undefined;
-      if (document.getElementById("loader")) {
-        initApp();
-        return;
-      }
-      tries += 1;
-      if (tries < 10) appInitRaf = window.requestAnimationFrame(retry);
-    };
-    appInitRaf = window.requestAnimationFrame(retry);
-    return;
-  }
 
   appInitialized = true;
 
@@ -159,7 +130,6 @@ export function initApp() {
 
   window.scrollTo(0, 0);
   resetScrollLock();
-  document.documentElement.classList.add("is-loading");
 
   initMediaQueries();
 
@@ -171,9 +141,7 @@ export function initApp() {
   initSmoothScroll();
   initButtonSystem();
   initAnimations();
-  initLoader();
   initLogoHover();
-  initMobileMenu();
   initProjectDetail();
   initGlobalUI();
 }

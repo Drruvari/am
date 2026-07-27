@@ -6,7 +6,8 @@ export const sections = [
     description:
       "Limestone walls anchor a coastal home while deep openings frame shade, wind, and distant water.",
     metric: "420 SQM",
-    detail: "Coastal residence shaped around shade, wind, and long Adriatic views",
+    detail:
+      "Coastal residence shaped around shade, wind, and long Adriatic views",
   },
   {
     number: "02",
@@ -33,16 +34,8 @@ export const sections = [
     description:
       "A compact retreat pairs a mineral shell with one roof opening and the changing mountain sky.",
     metric: "310 SQM",
-    detail: "Mountain retreat built around mass, silence, and a single roof aperture",
-  },
-  {
-    number: "05",
-    title: "Courtyard House, Tirana",
-    year: "2024",
-    description:
-      "Protected gardens divide family life into intimate rooms linked by soft daylight and local stone.",
-    metric: "360 SQM",
-    detail: "Courtyard home balancing privacy with shared family rooms",
+    detail:
+      "Mountain retreat built around mass, silence, and a single roof aperture",
   },
 ];
 
@@ -51,5 +44,4 @@ export const imageSources = [
   "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=1400&q=85",
   "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1400&q=85",
   "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1400&q=85",
-  "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1400&q=85",
 ];

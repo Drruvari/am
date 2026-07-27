@@ -38,15 +38,11 @@ const BUTTON_TEXT_HOVER_TARGETS = [
   '.hero__cta .btn__label > span',
   '.archive-card__label',
   '.project-card__label',
-  '.header-link:not(.is-disabled):not(.header-menu-trigger):not(.header-contact)',
-  '.site-header__nav-link',
   '.site-header__contact-link > span',
   '.site-header__contact-link .btn__label > span',
   '.site-header__menu-button .btn__label > span',
   '.footer__cta .btn__label > span:first-child',
   '.mobile-menu__close-button .btn__label > span',
-  '.footer__nav-link',
-  '.footer__bar-link',
   '.project-panel__close-button .btn__label > span',
 ]
 
