@@ -5,6 +5,7 @@ import Noise from "@/components/Noise";
 import PageTransition from "@/components/PageTransition";
 import { disposeApp, initApp } from "@/lib/init-app";
 import Home from "@/pages/Home/index";
+import Gallery from "@/pages/Gallery";
 import ProcessPage from "@/pages/Process";
 import Studio from "@/pages/Studio";
 import Works from "@/pages/Works";
@@ -49,6 +50,7 @@ export default function App() {
   const isWorksPage = /\/works?\/?$/.test(window.location.pathname);
   const isStudioPage = window.location.pathname.includes("/studio");
   const isProcessPage = window.location.pathname.includes("/process");
+  const isGalleryPage = window.location.pathname.includes("/gallery");
 
   useEffect(() => {
     initApp();
@@ -67,19 +69,23 @@ export default function App() {
         patternSize={1024}
       />
       <CustomCursor />
-      <Header />
-      <BubbleMenu
-        logo={<span>ARBËR MANGA</span>}
-        items={mobileNavigation}
-        menuAriaLabel="Toggle navigation"
-        menuBg="#d1d1c7"
-        menuContentColor="#ffffff"
-        useFixedPosition
-        animationEase="back.out(1.5)"
-        animationDuration={0.5}
-        staggerDelay={0.12}
-      />
-      {isWorksPage ? (
+      {!isGalleryPage && <Header />}
+      {!isGalleryPage && (
+        <BubbleMenu
+          logo={<span>ARBËR MANGA</span>}
+          items={mobileNavigation}
+          menuAriaLabel="Toggle navigation"
+          menuBg="#d1d1c7"
+          menuContentColor="#ffffff"
+          useFixedPosition
+          animationEase="back.out(1.5)"
+          animationDuration={0.5}
+          staggerDelay={0.12}
+        />
+      )}
+      {isGalleryPage ? (
+        <Gallery />
+      ) : isWorksPage ? (
         <Works />
       ) : isStudioPage ? (
         <Studio />

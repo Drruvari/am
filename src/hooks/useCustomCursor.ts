@@ -109,6 +109,11 @@ export function useCustomCursor() {
 
       setCursorVisible(true);
 
+      if (document.body.classList.contains("is-gallery-dragging")) {
+        applyCursorState("default");
+        return;
+      }
+
       const hoverTarget = pointerTarget.closest("[data-hover], [data-cursor]");
       if (hoverTarget) {
         const key =
@@ -132,7 +137,7 @@ export function useCustomCursor() {
       applyCursorState("default");
     };
 
-    const onMouseMove = (event: MouseEvent) => {
+    const onPointerMove = (event: PointerEvent) => {
       lastMouseX = event.clientX;
       lastMouseY = event.clientY;
       xTo(lastMouseX);
@@ -155,7 +160,7 @@ export function useCustomCursor() {
       setCursorVisible(false);
     };
 
-    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("pointermove", onPointerMove);
     window.addEventListener("scroll", onStateInvalidated, { passive: true });
     window.addEventListener("resize", onStateInvalidated);
     window.addEventListener("blur", onWindowBlur);
@@ -165,7 +170,7 @@ export function useCustomCursor() {
 
     return () => {
       document.body.classList.remove("has-custom-cursor");
-      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("scroll", onStateInvalidated);
       window.removeEventListener("resize", onStateInvalidated);
       window.removeEventListener("blur", onWindowBlur);

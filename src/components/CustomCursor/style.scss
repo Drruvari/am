@@ -43,6 +43,17 @@
   }
 }
 
+body.is-gallery-dragging .custom-cursor {
+  .custom-cursor__img {
+    opacity: 0;
+  }
+
+  .custom-cursor__img--default {
+    opacity: 1;
+    transform: rotate(-12deg) scale(0.78);
+  }
+}
+
 @media (max-width: 48rem) {
   .custom-cursor {
     display: none;

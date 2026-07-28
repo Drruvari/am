@@ -37,11 +37,12 @@ jobs:
 
       - name: Add direct route fallbacks
         run: |
-          mkdir -p dist/work dist/works dist/studio dist/process
+          mkdir -p dist/work dist/works dist/studio dist/process dist/gallery
           cp dist/index.html dist/work/index.html
           cp dist/index.html dist/works/index.html
           cp dist/index.html dist/studio/index.html
           cp dist/index.html dist/process/index.html
+          cp dist/index.html dist/gallery/index.html
 
       - name: Verify production build
         run: |
@@ -56,6 +57,7 @@ jobs:
           test -f dist/work/index.html
           test -f dist/studio/index.html
           test -f dist/process/index.html
+          test -f dist/gallery/index.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

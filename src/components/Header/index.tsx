@@ -6,7 +6,7 @@ const navigation = [
   { label: "Work", href: `${baseUrl}work` },
   { label: "Studio", href: `${baseUrl}studio` },
   { label: "Process", href: `${baseUrl}process` },
-  { label: "Gallery", href: "#work" },
+  { label: "Gallery", href: `${baseUrl}gallery` },
 ] as const;
 
 export default function Header() {
