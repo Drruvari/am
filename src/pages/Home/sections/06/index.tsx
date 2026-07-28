@@ -108,7 +108,7 @@ export default function ProjectInvitation() {
           noise={0.15}
           parallax={0.5}
           iterations={1}
-          intensity={1.5}
+          intensity={0.85}
           bandWidth={6}
           transparent
           autoRotate={0}
