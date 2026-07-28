@@ -116,7 +116,19 @@ body.is-header-on-dark:not(.is-menu-open) .header-logo {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: clamp(0.85rem, 1.3vw, 1.25rem);
+  gap: 0.35rem;
+  font-weight: 400;
+}
+
+.header-menu__item {
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: center;
+
+  &:not(:last-child)::after {
+    content: ",";
+    font-weight: 400;
+  }
 }
 
 .header-link {

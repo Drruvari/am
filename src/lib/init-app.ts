@@ -105,14 +105,18 @@ export function disposeApp() {
     "is-footer-visible",
     "has-custom-cursor",
   );
-  gsap.set(
+  const resetTargets = gsap.utils.toArray<HTMLElement>(
     ".banner-reveal, .slider, .slider-img img, .hero__img, .header, .header-wrapp, .header-link, .header-logo svg",
-    { clearProps: "all" },
   );
+  if (resetTargets.length) {
+    gsap.set(resetTargets, { clearProps: "all" });
+  }
   const fadeElements = gsap.utils.toArray<HTMLElement>(".banner-reveal");
   if (fadeElements.length) gsap.set(fadeElements, { yPercent: 0 });
-  gsap.set(".slider", { yPercent: 0 });
-  gsap.set(".header-wrapp", { y: 0 });
+  const sliders = gsap.utils.toArray<HTMLElement>(".slider");
+  if (sliders.length) gsap.set(sliders, { yPercent: 0 });
+  const headerWrappers = gsap.utils.toArray<HTMLElement>(".header-wrapp");
+  if (headerWrappers.length) gsap.set(headerWrappers, { y: 0 });
   document.documentElement.classList.remove("is-loading");
   appInitialized = false;
 }
@@ -140,8 +144,13 @@ export function initApp() {
 
   initSmoothScroll();
   initButtonSystem();
-  initAnimations();
   initLogoHover();
-  initProjectDetail();
   initGlobalUI();
+
+  if (document.querySelector(".home-page")) {
+    initAnimations();
+    initProjectDetail();
+  } else {
+    document.documentElement.classList.remove("is-entering", "is-loading");
+  }
 }

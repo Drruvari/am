@@ -2,14 +2,16 @@ import BubbleMenu from "@/components/BubbleMenu";
 import CustomCursor from "@/components/CustomCursor/index";
 import Header from "@/components/Header/index";
 import Noise from "@/components/Noise";
+import PageTransition from "@/components/PageTransition";
 import { disposeApp, initApp } from "@/lib/init-app";
 import Home from "@/pages/Home/index";
+import Works from "@/pages/Works";
 import { useEffect } from "react";
 
 const mobileNavigation = [
   {
     label: "Home",
-    href: "#top",
+    href: "/",
     ariaLabel: "Home",
     rotation: -8,
   },
@@ -21,7 +23,7 @@ const mobileNavigation = [
   },
   {
     label: "Work",
-    href: "#work",
+    href: "/works",
     ariaLabel: "Selected work",
     rotation: -5,
   },
@@ -40,6 +42,8 @@ const mobileNavigation = [
 ] as const;
 
 export default function App() {
+  const isWorksPage = window.location.pathname.includes("/works");
+
   useEffect(() => {
     initApp();
     return () => disposeApp();
@@ -47,6 +51,7 @@ export default function App() {
 
   return (
     <>
+      <PageTransition />
       <Noise
         className="noise-overlay--fixed"
         patternAlpha={6}
@@ -68,7 +73,7 @@ export default function App() {
         animationDuration={0.5}
         staggerDelay={0.12}
       />
-      <Home />
+      {isWorksPage ? <Works /> : <Home />}
     </>
   );
 }

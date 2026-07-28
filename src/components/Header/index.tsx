@@ -1,7 +1,7 @@
 import "./style.scss";
 
 const navigation = [
-  { label: "Work", href: "#work" },
+  { label: "Work", href: "/works" },
   { label: "Studio", href: "#featured-project" },
   { label: "Process", href: "#process" },
   { label: "Gallery", href: "#work" },
@@ -12,7 +12,7 @@ export default function Header() {
     <header className="header site-header" id="site-header">
       <div className="header-wrapp">
         <a
-          href="#top"
+          href="/"
           className="header-logo"
           aria-label="Arbër Manga home"
           data-hover="link"

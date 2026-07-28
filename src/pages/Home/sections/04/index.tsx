@@ -97,7 +97,7 @@ export default function SelectedWorks() {
   return (
     <section id="work" className="selected-works">
       <header className="selected-works__header">
-        <h2>Selected Works</h2>
+        <h2>Works</h2>
         <p>
           Homes, adaptations, and rooms shaped by site, material, and everyday
           life.
