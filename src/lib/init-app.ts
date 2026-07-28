@@ -1,6 +1,6 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { initAnimations } from "./animations";
+import { initAnimations, initHeaderTheme } from "./animations";
 import { initButtonSystem } from "./button";
 import { addCleanup, runCleanups } from "./cleanup";
 import { initMediaQueries, mm } from "./globals";
@@ -146,6 +146,8 @@ export function initApp() {
   initButtonSystem();
   initLogoHover();
   initGlobalUI();
+  const cleanupHeaderTheme = initHeaderTheme();
+  if (cleanupHeaderTheme) addCleanup(cleanupHeaderTheme);
 
   if (document.querySelector(".home-page")) {
     initAnimations();

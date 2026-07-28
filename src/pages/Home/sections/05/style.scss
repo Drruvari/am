@@ -45,7 +45,17 @@
     gap: var(--grid-gap);
     align-items: center;
     min-height: 0;
-    padding-block: clamp(4rem, 7vw, 7rem);
+    padding-block: clamp(4rem, 6vw, 6rem);
+  }
+
+  &__statement {
+    width: min(100%, 15ch);
+    margin: clamp(5rem, 9vw, 9rem) 0 0 24%;
+    font-size: clamp(3rem, 6.8vw, 8rem);
+    font-weight: 600;
+    line-height: 0.88;
+    letter-spacing: -0.06em;
+    text-transform: none;
   }
 
   &__preview {
@@ -62,15 +72,19 @@
     }
 
     &--2 {
-      transform: translateY(0);
+      transform: translateY(calc(-1 * clamp(0.75rem, 1vw, 1.2rem)));
     }
 
     &--3 {
-      transform: translateY(clamp(2.25rem, 3vw, 3.5rem));
+      transform: translateY(clamp(0.75rem, 1vw, 1.2rem));
     }
 
     &--4 {
-      transform: translateY(clamp(4.5rem, 6vw, 7rem));
+      transform: translateY(clamp(2.75rem, 4vw, 4.5rem));
+    }
+
+    &--5 {
+      transform: translateY(clamp(4.75rem, 7vw, 7.5rem));
     }
 
     > p {
@@ -103,13 +117,17 @@
       }
 
       button {
-        display: block;
+        display: grid;
+        grid-template-columns: clamp(2.75rem, 4vw, 4.5rem) 1fr;
+        gap: 0.4rem;
+        align-items: baseline;
         width: 100%;
-        padding: 0;
+        padding: 0.12em 0;
         border: 0;
+        border-top: 1px solid rgb(8 8 7 / 0.12);
         background: transparent;
         color: inherit;
-        font: 400 clamp(3rem, 4.6vw, 5.5rem)/0.96 var(--font-heading);
+        font: 400 clamp(2.65rem, 4.1vw, 5rem)/0.98 var(--font-heading);
         letter-spacing: var(--tracking-display);
         text-align: left;
         text-transform: uppercase;
@@ -117,6 +135,11 @@
         transition:
           color 0.35s ease,
           transform 0.45s var(--ease-out-expo);
+
+        > .mono {
+          font-size: clamp(0.65rem, 0.75vw, 0.78rem);
+          letter-spacing: 0.06em;
+        }
 
         &:active {
           transform: translateX(0.18em);
@@ -220,6 +243,12 @@
       min-height: auto;
       gap: 2.5rem;
       padding-block: 3.75rem;
+    }
+
+    &__statement {
+      width: 100%;
+      margin: 4rem 0 0;
+      font-size: clamp(2.75rem, 11vw, 5rem);
     }
 
     &__preview,

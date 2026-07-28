@@ -5,11 +5,20 @@ const baseUrl = import.meta.env.BASE_URL;
 const navigation = [
   { label: "Work", href: `${baseUrl}work` },
   { label: "Studio", href: `${baseUrl}studio` },
-  { label: "Process", href: "#process" },
+  { label: "Process", href: `${baseUrl}process` },
   { label: "Gallery", href: "#work" },
 ] as const;
 
 export default function Header() {
+  const pathname = window.location.pathname.replace(/\/+$/, "");
+  const activePage = /\/works?$/.test(pathname)
+    ? "Work"
+    : pathname.endsWith("/studio")
+      ? "Studio"
+      : pathname.endsWith("/process")
+        ? "Process"
+        : null;
+
   return (
     <header className="header site-header" id="site-header">
       <div className="header-wrapp">
@@ -28,7 +37,10 @@ export default function Header() {
               <a
                 key={item.label}
                 href={item.href}
-                className="header-menu__item header-link"
+                className={`header-menu__item header-link${
+                  activePage === item.label ? " is-active" : ""
+                }`}
+                aria-current={activePage === item.label ? "page" : undefined}
                 data-hover="link"
               >
                 <span className="header-text-effect">

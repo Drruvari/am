@@ -45,21 +45,6 @@ const process = [
   },
 ];
 
-const principles = [
-  {
-    title: "Attention before expression",
-    text: "I begin by understanding the place, the people, and the everyday rituals the architecture must support.",
-  },
-  {
-    title: "Clarity through every scale",
-    text: "One central idea guides plan, section, material, and detail so the finished space feels calm and coherent.",
-  },
-  {
-    title: "Direct responsibility",
-    text: "I remain personally involved from first conversation through construction, keeping decisions close and consistent.",
-  },
-];
-
 export default function Studio() {
   const pageRef = useRef<HTMLElement>(null);
 
@@ -75,13 +60,33 @@ export default function Studio() {
         return;
       }
 
-      gsap.from(".studio-intro__line > span", {
-        yPercent: 110,
-        duration: 1.15,
-        stagger: 0.09,
-        ease: "power4.out",
-        delay: 0.15,
-      });
+      gsap
+        .timeline({ delay: 0.15 })
+        .from(".studio-intro__line > span", {
+          yPercent: 110,
+          duration: 1.15,
+          stagger: 0.09,
+          ease: "power4.out",
+        })
+        .from(
+          ".studio-intro__line--with-image",
+          {
+            columnGap: 0,
+            duration: 0.8,
+            ease: "power3.inOut",
+          },
+          ">-0.08",
+        )
+        .from(
+          ".studio-intro__line--with-image figure",
+          {
+            width: 0,
+            autoAlpha: 0,
+            duration: 0.8,
+            ease: "power3.inOut",
+          },
+          "<",
+        );
 
       reveals.forEach((element) => {
         gsap.from(element, {
@@ -100,26 +105,28 @@ export default function Studio() {
         });
       });
 
-      gsap.utils.toArray<HTMLElement>("[data-studio-parallax]").forEach((media) => {
-        const image = media.querySelector("img");
-        if (!image) return;
+      gsap.utils
+        .toArray<HTMLElement>("[data-studio-parallax]")
+        .forEach((media) => {
+          const image = media.querySelector("img");
+          if (!image) return;
 
-        gsap.fromTo(
-          image,
-          { yPercent: -7, scale: 1.08 },
-          {
-            yPercent: 7,
-            scale: 1,
-            ease: "none",
-            scrollTrigger: {
-              trigger: media,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 1.2,
+          gsap.fromTo(
+            image,
+            { yPercent: -7, scale: 1.08 },
+            {
+              yPercent: 7,
+              scale: 1,
+              ease: "none",
+              scrollTrigger: {
+                trigger: media,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1.2,
+              },
             },
-          },
-        );
-      });
+          );
+        });
 
       const marquee = gsap.fromTo(
         ".studio-strip__track",
@@ -161,23 +168,55 @@ export default function Studio() {
         },
       });
 
-      const processSheets = gsap.utils.toArray<HTMLElement>(
-        ".studio-process__step",
-      );
-      processSheets.slice(0, -1).forEach((sheet, index) => {
-        gsap.to(sheet, {
-          scale: 0.985,
-          backgroundColor: "#d9d9d6",
-          ease: "none",
-          scrollTrigger: {
-            trigger: processSheets[index + 1],
-            start: "top bottom",
-            end: "top top",
-            scrub: 1.4,
-            invalidateOnRefresh: true,
-          },
-        });
-      });
+      if (window.matchMedia("(min-width: 769px)").matches) {
+        const finalProcessSheet = pageRef.current?.querySelector<HTMLElement>(
+          ".studio-process__step:nth-child(3)",
+        );
+        const finalProcessNumber =
+          finalProcessSheet?.querySelector<HTMLElement>(
+            ".studio-process__number",
+          );
+
+        if (finalProcessSheet && finalProcessNumber) {
+          const getStickyTop = () =>
+            Number.parseFloat(
+              window.getComputedStyle(finalProcessSheet).top,
+            ) || 0;
+
+          const getNumberTravel = () => {
+            const styles = window.getComputedStyle(finalProcessSheet);
+            const paddingBottom = Number.parseFloat(styles.paddingBottom) || 0;
+            const fontSize =
+              Number.parseFloat(
+                window.getComputedStyle(finalProcessNumber).fontSize,
+              ) || finalProcessNumber.offsetHeight;
+            const available =
+              finalProcessSheet.clientHeight -
+              finalProcessNumber.offsetTop -
+              fontSize -
+              paddingBottom;
+
+            return Math.max(0, available * 0.55);
+          };
+
+          gsap.fromTo(
+            finalProcessNumber,
+            { y: 0 },
+            {
+              y: () => getNumberTravel(),
+              ease: "none",
+              scrollTrigger: {
+                trigger: finalProcessSheet,
+                start: () => `top ${getStickyTop()}px`,
+                end: () => `+=${Math.round(window.innerHeight * 0.4)}`,
+                scrub: 0.35,
+                invalidateOnRefresh: true,
+              },
+            },
+          );
+        }
+      }
+
     },
     { scope: pageRef },
   );
@@ -186,21 +225,26 @@ export default function Studio() {
     <>
       <main ref={pageRef} id="top" className="studio-page">
         <section className="studio-intro">
-          <p className="studio-eyebrow mono">Independent architecture practice</p>
           <h1>
-            <span className="studio-intro__line">
-              <span>Spaces, shaped</span>
+            <span className="studio-intro__line studio-intro__line--with-image">
+              <figure>
+                <img src={images.architecture} alt="" aria-hidden="true" />
+              </figure>
+              <span>Architecture</span>
             </span>
             <span className="studio-intro__line">
-              <span>to be lived in.</span>
+              <span>for everyday</span>
+            </span>
+            <span className="studio-intro__line">
+              <span>life.</span>
             </span>
           </h1>
           <div className="studio-intro__meta">
             <p>
-              Architecture and interiors developed with care, clarity, and a
-              close relationship between idea and making.
+              A solo architecture practice, shaping places with care from first
+              idea to final detail.
             </p>
-            <span className="mono">Arbër Manga · Tirana</span>
+            <span className="mono">[Scroll]</span>
           </div>
         </section>
 
@@ -242,74 +286,64 @@ export default function Studio() {
             borderThickness={2.25}
           />
           <h2 data-studio-reveal>
-            I work directly with each client, from first conversation to the
-            final built detail.
+            Good architecture grows through trust, careful listening, and a
+            shared understanding of what a place should become.
           </h2>
           <div className="studio-manifesto__note" data-studio-reveal>
             <span className="studio-eyebrow mono">(Solo practice)</span>
             <p>
-              One point of contact. One consistent design voice. Specialist
-              engineers, makers, and consultants join only when the project
-              needs them.
+              I keep the practice intentionally small so ideas, decisions, and
+              responsibilities stay close from the first sketch through the
+              completed space.
             </p>
           </div>
         </section>
 
         <section className="studio-profile">
           <header className="studio-profile__header" data-studio-reveal>
-            <span className="studio-eyebrow mono">(The architect)</span>
             <h2>
-              Working,
-              <br />
-              personally.
+              Architecture becomes meaningful when it responds clearly to
+              place, daily life, and the people it serves.
             </h2>
           </header>
 
           <div className="studio-profile__aside" data-studio-reveal>
+            <span className="studio-eyebrow mono">(The architect)</span>
             <p>
-              One architect.
-              <br />
-              One direct process.
+              I work directly with each client, keeping design thinking,
+              communication, and responsibility connected from the first
+              conversation to the completed space.
             </p>
-            <span className="studio-eyebrow mono">(Principles)</span>
           </div>
 
-          <figure
-            className="studio-profile__portrait"
-            data-studio-reveal
-            data-studio-mask
-            data-studio-parallax
-          >
-            <img src={images.portrait} alt="Arbër Manga" />
-          </figure>
-
-          <div className="studio-profile__principles" data-studio-reveal>
-            {principles.map((principle, index) => (
-              <article key={principle.title}>
-                <span className="mono">
-                  {String(index + 1).padStart(2, "0")}.
-                </span>
-                <div>
-                  <h3>{principle.title}</h3>
-                  <p>{principle.text}</p>
-                </div>
-              </article>
-            ))}
+          <div className="studio-profile__media">
+            <figure
+              data-studio-reveal
+              data-studio-mask
+              data-studio-parallax
+            >
+              <img src={images.portrait} alt="Arbër Manga" />
+            </figure>
+            <figure
+              data-studio-reveal
+              data-studio-mask
+              data-studio-parallax
+            >
+              <img src={images.material} alt="Architectural material detail" />
+            </figure>
           </div>
+
         </section>
 
         <section className="studio-process">
           <div className="studio-process__heading" data-studio-reveal>
             <span className="studio-eyebrow mono">(How I work)</span>
-            <h2>A clear process, kept close.</h2>
+            <h2>From first questions to a resolved place.</h2>
           </div>
 
           <div className="studio-process__list">
             {process.map((step) => (
-              <article
-                className="studio-process__step"
-                key={step.number}
-              >
+              <article className="studio-process__step" key={step.number}>
                 <span className="studio-process__number">{step.number}</span>
                 <span className="studio-eyebrow mono">{step.label}</span>
                 <div>
@@ -330,11 +364,12 @@ export default function Studio() {
           </figure>
           <div data-studio-reveal>
             <span className="studio-eyebrow mono">(Collaboration)</span>
-            <h2>A small practice with the right people around each project.</h2>
+            <h2>Independent in direction, collaborative where it matters.</h2>
             <p>
-              I assemble trusted structural, environmental, landscape, and
-              fabrication specialists around a commission as required. The
-              practice stays lean; the expertise does not.
+              Each commission is led by me and supported by trusted engineers,
+              landscape designers, makers, and consultants selected for its
+              particular needs. The structure stays direct while the knowledge
+              around the project expands.
             </p>
           </div>
         </section>

@@ -5,6 +5,7 @@ import Noise from "@/components/Noise";
 import PageTransition from "@/components/PageTransition";
 import { disposeApp, initApp } from "@/lib/init-app";
 import Home from "@/pages/Home/index";
+import ProcessPage from "@/pages/Process";
 import Studio from "@/pages/Studio";
 import Works from "@/pages/Works";
 import { useEffect } from "react";
@@ -31,9 +32,9 @@ const mobileNavigation = [
     rotation: -5,
   },
   {
-    label: "Services",
-    href: "#process",
-    ariaLabel: "Services",
+    label: "Process",
+    href: `${baseUrl}process`,
+    ariaLabel: "Process",
     rotation: 7,
   },
   {
@@ -47,6 +48,7 @@ const mobileNavigation = [
 export default function App() {
   const isWorksPage = /\/works?\/?$/.test(window.location.pathname);
   const isStudioPage = window.location.pathname.includes("/studio");
+  const isProcessPage = window.location.pathname.includes("/process");
 
   useEffect(() => {
     initApp();
@@ -77,7 +79,15 @@ export default function App() {
         animationDuration={0.5}
         staggerDelay={0.12}
       />
-      {isWorksPage ? <Works /> : isStudioPage ? <Studio /> : <Home />}
+      {isWorksPage ? (
+        <Works />
+      ) : isStudioPage ? (
+        <Studio />
+      ) : isProcessPage ? (
+        <ProcessPage />
+      ) : (
+        <Home />
+      )}
     </>
   );
 }

@@ -129,7 +129,11 @@ export default function SelectedWorks() {
         ))}
       </div>
 
-      <a className="selected-works__more" href="#process" data-hover="link">
+      <a
+        className="selected-works__more"
+        href={`${import.meta.env.BASE_URL}process`}
+        data-hover="link"
+      >
         <img src={arrow} alt="" aria-hidden="true" />
         <strong>View all projects</strong>
         <span>({String(projects.length).padStart(2, "0")})</span>

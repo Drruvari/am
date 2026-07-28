@@ -17,19 +17,35 @@ let homepageMotionInitialized = false;
 let heroEasesInitialized = false;
 
 const darkHeaderSections =
-  ".banner, .collection, .philosophy, .project-invitation, .footer";
+  ".banner, .collection, .philosophy, .process-list, .project-invitation, .footer";
 
-function initHeaderTheme() {
+export function initHeaderTheme() {
   const header = document.querySelector<HTMLElement>(".header");
   if (!header) return;
 
   const syncHeaderTheme = () => {
     const headerLine = header.getBoundingClientRect().height * 0.5;
-    const section = document
-      .elementsFromPoint(window.innerWidth * 0.5, headerLine)
+    const surfaces = document.elementsFromPoint(
+      window.innerWidth * 0.5,
+      headerLine,
+    );
+    const revealTopHalf = document.querySelector<HTMLElement>(
+      ".process-reveal__heading-half--top",
+    );
+    const revealTopBounds = revealTopHalf?.getBoundingClientRect();
+    const isRevealHeader =
+      revealTopBounds !== undefined &&
+      headerLine >= revealTopBounds.top &&
+      headerLine <= revealTopBounds.top + revealTopBounds.height * 0.5;
+    const isRevealContent = surfaces.some((element) =>
+      element.closest(".process-reveal__content"),
+    );
+    const section = surfaces
       .map((element) => element.closest<HTMLElement>("section, footer"))
       .find(Boolean);
-    const onDark = section?.matches(darkHeaderSections) ?? false;
+    const onDark =
+      !isRevealHeader &&
+      (isRevealContent || (section?.matches(darkHeaderSections) ?? false));
 
     document.body.classList.toggle("is-header-on-dark", onDark);
   };
@@ -44,7 +60,10 @@ function initHeaderTheme() {
 
   syncHeaderTheme();
 
-  return () => trigger.kill();
+  return () => {
+    trigger.kill();
+    document.body.classList.remove("is-header-on-dark");
+  };
 }
 
 function initHeroEases() {
@@ -370,8 +389,6 @@ function initMobileSectionMotion() {
 
 function initHomepageMotion() {
   const ctx = gsap.context(() => {
-    initHeaderTheme();
-
     if (prefersReducedMotion()) {
       gsap.set(
         [

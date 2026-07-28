@@ -44,8 +44,12 @@ export default function Contact() {
             >
               Studio
             </a>
-            <a className="footer__nav-link" href="#process" data-hover="link">
-              Services
+            <a
+              className="footer__nav-link"
+              href={`${import.meta.env.BASE_URL}process`}
+              data-hover="link"
+            >
+              Process
             </a>
             <a className="footer__nav-link" href="#work" data-hover="link">
               Archive
