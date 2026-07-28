@@ -16,25 +16,25 @@ type GalleryItem = {
 const asset = (path: string) => `${import.meta.env.BASE_URL}assets/${path}`;
 
 const items: GalleryItem[] = [
-  { title: "House on the Ridge", meta: "Residence · 2025", src: asset("images/arch.jpg"), x: 470, y: 330, width: 1020, height: 560 },
+  { title: "House on the Ridge", meta: "Residence · 2025", src: asset("images/arch.webp"), x: 470, y: 330, width: 1020, height: 560 },
   { title: "Coastal Study", meta: "Process · 2024", src: asset("images/gallery-concrete-01.webp"), x: 1710, y: 90, width: 370, height: 500 },
   { title: "Material Assembly", meta: "Detail · 2025", src: asset("images/gallery-concrete-02.webp"), x: 1560, y: 760, width: 500, height: 340 },
   { title: "Courtyard Rooms", meta: "Residence · 2023", src: asset("images/gallery-concrete-03.webp"), x: 70, y: 1100, width: 500, height: 460 },
   { title: "Drafting Study", meta: "Drawing · 2025", src: asset("images/gallery-concrete-03.webp"), x: 720, y: 1190, width: 380, height: 430 },
   { title: "Model Study", meta: "Model · 2024", src: asset("images/gallery-concrete-04.webp"), x: 1310, y: 1320, width: 650, height: 370 },
-  { title: "Threshold", meta: "Interior · 2025", src: asset("images/arch.jpg"), x: -180, y: 180, width: 380, height: 500 },
+  { title: "Threshold", meta: "Interior · 2025", src: asset("images/arch.webp"), x: -180, y: 180, width: 380, height: 500 },
   { title: "Living Framework", meta: "Research · 2024", src: asset("images/gallery-concrete-02.webp"), x: 70, y: 790, width: 280, height: 200 },
   { title: "Light Court", meta: "Residence · 2025", src: asset("images/gallery-concrete-02.webp"), x: 1210, y: -150, width: 390, height: 280 },
   { title: "Civic Frame", meta: "Archive · 2023", src: asset("images/gallery-concrete-04.webp"), x: 650, y: 30, width: 350, height: 220 },
   { title: "Concrete Rhythm", meta: "Facade · 2024", src: asset("images/gallery-concrete-01.webp"), x: 2050, y: 1020, width: 300, height: 410 },
-  { title: "Garden Threshold", meta: "Interior · 2024", src: "https://images.unsplash.com/photo-1633557018921-39299488e1c9?auto=format&fit=crop&q=78&w=1600", x: 1050, y: 980, width: 250, height: 350 },
-  { title: "Museum Passage", meta: "Civic · 2025", src: "https://images.unsplash.com/photo-1761287347579-a9f73da0f959?auto=format&fit=crop&q=78&w=1600", x: 1030, y: 40, width: 300, height: 200 },
-  { title: "Circular Court", meta: "Interior · 2023", src: "https://images.unsplash.com/photo-1544840132-e882f4b414c2?auto=format&fit=crop&q=78&w=1600", x: 1790, y: 630, width: 280, height: 210 },
-  { title: "Window Room", meta: "Interior · 2024", src: "https://images.unsplash.com/photo-1719603235487-1ae56fc89535?auto=format&fit=crop&q=78&w=1600", x: 360, y: 1600, width: 420, height: 220 },
-  { title: "Old Mill", meta: "Adaptive reuse · 2025", src: "https://images.unsplash.com/photo-1741524916134-48f00f42d925?auto=format&fit=crop&q=78&w=1600", x: -70, y: 1510, width: 340, height: 250 },
+  { title: "Garden Threshold", meta: "Interior · 2024", src: "https://images.unsplash.com/photo-1633557018921-39299488e1c9?auto=format&fit=crop&q=68&w=1000", x: 1050, y: 980, width: 250, height: 350 },
+  { title: "Museum Passage", meta: "Civic · 2025", src: "https://images.unsplash.com/photo-1761287347579-a9f73da0f959?auto=format&fit=crop&q=68&w=1000", x: 1030, y: 40, width: 300, height: 200 },
+  { title: "Circular Court", meta: "Interior · 2023", src: "https://images.unsplash.com/photo-1544840132-e882f4b414c2?auto=format&fit=crop&q=68&w=1000", x: 1790, y: 630, width: 280, height: 210 },
+  { title: "Window Room", meta: "Interior · 2024", src: "https://images.unsplash.com/photo-1719603235487-1ae56fc89535?auto=format&fit=crop&q=68&w=1000", x: 360, y: 1600, width: 420, height: 220 },
+  { title: "Old Mill", meta: "Adaptive reuse · 2025", src: "https://images.unsplash.com/photo-1741524916134-48f00f42d925?auto=format&fit=crop&q=68&w=1000", x: -70, y: 1510, width: 340, height: 250 },
 ];
 
-const repetitions = [-1, 0, 1] as const;
+const repetitions = [-1, 0] as const;
 const grid = { width: 2200, height: 1800 };
 
 function GalleryMedia({ item, eager = false }: { item: GalleryItem; eager?: boolean }) {
@@ -196,17 +196,17 @@ export default function Gallery() {
       }
       const wrapX = grid.width * motion.scale;
       const wrapY = grid.height * motion.scale;
-      if (motion.currentX > wrapX / 2) {
+      if (motion.currentX >= wrapX) {
         motion.currentX -= wrapX;
         motion.targetX -= wrapX;
-      } else if (motion.currentX < -wrapX / 2) {
+      } else if (motion.currentX < 0) {
         motion.currentX += wrapX;
         motion.targetX += wrapX;
       }
-      if (motion.currentY > wrapY / 2) {
+      if (motion.currentY >= wrapY) {
         motion.currentY -= wrapY;
         motion.targetY -= wrapY;
-      } else if (motion.currentY < -wrapY / 2) {
+      } else if (motion.currentY < 0) {
         motion.currentY += wrapY;
         motion.targetY += wrapY;
       }
@@ -278,7 +278,9 @@ export default function Gallery() {
     startRender();
     introFrame = window.requestAnimationFrame(() => {
       const visibleTiles = Array.from(
-        canvas.querySelectorAll<HTMLElement>(".gallery-tile"),
+        canvas.querySelectorAll<HTMLElement>(
+          ".gallery-tile:not(.gallery-tile--primary)",
+        ),
       ).filter((tile) => {
         const rect = tile.getBoundingClientRect();
         return (
@@ -304,11 +306,11 @@ export default function Gallery() {
       });
 
       introTween = gsap.to(visibleTiles.reverse(), {
-        duration: 2,
-        ease: "expo.inOut",
+        duration: 1.2,
+        ease: "power4.inOut",
         x: 0,
         y: 0,
-        stagger: 0.05,
+        stagger: 0.035,
         clearProps: "transform",
       });
     });
@@ -380,7 +382,9 @@ export default function Gallery() {
             repetitions.flatMap((column) =>
               items.map((item, index) => (
                 <button
-                  className="gallery-tile"
+                  className={`gallery-tile${
+                    index === 0 ? " gallery-tile--primary" : ""
+                  }`}
                   type="button"
                   key={`${row}-${column}-${item.title}`}
                   style={{

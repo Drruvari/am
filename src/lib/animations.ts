@@ -16,9 +16,6 @@ let pageScrollInitialized = false;
 let homepageMotionInitialized = false;
 let heroEasesInitialized = false;
 
-const darkHeaderSections =
-  ".banner, .collection, .philosophy, .process-list, .project-invitation, .footer";
-
 export function initHeaderTheme() {
   const header = document.querySelector<HTMLElement>(".header");
   if (!header) return;
@@ -29,23 +26,12 @@ export function initHeaderTheme() {
       window.innerWidth * 0.5,
       headerLine,
     );
-    const revealTopHalf = document.querySelector<HTMLElement>(
-      ".process-reveal__heading-half--top",
-    );
-    const revealTopBounds = revealTopHalf?.getBoundingClientRect();
-    const isRevealHeader =
-      revealTopBounds !== undefined &&
-      headerLine >= revealTopBounds.top &&
-      headerLine <= revealTopBounds.top + revealTopBounds.height * 0.5;
-    const isRevealContent = surfaces.some((element) =>
-      element.closest(".process-reveal__content"),
-    );
-    const section = surfaces
-      .map((element) => element.closest<HTMLElement>("section, footer"))
+    const themedSurface = surfaces
+      .map((element) =>
+        element.closest<HTMLElement>("[data-header-theme]"),
+      )
       .find(Boolean);
-    const onDark =
-      !isRevealHeader &&
-      (isRevealContent || (section?.matches(darkHeaderSections) ?? false));
+    const onDark = themedSurface?.dataset.headerTheme === "dark";
 
     document.body.classList.toggle("is-header-on-dark", onDark);
   };

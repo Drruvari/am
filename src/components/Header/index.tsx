@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import "./style.scss";
 
 const baseUrl = import.meta.env.BASE_URL;
@@ -9,7 +10,29 @@ const navigation = [
   { label: "Gallery", href: `${baseUrl}gallery` },
 ] as const;
 
-export default function Header() {
+type HeaderProps = {
+  noiseEnabled: boolean;
+  onNoiseToggle: () => void;
+};
+
+export default function Header({
+  noiseEnabled,
+  onNoiseToggle,
+}: HeaderProps) {
+  useEffect(() => {
+    let cleanup: (() => void) | undefined;
+    let cancelled = false;
+
+    void import("@/lib/animations").then(({ initHeaderTheme }) => {
+      if (!cancelled) cleanup = initHeaderTheme();
+    });
+
+    return () => {
+      cancelled = true;
+      cleanup?.();
+    };
+  }, []);
+
   const pathname = window.location.pathname.replace(/\/+$/, "");
   const activePage = /\/works?$/.test(pathname)
     ? "Work"
@@ -28,7 +51,18 @@ export default function Header() {
           aria-label="Arbër Manga home"
           data-hover="link"
         >
-          <span className="header-logo__wordmark">ARBËR MANGA</span>
+          <span className="header-logo__mark" aria-hidden="true">
+            <img
+              className="header-logo__image header-logo__image--dark"
+              src={`${baseUrl}logo-dark.svg`}
+              alt=""
+            />
+            <img
+              className="header-logo__image header-logo__image--light"
+              src={`${baseUrl}logo-light.svg`}
+              alt=""
+            />
+          </span>
         </a>
 
         <div className="header-primary">
@@ -54,22 +88,36 @@ export default function Header() {
           </nav>
         </div>
 
-        <a
-          href="mailto:hello@arbermanga.com"
-          className="header-contact header-link header-action"
-          data-hover="link"
-          data-magnetic
-        >
-          <span className="header-text-effect">
-            <span className="header-text-effect__track">
-              <span>Start a Project</span>
-              <span aria-hidden="true">Start a Project</span>
+        <div className="header-actions">
+          <button
+            className="grain-switch"
+            type="button"
+            aria-label={`${noiseEnabled ? "Turn off" : "Turn on"} grain`}
+            aria-pressed={noiseEnabled}
+            title={`${noiseEnabled ? "Turn off" : "Turn on"} grain`}
+            onClick={onNoiseToggle}
+            data-hover="link"
+          >
+            <span className="grain-switch__field" aria-hidden="true" />
+          </button>
+
+          <a
+            href="mailto:hello@arbermanga.com"
+            className="header-contact header-link header-action"
+            data-hover="link"
+            data-magnetic
+          >
+            <span className="header-text-effect">
+              <span className="header-text-effect__track">
+                <span>Start a Project</span>
+                <span aria-hidden="true">Start a Project</span>
+              </span>
             </span>
-          </span>
-          <span className="header-action__icon" aria-hidden="true">
-            <span className="header-contact__arrow" />
-          </span>
-        </a>
+            <span className="header-action__icon" aria-hidden="true">
+              <span className="header-contact__arrow" />
+            </span>
+          </a>
+        </div>
       </div>
     </header>
   );

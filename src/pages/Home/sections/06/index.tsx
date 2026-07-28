@@ -8,6 +8,7 @@ export default function ProjectInvitation() {
     <section
       className="project-invitation"
       aria-labelledby="project-invitation-title"
+      data-header-theme="dark"
     >
       <div className="project-invitation__media" aria-hidden="true">
         <ColorBends

@@ -1,7 +1,7 @@
 import "./style.scss";
 
 const images = [
-  "/assets/images/arch.jpg",
+  "/assets/images/arch.webp",
   "https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=1000&q=80",
   "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=1000&q=80",
   "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1000&q=80",

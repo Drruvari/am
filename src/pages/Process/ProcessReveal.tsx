@@ -78,7 +78,10 @@ export default function ProcessReveal() {
     >
       <div className="process-reveal__stage">
         <div className="process-reveal__header">
-          <div className="process-reveal__heading-half process-reveal__heading-half--top">
+          <div
+            className="process-reveal__heading-half process-reveal__heading-half--top"
+            data-header-theme="light"
+          >
             <h1 id="process-reveal-title">From idea to place.</h1>
           </div>
           <div
@@ -89,7 +92,7 @@ export default function ProcessReveal() {
           </div>
         </div>
 
-        <div className="process-reveal__content">
+        <div className="process-reveal__content" data-header-theme="dark">
           <span className="mono process-reveal__eyebrow">(My approach)</span>
           <div className="process-reveal__copy">
             <p>

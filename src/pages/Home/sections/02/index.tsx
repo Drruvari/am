@@ -111,6 +111,7 @@ export default function PracticeOverview() {
       ref={sectionRef}
       className="featured-project collection"
       id="featured-project"
+      data-header-theme="dark"
     >
       <div className="featured-project__surface">
         <div

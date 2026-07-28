@@ -21,7 +21,7 @@ export default function Contact() {
   };
 
   return (
-    <footer className="footer" id="contact">
+    <footer className="footer" id="contact" data-header-theme="dark">
       <div className="footer__grid">
         <nav
           className="footer__col footer__col--nav"

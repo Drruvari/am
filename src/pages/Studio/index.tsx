@@ -10,7 +10,7 @@ import "./style.scss";
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const images = {
-  portrait: `${import.meta.env.BASE_URL}assets/images/arch.jpg`,
+  portrait: `${import.meta.env.BASE_URL}assets/images/arch.webp`,
   architecture:
     "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1600&q=88",
   interior:
@@ -223,7 +223,12 @@ export default function Studio() {
 
   return (
     <>
-      <main ref={pageRef} id="top" className="studio-page">
+      <main
+        ref={pageRef}
+        id="top"
+        className="studio-page"
+        data-header-theme="light"
+      >
         <section className="studio-intro">
           <h1>
             <span className="studio-intro__line studio-intro__line--with-image">

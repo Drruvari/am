@@ -26,7 +26,7 @@ export default function Noise({
     if (!canvas || !context) return;
 
     const size = Math.max(1, Math.round(patternSize));
-    const refreshInterval = Math.max(1, Math.round(patternRefreshInterval));
+    const refreshInterval = Math.max(0, Math.round(patternRefreshInterval));
     const alpha = Math.min(255, Math.max(0, patternAlpha));
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
@@ -60,7 +60,7 @@ export default function Noise({
     };
 
     drawGrain();
-    if (!reducedMotion) loop();
+    if (!reducedMotion && refreshInterval > 0) loop();
 
     return () => window.cancelAnimationFrame(animationId);
   }, [

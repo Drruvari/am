@@ -82,7 +82,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="banner" id="hero" ref={heroRef}>
+    <section className="banner" id="hero" ref={heroRef} data-header-theme="dark">
       <div className="banner-media" aria-hidden="true">
         <Silk noiseIntensity={0.35} />
       </div>

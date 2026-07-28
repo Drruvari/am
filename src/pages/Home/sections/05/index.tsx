@@ -99,7 +99,12 @@ export default function Process() {
   );
 
   return (
-    <section ref={sectionRef} className="process" id="process">
+    <section
+      ref={sectionRef}
+      className="process"
+      id="process"
+      data-header-theme="light"
+    >
       <div className="process__intro">
         <div className="process__topline">
           <span className="mono">(Process)</span>

@@ -95,7 +95,7 @@ function ProjectMedia({ index, title }: ProjectMediaProps) {
 
 export default function SelectedWorks() {
   return (
-    <section id="work" className="selected-works">
+    <section id="work" className="selected-works" data-header-theme="light">
       <header className="selected-works__header">
         <h2>Works</h2>
         <p>

@@ -135,7 +135,11 @@ export default function InteractiveProcessList() {
   };
 
   return (
-    <section className="process-list" aria-labelledby="process-list-title">
+    <section
+      className="process-list"
+      aria-labelledby="process-list-title"
+      data-header-theme="dark"
+    >
       <div className="process-list__heading">
         <span className="mono">(Overview)</span>
         <h2 id="process-list-title">Six stages. One continuous line of thought.</h2>
