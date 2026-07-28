@@ -335,7 +335,6 @@ function initMobileSectionMotion() {
       const surfaces = gsap.utils.toArray<HTMLElement>([
         ".featured-project__surface",
         ".process__intro",
-        ".project-invitation__content",
         ".footer__grid",
       ]);
 
@@ -363,22 +362,6 @@ function initMobileSectionMotion() {
           },
         );
       });
-
-      gsap.fromTo(
-        ".project-invitation__media",
-        { scale: 1.075 },
-        {
-          scale: 1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: ".project-invitation",
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1.1,
-            invalidateOnRefresh: true,
-          },
-        },
-      );
     },
   );
 

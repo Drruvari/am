@@ -2,7 +2,7 @@ import "./style.scss";
 
 const navigation = [
   { label: "Work", href: "/works" },
-  { label: "Studio", href: "#featured-project" },
+  { label: "Studio", href: "/studio" },
   { label: "Process", href: "#process" },
   { label: "Gallery", href: "#work" },
 ] as const;

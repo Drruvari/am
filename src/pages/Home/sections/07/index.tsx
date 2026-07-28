@@ -39,7 +39,7 @@ export default function Contact() {
             </a>
             <a
               className="footer__nav-link"
-              href="#featured-project"
+              href="/studio"
               data-hover="link"
             >
               Studio

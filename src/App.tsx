@@ -5,6 +5,7 @@ import Noise from "@/components/Noise";
 import PageTransition from "@/components/PageTransition";
 import { disposeApp, initApp } from "@/lib/init-app";
 import Home from "@/pages/Home/index";
+import Studio from "@/pages/Studio";
 import Works from "@/pages/Works";
 import { useEffect } from "react";
 
@@ -17,7 +18,7 @@ const mobileNavigation = [
   },
   {
     label: "Studio",
-    href: "#featured-project",
+    href: "/studio",
     ariaLabel: "Studio",
     rotation: 8,
   },
@@ -43,6 +44,7 @@ const mobileNavigation = [
 
 export default function App() {
   const isWorksPage = window.location.pathname.includes("/works");
+  const isStudioPage = window.location.pathname.includes("/studio");
 
   useEffect(() => {
     initApp();
@@ -73,7 +75,7 @@ export default function App() {
         animationDuration={0.5}
         staggerDelay={0.12}
       />
-      {isWorksPage ? <Works /> : <Home />}
+      {isWorksPage ? <Works /> : isStudioPage ? <Studio /> : <Home />}
     </>
   );
 }
