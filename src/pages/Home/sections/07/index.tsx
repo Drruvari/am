@@ -145,16 +145,18 @@ export default function Contact() {
         }}
         onPointerCancel={() => setIsHoldingDither(false)}
       >
-        <Dither
-          waveColor={footerWaveColor}
-          disableAnimation={false}
-          enableMouseInteraction
-          mouseRadius={0.3}
-          colorNum={4}
-          waveAmplitude={0.3}
-          waveFrequency={3}
-          waveSpeed={0.05}
-        />
+        <div className="footer__dither-zoom">
+          <Dither
+            waveColor={footerWaveColor}
+            disableAnimation={false}
+            enableMouseInteraction
+            mouseRadius={0.3}
+            colorNum={4}
+            waveAmplitude={0.3}
+            waveFrequency={3}
+            waveSpeed={0.05}
+          />
+        </div>
         <div className="footer__image-meta mono" aria-hidden="true">
           <span>ARBËR MANGA</span>
           <span>ARCHITECTURE STUDIO</span>

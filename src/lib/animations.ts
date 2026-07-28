@@ -117,7 +117,7 @@ function initHeroCollectionTransition(isMobile = false) {
       trigger: banner,
       start: "top top",
       end: "bottom top",
-      scrub: isMobile ? true : 1,
+      scrub: isMobile ? 0.65 : 1,
       invalidateOnRefresh: true,
       onLeave: () => {
         ensureCollectionFullscreen();
@@ -249,22 +249,68 @@ function initRevealGroup({
 }
 
 function initFooterMotion() {
-  gsap.fromTo(
-    ".footer",
-    {
-      yPercent: 6,
-    },
-    {
-      yPercent: 0,
-      ease: "none",
-      scrollTrigger: {
-        trigger: ".footer",
-        start: "top bottom",
-        end: "top center",
-        scrub: 1,
+  const media = gsap.matchMedia();
+
+  media.add("(min-width: 769px)", () => {
+    gsap.fromTo(
+      ".footer",
+      {
+        yPercent: 6,
       },
-    },
-  );
+      {
+        yPercent: 0,
+        ease: "none",
+        scrollTrigger: {
+          trigger: ".footer",
+          start: "top bottom",
+          end: "top center",
+          scrub: 1,
+        },
+      },
+    );
+
+    gsap.fromTo(
+      ".footer__dither-zoom",
+      {
+        scale: 1.42,
+        autoAlpha: 0.42,
+      },
+      {
+        scale: 1,
+        autoAlpha: 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger: ".project-invitation",
+          start: "bottom bottom",
+          end: "bottom top+=20%",
+          scrub: 1.25,
+          invalidateOnRefresh: true,
+        },
+      },
+    );
+  });
+
+  media.add("(max-width: 768px)", () => {
+    gsap.fromTo(
+      ".footer__dither-zoom",
+      {
+        scale: 1.5,
+        autoAlpha: 0.35,
+      },
+      {
+        scale: 1,
+        autoAlpha: 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger: ".footer__image",
+          start: "top bottom",
+          end: "top 38%",
+          scrub: 1.15,
+          invalidateOnRefresh: true,
+        },
+      },
+    );
+  });
 
   ScrollTrigger.create({
     trigger: "main",
@@ -276,6 +322,67 @@ function initFooterMotion() {
       document.body.classList.remove("is-header-on-dark", "is-footer-visible");
     },
   });
+
+  return () => media.revert();
+}
+
+function initMobileSectionMotion() {
+  const media = gsap.matchMedia();
+
+  media.add(
+    "(max-width: 768px) and (prefers-reduced-motion: no-preference)",
+    () => {
+      const surfaces = gsap.utils.toArray<HTMLElement>([
+        ".featured-project__surface",
+        ".process__intro",
+        ".project-invitation__content",
+        ".footer__grid",
+      ]);
+
+      surfaces.forEach((surface) => {
+        gsap.fromTo(
+          surface,
+          {
+            y: 34,
+            scale: 0.985,
+            autoAlpha: 0.72,
+            transformOrigin: "50% 50%",
+          },
+          {
+            y: 0,
+            scale: 1,
+            autoAlpha: 1,
+            ease: "none",
+            scrollTrigger: {
+              trigger: surface,
+              start: "top 94%",
+              end: "top 58%",
+              scrub: 0.85,
+              invalidateOnRefresh: true,
+            },
+          },
+        );
+      });
+
+      gsap.fromTo(
+        ".project-invitation__media",
+        { scale: 1.075 },
+        {
+          scale: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: ".project-invitation",
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1.1,
+            invalidateOnRefresh: true,
+          },
+        },
+      );
+    },
+  );
+
+  return () => media.revert();
 }
 
 function initHomepageMotion() {
@@ -302,6 +409,7 @@ function initHomepageMotion() {
     }
 
     initFooterMotion();
+    initMobileSectionMotion();
     initLineReveals();
     initScrollStory();
     initParallax();

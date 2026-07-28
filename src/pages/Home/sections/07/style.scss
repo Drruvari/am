@@ -35,6 +35,13 @@
   user-select: none;
 }
 
+.footer__dither-zoom {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+}
+
 .footer__grid {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -87,7 +94,7 @@
   padding: 0.06em 3.5rem 0.1em 0;
   border-bottom: 1px solid rgb(209 209 199 / 0.2);
   color: inherit;
-  font: 500 clamp(2rem, 3vw, 3.5rem) / 1.02 var(--font-body);
+  font: 500 clamp(2rem, 3vw, 3.5rem) / 1.02 var(--font-heading);
   letter-spacing: -0.045em;
   text-decoration: none;
   transition:
@@ -398,6 +405,10 @@
     align-items: flex-end;
     font-size: clamp(0.66rem, 2.75vw, 0.76rem);
     transform: none;
+  }
+
+  .footer__image {
+    touch-action: pan-y;
   }
 }
 

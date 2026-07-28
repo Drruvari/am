@@ -108,7 +108,9 @@ p,
 }
 
 @include below($bp-md) {
+  html,
   body {
+    overscroll-behavior-y: none;
     touch-action: pan-y;
     -webkit-overflow-scrolling: touch;
   }

@@ -3,31 +3,6 @@
 @use "./base";
 @use "./utilities";
 
-@font-face {
-  font-family: "Geist";
-  src: url("/assets/fonts/geist-latin.woff2") format("woff2");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Special Gothic Condensed One";
-  src: url("/assets/fonts/special-gothic-condensed-one-latin.woff2")
-    format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Notable";
-  src: url("/assets/fonts/notable-regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
 .loader__tagline {
   font-family: var(--font-heading);
 }

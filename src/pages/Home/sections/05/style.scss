@@ -114,6 +114,13 @@
         text-align: left;
         text-transform: uppercase;
         cursor: pointer;
+        transition:
+          color 0.35s ease,
+          transform 0.45s var(--ease-out-expo);
+
+        &:active {
+          transform: translateX(0.18em);
+        }
       }
     }
   }

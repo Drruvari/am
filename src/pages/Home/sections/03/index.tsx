@@ -42,7 +42,7 @@ export default function Philosophy() {
       const setupMotion = (context: gsap.Context) => {
         const isNarrow = context.conditions?.narrow ?? false;
         const pinType = ScrollTrigger.isTouch === 1 ? "transform" : "fixed";
-        const scrollEnd = isNarrow ? "+=140%" : "+=300%";
+        const scrollEnd = isNarrow ? "+=220%" : "+=300%";
         const textSplit = SplitText.create(serviceText, {
           type: "chars",
           charsClass: "philosophy__char",
@@ -58,33 +58,8 @@ export default function Philosophy() {
 
         root.classList.add("is-motion-ready");
 
-        if (isNarrow) {
-          gsap.set(serviceText, { clearProps: "transform" });
-          gsap.fromTo(
-            [...characters, ...imageTiles],
-            { yPercent: 45, autoAlpha: 0 },
-            {
-              yPercent: 0,
-              autoAlpha: 1,
-              duration: 0.8,
-              stagger: 0.012,
-              ease: "power3.out",
-              scrollTrigger: {
-                trigger: root,
-                start: "top 72%",
-                once: true,
-              },
-            },
-          );
-
-          return () => {
-            root.classList.remove("is-motion-ready");
-            textSplit.revert();
-          };
-        }
-
         const previous = root.previousElementSibling;
-        if (previous instanceof HTMLElement) {
+        if (!isNarrow && previous instanceof HTMLElement) {
           const previousSurface =
             previous.querySelector<HTMLElement>(".featured-project__surface") ??
             previous;

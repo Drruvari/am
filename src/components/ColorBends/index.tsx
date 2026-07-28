@@ -185,7 +185,7 @@ export default function ColorBends({
       powerPreference: "high-performance",
     });
     const mesh = new THREE.Mesh(geometry, material);
-    const clock = new THREE.Clock();
+    const timer = new THREE.Timer();
     let frame = 0;
 
     scene.add(mesh);
@@ -209,9 +209,10 @@ export default function ColorBends({
       );
     };
 
-    const render = () => {
-      const delta = clock.getDelta();
-      const elapsed = clock.elapsedTime;
+    const render = (time?: number) => {
+      timer.update(time);
+      const delta = timer.getDelta();
+      const elapsed = timer.getElapsed();
       material.uniforms.uTime.value = elapsed;
 
       const degrees =

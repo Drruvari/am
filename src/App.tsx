@@ -62,7 +62,7 @@ export default function App() {
         items={mobileNavigation}
         menuAriaLabel="Toggle navigation"
         menuBg="#d1d1c7"
-        menuContentColor="#080807"
+        menuContentColor="#ffffff"
         useFixedPosition
         animationEase="back.out(1.5)"
         animationDuration={0.5}

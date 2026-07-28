@@ -122,11 +122,19 @@
 
 @media (max-width: 768px) {
   .project-invitation {
-    min-height: 100dvh;
-    padding-top: max(5rem, env(safe-area-inset-top, 0px) + 3rem);
-    padding-bottom: max(2.5rem, env(safe-area-inset-bottom, 0px) + 1.5rem);
+    min-height: 100svh;
+    padding: max(5rem, env(safe-area-inset-top, 0px) + 3rem)
+      clamp(1.25rem, 5vw, 2rem)
+      max(3rem, env(safe-area-inset-bottom, 0px) + 2rem);
+
+    &__media {
+      border-radius: 0 0 1rem 1rem;
+      transform: none;
+      will-change: auto;
+    }
 
     &__content {
+      width: 100%;
       align-items: flex-start;
       text-align: left;
     }
@@ -136,14 +144,18 @@
     }
 
     h2 {
+      width: 100%;
       align-items: flex-start;
-      font-size: clamp(3.4rem, 15vw, 6rem);
-      line-height: 0.8;
+      font-size: clamp(2.7rem, 11vw, 4.75rem);
+      line-height: 0.84;
+      letter-spacing: -0.045em;
     }
 
     h2 &__headline-last {
       align-self: flex-start;
-      padding-right: 0.45em;
+      max-width: 100%;
+      gap: 0.12em;
+      padding-right: 0;
     }
 
   }

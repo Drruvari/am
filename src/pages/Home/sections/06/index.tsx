@@ -53,38 +53,6 @@ export default function ProjectInvitation() {
           );
       });
 
-      media.add("(max-width: 768px)", () => {
-        gsap
-          .timeline({
-            defaults: { ease: "none" },
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 1.2,
-            },
-          })
-          .fromTo(
-            ".project-invitation__media",
-            {
-              scale: 1.16,
-              clipPath: "inset(0 0% round 0 0 16px 16px)",
-            },
-            {
-              scale: 1.02,
-              clipPath: "inset(0 3.5% round 0 0 16px 16px)",
-              duration: 1,
-            },
-            0,
-          )
-          .fromTo(
-            ".project-invitation__headline-last",
-            { xPercent: 0 },
-            { xPercent: 7, duration: 1 },
-            0,
-          );
-      });
-
       return () => media.revert();
     },
     { scope: sectionRef },

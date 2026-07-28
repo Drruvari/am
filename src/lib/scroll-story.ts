@@ -80,7 +80,7 @@ export function initParallax(root: ParentNode = document) {
     const configuredStrength = Number.parseFloat(
       element.dataset.parallax || "20",
     );
-    const strength = isMobile ? configuredStrength * 0.55 : configuredStrength;
+    const strength = isMobile ? configuredStrength * 0.45 : configuredStrength;
 
     gsap.fromTo(
       element,
@@ -93,7 +93,7 @@ export function initParallax(root: ParentNode = document) {
             element.closest("figure, .project-card__media") ?? element,
           start: "top bottom",
           end: "bottom top",
-          scrub: isMobile ? true : 1,
+          scrub: isMobile ? 1.25 : 1,
           invalidateOnRefresh: true,
         },
       },

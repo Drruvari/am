@@ -358,6 +358,10 @@
     &__more {
       margin: 4.5rem 0 0;
       font-size: clamp(1.5rem, 7vw, 2.25rem);
+
+      &:active {
+        transform: translateX(0.25rem);
+      }
     }
   }
 }

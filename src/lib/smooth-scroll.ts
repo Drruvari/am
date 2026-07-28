@@ -100,7 +100,9 @@ export function initSmoothScroll() {
   const prefersReducedMotion = window.matchMedia(
     '(prefers-reduced-motion: reduce)',
   ).matches
-  // Same Lenis-driven scroll on mobile + desktop (native only for reduced-motion)
+  const isTouchViewport = window.matchMedia(
+    '(max-width: 768px), (hover: none) and (pointer: coarse)',
+  ).matches
   const useSmoothScroll = !prefersReducedMotion
 
   if (useSmoothScroll) {
@@ -113,7 +115,10 @@ export function initSmoothScroll() {
       gestureOrientation: 'vertical',
       smoothWheel: true,
       wheelMultiplier: 0.9,
-      syncTouch: false,
+      syncTouch: isTouchViewport,
+      syncTouchLerp: isTouchViewport ? 0.06 : 0.075,
+      touchInertiaExponent: 1.55,
+      touchMultiplier: isTouchViewport ? 0.78 : 1,
     })
     lenis = smoothLenis
 
