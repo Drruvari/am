@@ -337,6 +337,7 @@
     min-height: 100svh;
     grid-template-rows: auto auto min(480px, 42svh);
     overflow: hidden;
+    box-shadow: 0 -3rem 0 var(--invitation-footer-bg);
   }
 
   .footer__grid {
