@@ -35,6 +35,13 @@ jobs:
         env:
           GITHUB_ACTIONS: true
 
+      - name: Add direct route fallbacks
+        run: |
+          mkdir -p dist/work dist/works dist/studio
+          cp dist/index.html dist/work/index.html
+          cp dist/index.html dist/works/index.html
+          cp dist/index.html dist/studio/index.html
+
       - name: Verify production build
         run: |
           if grep -q '/src/main.tsx' dist/index.html; then
@@ -45,6 +52,8 @@ jobs:
             echo 'Build is missing /am/ asset prefix.'
             exit 1
           fi
+          test -f dist/work/index.html
+          test -f dist/studio/index.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

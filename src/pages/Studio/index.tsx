@@ -10,7 +10,7 @@ import "./style.scss";
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const images = {
-  portrait: "/assets/images/arch.jpg",
+  portrait: `${import.meta.env.BASE_URL}assets/images/arch.jpg`,
   architecture:
     "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1600&q=88",
   interior:

@@ -39,7 +39,7 @@ export default function Contact() {
             </a>
             <a
               className="footer__nav-link"
-              href="/studio"
+              href={`${import.meta.env.BASE_URL}studio`}
               data-hover="link"
             >
               Studio

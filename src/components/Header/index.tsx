@@ -1,8 +1,10 @@
 import "./style.scss";
 
+const baseUrl = import.meta.env.BASE_URL;
+
 const navigation = [
-  { label: "Work", href: "/works" },
-  { label: "Studio", href: "/studio" },
+  { label: "Work", href: `${baseUrl}work` },
+  { label: "Studio", href: `${baseUrl}studio` },
   { label: "Process", href: "#process" },
   { label: "Gallery", href: "#work" },
 ] as const;
@@ -12,7 +14,7 @@ export default function Header() {
     <header className="header site-header" id="site-header">
       <div className="header-wrapp">
         <a
-          href="/"
+          href={baseUrl}
           className="header-logo"
           aria-label="Arbër Manga home"
           data-hover="link"

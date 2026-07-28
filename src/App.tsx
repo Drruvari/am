@@ -9,22 +9,24 @@ import Studio from "@/pages/Studio";
 import Works from "@/pages/Works";
 import { useEffect } from "react";
 
+const baseUrl = import.meta.env.BASE_URL;
+
 const mobileNavigation = [
   {
     label: "Home",
-    href: "/",
+    href: baseUrl,
     ariaLabel: "Home",
     rotation: -8,
   },
   {
     label: "Studio",
-    href: "/studio",
+    href: `${baseUrl}studio`,
     ariaLabel: "Studio",
     rotation: 8,
   },
   {
     label: "Work",
-    href: "/works",
+    href: `${baseUrl}work`,
     ariaLabel: "Selected work",
     rotation: -5,
   },
@@ -43,7 +45,7 @@ const mobileNavigation = [
 ] as const;
 
 export default function App() {
-  const isWorksPage = window.location.pathname.includes("/works");
+  const isWorksPage = /\/works?\/?$/.test(window.location.pathname);
   const isStudioPage = window.location.pathname.includes("/studio");
 
   useEffect(() => {
