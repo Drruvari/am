@@ -130,15 +130,6 @@ export default function ProjectInvitation() {
             </span>
           </span>
         </h2>
-        <a
-          className="project-invitation__button"
-          href="mailto:hello@arbermanga.com"
-          data-hover="link"
-          data-reveal="up"
-        >
-          <span>Discuss your project</span>
-          <span className="project-invitation__button-arrow" aria-hidden="true" />
-        </a>
       </div>
     </section>
   );

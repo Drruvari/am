@@ -118,85 +118,6 @@
     white-space: nowrap;
   }
 
-  &__button {
-    --invitation-button-accent: var(--color-on-dark);
-    --invitation-button-fill: var(--dark);
-
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: space-between;
-    width: fit-content;
-    margin-top: clamp(3rem, 6vw, 6rem);
-    min-width: 0;
-    min-height: 2.75rem;
-    padding: 0.25rem 0.25rem 0.25rem 0.75rem;
-    overflow: hidden;
-    border-radius: 2px;
-    background: var(--invitation-button-accent);
-    color: var(--invitation-button-fill);
-    font-size: clamp(1.05rem, 1.2vw, 1.2rem);
-    font-weight: 600;
-    isolation: isolate;
-    line-height: 1;
-    text-decoration: none;
-    transition:
-      color 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86),
-      transform 0.4s var(--ease-out-expo);
-
-    &::before {
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      border-radius: inherit;
-      background: var(--invitation-button-fill);
-      clip-path: inset(
-        0.25rem 0.25rem 0.25rem calc(100% - 2.5rem) round 2px
-      );
-      content: "";
-      pointer-events: none;
-      transition: clip-path 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86);
-    }
-
-    > span:first-child {
-      position: relative;
-      z-index: 2;
-    }
-
-    &:hover,
-    &:focus-visible {
-      color: var(--invitation-button-accent);
-      transform: translateY(-0.2rem);
-
-      &::before {
-        clip-path: inset(0 round 2px);
-      }
-    }
-  }
-
-  &__button-arrow {
-    position: relative;
-    width: 2.25rem;
-    height: 2.25rem;
-    z-index: 2;
-    margin-left: 1rem;
-    border-radius: 2px;
-
-    &::after {
-      position: absolute;
-      inset: 0.68rem;
-      background: var(--invitation-button-accent);
-      content: "";
-      mask: url("@/assets/arrow.svg") center / contain no-repeat;
-      transform: rotate(-90deg);
-      transition: transform 0.4s var(--ease-out-expo);
-    }
-  }
-
-  &__button:hover &__button-arrow::after,
-  &__button:focus-visible &__button-arrow::after {
-    transform: translate(0.1rem, -0.1rem) rotate(-90deg);
-  }
 }
 
 @media (max-width: 768px) {
@@ -225,12 +146,6 @@
       padding-right: 0.45em;
     }
 
-    &__button {
-      width: fit-content;
-      min-width: 0;
-      margin-top: 3rem;
-      font-size: clamp(1rem, 4.4vw, 1.15rem);
-    }
   }
 }
 
@@ -238,9 +153,5 @@
   .project-invitation__media {
     transform: scale(1.02);
     will-change: auto;
-  }
-
-  .project-invitation__button {
-    transition: none;
   }
 }
