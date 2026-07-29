@@ -31,11 +31,10 @@ export default function Contact() {
         >
           <span className="footer__label mono">(Navigation)</span>
           <div className="footer__nav">
-            <a
-              className="footer__nav-link"
-              href={`${import.meta.env.BASE_URL}work`}
-              data-hover="link"
-            >
+            <a className="footer__nav-link" href="#top" data-hover="link">
+              Home
+            </a>
+            <a className="footer__nav-link" href="#work" data-hover="link">
               Work
             </a>
             <a
@@ -52,12 +51,15 @@ export default function Contact() {
             >
               Process
             </a>
+            <a className="footer__nav-link" href="#work" data-hover="link">
+              Archive
+            </a>
             <a
               className="footer__nav-link"
-              href={`${import.meta.env.BASE_URL}gallery`}
+              href="mailto:hello@arbermanga.com"
               data-hover="link"
             >
-              Gallery
+              Contact
             </a>
           </div>
         </nav>

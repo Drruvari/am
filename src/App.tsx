@@ -15,9 +15,9 @@ const baseUrl = import.meta.env.BASE_URL;
 
 const mobileNavigation = [
   {
-    label: "Work",
-    href: `${baseUrl}work`,
-    ariaLabel: "Selected work",
+    label: "Home",
+    href: baseUrl,
+    ariaLabel: "Home",
     rotation: -8,
   },
   {
@@ -27,16 +27,22 @@ const mobileNavigation = [
     rotation: 8,
   },
   {
-    label: "Process",
-    href: `${baseUrl}process`,
-    ariaLabel: "Process",
+    label: "Work",
+    href: `${baseUrl}work`,
+    ariaLabel: "Selected work",
     rotation: -5,
   },
   {
-    label: "Gallery",
-    href: `${baseUrl}gallery`,
-    ariaLabel: "Gallery",
+    label: "Process",
+    href: `${baseUrl}process`,
+    ariaLabel: "Process",
     rotation: 7,
+  },
+  {
+    label: "Contact",
+    href: "#contact",
+    ariaLabel: "Contact",
+    rotation: -8,
   },
 ] as const;
 
