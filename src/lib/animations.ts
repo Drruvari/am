@@ -660,12 +660,24 @@ function initEntranceAnimation() {
     ".header-contact",
   ];
 
-  if (prefersReducedMotion()) {
+  const revealStatic = () => {
     root.classList.remove("is-entering");
+    gsap.set([titleText, ...headerItems, ...heroCopy], {
+      clearProps: "transform,opacity,visibility",
+    });
+    gsap.set(".banner-title__char", { clearProps: "transform" });
+  };
+
+  if (prefersReducedMotion()) {
     gsap.fromTo(
       [titleText, ...headerItems, ...heroCopy],
       { autoAlpha: 0 },
-      { autoAlpha: 1, duration: 0.3, clearProps: "opacity,visibility" },
+      {
+        autoAlpha: 1,
+        duration: 0.3,
+        clearProps: "opacity,visibility",
+        onComplete: revealStatic,
+      },
     );
     return;
   }
@@ -678,6 +690,7 @@ function initEntranceAnimation() {
   let cancelled = false;
   let frame: number | undefined;
   let timeline: gsap.core.Timeline | undefined;
+  const failsafe = window.setTimeout(revealStatic, 3200);
 
   gsap.set(headerItems, { y: -16, autoAlpha: 0 });
   gsap.set(heroCopy, { y: 28, autoAlpha: 0 });
@@ -698,12 +711,8 @@ function initEntranceAnimation() {
         timeline = gsap.timeline({
           defaults: { ease: "power4.out" },
           onComplete: () => {
-            root.classList.remove("is-entering");
-            gsap.set([...headerItems, ...heroCopy], {
-              clearProps: "transform,opacity,visibility",
-            });
-            gsap.set(titleChars, { clearProps: "transform" });
-            gsap.set(titleText, { clearProps: "opacity,visibility" });
+            window.clearTimeout(failsafe);
+            revealStatic();
           },
         });
 
@@ -740,6 +749,7 @@ function initEntranceAnimation() {
 
   addCleanup(() => {
     cancelled = true;
+    window.clearTimeout(failsafe);
     if (frame !== undefined) window.cancelAnimationFrame(frame);
     timeline?.kill();
   });

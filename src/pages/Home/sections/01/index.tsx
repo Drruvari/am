@@ -84,7 +84,7 @@ export default function Hero() {
   return (
     <section className="banner" id="hero" ref={heroRef} data-header-theme="dark">
       <div className="banner-media" aria-hidden="true">
-        <Silk noiseIntensity={0.35} />
+        <Silk color="#e4e2d8" noiseIntensity={0.22} />
       </div>
       <div className="banner-shade" aria-hidden="true" />
       <div className="banner-mask" aria-hidden="true" />

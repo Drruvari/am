@@ -206,6 +206,23 @@ html.is-entering {
     width: 100vw;
     height: 100dvh;
     min-height: 100svh;
+    background: linear-gradient(
+      145deg,
+      #c9c9bf 0%,
+      #8f8a82 42%,
+      #3f3c38 100%
+    );
+  }
+
+  .banner-shade {
+    background:
+      linear-gradient(
+        90deg,
+        rgb(0 0 0 / 0.16),
+        rgb(0 0 0 / 0.06) 58%,
+        rgb(0 0 0 / 0.14)
+      ),
+      linear-gradient(180deg, rgb(0 0 0 / 0.04), rgb(0 0 0 / 0.18));
   }
 
   .banner-descr {

@@ -81,14 +81,29 @@ export default function Silk({
     const container = containerRef.current;
     if (!container) return;
 
+    container.style.background = `linear-gradient(145deg, ${color} 0%, #5c5852 45%, #1c1b19 100%)`;
+
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    const renderer = new WebGLRenderer({
-      alpha: false,
-      antialias: true,
-      powerPreference: "high-performance",
-    });
+    const isCompactViewport = window.matchMedia("(max-width: 768px)").matches;
+
+    let renderer: WebGLRenderer;
+    try {
+      renderer = new WebGLRenderer({
+        alpha: false,
+        antialias: !isCompactViewport,
+        powerPreference: isCompactViewport ? "low-power" : "high-performance",
+      });
+    } catch {
+      return;
+    }
+
+    if (!renderer.getContext()) {
+      renderer.dispose();
+      return;
+    }
+
     const scene = new Scene();
     const camera = new OrthographicCamera(-0.5, 0.5, 0.5, -0.5, 0.1, 10);
     const geometry = new PlaneGeometry(1, 1);
@@ -110,7 +125,8 @@ export default function Silk({
 
     camera.position.z = 1;
     scene.add(mesh);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setClearColor(new Color(color), 1);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isCompactViewport ? 1.5 : 2));
     container.appendChild(renderer.domElement);
     timer.connect(document);
 

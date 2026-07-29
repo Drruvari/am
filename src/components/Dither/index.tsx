@@ -171,10 +171,22 @@ export default function Dither({
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    const renderer = new WebGLRenderer({
-      antialias: true,
-      powerPreference: "high-performance",
-    });
+
+    let renderer: WebGLRenderer;
+    try {
+      renderer = new WebGLRenderer({
+        antialias: true,
+        powerPreference: "low-power",
+      });
+    } catch {
+      return;
+    }
+
+    if (!renderer.getContext()) {
+      renderer.dispose();
+      return;
+    }
+
     const scene = new Scene();
     const camera = new OrthographicCamera(-0.5, 0.5, 0.5, -0.5, 0.1, 10);
     const geometry = new PlaneGeometry(1, 1);

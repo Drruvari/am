@@ -179,11 +179,27 @@ export default function ColorBends({
       },
       vertexShader,
     });
-    const renderer = new THREE.WebGLRenderer({
-      alpha: true,
-      antialias: false,
-      powerPreference: "high-performance",
-    });
+
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: false,
+        powerPreference: "low-power",
+      });
+    } catch {
+      geometry.dispose();
+      material.dispose();
+      return;
+    }
+
+    if (!renderer.getContext()) {
+      geometry.dispose();
+      material.dispose();
+      renderer.dispose();
+      return;
+    }
+
     const mesh = new THREE.Mesh(geometry, material);
     const timer = new THREE.Timer();
     let frame = 0;

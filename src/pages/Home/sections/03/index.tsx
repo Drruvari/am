@@ -3,6 +3,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { useRef } from "react";
+import { archImage } from "@/lib/images";
 import "./style.scss";
 
 gsap.registerPlugin(ScrollTrigger, SplitText, useGSAP);
@@ -17,7 +18,7 @@ const services = [
 ];
 
 const serviceImages = [
-  "/assets/images/arch.webp",
+  archImage,
   "https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=1400&q=85",
   "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1400&q=85",
 ];

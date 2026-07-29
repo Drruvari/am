@@ -2,6 +2,9 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import "./style.scss";
 
+const OPEN_PATH = "M 0 0 V 0 Q 50 0 100 0 V 0 z";
+const COVER_PATH = "M 0 0 V 100 Q 50 100 100 100 V 0 z";
+
 export default function PageTransition() {
   const pathRef = useRef<SVGPathElement>(null);
 
@@ -13,21 +16,32 @@ export default function PageTransition() {
       "(prefers-reduced-motion: reduce)",
     ).matches;
 
-    gsap
-      .timeline()
-      .set(path, {
-        attr: { d: "M 0 0 V 100 Q 50 100 100 100 V 0 z" },
-      })
-      .to(path, {
-        duration: reduceMotion ? 0.01 : 0.36,
-        ease: "power2.in",
-        attr: { d: "M 0 0 V 50 Q 50 0 100 50 V 0 z" },
-      })
-      .to(path, {
-        duration: reduceMotion ? 0.01 : 0.55,
-        ease: "power4.out",
-        attr: { d: "M 0 0 V 0 Q 50 0 100 0 V 0 z" },
-      });
+    const openOverlay = () => {
+      gsap.killTweensOf(path);
+      gsap
+        .timeline()
+        .set(path, {
+          attr: { d: COVER_PATH },
+        })
+        .to(path, {
+          duration: reduceMotion ? 0.01 : 0.36,
+          ease: "power2.in",
+          attr: { d: "M 0 0 V 50 Q 50 0 100 50 V 0 z" },
+        })
+        .to(path, {
+          duration: reduceMotion ? 0.01 : 0.55,
+          ease: "power4.out",
+          attr: { d: OPEN_PATH },
+        });
+    };
+
+    openOverlay();
+
+    // iOS Safari can stall SVG path morphs — force clear so the page isn't stuck black.
+    const failsafe = window.setTimeout(() => {
+      gsap.killTweensOf(path);
+      path.setAttribute("d", OPEN_PATH);
+    }, 1800);
 
     const onNavigate = (event: MouseEvent) => {
       if (
@@ -78,6 +92,7 @@ export default function PageTransition() {
 
     document.addEventListener("click", onNavigate);
     return () => {
+      window.clearTimeout(failsafe);
       document.removeEventListener("click", onNavigate);
       gsap.killTweensOf(path);
     };
@@ -93,7 +108,7 @@ export default function PageTransition() {
       <path
         ref={pathRef}
         vectorEffect="non-scaling-stroke"
-        d="M 0 0 V 100 Q 50 100 100 100 V 0 z"
+        d={COVER_PATH}
       />
     </svg>
   );
