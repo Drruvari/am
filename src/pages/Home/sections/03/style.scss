@@ -167,6 +167,11 @@
       width: 1.65em;
       height: 0.78em;
       margin-inline: 0.12em 0.18em;
+      will-change: auto;
+    }
+
+    &__char {
+      will-change: auto;
     }
 
     &__headline {
@@ -177,6 +182,7 @@
     &__image {
       width: clamp(5.75rem, 28vw, 9.5rem);
       border-radius: clamp(0.4rem, 1.5vw, 0.65rem);
+      will-change: auto;
     }
 
     &__copy {

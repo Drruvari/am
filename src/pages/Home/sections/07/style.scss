@@ -416,6 +416,10 @@
   .footer__image {
     touch-action: pan-y;
   }
+
+  .footer__dither-zoom {
+    will-change: auto;
+  }
 }
 
 @media (max-width: 30rem) {

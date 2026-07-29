@@ -143,6 +143,12 @@
 }
 
 @media (max-width: 900px) {
+  .collection,
+  .slider,
+  .featured-project__surface {
+    will-change: auto;
+  }
+
   .slider {
     min-height: 0;
   }

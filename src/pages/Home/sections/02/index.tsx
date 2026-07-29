@@ -17,6 +17,7 @@ export default function PracticeOverview() {
       const reducedMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
       ).matches;
+      const isMobile = window.matchMedia("(max-width: 768px)").matches;
       const textBlocks = gsap.utils.toArray<HTMLElement>(
         "[data-scroll-reveal]",
       );
@@ -32,6 +33,39 @@ export default function PracticeOverview() {
         gsap.set(splits.flatMap((split) => split.words), {
           clearProps: "filter,opacity,willChange",
         });
+      } else if (isMobile) {
+        // Native scroll path — no scrubbed blur/filter (paints every frame).
+        gsap.from(textBlocks, {
+          y: 28,
+          autoAlpha: 0,
+          duration: 0.7,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: textBlocks[0] ?? sectionRef.current,
+            start: "top 90%",
+            once: true,
+          },
+        });
+
+        gsap.from(
+          [
+            ".featured-project__marker",
+            ".featured-project__label",
+            ".featured-project__details",
+          ],
+          {
+            y: 28,
+            autoAlpha: 0,
+            duration: 0.7,
+            stagger: 0.1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: ".featured-project__details",
+              start: "top 92%",
+              once: true,
+            },
+          },
+        );
       } else {
         splits.forEach((split, index) => {
           const block = textBlocks[index];

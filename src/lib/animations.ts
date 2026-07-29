@@ -101,16 +101,18 @@ function initHeroCollectionTransition(isMobile = false) {
   }
 
   if (isMobile) {
-    gsap.set(collection, { padding: 0 });
+    gsap.set(collection, { padding: 0, clearProps: "willChange" });
     gsap.set(slider, {
       borderRadius: 0,
       clipPath: "inset(0)",
       yPercent: 0,
+      clearProps: "willChange",
     });
     gsap.set(".banner-mask, .collection-mask", { opacity: 0 });
-    gsap.set(sliderImages, { scale: 1 });
-    gsap.set(sliderItems, { autoAlpha: 0, transition: "none" });
-    gsap.set(sliderItems[0], { autoAlpha: 1, zIndex: 1 });
+    if (sliderImages.length) gsap.set(sliderImages, { scale: 1 });
+    if (sliderItems.length) {
+      gsap.set(sliderItems, { autoAlpha: 1, clearProps: "transform" });
+    }
     return null;
   }
 
@@ -315,6 +317,7 @@ function initFooterMotion() {
     gsap.set(".footer__dither-zoom", {
       scale: 1,
       autoAlpha: 1,
+      clearProps: "willChange",
     });
   });
 

@@ -205,12 +205,12 @@ export default function BubbleMenu({
         <div className="bubble-controls">
           <button
             type="button"
-            className="bubble noise-bubble"
+            className="bubble grain-switch"
             onClick={onNoiseToggle}
             aria-label={`${noiseEnabled ? "Turn off" : "Turn on"} grain`}
             aria-pressed={noiseEnabled}
           >
-            <span className="noise-bubble__field" aria-hidden="true" />
+            <span className="grain-switch__field" aria-hidden="true" />
           </button>
 
           <button
