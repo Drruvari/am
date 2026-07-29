@@ -83,6 +83,11 @@ export default function Silk({
 
     container.style.background = `linear-gradient(145deg, ${color} 0%, #5c5852 45%, #1c1b19 100%)`;
 
+    const isTouchUi = window.matchMedia(
+      "(hover: none), (pointer: coarse)",
+    ).matches;
+    if (isTouchUi) return;
+
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;

@@ -139,6 +139,11 @@ export default function ColorBends({
     const container = containerRef.current;
     if (!container) return;
 
+    const isTouchUi = window.matchMedia(
+      "(hover: none), (pointer: coarse)",
+    ).matches;
+    if (isTouchUi) return;
+
     const scene = new THREE.Scene();
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
     const geometry = new THREE.PlaneGeometry(2, 2);

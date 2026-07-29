@@ -168,6 +168,11 @@ export default function Dither({
     const container = containerRef.current;
     if (!container) return;
 
+    const isTouchUi = window.matchMedia(
+      "(hover: none), (pointer: coarse)",
+    ).matches;
+    if (isTouchUi) return;
+
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
