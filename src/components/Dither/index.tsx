@@ -171,7 +171,6 @@ export default function Dither({
     const isTouchUi = window.matchMedia(
       "(hover: none), (pointer: coarse)",
     ).matches;
-    if (isTouchUi) return;
 
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
@@ -207,7 +206,9 @@ export default function Dither({
         waveColor: { value: new Color(...waveColor) },
         mousePos: { value: new Vector2(0, 0) },
         mouseRadius: { value: mouseRadius },
-        enableMouseInteraction: { value: enableMouseInteraction ? 1 : 0 },
+        enableMouseInteraction: {
+          value: enableMouseInteraction && !isTouchUi ? 1 : 0,
+        },
       },
     });
     const mesh = new Mesh(geometry, material);
@@ -268,14 +269,14 @@ export default function Dither({
       material.uniforms.mouseRadius.value = mouseRadius * interactionStrength;
       material.uniforms.waveAmplitude.value =
         waveAmplitude * (1 + (interactionStrength - 1) * 0.35);
-      if (!disableAnimation && !reducedMotion) {
+      if (!disableAnimation && !reducedMotion && !isTouchUi) {
         material.uniforms.time.value += timer.getDelta();
       }
       renderer.setRenderTarget(renderTarget);
       renderer.render(scene, camera);
       renderer.setRenderTarget(null);
       renderer.render(postScene, camera);
-      if (!disableAnimation && !reducedMotion) {
+      if (!disableAnimation && !reducedMotion && !isTouchUi) {
         frame = window.requestAnimationFrame(render);
       }
     };

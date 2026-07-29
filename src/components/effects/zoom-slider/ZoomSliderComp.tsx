@@ -6,7 +6,7 @@ const SCROLL_PER_PX = 1;
 const LERP_FACTOR = 0.06;
 const DRAG_LERP_FACTOR = 0.18;
 const MOTION_LERP_FACTOR = 0.08;
-const MOMENTUM_FRICTION = 0.94;
+const MOMENTUM_FRICTION = 0.9;
 const MIN_MOMENTUM = 0.1;
 const MOBILE_BREAKPOINT = 640;
 const TABLET_BREAKPOINT = 1025;
@@ -92,7 +92,7 @@ export default function ZoomSliderComp({
   const isTablet =
     viewport.width >= MOBILE_BREAKPOINT && viewport.width < TABLET_BREAKPOINT;
   const cardWidth = isMobile
-    ? Math.round(viewport.width * 0.72)
+    ? Math.round(viewport.width * 0.82)
     : isTablet
       ? Math.round(viewport.width * 0.42)
       : Math.round(Math.min(420, Math.max(300, viewport.width * 0.2)));
@@ -149,8 +149,8 @@ export default function ZoomSliderComp({
         isMobile ? 142 : 102,
         Math.round((window.innerHeight - contentHeight) / 2),
       );
-      const tilt = reduceMotion ? 0 : motion * (isMobile ? 0.8 : 1.2);
-      const lift = reduceMotion ? 0 : -Math.abs(motion) * 8;
+      const tilt = reduceMotion || isMobile ? 0 : motion * 1.2;
+      const lift = reduceMotion || isMobile ? 0 : -Math.abs(motion) * 8;
 
       for (let index = 0; index < count; index += 1) {
         const cardIndex = (startIndex + index) % count;
@@ -200,7 +200,15 @@ export default function ZoomSliderComp({
       state.current = lerp(
         state.current,
         state.target,
-        reduceMotion ? 1 : state.isDragging ? DRAG_LERP_FACTOR : LERP_FACTOR,
+        reduceMotion
+          ? 1
+          : state.isDragging
+            ? isMobile
+              ? 0.32
+              : DRAG_LERP_FACTOR
+            : isMobile
+              ? 0.12
+              : LERP_FACTOR,
       );
 
       if (Math.abs(state.current - state.target) < 0.01) {
@@ -265,9 +273,15 @@ export default function ZoomSliderComp({
     };
     const onTouchMove = (event: TouchEvent) => {
       if (!state.isDragging) return;
+      const deltaX = event.touches[0].clientX - state.lastX;
+      const deltaY = event.touches[0].clientY - state.lastY;
+      if (Math.abs(deltaY) > Math.abs(deltaX)) {
+        endDrag();
+        return;
+      }
       event.preventDefault();
       event.stopPropagation();
-      moveDrag(event.touches[0].clientX, event.touches[0].clientY);
+      moveDrag(event.touches[0].clientX, state.lastY);
     };
 
     root.addEventListener("wheel", onWheel, { passive: false });
@@ -291,7 +305,7 @@ export default function ZoomSliderComp({
       window.removeEventListener("touchend", endDrag);
       window.removeEventListener("touchcancel", endDrag);
     };
-  }, [cardStep, images.length, positionCards, reduceMotion]);
+  }, [cardStep, images.length, isMobile, positionCards, reduceMotion]);
 
   useEffect(() => {
     if (previousFilterRef.current === activeFilter) return;

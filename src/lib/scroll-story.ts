@@ -29,6 +29,7 @@ export function initScrollStory(root: ParentNode = document) {
 
   const groups = new Map<string, HTMLElement[]>();
   const ungrouped: HTMLElement[] = [];
+  const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
   elements.forEach((element) => {
     const groupName = element.dataset.revealGroup;
@@ -53,14 +54,15 @@ export function initScrollStory(root: ParentNode = document) {
       yPercent: 0,
       autoAlpha: 1,
       clipPath: "inset(0% 0% 0% 0%)",
-      duration: 1,
+      duration: isMobile ? 0.65 : 1,
       delay: Number.parseFloat(first.dataset.revealDelay || "0"),
-      stagger: 0.08,
+      stagger: isMobile ? 0.045 : 0.08,
       ease: "power3.out",
       scrollTrigger: {
         trigger,
-        start: first.dataset.revealStart || "top 82%",
-        toggleActions: "play none none reverse",
+        start: first.dataset.revealStart || (isMobile ? "top 90%" : "top 82%"),
+        once: isMobile,
+        toggleActions: isMobile ? "play none none none" : "play none none reverse",
       },
     });
   };
@@ -75,12 +77,13 @@ export function initParallax(root: ParentNode = document) {
   if (prefersReducedMotion()) return;
 
   const isMobile = window.matchMedia("(max-width: 768px)").matches;
+  if (isMobile) return;
 
   root.querySelectorAll<HTMLElement>("[data-parallax]").forEach((element) => {
     const configuredStrength = Number.parseFloat(
       element.dataset.parallax || "20",
     );
-    const strength = isMobile ? configuredStrength * 0.45 : configuredStrength;
+    const strength = configuredStrength;
 
     gsap.fromTo(
       element,
@@ -93,7 +96,7 @@ export function initParallax(root: ParentNode = document) {
             element.closest("figure, .project-card__media") ?? element,
           start: "top bottom",
           end: "bottom top",
-          scrub: isMobile ? 1.25 : 1,
+          scrub: 1,
           invalidateOnRefresh: true,
         },
       },
@@ -108,6 +111,7 @@ export function initLineReveals(
   const splits: SplitType[] = [];
 
   if (prefersReducedMotion()) return;
+  const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
   root.querySelectorAll<HTMLElement>(selector).forEach((element) => {
     const split = new SplitType(element, { types: "lines", tagName: "span" });
@@ -122,13 +126,16 @@ export function initLineReveals(
     gsap.to(lines, {
         yPercent: 0,
         autoAlpha: 1,
-        duration: 0.9,
-        stagger: 0.08,
+        duration: isMobile ? 0.65 : 0.9,
+        stagger: isMobile ? 0.045 : 0.08,
         ease: "power3.out",
         scrollTrigger: {
           trigger: element,
-          start: "top 80%",
-          toggleActions: "play none none reverse",
+          start: isMobile ? "top 90%" : "top 80%",
+          once: isMobile,
+          toggleActions: isMobile
+            ? "play none none none"
+            : "play none none reverse",
         },
     });
   });

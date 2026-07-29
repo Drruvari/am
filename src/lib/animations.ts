@@ -100,6 +100,20 @@ function initHeroCollectionTransition(isMobile = false) {
     return null;
   }
 
+  if (isMobile) {
+    gsap.set(collection, { padding: 0 });
+    gsap.set(slider, {
+      borderRadius: 0,
+      clipPath: "inset(0)",
+      yPercent: 0,
+    });
+    gsap.set(".banner-mask, .collection-mask", { opacity: 0 });
+    gsap.set(sliderImages, { scale: 1 });
+    gsap.set(sliderItems, { autoAlpha: 0, transition: "none" });
+    gsap.set(sliderItems[0], { autoAlpha: 1, zIndex: 1 });
+    return null;
+  }
+
   gsap.set(collection, {
     padding: 0,
   });
@@ -298,25 +312,10 @@ function initFooterMotion() {
   });
 
   media.add("(max-width: 768px)", () => {
-    gsap.fromTo(
-      ".footer__dither-zoom",
-      {
-        scale: 1.5,
-        autoAlpha: 0.35,
-      },
-      {
-        scale: 1,
-        autoAlpha: 1,
-        ease: "none",
-        scrollTrigger: {
-          trigger: ".footer__image",
-          start: "top bottom",
-          end: "top 38%",
-          scrub: 1.15,
-          invalidateOnRefresh: true,
-        },
-      },
-    );
+    gsap.set(".footer__dither-zoom", {
+      scale: 1,
+      autoAlpha: 1,
+    });
   });
 
   ScrollTrigger.create({
@@ -329,45 +328,6 @@ function initFooterMotion() {
       document.body.classList.remove("is-header-on-dark", "is-footer-visible");
     },
   });
-
-  return () => media.revert();
-}
-
-function initMobileSectionMotion() {
-  const media = gsap.matchMedia();
-
-  media.add(
-    "(max-width: 768px) and (prefers-reduced-motion: no-preference)",
-    () => {
-      const surfaces = gsap.utils.toArray<HTMLElement>([
-        ".featured-project__surface",
-        ".process__intro",
-        ".footer__grid",
-      ]);
-
-      surfaces.forEach((surface) => {
-        gsap.fromTo(
-          surface,
-          {
-            y: 22,
-            autoAlpha: 0.78,
-          },
-          {
-            y: 0,
-            autoAlpha: 1,
-            ease: "none",
-            scrollTrigger: {
-              trigger: surface,
-              start: "top 96%",
-              end: "top 62%",
-              scrub: true,
-              invalidateOnRefresh: true,
-            },
-          },
-        );
-      });
-    },
-  );
 
   return () => media.revert();
 }
@@ -394,7 +354,6 @@ function initHomepageMotion() {
     }
 
     initFooterMotion();
-    initMobileSectionMotion();
     initLineReveals();
     initScrollStory();
     initParallax();

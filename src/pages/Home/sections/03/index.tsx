@@ -40,10 +40,9 @@ export default function Philosophy() {
 
       const media = gsap.matchMedia();
 
-      const setupMotion = (context: gsap.Context) => {
-        const isNarrow = context.conditions?.narrow ?? false;
+      const setupMotion = () => {
         const pinType = ScrollTrigger.isTouch === 1 ? "transform" : "fixed";
-        const scrollEnd = isNarrow ? "+=220%" : "+=300%";
+        const scrollEnd = "+=300%";
         const textSplit = SplitText.create(serviceText, {
           type: "chars",
           charsClass: "philosophy__char",
@@ -60,7 +59,7 @@ export default function Philosophy() {
         root.classList.add("is-motion-ready");
 
         const previous = root.previousElementSibling;
-        if (!isNarrow && previous instanceof HTMLElement) {
+        if (previous instanceof HTMLElement) {
           const previousSurface =
             previous.querySelector<HTMLElement>(".featured-project__surface") ??
             previous;
@@ -94,7 +93,7 @@ export default function Philosophy() {
               transformOrigin: "50% 50%",
             },
             {
-              yPercent: isNarrow ? -6 : -10,
+              yPercent: -10,
               scale: 0.97,
               opacity: 0.35,
               ease: "none",
@@ -171,9 +170,8 @@ export default function Philosophy() {
       // Same motion on all viewports — only reduced-motion opts out.
       media.add(
         {
-          motion: "(prefers-reduced-motion: no-preference)",
-          narrow: "(max-width: 768px)",
-          wide: "(min-width: 769px)",
+          motion:
+            "(min-width: 769px) and (prefers-reduced-motion: no-preference)",
         },
         (context) => {
           if (!context.conditions?.motion) return;
@@ -186,7 +184,7 @@ export default function Philosophy() {
 
           fontsReady.then(() => {
             if (disposed) return;
-            cleanupMotion = setupMotion(context);
+            cleanupMotion = setupMotion();
             ScrollTrigger.refresh();
           });
 
@@ -194,6 +192,16 @@ export default function Philosophy() {
             disposed = true;
             cleanupMotion?.();
           };
+        },
+      );
+
+      media.add(
+        "(max-width: 768px) and (prefers-reduced-motion: no-preference)",
+        () => {
+          root.classList.add("is-motion-ready");
+          gsap.set(serviceText, { clearProps: "all", autoAlpha: 1 });
+
+          return () => root.classList.remove("is-motion-ready");
         },
       );
 

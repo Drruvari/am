@@ -261,6 +261,12 @@
 
 @media (max-width: 768px) {
   .zoom-slider {
+    touch-action: pan-y;
+
+    &__card {
+      will-change: auto;
+    }
+
     &__filters {
       top: 5.25rem;
       right: 1rem;

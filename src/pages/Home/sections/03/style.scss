@@ -138,27 +138,29 @@
   }
 }
 
-// Mobile keeps desktop horizontal pinned story with touch-scaled typography.
 @include below($bp-md) {
   .philosophy {
     &__stage {
-      display: grid;
-      height: 100svh;
+      display: flex;
+      height: auto;
       min-height: 100svh;
-      padding: var(--content-inset);
+      flex-direction: column;
+      justify-content: center;
+      gap: clamp(2rem, 8vw, 4rem);
+      overflow: visible;
+      padding: clamp(6rem, 20vw, 9rem) var(--content-inset);
       padding-bottom: calc(
-        var(--content-inset) + env(safe-area-inset-bottom, 0px)
+        clamp(5rem, 16vw, 8rem) + env(safe-area-inset-bottom, 0px)
       );
     }
 
     &__services-text {
-      width: max-content;
-      padding-left: 100vw;
-      font-size: clamp(3.2rem, 15vw, 5.75rem);
-      line-height: 1;
-      text-align: left;
-      white-space: nowrap;
-      will-change: transform;
+      width: 100%;
+      padding-left: 0;
+      font-size: clamp(2.6rem, 12vw, 4.75rem);
+      line-height: 0.98;
+      white-space: normal;
+      will-change: auto;
     }
 
     &__service-image {
@@ -178,13 +180,11 @@
     }
 
     &__copy {
-      position: absolute;
-      right: var(--content-inset);
-      bottom: max(2rem, env(safe-area-inset-bottom, 0px) + 1rem);
-      left: var(--content-inset);
-      width: min(88%, 26rem);
-      margin-inline: auto;
+      position: static;
+      width: min(100%, 26rem);
+      margin: 0;
       font-size: clamp(0.78rem, 3vw, 0.9rem);
+      text-align: left;
     }
   }
 }
