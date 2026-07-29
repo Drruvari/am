@@ -1,8 +1,8 @@
-import Arrow from "@/components/Arrow";
 import { gsap } from "gsap";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import "./style.scss";
 
+const baseUrl = import.meta.env.BASE_URL;
 type GalleryItem = {
   title: string;
   meta: string;
@@ -366,9 +366,20 @@ export default function Gallery() {
   return (
     <main className="gallery-page">
       <header className="gallery-header">
-        <a className="gallery-back" href={import.meta.env.BASE_URL}>
-          <Arrow side="left" size="0.9rem" borderThickness={1.35} />
-          <span>Back to home</span>
+        <a
+          className="gallery-home"
+          href={baseUrl}
+          aria-label="Go home"
+          data-hover="link"
+        >
+          <span className="gallery-home__anchor">
+            <span className="gallery-home__mark" aria-hidden="true">
+              <img src={`${baseUrl}logo-light.svg`} alt="" />
+            </span>
+            <span className="gallery-home__tip" aria-hidden="true">
+              Go home
+            </span>
+          </span>
         </a>
         <p className="gallery-header__brand">Arbër Manga</p>
         <p className="gallery-header__meta">Selected architecture / 2022–2026</p>
@@ -423,7 +434,8 @@ export default function Gallery() {
 
       <footer className="gallery-footer">
         <p>Drag to explore</p>
-        <p>Scroll any direction</p>
+        <p className="gallery-footer__center">Scroll any direction</p>
+        <p className="gallery-footer__action">Click to open</p>
       </footer>
 
       {activeItem && (
