@@ -364,6 +364,10 @@
     border-top: 1px solid rgb(209 209 199 / 0.18);
   }
 
+  .footer__col--details {
+    border-top: 0;
+  }
+
   .footer__col--social {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
