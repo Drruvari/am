@@ -22,10 +22,7 @@ export default function Noise({
 
   useEffect(() => {
     const canvas = grainRef.current;
-    const context = canvas?.getContext("2d", {
-      alpha: true,
-      desynchronized: true,
-    });
+    const context = canvas?.getContext("2d", { alpha: true });
     if (!canvas || !context) return;
 
     const isCompactViewport = window.matchMedia("(max-width: 768px)").matches;
