@@ -331,6 +331,48 @@ function initFooterMotion() {
   return () => media.revert();
 }
 
+function initMobileSectionMotion() {
+  const media = gsap.matchMedia();
+
+  media.add(
+    "(max-width: 768px) and (prefers-reduced-motion: no-preference)",
+    () => {
+      const surfaces = gsap.utils.toArray<HTMLElement>([
+        ".featured-project__surface",
+        ".process__intro",
+        ".footer__grid",
+      ]);
+
+      surfaces.forEach((surface) => {
+        gsap.fromTo(
+          surface,
+          {
+            y: 34,
+            scale: 0.985,
+            autoAlpha: 0.72,
+            transformOrigin: "50% 50%",
+          },
+          {
+            y: 0,
+            scale: 1,
+            autoAlpha: 1,
+            ease: "none",
+            scrollTrigger: {
+              trigger: surface,
+              start: "top 94%",
+              end: "top 58%",
+              scrub: 0.85,
+              invalidateOnRefresh: true,
+            },
+          },
+        );
+      });
+    },
+  );
+
+  return () => media.revert();
+}
+
 function initHomepageMotion() {
   const ctx = gsap.context(() => {
     if (prefersReducedMotion()) {
@@ -353,6 +395,7 @@ function initHomepageMotion() {
     }
 
     initFooterMotion();
+    initMobileSectionMotion();
     initLineReveals();
     initScrollStory();
     initParallax();

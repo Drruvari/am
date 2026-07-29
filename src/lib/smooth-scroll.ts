@@ -103,7 +103,7 @@ export function initSmoothScroll() {
   const isTouchViewport = window.matchMedia(
     '(max-width: 768px), (hover: none) and (pointer: coarse)',
   ).matches
-  const useSmoothScroll = !prefersReducedMotion && !isTouchViewport
+  const useSmoothScroll = !prefersReducedMotion
 
   if (useSmoothScroll) {
     document.documentElement.classList.add('lenis', 'lenis-smooth')

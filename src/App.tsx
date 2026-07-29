@@ -112,26 +112,11 @@ export default function App() {
         )}
         {!isGalleryPage && (
           <BubbleMenu
-            logo={
-              <span className="mobile-logo-mark" aria-hidden="true">
-                <img
-                  className="mobile-logo-mark__dark"
-                  src={`${baseUrl}logo-dark.svg`}
-                  alt=""
-                />
-                <img
-                  className="mobile-logo-mark__light"
-                  src={`${baseUrl}logo-light.svg`}
-                  alt=""
-                />
-              </span>
-            }
+            logo={<span>ARBËR MANGA</span>}
             items={mobileNavigation}
             menuAriaLabel="Toggle navigation"
             menuBg="#d1d1c7"
-            menuContentColor="#080807"
-            noiseEnabled={noiseEnabled}
-            onNoiseToggle={toggleNoise}
+            menuContentColor="#ffffff"
             useFixedPosition
             animationEase="back.out(1.5)"
             animationDuration={0.5}
