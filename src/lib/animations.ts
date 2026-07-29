@@ -668,19 +668,17 @@ function initEntranceAnimation() {
     gsap.set(".banner-title__char", { clearProps: "transform" });
   };
 
-  if (prefersReducedMotion()) {
-    gsap.fromTo(
-      [titleText, ...headerItems, ...heroCopy],
-      { autoAlpha: 0 },
-      {
-        autoAlpha: 1,
-        duration: 0.3,
-        clearProps: "opacity,visibility",
-        onComplete: revealStatic,
-      },
-    );
+  const isTouchUi = window.matchMedia(
+    "(hover: none), (pointer: coarse)",
+  ).matches;
+
+  // Mobile: show content immediately — never gate the dark hero behind motion.
+  if (prefersReducedMotion() || isTouchUi) {
+    revealStatic();
     return;
   }
+
+  root.classList.add("is-entering");
 
   const fontsReady = document.fonts?.ready ?? Promise.resolve();
   const readinessTimeout = new Promise<void>((resolve) => {
@@ -690,12 +688,7 @@ function initEntranceAnimation() {
   let cancelled = false;
   let frame: number | undefined;
   let timeline: gsap.core.Timeline | undefined;
-  const isTouchUi = window.matchMedia(
-    "(hover: none), (pointer: coarse)",
-  ).matches;
-  // Touch devices: reveal sooner so a stalled motion stack can't read as a
-  // black void under the dark hero.
-  const failsafe = window.setTimeout(revealStatic, isTouchUi ? 1600 : 3200);
+  const failsafe = window.setTimeout(revealStatic, 3200);
 
   gsap.set(headerItems, { y: -16, autoAlpha: 0 });
   gsap.set(heroCopy, { y: 28, autoAlpha: 0 });
@@ -757,6 +750,7 @@ function initEntranceAnimation() {
     window.clearTimeout(failsafe);
     if (frame !== undefined) window.cancelAnimationFrame(frame);
     timeline?.kill();
+    revealStatic();
   });
 }
 

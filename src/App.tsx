@@ -62,10 +62,9 @@ export default function App() {
     getRouteFlags();
 
   useEffect(() => {
-    if (isGalleryPage) {
-      document.documentElement.classList.remove("is-entering", "is-loading");
-      return;
-    }
+    document.documentElement.classList.remove("is-entering", "is-loading");
+
+    if (isGalleryPage) return;
 
     let cancelled = false;
     let raf = 0;
@@ -155,7 +154,11 @@ export default function App() {
         />
       )}
       {isGalleryPage || isWorksPage || isStudioPage || isProcessPage ? (
-        <Suspense fallback={null}>{page}</Suspense>
+        <Suspense
+          fallback={<div className="route-fallback" aria-hidden="true" />}
+        >
+          {page}
+        </Suspense>
       ) : (
         page
       )}

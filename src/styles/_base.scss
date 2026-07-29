@@ -76,6 +76,11 @@ main {
   background: var(--bg);
 }
 
+.route-fallback {
+  min-height: 100svh;
+  background: var(--color-background);
+}
+
 a:focus-visible,
 button:focus-visible {
   outline: 2px solid var(--accent);

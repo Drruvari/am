@@ -29,9 +29,13 @@
 
 .banner-media {
   z-index: -3;
-  background: var(--color-on-dark);
-  filter: blur(var(--hero-media-blur));
-  transform: scale(var(--hero-media-scale));
+  // No filter/transform here — Safari blacks out nested WebGL canvases.
+  background: linear-gradient(
+    145deg,
+    #c9c9bf 0%,
+    #8f8a82 42%,
+    #3f3c38 100%
+  );
 
   canvas {
     display: block;

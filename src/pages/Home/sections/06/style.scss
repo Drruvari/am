@@ -45,9 +45,8 @@
     overflow: hidden;
     border-radius: 0 0 clamp(1rem, 2.5vw, 2rem)
       clamp(1rem, 2.5vw, 2rem);
-    backface-visibility: hidden;
+    // Avoid transform on WebGL parent — Safari can paint the canvas black.
     corner-shape: squircle;
-    transform: scale(1.02);
     transform-origin: 50% 50%;
     translate: 0;
   }

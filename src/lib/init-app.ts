@@ -163,16 +163,6 @@ export function initApp() {
     limitCallbacks: true,
   });
 
-  const isTouchViewport = window.matchMedia(
-    "(max-width: 768px), (hover: none) and (pointer: coarse)",
-  ).matches;
-
-  // Stabilizes pin scrubbing against mobile browser chrome / address-bar resize.
-  if (isTouchViewport) {
-    ScrollTrigger.normalizeScroll(true);
-    addCleanup(() => ScrollTrigger.normalizeScroll(false));
-  }
-
   initSmoothScroll();
   initButtonSystem();
   initLogoHover();
