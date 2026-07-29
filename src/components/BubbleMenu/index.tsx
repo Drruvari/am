@@ -25,6 +25,8 @@ type BubbleMenuProps = {
   menuAriaLabel?: string;
   menuBg?: string;
   menuContentColor?: string;
+  noiseEnabled: boolean;
+  onNoiseToggle: () => void;
   useFixedPosition?: boolean;
   animationEase?: string;
   animationDuration?: number;
@@ -45,6 +47,8 @@ export default function BubbleMenu({
   menuAriaLabel = "Toggle navigation",
   menuBg = "#d1d1c7",
   menuContentColor = "#080807",
+  noiseEnabled,
+  onNoiseToggle,
   useFixedPosition = true,
   animationEase = "back.out(1.5)",
   animationDuration = 0.5,
@@ -71,13 +75,19 @@ export default function BubbleMenu({
     const labels = labelRefs.current.filter(Boolean);
     if (!overlay || !bubbles.length) return;
 
-    gsap.killTweensOf([...bubbles, ...labels]);
+    gsap.killTweensOf([overlay, ...bubbles, ...labels]);
 
     if (isMenuOpen) {
-      gsap.set(overlay, { display: "flex" });
+      gsap.set(overlay, { display: "flex", autoAlpha: 0 });
+      gsap.to(overlay, {
+        autoAlpha: 1,
+        duration: 0.32,
+        ease: "power2.out",
+      });
       bubbles.forEach((bubble, index) => {
         gsap.set(bubble, {
           scale: 0,
+          autoAlpha: 0,
           rotation: items[index]?.rotation ?? 0,
           transformOrigin: "50% 50%",
         });
@@ -88,6 +98,7 @@ export default function BubbleMenu({
         const timeline = gsap.timeline({ delay: index * staggerDelay });
         timeline.to(bubble, {
           scale: 1,
+          autoAlpha: 1,
           duration: animationDuration,
           ease: animationEase,
         });
@@ -103,18 +114,38 @@ export default function BubbleMenu({
         );
       });
     } else {
-      gsap.to(labels, {
-        y: 24,
-        autoAlpha: 0,
-        duration: 0.2,
-        ease: "power3.in",
-      });
-      gsap.to(bubbles, {
-        scale: 0,
-        duration: 0.2,
-        ease: "power3.in",
+      const closeTimeline = gsap.timeline({
         onComplete: () => setShowOverlay(false),
       });
+
+      closeTimeline
+        .to(labels, {
+          y: 16,
+          autoAlpha: 0,
+          duration: 0.22,
+          stagger: { each: 0.025, from: "end" },
+          ease: "power2.in",
+        })
+        .to(
+          bubbles,
+          {
+            scale: 0.82,
+            autoAlpha: 0,
+            duration: 0.3,
+            stagger: { each: 0.035, from: "end" },
+            ease: "power3.inOut",
+          },
+          0.06,
+        )
+        .to(
+          overlay,
+          {
+            autoAlpha: 0,
+            duration: 0.28,
+            ease: "power2.inOut",
+          },
+          "-=0.12",
+        );
     }
   }, [
     animationDuration,
@@ -152,20 +183,29 @@ export default function BubbleMenu({
           <span className="logo-content">{logo}</span>
         </a>
 
-        <button
-          type="button"
-          className={`bubble toggle-bubble menu-btn ${isMenuOpen ? "open" : ""}`}
-          onClick={toggleMenu}
-          aria-label={menuAriaLabel}
-          aria-expanded={isMenuOpen}
-          aria-controls="mobile-bubble-menu"
-        >
-          <span className="menu-line" style={{ background: menuContentColor }} />
-          <span
-            className="menu-line short"
-            style={{ background: menuContentColor }}
-          />
-        </button>
+        <div className="bubble-controls">
+          <button
+            type="button"
+            className="bubble noise-bubble"
+            onClick={onNoiseToggle}
+            aria-label={`${noiseEnabled ? "Turn off" : "Turn on"} grain`}
+            aria-pressed={noiseEnabled}
+          >
+            <span className="noise-bubble__field" aria-hidden="true" />
+          </button>
+
+          <button
+            type="button"
+            className={`bubble toggle-bubble menu-btn ${isMenuOpen ? "open" : ""}`}
+            onClick={toggleMenu}
+            aria-label={menuAriaLabel}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-bubble-menu"
+          >
+            <span className="menu-line" />
+            <span className="menu-line short" />
+          </button>
+        </div>
       </nav>
 
       {showOverlay && (

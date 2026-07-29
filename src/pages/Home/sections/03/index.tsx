@@ -177,6 +177,16 @@ export default function Philosophy() {
         (context) => {
           if (!context.conditions?.motion) return;
 
+          if (context.conditions.narrow) {
+            root.classList.add("is-motion-ready");
+            gsap.set(serviceText, {
+              clearProps: "transform,visibility",
+              autoAlpha: 1,
+            });
+
+            return () => root.classList.remove("is-motion-ready");
+          }
+
           gsap.set(serviceText, { autoAlpha: 0 });
 
           let disposed = false;

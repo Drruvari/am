@@ -50,34 +50,77 @@
     .logo-content {
       display: inline-flex;
       align-items: center;
-      font-family: var(--font-heading);
-      font-size: 0.78rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      line-height: 1;
-      white-space: nowrap;
     }
 
-    .toggle-bubble {
+    .mobile-logo-mark {
+      position: relative;
+      display: block;
+      width: 2rem;
+      aspect-ratio: 1;
+    }
+
+    .mobile-logo-mark img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      transition: opacity 0.3s ease;
+    }
+
+    .mobile-logo-mark__light {
+      opacity: 1;
+    }
+
+    .mobile-logo-mark__dark {
+      opacity: 0;
+    }
+
+    .bubble-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      pointer-events: auto;
+    }
+
+    .toggle-bubble,
+    .noise-bubble {
+      --mobile-control-bg: var(--color-foreground);
+      --mobile-control-fg: var(--color-on-dark);
+
       position: relative;
       width: var(--bubble-size);
       overflow: hidden;
-      background: rgb(209 209 199 / 0.2);
-      box-shadow:
-        inset 0 1px 0 rgb(255 255 255 / 0.48),
-        inset 0 -1px 0 rgb(8 8 7 / 0.08),
-        0 0.55rem 1.6rem rgb(0 0 0 / 0.2);
+      border-radius: 2px;
+      background: var(--mobile-control-bg);
+      box-shadow: none;
+      color: var(--mobile-control-fg);
+      transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
+    }
 
-      &::before {
-        position: absolute;
-        inset: 0;
-        z-index: 0;
-        background: rgb(255 255 255 / 0.08);
-        backdrop-filter: blur(32px) saturate(1.6) brightness(1.08);
-        -webkit-backdrop-filter: blur(32px) saturate(1.6) brightness(1.08);
-        content: "";
-        pointer-events: none;
-      }
+    .noise-bubble {
+      padding: 0.3rem;
+      cursor: pointer;
+    }
+
+    .noise-bubble__field {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle, currentColor 0 0.7px, transparent 0.9px)
+        0 0 / 4px 4px;
+      opacity: 0.28;
+      transform: scale(0.7);
+      transition:
+        opacity 0.35s ease,
+        transform 0.5s var(--ease-out-expo);
+    }
+
+    .noise-bubble[aria-pressed="true"] .noise-bubble__field {
+      opacity: 0.9;
+      transform: scale(1) rotate(22.5deg);
     }
 
     .menu-btn {
@@ -94,6 +137,7 @@
       width: 1.35rem;
       height: 1.5px;
       border-radius: 999px;
+      background: currentColor;
       transition:
         transform 0.35s var(--ease-out-expo),
         width 0.35s var(--ease-out-expo);
@@ -119,6 +163,28 @@
     }
   }
 
+  body.is-header-on-dark .bubble-menu :is(.toggle-bubble, .noise-bubble),
+  body.is-bubble-menu-open .bubble-menu :is(.toggle-bubble, .noise-bubble) {
+    --mobile-control-bg: var(--color-on-dark);
+    --mobile-control-fg: var(--color-dark);
+  }
+
+  body:not(.is-header-on-dark) .mobile-logo-mark__light {
+    opacity: 0;
+  }
+
+  body:not(.is-header-on-dark) .mobile-logo-mark__dark {
+    opacity: 1;
+  }
+
+  body.is-bubble-menu-open .mobile-logo-mark__light {
+    opacity: 1;
+  }
+
+  body.is-bubble-menu-open .mobile-logo-mark__dark {
+    opacity: 0;
+  }
+
   .bubble-menu-items {
     position: absolute;
     inset: 0;
@@ -130,7 +196,7 @@
       var(--content-inset)
       calc(1.5rem + env(safe-area-inset-bottom, 0px));
     overflow-y: auto;
-    background: transparent;
+    background: var(--color-dark);
     pointer-events: auto;
 
     &.fixed {
@@ -191,13 +257,9 @@
     padding: clamp(1.35rem, 5vw, 2rem) clamp(1.75rem, 7vw, 3rem);
     overflow: hidden;
     border: 0;
-    border-radius: clamp(1.25rem, 5vw, 2rem);
-    corner-shape: squircle;
-    background: color-mix(in srgb, var(--pill-bg) 34%, transparent);
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.38),
-      inset 0 -1px 0 rgb(8 8 7 / 0.08),
-      0 0.65rem 1.8rem rgb(0 0 0 / 0.18);
+    border-radius: 4px;
+    background: var(--pill-bg);
+    box-shadow: none;
     color: var(--pill-color);
     font: 450 clamp(2rem, 10vw, 3.4rem) / 0.9 var(--font-heading);
     letter-spacing: var(--tracking-display);
@@ -209,8 +271,6 @@
       box-shadow 0.45s ease,
       transform 0.45s var(--ease-out-expo);
     transform: translateZ(0);
-    backdrop-filter: blur(18px) saturate(1.3);
-    -webkit-backdrop-filter: blur(18px) saturate(1.3);
     -webkit-tap-highlight-color: transparent;
     will-change: transform;
 

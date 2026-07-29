@@ -138,27 +138,26 @@
   }
 }
 
-// Mobile keeps desktop horizontal pinned story with touch-scaled typography.
+// Mobile uses a native-flow composition to keep touch scrolling stable.
 @include below($bp-md) {
   .philosophy {
     &__stage {
-      display: grid;
-      height: 100svh;
+      height: auto;
       min-height: 100svh;
-      padding: var(--content-inset);
+      padding: clamp(6rem, 18vw, 8rem) var(--content-inset);
       padding-bottom: calc(
-        var(--content-inset) + env(safe-area-inset-bottom, 0px)
+        clamp(6rem, 18vw, 8rem) + env(safe-area-inset-bottom, 0px)
       );
     }
 
     &__services-text {
-      width: max-content;
-      padding-left: 100vw;
-      font-size: clamp(3.2rem, 15vw, 5.75rem);
-      line-height: 1;
-      text-align: left;
-      white-space: nowrap;
-      will-change: transform;
+      width: 100%;
+      padding-left: 0;
+      font-size: clamp(2.65rem, 12vw, 4.5rem);
+      line-height: 0.98;
+      text-align: center;
+      white-space: normal;
+      will-change: auto;
     }
 
     &__service-image {
