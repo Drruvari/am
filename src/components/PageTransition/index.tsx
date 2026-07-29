@@ -4,44 +4,64 @@ import "./style.scss";
 
 const OPEN_PATH = "M 0 0 V 0 Q 50 0 100 0 V 0 z";
 const COVER_PATH = "M 0 0 V 100 Q 50 100 100 100 V 0 z";
+const LEAVE_START = "M 0 100 V 100 Q 50 100 100 100 V 100 z";
+const LEAVE_MID = "M 0 100 V 50 Q 50 0 100 50 V 100 z";
+const LEAVE_END = "M 0 100 V 0 Q 50 0 100 0 V 100 z";
+const ENTER_MID = "M 0 0 V 50 Q 50 0 100 50 V 0 z";
 
 export default function PageTransition() {
   const pathRef = useRef<SVGPathElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
     const path = pathRef.current;
-    if (!path) return;
+    const svg = svgRef.current;
+    if (!path || !svg) return;
 
     const reduceMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
+    // iOS Safari stalls GSAP SVG path morphs and can leave a full black cover.
+    const isTouchUi = window.matchMedia(
+      "(hover: none), (pointer: coarse)",
+    ).matches;
+    const skipMorph = reduceMotion || isTouchUi;
 
-    const openOverlay = () => {
+    let enterFailsafe: number | undefined;
+    let leaveFailsafe: number | undefined;
+
+    const clearOverlay = () => {
       gsap.killTweensOf(path);
+      path.setAttribute("d", OPEN_PATH);
+      svg.style.visibility = "hidden";
+      // Nudge iOS to drop a stale covered compositor layer.
+      void svg.getBoundingClientRect();
+    };
+
+    const armOverlay = () => {
+      svg.style.visibility = "visible";
+    };
+
+    clearOverlay();
+
+    if (!skipMorph) {
+      armOverlay();
       gsap
-        .timeline()
-        .set(path, {
-          attr: { d: COVER_PATH },
-        })
+        .timeline({ onComplete: clearOverlay })
+        .set(path, { attr: { d: COVER_PATH } })
         .to(path, {
-          duration: reduceMotion ? 0.01 : 0.36,
+          duration: 0.36,
           ease: "power2.in",
-          attr: { d: "M 0 0 V 50 Q 50 0 100 50 V 0 z" },
+          attr: { d: ENTER_MID },
         })
         .to(path, {
-          duration: reduceMotion ? 0.01 : 0.55,
+          duration: 0.55,
           ease: "power4.out",
           attr: { d: OPEN_PATH },
         });
-    };
 
-    openOverlay();
-
-    // iOS Safari can stall SVG path morphs — force clear so the page isn't stuck black.
-    const failsafe = window.setTimeout(() => {
-      gsap.killTweensOf(path);
-      path.setAttribute("d", OPEN_PATH);
-    }, 1800);
+      enterFailsafe = window.setTimeout(clearOverlay, 1200);
+    }
 
     const onNavigate = (event: MouseEvent) => {
       if (
@@ -70,29 +90,46 @@ export default function PageTransition() {
       }
 
       event.preventDefault();
+
+      const go = () => {
+        if (leaveFailsafe !== undefined) {
+          window.clearTimeout(leaveFailsafe);
+          leaveFailsafe = undefined;
+        }
+        window.location.assign(destination.href);
+      };
+
+      // Skip morph on touch — navigate immediately so the next page never
+      // inherits a stuck black cover from a stalled leave wipe.
+      if (skipMorph) {
+        clearOverlay();
+        go();
+        return;
+      }
+
+      armOverlay();
       gsap.killTweensOf(path);
       gsap
-        .timeline({
-          onComplete: () => window.location.assign(destination.href),
-        })
-        .set(path, {
-          attr: { d: "M 0 100 V 100 Q 50 100 100 100 V 100 z" },
-        })
+        .timeline({ onComplete: go })
+        .set(path, { attr: { d: LEAVE_START } })
         .to(path, {
-          duration: reduceMotion ? 0.01 : 0.5,
+          duration: 0.5,
           ease: "power4.in",
-          attr: { d: "M 0 100 V 50 Q 50 0 100 50 V 100 z" },
+          attr: { d: LEAVE_MID },
         })
         .to(path, {
-          duration: reduceMotion ? 0.01 : 0.3,
+          duration: 0.3,
           ease: "power2.out",
-          attr: { d: "M 0 100 V 0 Q 50 0 100 0 V 100 z" },
+          attr: { d: LEAVE_END },
         });
+
+      leaveFailsafe = window.setTimeout(go, 1200);
     };
 
     document.addEventListener("click", onNavigate);
     return () => {
-      window.clearTimeout(failsafe);
+      if (enterFailsafe !== undefined) window.clearTimeout(enterFailsafe);
+      if (leaveFailsafe !== undefined) window.clearTimeout(leaveFailsafe);
       document.removeEventListener("click", onNavigate);
       gsap.killTweensOf(path);
     };
@@ -100,10 +137,12 @@ export default function PageTransition() {
 
   return (
     <svg
+      ref={svgRef}
       className="page-transition"
       viewBox="0 0 100 100"
       preserveAspectRatio="none"
       aria-hidden="true"
+      style={{ visibility: "hidden" }}
     >
       <path
         ref={pathRef}

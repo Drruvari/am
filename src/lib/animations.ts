@@ -690,7 +690,12 @@ function initEntranceAnimation() {
   let cancelled = false;
   let frame: number | undefined;
   let timeline: gsap.core.Timeline | undefined;
-  const failsafe = window.setTimeout(revealStatic, 3200);
+  const isTouchUi = window.matchMedia(
+    "(hover: none), (pointer: coarse)",
+  ).matches;
+  // Touch devices: reveal sooner so a stalled motion stack can't read as a
+  // black void under the dark hero.
+  const failsafe = window.setTimeout(revealStatic, isTouchUi ? 1600 : 3200);
 
   gsap.set(headerItems, { y: -16, autoAlpha: 0 });
   gsap.set(heroCopy, { y: 28, autoAlpha: 0 });
