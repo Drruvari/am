@@ -108,7 +108,7 @@ export default function PageTransition() {
       <path
         ref={pathRef}
         vectorEffect="non-scaling-stroke"
-        d={COVER_PATH}
+        d={OPEN_PATH}
       />
     </svg>
   );
