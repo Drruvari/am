@@ -21,6 +21,7 @@ type BubbleMenuItem = {
 
 type BubbleMenuProps = {
   logo: ReactNode;
+  logoHref?: string;
   items: readonly BubbleMenuItem[];
   menuAriaLabel?: string;
   menuBg?: string;
@@ -43,6 +44,7 @@ type PillStyle = CSSProperties & {
 
 export default function BubbleMenu({
   logo,
+  logoHref = "/",
   items,
   menuAriaLabel = "Toggle navigation",
   menuBg = "#d1d1c7",
@@ -194,7 +196,7 @@ export default function BubbleMenu({
       >
         <a
           className="bubble logo-bubble"
-          href="#top"
+          href={logoHref}
           aria-label="Arbër Manga home"
         >
           <span className="logo-content">{logo}</span>

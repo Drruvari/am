@@ -141,6 +141,7 @@ export default function App() {
               />
             </span>
           }
+          logoHref={baseUrl}
           items={mobileNavigation}
           menuAriaLabel="Toggle navigation"
           menuBg="#d1d1c7"
