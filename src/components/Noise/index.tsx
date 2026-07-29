@@ -22,17 +22,34 @@ export default function Noise({
 
   useEffect(() => {
     const canvas = grainRef.current;
-    const context = canvas?.getContext("2d", { alpha: true });
+    const context = canvas?.getContext("2d", {
+      alpha: true,
+      desynchronized: true,
+    });
     if (!canvas || !context) return;
 
-    const size = Math.max(1, Math.round(patternSize));
-    const refreshInterval = Math.max(0, Math.round(patternRefreshInterval));
+    const isCompactViewport = window.matchMedia("(max-width: 768px)").matches;
+    const size = Math.max(
+      1,
+      Math.round(isCompactViewport ? Math.min(patternSize, 128) : patternSize),
+    );
+    const refreshInterval = Math.max(
+      1,
+      Math.round(
+        isCompactViewport
+          ? Math.max(patternRefreshInterval, 24)
+          : patternRefreshInterval,
+      ),
+    );
     const alpha = Math.min(255, Math.max(0, patternAlpha));
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
+    // Static grain on touch — animated canvas fights scroll compositing.
+    const animateGrain = !reducedMotion && !isCompactViewport;
     let frame = 0;
     let animationId = 0;
+    let running = false;
 
     canvas.width = size;
     canvas.height = size;
@@ -53,16 +70,40 @@ export default function Noise({
       context.putImageData(imageData, 0, 0);
     };
 
+    const stop = () => {
+      running = false;
+      if (animationId) {
+        window.cancelAnimationFrame(animationId);
+        animationId = 0;
+      }
+    };
+
     const loop = () => {
+      if (!running) return;
       if (frame % refreshInterval === 0) drawGrain();
       frame += 1;
       animationId = window.requestAnimationFrame(loop);
     };
 
-    drawGrain();
-    if (!reducedMotion && refreshInterval > 0) loop();
+    const start = () => {
+      if (!animateGrain || running) return;
+      running = true;
+      loop();
+    };
 
-    return () => window.cancelAnimationFrame(animationId);
+    const onVisibility = () => {
+      if (document.hidden) stop();
+      else start();
+    };
+
+    drawGrain();
+    if (!document.hidden) start();
+    document.addEventListener("visibilitychange", onVisibility);
+
+    return () => {
+      document.removeEventListener("visibilitychange", onVisibility);
+      stop();
+    };
   }, [
     patternAlpha,
     patternRefreshInterval,

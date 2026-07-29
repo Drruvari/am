@@ -4,6 +4,7 @@ html {
   scroll-padding-top: calc(
     var(--header-offset) + env(safe-area-inset-top, 0px)
   );
+  overscroll-behavior-y: none;
 
   &.lenis {
     height: auto;
@@ -22,11 +23,13 @@ body {
   width: 100%;
   max-width: 100%;
   overflow-x: clip;
+  overscroll-behavior-y: none;
   background: var(--color-background);
   color: var(--color-foreground);
   font: 400 clamp(0.9375rem, 0.2vw + 0.9rem, 1rem)/1.6 var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
 
   &.is-project-panel-open,
   &.is-menu-open,

@@ -103,7 +103,8 @@ export function initSmoothScroll() {
   const isTouchViewport = window.matchMedia(
     '(max-width: 768px), (hover: none) and (pointer: coarse)',
   ).matches
-  const useSmoothScroll = !prefersReducedMotion
+  // Native touch scrolling is smoother and avoids Lenis/ScrollTrigger jank on mobile.
+  const useSmoothScroll = !prefersReducedMotion && !isTouchViewport
 
   if (useSmoothScroll) {
     document.documentElement.classList.add('lenis', 'lenis-smooth')
@@ -115,10 +116,8 @@ export function initSmoothScroll() {
       gestureOrientation: 'vertical',
       smoothWheel: true,
       wheelMultiplier: 0.9,
-      syncTouch: isTouchViewport,
-      syncTouchLerp: isTouchViewport ? 0.06 : 0.075,
-      touchInertiaExponent: 1.55,
-      touchMultiplier: isTouchViewport ? 0.78 : 1,
+      syncTouch: false,
+      touchMultiplier: 1,
     })
     lenis = smoothLenis
 

@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import "./style.scss";
 
 const baseUrl = import.meta.env.BASE_URL;
@@ -19,20 +18,6 @@ export default function Header({
   noiseEnabled,
   onNoiseToggle,
 }: HeaderProps) {
-  useEffect(() => {
-    let cleanup: (() => void) | undefined;
-    let cancelled = false;
-
-    void import("@/lib/animations").then(({ initHeaderTheme }) => {
-      if (!cancelled) cleanup = initHeaderTheme();
-    });
-
-    return () => {
-      cancelled = true;
-      cleanup?.();
-    };
-  }, []);
-
   const pathname = window.location.pathname.replace(/\/+$/, "");
   const activePage = /\/works?$/.test(pathname)
     ? "Work"
@@ -40,7 +25,10 @@ export default function Header({
       ? "Studio"
       : pathname.endsWith("/process")
         ? "Process"
-        : null;
+        : pathname.endsWith("/gallery")
+          ? "Gallery"
+          : null;
+  const grainLabel = noiseEnabled ? "Turn off grain" : "Turn on grain";
 
   return (
     <header className="header site-header" id="site-header">
@@ -48,20 +36,26 @@ export default function Header({
         <a
           href={baseUrl}
           className="header-logo"
-          aria-label="Arbër Manga home"
+          aria-label="Go home"
           data-hover="link"
+          data-magnetic
         >
-          <span className="header-logo__mark" aria-hidden="true">
-            <img
-              className="header-logo__image header-logo__image--dark"
-              src={`${baseUrl}logo-dark.svg`}
-              alt=""
-            />
-            <img
-              className="header-logo__image header-logo__image--light"
-              src={`${baseUrl}logo-light.svg`}
-              alt=""
-            />
+          <span className="header-logo__anchor">
+            <span className="header-logo__mark" aria-hidden="true">
+              <img
+                className="header-logo__image header-logo__image--dark"
+                src={`${baseUrl}logo-dark.svg`}
+                alt=""
+              />
+              <img
+                className="header-logo__image header-logo__image--light"
+                src={`${baseUrl}logo-light.svg`}
+                alt=""
+              />
+            </span>
+            <span className="header-tip" aria-hidden="true">
+              Go home
+            </span>
           </span>
         </a>
 
@@ -89,17 +83,22 @@ export default function Header({
         </div>
 
         <div className="header-actions">
-          <button
-            className="grain-switch"
-            type="button"
-            aria-label={`${noiseEnabled ? "Turn off" : "Turn on"} grain`}
-            aria-pressed={noiseEnabled}
-            title={`${noiseEnabled ? "Turn off" : "Turn on"} grain`}
-            onClick={onNoiseToggle}
-            data-hover="link"
-          >
-            <span className="grain-switch__field" aria-hidden="true" />
-          </button>
+          <span className="header-tip-wrap">
+            <button
+              className="grain-switch"
+              type="button"
+              aria-label={grainLabel}
+              aria-pressed={noiseEnabled}
+              onClick={onNoiseToggle}
+              data-hover="link"
+              data-magnetic
+            >
+              <span className="grain-switch__field" aria-hidden="true" />
+            </button>
+            <span className="header-tip" aria-hidden="true">
+              {grainLabel}
+            </span>
+          </span>
 
           <a
             href="mailto:hello@arbermanga.com"

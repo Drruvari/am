@@ -1,6 +1,6 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { initAnimations } from "./animations";
+import { initAnimations, initHeaderTheme } from "./animations";
 import { initButtonSystem } from "./button";
 import { addCleanup, runCleanups } from "./cleanup";
 import { initMediaQueries, mm } from "./globals";
@@ -13,6 +13,26 @@ import {
 } from "./smooth-scroll";
 
 let appInitialized = false;
+let bootSession = 0;
+
+function isHomeRoute(pathname = window.location.pathname) {
+  const normalized = pathname.replace(/\/+$/, "") || "/";
+  return !/\/(works?|studio|process|gallery)$/.test(normalized);
+}
+
+function bootHomepageMotion(session: number) {
+  if (session !== bootSession || !appInitialized) return false;
+
+  if (!document.querySelector(".home-page")) return false;
+
+  initAnimations();
+  initProjectDetail();
+  return true;
+}
+
+function clearEntranceLocks() {
+  document.documentElement.classList.remove("is-entering", "is-loading");
+}
 
 function initGlobalUI() {
   const footerYear = document.getElementById("footerYear");
@@ -90,12 +110,12 @@ function initGlobalUI() {
 }
 
 export function disposeApp() {
+  bootSession += 1;
   runCleanups();
 
   ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
   gsap.killTweensOf("*");
   mm?.revert();
-  document.documentElement.classList.remove("is-loading");
   resetScrollLock();
   document.body.classList.remove(
     "is-menu-open",
@@ -117,7 +137,7 @@ export function disposeApp() {
   if (sliders.length) gsap.set(sliders, { yPercent: 0 });
   const headerWrappers = gsap.utils.toArray<HTMLElement>(".header-wrapp");
   if (headerWrappers.length) gsap.set(headerWrappers, { y: 0 });
-  document.documentElement.classList.remove("is-loading");
+  document.documentElement.classList.remove("is-loading", "is-entering");
   appInitialized = false;
 }
 
@@ -125,6 +145,7 @@ export function initApp() {
   if (appInitialized) return;
 
   appInitialized = true;
+  const session = ++bootSession;
 
   gsap.registerPlugin(ScrollTrigger);
 
@@ -142,14 +163,50 @@ export function initApp() {
     limitCallbacks: true,
   });
 
+  const isTouchViewport = window.matchMedia(
+    "(max-width: 768px), (hover: none) and (pointer: coarse)",
+  ).matches;
+
+  // Stabilizes pin scrubbing against mobile browser chrome / address-bar resize.
+  if (isTouchViewport) {
+    ScrollTrigger.normalizeScroll(true);
+    addCleanup(() => ScrollTrigger.normalizeScroll(false));
+  }
+
   initSmoothScroll();
   initButtonSystem();
   initLogoHover();
   initGlobalUI();
-  if (document.querySelector(".home-page")) {
-    initAnimations();
-    initProjectDetail();
-  } else {
-    document.documentElement.classList.remove("is-entering", "is-loading");
+
+  const cleanupHeaderTheme = initHeaderTheme();
+  if (cleanupHeaderTheme) addCleanup(cleanupHeaderTheme);
+
+  if (bootHomepageMotion(session)) return;
+
+  if (!isHomeRoute()) {
+    clearEntranceLocks();
+    return;
   }
+
+  // Home route but DOM not ready yet (Suspense/HMR) — retry briefly.
+  let attempts = 0;
+  const maxAttempts = 120;
+  let frame = 0;
+
+  const retry = () => {
+    if (session !== bootSession || !appInitialized) return;
+
+    if (bootHomepageMotion(session)) return;
+
+    attempts += 1;
+    if (attempts >= maxAttempts) {
+      clearEntranceLocks();
+      return;
+    }
+
+    frame = window.requestAnimationFrame(retry);
+  };
+
+  frame = window.requestAnimationFrame(retry);
+  addCleanup(() => window.cancelAnimationFrame(frame));
 }

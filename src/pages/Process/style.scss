@@ -237,6 +237,28 @@
   }
 }
 
+@media (min-width: 769px) and (max-width: 1024px) {
+  .process-reveal__heading-half {
+    h1,
+    p {
+      max-width: 8.5ch;
+      font-size: clamp(3.5rem, 8vw, 6.5rem);
+    }
+  }
+
+  .process-reveal__copy {
+    max-width: 34rem;
+  }
+
+  .process-list__heading {
+    gap: 1.5rem;
+
+    h2 {
+      font-size: clamp(2.75rem, 5vw, 4.5rem);
+    }
+  }
+}
+
 @media (max-width: 768px) {
   .process-reveal {
     height: auto;

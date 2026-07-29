@@ -66,8 +66,10 @@ function initHeroEases() {
 
 function scheduleScrollRefresh() {
   window.requestAnimationFrame(() => {
-    ScrollTrigger.refresh(true);
-    updateScrollState();
+    window.requestAnimationFrame(() => {
+      ScrollTrigger.refresh(true);
+      updateScrollState();
+    });
   });
 }
 
@@ -122,7 +124,7 @@ function initHeroCollectionTransition(isMobile = false) {
       trigger: banner,
       start: "top top",
       end: "bottom top",
-      scrub: isMobile ? 0.65 : 1,
+      scrub: isMobile ? true : 1,
       invalidateOnRefresh: true,
       onLeave: () => {
         ensureCollectionFullscreen();
@@ -347,21 +349,18 @@ function initMobileSectionMotion() {
         gsap.fromTo(
           surface,
           {
-            y: 34,
-            scale: 0.985,
-            autoAlpha: 0.72,
-            transformOrigin: "50% 50%",
+            y: 22,
+            autoAlpha: 0.78,
           },
           {
             y: 0,
-            scale: 1,
             autoAlpha: 1,
             ease: "none",
             scrollTrigger: {
               trigger: surface,
-              start: "top 94%",
-              end: "top 58%",
-              scrub: 0.85,
+              start: "top 96%",
+              end: "top 62%",
+              scrub: true,
               invalidateOnRefresh: true,
             },
           },
@@ -595,7 +594,9 @@ function initMagneticButtons() {
     const cleanups = gsap.utils
       .toArray<HTMLElement>("[data-magnetic]:not(.btn)")
       .map((button) => {
-        const isHeaderControl = button.matches(".header-contact, .header-cart");
+        const isHeaderControl = button.matches(
+          ".header-contact, .header-cart, .header-logo, .grain-switch",
+        );
         const magneticX = isHeaderControl ? 0.3 : 0.16;
         const magneticY = isHeaderControl ? 0.38 : 0.22;
         const xTo = gsap.quickTo(button, "x", {

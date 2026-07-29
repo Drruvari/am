@@ -1,11 +1,12 @@
+import BubbleMenu from "@/components/BubbleMenu";
 import CustomCursor from "@/components/CustomCursor/index";
+import Header from "@/components/Header/index";
 import Noise from "@/components/Noise";
 import PageTransition from "@/components/PageTransition";
+import { disposeApp, initApp } from "@/lib/init-app";
+import Home from "@/pages/Home/index";
 import { lazy, Suspense, useEffect, useState } from "react";
 
-const BubbleMenu = lazy(() => import("@/components/BubbleMenu"));
-const Header = lazy(() => import("@/components/Header/index"));
-const Home = lazy(() => import("@/pages/Home/index"));
 const Gallery = lazy(() => import("@/pages/Gallery"));
 const ProcessPage = lazy(() => import("@/pages/Process"));
 const Studio = lazy(() => import("@/pages/Studio"));
@@ -15,9 +16,9 @@ const baseUrl = import.meta.env.BASE_URL;
 
 const mobileNavigation = [
   {
-    label: "Home",
-    href: baseUrl,
-    ariaLabel: "Home",
+    label: "Work",
+    href: `${baseUrl}work`,
+    ariaLabel: "Selected work",
     rotation: -8,
   },
   {
@@ -27,24 +28,27 @@ const mobileNavigation = [
     rotation: 8,
   },
   {
-    label: "Work",
-    href: `${baseUrl}work`,
-    ariaLabel: "Selected work",
-    rotation: -5,
-  },
-  {
     label: "Process",
     href: `${baseUrl}process`,
     ariaLabel: "Process",
-    rotation: 7,
+    rotation: -5,
   },
   {
-    label: "Contact",
-    href: "#contact",
-    ariaLabel: "Contact",
-    rotation: -8,
+    label: "Gallery",
+    href: `${baseUrl}gallery`,
+    ariaLabel: "Gallery",
+    rotation: 7,
   },
 ] as const;
+
+function getRouteFlags(pathname = window.location.pathname) {
+  return {
+    isWorksPage: /\/works?\/?$/.test(pathname),
+    isStudioPage: pathname.includes("/studio"),
+    isProcessPage: pathname.includes("/process"),
+    isGalleryPage: pathname.includes("/gallery"),
+  };
+}
 
 export default function App() {
   const [noiseEnabled, setNoiseEnabled] = useState(() => {
@@ -54,10 +58,8 @@ export default function App() {
       return true;
     }
   });
-  const isWorksPage = /\/works?\/?$/.test(window.location.pathname);
-  const isStudioPage = window.location.pathname.includes("/studio");
-  const isProcessPage = window.location.pathname.includes("/process");
-  const isGalleryPage = window.location.pathname.includes("/gallery");
+  const { isWorksPage, isStudioPage, isProcessPage, isGalleryPage } =
+    getRouteFlags();
 
   useEffect(() => {
     if (isGalleryPage) {
@@ -66,19 +68,28 @@ export default function App() {
     }
 
     let cancelled = false;
-    let cleanup: (() => void) | undefined;
+    let raf = 0;
+    const needsHome = !isWorksPage && !isStudioPage && !isProcessPage;
 
-    void import("@/lib/init-app").then(({ disposeApp, initApp }) => {
+    const boot = () => {
       if (cancelled) return;
+
+      if (needsHome && !document.querySelector(".home-page")) {
+        raf = window.requestAnimationFrame(boot);
+        return;
+      }
+
       initApp();
-      cleanup = disposeApp;
-    });
+    };
+
+    boot();
 
     return () => {
       cancelled = true;
-      cleanup?.();
+      window.cancelAnimationFrame(raf);
+      disposeApp();
     };
-  }, [isGalleryPage]);
+  }, [isGalleryPage, isWorksPage, isStudioPage, isProcessPage]);
 
   const toggleNoise = () => {
     setNoiseEnabled((enabled) => {
@@ -92,6 +103,12 @@ export default function App() {
     });
   };
 
+  let page = <Home />;
+  if (isGalleryPage) page = <Gallery />;
+  else if (isWorksPage) page = <Works />;
+  else if (isStudioPage) page = <Studio />;
+  else if (isProcessPage) page = <ProcessPage />;
+
   return (
     <>
       <PageTransition />
@@ -99,42 +116,49 @@ export default function App() {
         <Noise
           className="noise-overlay--fixed"
           patternAlpha={2}
-          patternRefreshInterval={8}
+          patternRefreshInterval={12}
           patternScaleX={1}
           patternScaleY={1}
-          patternSize={512}
+          patternSize={256}
         />
       )}
       <CustomCursor />
-      <Suspense fallback={null}>
-        {!isGalleryPage && (
-          <Header noiseEnabled={noiseEnabled} onNoiseToggle={toggleNoise} />
-        )}
-        {!isGalleryPage && (
-          <BubbleMenu
-            logo={<span>ARBËR MANGA</span>}
-            items={mobileNavigation}
-            menuAriaLabel="Toggle navigation"
-            menuBg="#d1d1c7"
-            menuContentColor="#ffffff"
-            useFixedPosition
-            animationEase="back.out(1.5)"
-            animationDuration={0.5}
-            staggerDelay={0.12}
-          />
-        )}
-        {isGalleryPage ? (
-          <Gallery />
-        ) : isWorksPage ? (
-          <Works />
-        ) : isStudioPage ? (
-          <Studio />
-        ) : isProcessPage ? (
-          <ProcessPage />
-        ) : (
-          <Home />
-        )}
-      </Suspense>
+      {!isGalleryPage && (
+        <Header noiseEnabled={noiseEnabled} onNoiseToggle={toggleNoise} />
+      )}
+      {!isGalleryPage && (
+        <BubbleMenu
+          logo={
+            <span className="mobile-logo-mark" aria-hidden="true">
+              <img
+                className="mobile-logo-mark__dark"
+                src={`${baseUrl}logo-dark.svg`}
+                alt=""
+              />
+              <img
+                className="mobile-logo-mark__light"
+                src={`${baseUrl}logo-light.svg`}
+                alt=""
+              />
+            </span>
+          }
+          items={mobileNavigation}
+          menuAriaLabel="Toggle navigation"
+          menuBg="#d1d1c7"
+          menuContentColor="#080807"
+          noiseEnabled={noiseEnabled}
+          onNoiseToggle={toggleNoise}
+          useFixedPosition
+          animationEase="power3.out"
+          animationDuration={0.55}
+          staggerDelay={0.08}
+        />
+      )}
+      {isGalleryPage || isWorksPage || isStudioPage || isProcessPage ? (
+        <Suspense fallback={null}>{page}</Suspense>
+      ) : (
+        page
+      )}
     </>
   );
 }

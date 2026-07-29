@@ -175,7 +175,11 @@ export default function Gallery() {
     let introTween: gsap.core.Tween | null = null;
 
     const setScale = () => {
-      motion.scale = Math.min(1, Math.max(0.58, window.innerWidth / 1440));
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const widthScale = width / (width < 768 ? 980 : 1440);
+      const heightScale = height / (height < 700 ? 820 : 980);
+      motion.scale = Math.min(1, Math.max(0.42, Math.min(widthScale, heightScale)));
       if (frame) return;
       frame = window.requestAnimationFrame(render);
     };
@@ -418,8 +422,8 @@ export default function Gallery() {
       </div>
 
       <footer className="gallery-footer">
-        <p>Click + hold to drag and explore</p>
-        <p>Scroll in any direction</p>
+        <p>Drag to explore</p>
+        <p>Scroll any direction</p>
       </footer>
 
       {activeItem && (

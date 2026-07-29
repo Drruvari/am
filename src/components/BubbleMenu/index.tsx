@@ -25,6 +25,8 @@ type BubbleMenuProps = {
   menuAriaLabel?: string;
   menuBg?: string;
   menuContentColor?: string;
+  noiseEnabled: boolean;
+  onNoiseToggle: () => void;
   useFixedPosition?: boolean;
   animationEase?: string;
   animationDuration?: number;
@@ -45,10 +47,12 @@ export default function BubbleMenu({
   menuAriaLabel = "Toggle navigation",
   menuBg = "#d1d1c7",
   menuContentColor = "#080807",
+  noiseEnabled,
+  onNoiseToggle,
   useFixedPosition = true,
-  animationEase = "back.out(1.5)",
-  animationDuration = 0.5,
-  staggerDelay = 0.12,
+  animationEase = "power3.out",
+  animationDuration = 0.55,
+  staggerDelay = 0.08,
 }: BubbleMenuProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
@@ -71,23 +75,32 @@ export default function BubbleMenu({
     const labels = labelRefs.current.filter(Boolean);
     if (!overlay || !bubbles.length) return;
 
-    gsap.killTweensOf([...bubbles, ...labels]);
+    gsap.killTweensOf([overlay, ...bubbles, ...labels]);
 
     if (isMenuOpen) {
-      gsap.set(overlay, { display: "flex" });
+      gsap.set(overlay, { display: "flex", autoAlpha: 0 });
+      gsap.to(overlay, {
+        autoAlpha: 1,
+        duration: 0.38,
+        ease: "power2.out",
+      });
       bubbles.forEach((bubble, index) => {
         gsap.set(bubble, {
-          scale: 0,
+          scale: 0.88,
+          autoAlpha: 0,
+          y: 28,
           rotation: items[index]?.rotation ?? 0,
           transformOrigin: "50% 50%",
         });
       });
-      gsap.set(labels, { y: 24, autoAlpha: 0 });
+      gsap.set(labels, { y: 18, autoAlpha: 0 });
 
       bubbles.forEach((bubble, index) => {
         const timeline = gsap.timeline({ delay: index * staggerDelay });
         timeline.to(bubble, {
           scale: 1,
+          autoAlpha: 1,
+          y: 0,
           duration: animationDuration,
           ease: animationEase,
         });
@@ -96,30 +109,53 @@ export default function BubbleMenu({
           {
             y: 0,
             autoAlpha: 1,
-            duration: animationDuration,
+            duration: animationDuration * 0.85,
             ease: "power3.out",
           },
-          `-=${animationDuration * 0.9}`,
+          `-=${animationDuration * 0.75}`,
         );
       });
-    } else {
-      gsap.to(labels, {
-        y: 24,
-        autoAlpha: 0,
-        duration: 0.2,
-        ease: "power3.in",
-      });
-      gsap.to(bubbles, {
-        scale: 0,
-        duration: 0.2,
-        ease: "power3.in",
+    } else if (showOverlay) {
+      const closeTimeline = gsap.timeline({
+        defaults: { ease: "power2.inOut" },
         onComplete: () => setShowOverlay(false),
       });
+
+      closeTimeline
+        .to(labels, {
+          y: 12,
+          autoAlpha: 0,
+          duration: 0.28,
+          stagger: { each: 0.03, from: "end" },
+          ease: "power2.in",
+        })
+        .to(
+          bubbles,
+          {
+            scale: 0.92,
+            y: -12,
+            autoAlpha: 0,
+            duration: 0.36,
+            stagger: { each: 0.04, from: "end" },
+            ease: "power3.inOut",
+          },
+          0.04,
+        )
+        .to(
+          overlay,
+          {
+            autoAlpha: 0,
+            duration: 0.34,
+            ease: "power2.inOut",
+          },
+          "-=0.18",
+        );
     }
   }, [
     animationDuration,
     animationEase,
     isMenuOpen,
+    items,
     showOverlay,
     staggerDelay,
   ]);
@@ -131,10 +167,22 @@ export default function BubbleMenu({
       if (event.key === "Escape") closeMenu();
     };
 
+    let savedY = 0;
+    if (isMenuOpen) {
+      savedY = window.scrollY;
+      document.body.style.top = `-${savedY}px`;
+      document.body.classList.add("is-scroll-locked");
+    }
+
     window.addEventListener("keydown", handleKeyDown);
     return () => {
       document.body.classList.remove("is-bubble-menu-open");
       window.removeEventListener("keydown", handleKeyDown);
+      if (document.body.classList.contains("is-scroll-locked")) {
+        document.body.classList.remove("is-scroll-locked");
+        document.body.style.top = "";
+        window.scrollTo(0, savedY);
+      }
     };
   }, [isMenuOpen]);
 
@@ -152,20 +200,29 @@ export default function BubbleMenu({
           <span className="logo-content">{logo}</span>
         </a>
 
-        <button
-          type="button"
-          className={`bubble toggle-bubble menu-btn ${isMenuOpen ? "open" : ""}`}
-          onClick={toggleMenu}
-          aria-label={menuAriaLabel}
-          aria-expanded={isMenuOpen}
-          aria-controls="mobile-bubble-menu"
-        >
-          <span className="menu-line" style={{ background: menuContentColor }} />
-          <span
-            className="menu-line short"
-            style={{ background: menuContentColor }}
-          />
-        </button>
+        <div className="bubble-controls">
+          <button
+            type="button"
+            className="bubble noise-bubble"
+            onClick={onNoiseToggle}
+            aria-label={`${noiseEnabled ? "Turn off" : "Turn on"} grain`}
+            aria-pressed={noiseEnabled}
+          >
+            <span className="noise-bubble__field" aria-hidden="true" />
+          </button>
+
+          <button
+            type="button"
+            className={`bubble toggle-bubble menu-btn ${isMenuOpen ? "open" : ""}`}
+            onClick={toggleMenu}
+            aria-label={menuAriaLabel}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-bubble-menu"
+          >
+            <span className="menu-line" />
+            <span className="menu-line short" />
+          </button>
+        </div>
       </nav>
 
       {showOverlay && (
@@ -181,9 +238,9 @@ export default function BubbleMenu({
                 "--item-rot": `${item.rotation ?? 0}deg`,
                 "--pill-bg": menuBg,
                 "--pill-color": menuContentColor,
-                "--hover-bg": item.hoverStyles?.bgColor ?? "#080807",
+                "--hover-bg": item.hoverStyles?.bgColor ?? "#f2f2ee",
                 "--hover-color":
-                  item.hoverStyles?.textColor ?? "var(--color-on-dark)",
+                  item.hoverStyles?.textColor ?? "#080807",
               };
 
               return (
